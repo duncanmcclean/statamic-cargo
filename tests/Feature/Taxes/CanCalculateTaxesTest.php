@@ -620,7 +620,7 @@ class CanCalculateTaxesTest extends TestCase
         {
             public $lineItem;
 
-            public function set_address($address): self
+            public function setAddress($address): self
             {
                 return $this;
             }
