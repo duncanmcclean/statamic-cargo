@@ -86,20 +86,4 @@ return [
         ],
     ],
 
-    'notifications' => [
-        'order_paid' => [
-            // \DuncanMcClean\SimpleCommerce\Notifications\CustomerOrderPaid::class => [
-            //     'to' => 'customer',
-            // ],
-
-            // \DuncanMcClean\SimpleCommerce\Notifications\BackOfficeOrderPaid::class => [
-            //     'to' => 'duncan@example.com',
-            // ],
-        ],
-
-        'order_dispatched' => [
-            // \DuncanMcClean\SimpleCommerce\Notifications\CustomerOrderShipped::class => ['to' => 'customer'],
-        ],
-    ],
-
 ];
