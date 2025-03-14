@@ -1,0 +1,22 @@
+<?php
+
+namespace DummyNamespace;
+
+use DuncanMcClean\Cargo\Contracts\Cart\Cart;
+use DuncanMcClean\Cargo\Shipping\ShippingMethod;
+use DuncanMcClean\Cargo\Shipping\ShippingOption;
+use Illuminate\Support\Collection;
+
+class DummyClass extends ShippingMethod
+{
+    protected static $title = 'Free Shipping';
+
+    public function options(Cart $cart): Collection
+    {
+        return collect([
+            ShippingOption::make($this)
+                ->name(__('Free Shipping'))
+                ->price(0),
+        ]);
+    }
+}

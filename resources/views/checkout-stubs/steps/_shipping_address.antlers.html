@@ -3,7 +3,7 @@
 #}}
 
 {{ if {cart:has_physical_products} }}
-    {{ partial:checkout/components/step title="Shipping Address" key="shipping_address" }}
+    {{ partial:checkout/components/step title="Shipping Address" }}
         {{ partial:checkout/components/address type="shipping" }}
 
         {{ slot:footer }}

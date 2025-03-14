@@ -213,6 +213,16 @@ class CartLineItemsTest extends TestCase
             ],
         ])->save();
 
+        $product->blueprint()->ensureField('product_variants', [
+            'type' => 'product_variants',
+            'option_fields' => [
+                [
+                    'handle' => 'stock',
+                    'field' => ['type' => 'integer'],
+                ],
+            ],
+        ])->save();
+
         $this
             ->post('/!/cargo/cart/line-items', [
                 'product' => $product->id(),
@@ -242,6 +252,16 @@ class CartLineItemsTest extends TestCase
                 ['key' => 'Red', 'variant' => 'Red', 'price' => 1000, 'stock' => 3],
                 ['key' => 'Yellow', 'variant' => 'Yellow', 'price' => 1500, 'stock' => 3],
                 ['key' => 'Blue', 'variant' => 'Blue', 'price' => 1799, 'stock' => 3],
+            ],
+        ])->save();
+
+        $product->blueprint()->ensureField('product_variants', [
+            'type' => 'product_variants',
+            'option_fields' => [
+                [
+                    'handle' => 'stock',
+                    'field' => ['type' => 'integer'],
+                ],
             ],
         ])->save();
 

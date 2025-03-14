@@ -1,10 +1,11 @@
 {{#
     @name Step
     @desc A step in the Checkout process.
-    @param* key The step's key. Must be unique.
     @param* title The step's title. Will be displayed to the customer.
     @param formless Boolean. Determines whether the step should be wrapped in a cart:update form. Default: false.
 #}}
+
+{{ key = {title | slugify} }}
 
 <div id="step-{{ key }}">
     <template x-if="currentStep !== '{{ key }}'">

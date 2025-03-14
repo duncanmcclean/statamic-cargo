@@ -3,6 +3,7 @@
 namespace DuncanMcClean\Cargo;
 
 use DuncanMcClean\Cargo\Facades\Order;
+use DuncanMcClean\Cargo\Facades\PaymentGateway;
 use DuncanMcClean\Cargo\Jobs\PurgeAbandonedCarts;
 use DuncanMcClean\Cargo\Stache\Query\CartQueryBuilder;
 use DuncanMcClean\Cargo\Stache\Query\CouponQueryBuilder;
@@ -11,6 +12,8 @@ use DuncanMcClean\Cargo\Stache\Stores\CartsStore;
 use DuncanMcClean\Cargo\Stache\Stores\CouponsStore;
 use DuncanMcClean\Cargo\Stache\Stores\OrdersStore;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Foundation\Console\AboutCommand;
+use Illuminate\Support\Str;
 use Statamic\Console\Commands\Multisite as MultisiteCommand;
 use Statamic\Facades\Blueprint;
 use Statamic\Facades\Config;
@@ -229,5 +232,26 @@ class ServiceProvider extends AddonServiceProvider
 
             return $next($payload);
         });
+
+        AboutCommand::add('Cargo', fn () => [
+            'Carts' => config('statamic.cargo.carts.repository'),
+            'Orders' => config('statamic.cargo.orders.repository'),
+            'Payment Gateways' => collect(config('statamic.cargo.payments.gateways'))
+                ->map(function (array $gateway, string $handle) {
+                    $paymentGateway = PaymentGateway::find($handle);
+
+                    if (! $paymentGateway) {
+                        return $handle;
+                    }
+
+                    if (! Str::startsWith(get_class($paymentGateway), 'DuncanMcClean\\Cargo')) {
+                        return "{$paymentGateway->title()} (Custom)";
+                    }
+
+                    return $paymentGateway->title();
+                })
+                ->filter()
+                ->join(', '),
+        ]);
     }
 }

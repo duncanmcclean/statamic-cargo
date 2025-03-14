@@ -2,7 +2,7 @@
     Displays the "Billing Address" step in the Checkout process.
 #}}
 
-{{ partial:checkout/components/step title="Billing Address" key="billing_address" x-data="BillingAddressStep" }}
+{{ partial:checkout/components/step title="Billing Address" x-data="BillingAddressStep" }}
     {{ if {cart:has_physical_products} }}
         <label for="use_shipping_address_for_billing" class="flex items-center cursor-pointer">
             <input type="checkbox" id="use_shipping_address_for_billing" name="use_shipping_address_for_billing" x-model="useShippingAddressForBilling" class="rounded text-secondary focus:ring-secondary h-4 w-4">
