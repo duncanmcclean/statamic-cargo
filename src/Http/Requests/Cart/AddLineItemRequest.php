@@ -1,0 +1,51 @@
+<?php
+
+namespace DuncanMcClean\Cargo\Http\Requests\Cart;
+
+use DuncanMcClean\Cargo\Facades\Product;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class AddLineItemRequest extends FormRequest
+{
+    public function authorize()
+    {
+        return true;
+    }
+
+    public function rules()
+    {
+        return [
+            'product' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    $product = Product::find($value);
+
+                    if (! $product) {
+                        return $fail(__('The product is invalid.'));
+                    }
+
+                    if (! in_array($product->collectionHandle(), config('statamic.cargo.products.collections'))) {
+                        $fail(__('The product is invalid.'));
+                    }
+                },
+            ],
+            'variant' => [
+                Rule::requiredIf(fn () => Product::find($this->product)?->isVariantProduct()),
+                function ($attribute, $value, $fail) {
+                    $product = Product::find($this->product);
+
+                    if ($product->isVariantProduct()) {
+                        $variant = $product->variant($value);
+
+                        if (! $variant) {
+                            return $fail(__('The variant is invalid.'));
+                        }
+                    }
+
+                },
+            ],
+            'quantity' => ['nullable', 'integer', 'gt:0'],
+        ];
+    }
+}

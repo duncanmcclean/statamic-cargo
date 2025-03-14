@@ -1,0 +1,57 @@
+{
+    "name": "duncanmcclean/cargo",
+    "description": "",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "DuncanMcClean\\Cargo\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests",
+            "Tests\\Fixtures\\": "tests/__fixtures__/app"
+        }
+    },
+    "extra": {
+        "download-dist": {
+            "url": "https://github.com/duncanmcclean/cargo/releases/download/{$version}/dist.tar.gz",
+            "path": "dist"
+        },
+        "statamic": {
+            "name": "Cargo",
+            "description": ""
+        },
+        "laravel": {
+            "providers": [
+                "DuncanMcClean\\Cargo\\ServiceProvider",
+                "DuncanMcClean\\Cargo\\Payments\\PaymentServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "php": "^8.3",
+        "ext-intl": "*",
+        "laravel/framework": "^11.0 || ^12.0",
+        "mollie/mollie-api-php": "^2.73.0",
+        "moneyphp/money": "^4.5",
+        "pixelfear/composer-dist-plugin": "^0.1.0",
+        "statamic/cms": "^5.47",
+        "stillat/proteus": "^4.0",
+        "stripe/stripe-php": "^16.4"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.18",
+        "orchestra/testbench": "^9.2 || ^10.0",
+        "phpunit/phpunit": "^10.5.35 || ^11.0",
+        "spatie/ray": "^1.36.1"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pixelfear/composer-dist-plugin": true
+        }
+    }
+}

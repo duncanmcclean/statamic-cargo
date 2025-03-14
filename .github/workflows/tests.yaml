@@ -1,0 +1,67 @@
+name: Test Suite
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  php_tests:
+    if: "!contains(github.event.head_commit.message, 'changelog')"
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        php: [8.3, 8.4]
+        laravel: [11.*, 12.*]
+        stability: [prefer-lowest, prefer-stable]
+        os: [ubuntu-latest]
+
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Get changed files (Payments)
+        id: changed-files-payments
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            .github/workflows/tests.yaml
+            src/Payments
+            src/Http/Controllers/Payments
+            tests/Feature/Payments
+            composer.json
+
+      - name: Determine whether payment tests should run
+        id: should-run-payment-tests
+        if: steps.changed-files-payments.outputs.any_modified == 'true' || github.event_name == 'schedule'
+        run: |
+          echo "result=true" >> $GITHUB_OUTPUT
+          echo "result=true" >> $env:GITHUB_OUTPUT
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
+
+      - name: Install dependencies
+        run: |
+          composer require "illuminate/contracts:${{ matrix.laravel }}" --no-interaction --no-update
+          composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-suggest
+
+      - name: Execute tests
+        run: vendor/bin/phpunit --exclude-group=payments
+
+      - name: Execute tests (Payments)
+        run: vendor/bin/phpunit --group=payments
+        if: steps.should-run-payment-tests.outputs.result == 'true'
+        env:
+          STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
+          STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
+          MOLLIE_KEY: ${{ secrets.MOLLIE_KEY }}
+          MOLLIE_PROFILE: ${{ secrets.MOLLIE_PROFILE }}
