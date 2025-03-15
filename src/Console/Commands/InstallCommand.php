@@ -171,7 +171,7 @@ PHP;
     Event::listen(OrderPaymentReceived::class, function ($event) {
             Mail::to($event->order->customer())
                 ->locale($event->order->site()->shortLocale())
-                ->sendNow(new OrderConfirmation($event->order));
+                ->send(new OrderConfirmation($event->order));
         });
 PHP);
         } catch (\Exception $e) {
