@@ -11,7 +11,6 @@ use DuncanMcClean\Cargo\Data\HasAddresses;
 use DuncanMcClean\Cargo\Events\OrderCreated;
 use DuncanMcClean\Cargo\Events\OrderDeleted;
 use DuncanMcClean\Cargo\Events\OrderSaved;
-use DuncanMcClean\Cargo\Events\OrderStatusUpdated;
 use DuncanMcClean\Cargo\Facades;
 use DuncanMcClean\Cargo\Facades\Coupon as CouponFacade;
 use DuncanMcClean\Cargo\Facades\Order as OrderFacade;
@@ -51,7 +50,7 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
     protected $coupon;
     protected $lineItems;
     protected $site;
-    protected $initialPath;
+    protected $withEvents = true;
 
     public function __construct()
     {
@@ -270,34 +269,59 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
             ->args(func_get_args());
     }
 
+    public function saveQuietly(): bool
+    {
+        $this->withEvents = false;
+
+        return $this->save();
+    }
+
     public function save(): bool
     {
+        $original = $this->getOriginal();
         $isNew = is_null(OrderFacade::find($this->id()));
+
+        $withEvents = $this->withEvents;
+        $this->withEvents = true;
 
         OrderFacade::save($this);
 
-        if ($isNew) {
-            event(new OrderCreated($this));
+        if ($withEvents) {
+            if ($isNew) {
+                OrderCreated::dispatch($this);
+            }
+
+            OrderSaved::dispatch($this);
+
+            if ($this->status()->value !== Arr::get($original, 'status')) {
+                $event = OrderStatus::event($this->status());
+
+                $event::dispatch($this);
+            }
         }
 
-        event(new OrderSaved($this));
-
-        if ($this->isDirty('status') && $this->getOriginal('status')) {
-            event(new OrderStatusUpdated(
-                order: $this,
-                oldStatus: OrderStatus::from($this->getOriginal('status')),
-                newStatus: $this->status())
-            );
-        }
+        $this->syncOriginal();
 
         return true;
     }
 
+    public function deleteQuietly(): bool
+    {
+        $this->withEvents = false;
+
+        return $this->delete();
+    }
+
     public function delete(): bool
     {
+        $withEvents = $this->withEvents;
+        $this->withEvents = true;
+
         OrderFacade::delete($this);
 
-        event(new OrderDeleted($this));
+        if ($withEvents) {
+            OrderDeleted::dispatch($this);
+        }
 
         return true;
     }

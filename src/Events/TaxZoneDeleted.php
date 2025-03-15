@@ -4,8 +4,9 @@ namespace DuncanMcClean\Cargo\Events;
 
 use DuncanMcClean\Cargo\Contracts\Taxes\TaxZone;
 use Statamic\Contracts\Git\ProvidesCommitMessage;
+use Statamic\Events\Event;
 
-class TaxZoneDeleted implements ProvidesCommitMessage
+class TaxZoneDeleted extends Event implements ProvidesCommitMessage
 {
     public function __construct(public TaxZone $taxZone) {}
 

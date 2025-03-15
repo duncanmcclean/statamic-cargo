@@ -3,6 +3,7 @@
 namespace DuncanMcClean\Cargo\Console\Commands;
 
 use DuncanMcClean\Cargo\Data\Currencies;
+use DuncanMcClean\Cargo\Support\CodeInjection;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Statamic\Console\RunsInPlease;
@@ -31,6 +32,7 @@ class InstallCommand extends Command
             ->promptForSiteCurrencies()
             ->promptForProductsCollection()
             ->promptToPublishCheckoutStubs()
+            ->promptToPublishMailables()
             ->promptToGitignoreCartsDirectory()
             ->promptToGitignoreOrdersDirectory()
             ->schedulePurgeAbandonedCartsCommand();
@@ -139,6 +141,48 @@ PHP;
         File::put(base_path('routes/web.php'), $routes);
 
         $this->components->info("Checkout stubs published. You'll find them in <comment>resources/views/checkout</comment>. You can customize these views to suit your needs.");
+
+        return $this;
+    }
+
+    private function promptToPublishMailables(): self
+    {
+        $mailablePath = app_path('Mail/OrderConfirmation.php');
+        $mailableViewPath = resource_path('views/emails/order-confirmation.blade.php');
+
+        if (File::exists($mailablePath) && File::exists($mailableViewPath)) {
+            return $this;
+        }
+
+        File::ensureDirectoryExists(app_path('Mail'));
+        File::put($mailablePath, File::get(__DIR__.'/stubs/install/OrderConfirmation.php.stub'));
+
+        File::ensureDirectoryExists(resource_path('views/emails'));
+        File::put($mailableViewPath, File::get(__DIR__.'/stubs/install/order-confirmation.blade.php.stub'));
+
+        CodeInjection::injectImportsIntoAppServiceProvider([
+            'Illuminate\Support\Facades\Event',
+            'App\Mail\OrderConfirmation',
+            'DuncanMcClean\Cargo\Events\OrderPaymentReceived',
+        ]);
+
+        try {
+            CodeInjection::injectIntoAppServiceProviderBoot($code = <<<'PHP'
+    Event::listen(OrderPaymentReceived::class, function ($event) {
+            Mail::to($event->order->customer())
+                ->locale($event->order->site()->shortLocale())
+                ->sendNow(new OrderConfirmation($event->order));
+        });
+PHP);
+        } catch (\Exception $e) {
+            if ($e->getMessage() !== 'Code has already been injected.') {
+                $this->components->warn('Failed to inject code into AppServiceProvider. Please add the following to the <comment>boot</comment> method manually:');
+                $this->line($code);
+                $this->newLine();
+            }
+        }
+
+        $this->components->info("Mailables published. You'll find them in <comment>app/Mail</comment> and <comment>resources/views/emails</comment>.");
 
         return $this;
     }

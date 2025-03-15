@@ -6,6 +6,7 @@ use ArrayAccess;
 use Carbon\Carbon;
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Coupons\Coupon as Contract;
+use DuncanMcClean\Cargo\Events\CouponCreated;
 use DuncanMcClean\Cargo\Events\CouponDeleted;
 use DuncanMcClean\Cargo\Events\CouponSaved;
 use DuncanMcClean\Cargo\Facades\Coupon as CouponFacade;
@@ -35,6 +36,7 @@ class Coupon implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVa
     protected $code;
     protected $amount;
     protected $type;
+    protected $withEvents = true;
 
     public function __construct()
     {
@@ -184,20 +186,52 @@ class Coupon implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVa
         };
     }
 
+    public function saveQuietly(): bool
+    {
+        $this->withEvents = false;
+
+        return $this->save();
+    }
+
     public function save(): bool
     {
+        $isNew = is_null(CouponFacade::find($this->id()));
+
+        $withEvents = $this->withEvents;
+        $this->withEvents = true;
+
         CouponFacade::save($this);
 
-        event(new CouponSaved($this));
+        if ($withEvents) {
+            if ($isNew) {
+                CouponCreated::dispatch($this);
+            }
+
+            CouponSaved::dispatch($this);
+        }
+
+        $this->syncOriginal();
 
         return true;
     }
 
+    public function deleteQuietly(): bool
+    {
+        $this->withEvents = false;
+
+        return $this->delete();
+    }
+
     public function delete(): bool
     {
+        $withEvents = $this->withEvents;
+        $this->withEvents = true;
+
         CouponFacade::delete($this);
 
-        event(new CouponDeleted($this));
+        if ($withEvents) {
+            CouponDeleted::dispatch($this);
+        }
 
         return true;
     }

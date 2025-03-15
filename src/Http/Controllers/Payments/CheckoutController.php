@@ -57,7 +57,7 @@ class CheckoutController
             $this->updateStock($order);
 
             if ($order->coupon()) {
-                event(new CouponRedeemed($order->coupon(), $order));
+                CouponRedeemed::dispatch($order->coupon(), $order);
             }
         } catch (ValidationException|PreventCheckout $e) {
             $paymentGateway->cancel($cart);
@@ -118,11 +118,11 @@ class CheckoutController
                 $product->set('stock', $product->stock() - $lineItem->quantity())->save();
 
                 if ($product->stock() < config('statamic.cargo.products.low_stock_threshold')) {
-                    event(new ProductStockLow($product));
+                    ProductStockLow::dispatch($product);
                 }
 
                 if ($product->stock() === 0) {
-                    event(new ProductNoStockRemaining($product));
+                    ProductNoStockRemaining::dispatch($product);
                 }
             }
 
@@ -147,11 +147,11 @@ class CheckoutController
                 $product->set('product_variants', $productVariants)->save();
 
                 if ($product->stock() < config('statamic.cargo.products.low_stock_threshold')) {
-                    event(new ProductStockLow($product->variant($lineItem->variant()->key())));
+                    ProductStockLow::dispatch($product->variant($lineItem->variant()->key()));
                 }
 
                 if ($product->stock() === 0) {
-                    event(new ProductNoStockRemaining($product->variant($lineItem->variant()->key())));
+                    ProductNoStockRemaining::dispatch($product->variant($lineItem->variant()->key()));
                 }
             }
         });

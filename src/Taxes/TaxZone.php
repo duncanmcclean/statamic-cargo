@@ -37,7 +37,7 @@ class TaxZone implements Augmentable, Contract
     {
         Facades\TaxZone::save($this);
 
-        event(new TaxZoneSaved($this));
+        TaxZoneSaved::dispatch($this);
 
         return true;
     }
@@ -46,7 +46,7 @@ class TaxZone implements Augmentable, Contract
     {
         Facades\TaxZone::delete($this->handle());
 
-        event(new TaxZoneDeleted($this));
+        TaxZoneDeleted::dispatch($this);
 
         return true;
     }

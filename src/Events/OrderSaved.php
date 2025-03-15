@@ -4,8 +4,9 @@ namespace DuncanMcClean\Cargo\Events;
 
 use DuncanMcClean\Cargo\Contracts\Orders\Order;
 use Statamic\Contracts\Git\ProvidesCommitMessage;
+use Statamic\Events\Event;
 
-class OrderSaved implements ProvidesCommitMessage
+class OrderSaved extends Event implements ProvidesCommitMessage
 {
     public function __construct(public Order $order) {}
 

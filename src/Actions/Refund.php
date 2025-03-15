@@ -96,6 +96,6 @@ class Refund extends Action
 
         $order->paymentGateway()->refund($order, $values['amount']);
 
-        event(new OrderRefunded($order->fresh(), $values['amount']));
+        OrderRefunded::dispatch($order->fresh(), $values['amount']);
     }
 }

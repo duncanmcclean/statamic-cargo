@@ -2,10 +2,15 @@
 
 namespace Tests\Data;
 
+use DuncanMcClean\Cargo\Contracts\Cart\Cart as CartContract;
+use DuncanMcClean\Cargo\Events\CartCreated;
+use DuncanMcClean\Cargo\Events\CartDeleted;
+use DuncanMcClean\Cargo\Events\CartSaved;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use DuncanMcClean\Cargo\Facades\TaxZone;
 use DuncanMcClean\Cargo\Shipping\ShippingOption;
+use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
@@ -201,5 +206,91 @@ class CartTest extends TestCase
         $this->assertInstanceOf(ShippingOption::class, $cart->shippingOption());
         $this->assertEquals('Standard Shipping', $cart->shippingOption()->name());
         $this->assertEquals(500, $cart->shippingOption()->price());
+    }
+
+    #[Test]
+    public function cart_can_be_saved()
+    {
+        Event::fake();
+
+        $this->assertNull(Cart::find('abc'));
+
+        $cart = Cart::make()->id('abc');
+
+        $cart->save();
+
+        $this->assertInstanceOf(CartContract::class, $cart = Cart::find('abc'));
+        $this->assertEquals('abc', $cart->id());
+        $this->assertFileExists($cart->path());
+        $this->assertStringContainsString('content/cargo/carts/abc.yaml', $cart->path());
+
+        Event::assertDispatched(CartCreated::class, function ($event) use ($cart) {
+            return $event->cart->id() === $cart->id();
+        });
+
+        Event::assertDispatched(CartSaved::class, function ($event) use ($cart) {
+            return $event->cart->id() === $cart->id();
+        });
+    }
+
+    #[Test]
+    public function cart_can_be_saved_quietly()
+    {
+        Event::fake();
+
+        $this->assertNull(Cart::find('abc'));
+
+        $cart = Cart::make()->id('abc');
+
+        $cart->saveQuietly();
+
+        $this->assertInstanceOf(CartContract::class, $cart = Cart::find('abc'));
+        $this->assertEquals('abc', $cart->id());
+        $this->assertFileExists($cart->path());
+        $this->assertStringContainsString('content/cargo/carts/abc.yaml', $cart->path());
+
+        Event::assertNotDispatched(CartCreated::class, function ($event) use ($cart) {
+            return $event->cart->id() === $cart->id();
+        });
+
+        Event::assertNotDispatched(CartSaved::class, function ($event) use ($cart) {
+            return $event->cart->id() === $cart->id();
+        });
+    }
+
+    #[Test]
+    public function carts_can_be_deleted()
+    {
+        Event::fake();
+
+        $cart = tap(Cart::make())->save();
+
+        $this->assertFileExists($cart->path());
+
+        $cart->delete();
+
+        $this->assertFileDoesNotExist($cart->path());
+
+        Event::assertDispatched(CartDeleted::class, function ($event) use ($cart) {
+            return $event->cart->id() === $cart->id();
+        });
+    }
+
+    #[Test]
+    public function carts_can_be_deleted_quietly()
+    {
+        Event::fake();
+
+        $cart = tap(Cart::make())->save();
+
+        $this->assertFileExists($cart->path());
+
+        $cart->deleteQuietly();
+
+        $this->assertFileDoesNotExist($cart->path());
+
+        Event::assertNotDispatched(CartDeleted::class, function ($event) use ($cart) {
+            return $event->cart->id() === $cart->id();
+        });
     }
 }

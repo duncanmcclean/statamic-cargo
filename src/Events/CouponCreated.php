@@ -3,16 +3,10 @@
 namespace DuncanMcClean\Cargo\Events;
 
 use DuncanMcClean\Cargo\Contracts\Coupons\Coupon;
-use Illuminate\Foundation\Events\Dispatchable;
 use Statamic\Contracts\Git\ProvidesCommitMessage;
 use Statamic\Events\Event;
 
-class CouponDeleted extends Event implements ProvidesCommitMessage
+class CouponCreated extends Event
 {
     public function __construct(public Coupon $coupon) {}
-
-    public function commitMessage()
-    {
-        return __('Coupon deleted', [], config('statamic.git.locale'));
-    }
 }

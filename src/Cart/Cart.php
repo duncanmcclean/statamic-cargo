@@ -8,6 +8,7 @@ use DuncanMcClean\Cargo\Contracts\Cart\Cart as Contract;
 use DuncanMcClean\Cargo\Contracts\Coupons\Coupon;
 use DuncanMcClean\Cargo\Customers\GuestCustomer;
 use DuncanMcClean\Cargo\Data\HasAddresses;
+use DuncanMcClean\Cargo\Events\CartCreated;
 use DuncanMcClean\Cargo\Events\CartDeleted;
 use DuncanMcClean\Cargo\Events\CartRecalculated;
 use DuncanMcClean\Cargo\Events\CartSaved;
@@ -15,6 +16,7 @@ use DuncanMcClean\Cargo\Facades;
 use DuncanMcClean\Cargo\Facades\Cart as CartFacade;
 use DuncanMcClean\Cargo\Facades\Coupon as CouponFacade;
 use DuncanMcClean\Cargo\Facades\Order;
+use DuncanMcClean\Cargo\Facades\Order as OrderFacade;
 use DuncanMcClean\Cargo\Orders\AugmentedOrder;
 use DuncanMcClean\Cargo\Orders\HasTotals;
 use DuncanMcClean\Cargo\Orders\LineItems;
@@ -50,7 +52,7 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
     protected $coupon;
     protected $lineItems;
     protected $site;
-    protected $initialPath;
+    protected $withEvents = true;
     private bool $withoutRecalculating = false;
 
     public function __construct()
@@ -212,8 +214,20 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
         return $this->fingerprint() !== $this->get('fingerprint');
     }
 
+    public function saveQuietly(): bool
+    {
+        $this->withEvents = false;
+
+        return $this->save();
+    }
+
     public function save(): bool
     {
+        $isNew = is_null(CartFacade::find($this->id()));
+
+        $withEvents = $this->withEvents;
+        $this->withEvents = true;
+
         $this->set('updated_at', Carbon::now()->timestamp);
 
         if ($this->shouldRecalculate()) {
@@ -222,18 +236,38 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
 
         CartFacade::save($this);
 
-        event(new CartSaved($this));
+        if ($withEvents) {
+            if ($isNew) {
+                CartCreated::dispatch($this);
+            }
+
+            CartSaved::dispatch($this);
+        }
 
         $this->withoutRecalculating = false;
+
+        $this->syncOriginal();
 
         return true;
     }
 
+    public function deleteQuietly(): bool
+    {
+        $this->withEvents = false;
+
+        return $this->delete();
+    }
+
     public function delete(): bool
     {
+        $withEvents = $this->withEvents;
+        $this->withEvents = true;
+
         CartFacade::delete($this);
 
-        event(CartDeleted::class);
+        if ($withEvents) {
+            CartDeleted::dispatch($this);
+        }
 
         return true;
     }
@@ -290,7 +324,7 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
 
         $this->set('fingerprint', $this->fingerprint());
 
-        event(new CartRecalculated($this));
+        CartRecalculated::dispatch($this);
     }
 
     public function fingerprint(): string

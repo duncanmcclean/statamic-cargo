@@ -31,7 +31,7 @@ class TaxClass implements Augmentable, Contract
     {
         Facades\TaxClass::save($this);
 
-        event(new TaxClassSaved($this));
+        TaxClassSaved::dispatch($this);
 
         return true;
     }
@@ -40,7 +40,7 @@ class TaxClass implements Augmentable, Contract
     {
         Facades\TaxClass::delete($this->handle());
 
-        event(new TaxClassDeleted($this));
+        TaxClassDeleted::dispatch($this);
 
         return true;
     }

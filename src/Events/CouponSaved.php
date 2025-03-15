@@ -4,8 +4,9 @@ namespace DuncanMcClean\Cargo\Events;
 
 use DuncanMcClean\Cargo\Contracts\Coupons\Coupon;
 use Statamic\Contracts\Git\ProvidesCommitMessage;
+use Statamic\Events\Event;
 
-class CouponSaved implements ProvidesCommitMessage
+class CouponSaved extends Event implements ProvidesCommitMessage
 {
     public function __construct(public Coupon $coupon) {}
 

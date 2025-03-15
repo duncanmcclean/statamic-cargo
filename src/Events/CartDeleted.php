@@ -3,9 +3,11 @@
 namespace DuncanMcClean\Cargo\Events;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
+use Illuminate\Foundation\Bus\Dispatchable;
 use Statamic\Contracts\Git\ProvidesCommitMessage;
+use Statamic\Events\Event;
 
-class CartDeleted implements ProvidesCommitMessage
+class CartDeleted extends Event implements ProvidesCommitMessage
 {
     public function __construct(public Cart $cart) {}
 

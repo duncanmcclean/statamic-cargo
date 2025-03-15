@@ -2,11 +2,21 @@
 
 namespace Tests\Feature\Orders;
 
+use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
+use DuncanMcClean\Cargo\Events\OrderCancelled;
+use DuncanMcClean\Cargo\Events\OrderCreated;
+use DuncanMcClean\Cargo\Events\OrderDeleted;
+use DuncanMcClean\Cargo\Events\OrderPaymentPending;
+use DuncanMcClean\Cargo\Events\OrderPaymentReceived;
+use DuncanMcClean\Cargo\Events\OrderReturned;
+use DuncanMcClean\Cargo\Events\OrderSaved;
+use DuncanMcClean\Cargo\Events\OrderShipped;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
-use Statamic\Facades\User;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
 
@@ -33,7 +43,7 @@ class OrderTest extends TestCase
 
         $order = Order::makeFromCart($cart);
 
-        $this->assertInstanceOf(\DuncanMcClean\Cargo\Contracts\Orders\Order::class, $order);
+        $this->assertInstanceOf(OrderContract::class, $order);
 
         $this->assertEquals($cart->lineItems(), $order->lineItems());
         $this->assertEquals(2500, $order->grandTotal());
@@ -58,79 +68,196 @@ class OrderTest extends TestCase
     }
 
     #[Test]
-    public function can_query_columns()
+    public function order_can_be_saved()
     {
-        Cart::make()->id('abc')->save();
-        Cart::make()->id('def')->save();
-        Cart::make()->id('ghi')->save();
+        Event::fake();
 
-        Order::make()->id('123')->cart('abc')->grandTotal(1150)->customer(['name' => 'Foo', 'email' => 'foo@example.com'])->save();
-        Order::make()->id('456')->cart('def')->grandTotal(3470)->customer(['name' => 'Bar', 'email' => 'bar@example.com'])->save();
-        Order::make()->id('789')->cart('ghi')->grandTotal(9500)->customer(['name' => 'Baz', 'email' => 'baz@example.com'])->save();
+        $this->assertNull(Order::find('abc'));
 
-        $query = Order::query()->where('grand_total', '<', 5000)->get();
+        $order = Order::make()
+            ->id('abc')
+            ->orderNumber(1000)
+            ->date(Carbon::parse('2025-03-15 12:34:56'));
 
-        $this->assertCount(2, $query);
-        $this->assertEquals([123, 456], $query->map->id()->all());
+        $order->save();
+
+        $this->assertInstanceOf(OrderContract::class, $order = Order::find($order->id()));
+        $this->assertEquals('abc', $order->id());
+        $this->assertFileExists($order->path());
+        $this->assertStringContainsString('content/cargo/orders/2025-03-15-123456.1000.yaml', $order->path());
+
+        $this->assertEquals(<<<'YAML'
+id: abc
+status: payment_pending
+
+YAML
+            , file_get_contents($order->path()));
+
+        Event::assertDispatched(OrderCreated::class, function ($event) use ($order) {
+            return $event->order->id() === $order->id();
+        });
+
+        Event::assertDispatched(OrderSaved::class, function ($event) use ($order) {
+            return $event->order->id() === $order->id();
+        });
+
+        Event::assertDispatched(OrderPaymentPending::class, function ($event) use ($order) {
+            return $event->order->id() === $order->id();
+        });
     }
 
     #[Test]
-    public function can_query_status()
+    public function order_can_be_saved_quietly()
     {
-        Cart::make()->id('abc')->save();
-        Cart::make()->id('def')->save();
-        Cart::make()->id('ghi')->save();
+        Event::fake();
 
-        Order::make()->id('123')->cart('abc')->status(OrderStatus::PaymentPending)->customer(['name' => 'Foo', 'email' => 'foo@example.com'])->save();
-        Order::make()->id('456')->cart('def')->status(OrderStatus::PaymentPending)->customer(['name' => 'Bar', 'email' => 'bar@example.com'])->save();
-        Order::make()->id('789')->cart('ghi')->status(OrderStatus::Shipped)->customer(['name' => 'Baz', 'email' => 'baz@example.com'])->save();
+        $this->assertNull(Order::find('abc'));
 
-        $query = Order::query()->whereStatus(OrderStatus::PaymentPending)->get();
+        $order = Order::make()
+            ->id('abc')
+            ->orderNumber(1000)
+            ->date(Carbon::parse('2025-03-15 12:34:56'));
 
-        $this->assertCount(2, $query);
-        $this->assertEquals([123, 456], $query->map->id()->all());
+        $order->saveQuietly();
+
+        $this->assertInstanceOf(OrderContract::class, $order = Order::find($order->id()));
+        $this->assertEquals('abc', $order->id());
+        $this->assertFileExists($order->path());
+        $this->assertStringContainsString('content/cargo/orders/2025-03-15-123456.1000.yaml', $order->path());
+
+        $this->assertEquals(<<<'YAML'
+id: abc
+status: payment_pending
+
+YAML
+            , file_get_contents($order->path()));
+
+        Event::assertNotDispatched(OrderCreated::class, function ($event) use ($order) {
+            return $event->order->id() === $order->id();
+        });
+
+        Event::assertNotDispatched(OrderSaved::class, function ($event) use ($order) {
+            return $event->order->id() === $order->id();
+        });
+
+        Event::assertNotDispatched(OrderPaymentPending::class, function ($event) use ($order) {
+            return $event->order->id() === $order->id();
+        });
     }
 
     #[Test]
-    public function can_query_customers()
+    public function order_payment_pending_event_is_dispatched()
     {
-        Cart::make()->id('abc')->save();
-        Cart::make()->id('def')->save();
-        Cart::make()->id('ghi')->save();
+        Event::fake();
 
-        User::make()->id('foo')->email('foo@example.com')->save();
+        // Event should be dispatched when an order is created
+        // (payment pending is the default status)
+        $order = tap(Order::make())->save();
 
-        Order::make()->id('123')->cart('abc')->grandTotal(1150)->customer('foo')->save();
-        Order::make()->id('456')->cart('def')->grandTotal(3470)->customer(['name' => 'Bar', 'email' => 'bar@example.com'])->save();
-        Order::make()->id('789')->cart('ghi')->grandTotal(9500)->customer('foo')->save();
-
-        // Query users
-        $query = Order::query()->where('customer', 'foo')->get();
-
-        $this->assertCount(2, $query);
-        $this->assertEquals([123, 789], $query->map->id()->all());
-
-        // Query guest customers
-        $query = Order::query()->where('customer', 'guest::bar@example.com')->get();
-
-        $this->assertCount(1, $query);
-        $this->assertEquals([456], $query->map->id()->all());
+        Event::assertDispatched(OrderPaymentPending::class, function ($event) use ($order) {
+            return $event->order->id() === $order->id();
+        });
     }
 
     #[Test]
-    public function can_query_data()
+    public function order_payment_received_event_is_dispatched()
     {
-        Cart::make()->id('abc')->save();
-        Cart::make()->id('def')->save();
-        Cart::make()->id('ghi')->save();
+        Event::fake();
 
-        Order::make()->id('123')->cart('abc')->customer(['name' => 'Foo', 'email' => 'foo@example.com'])->data(['foo' => true])->save();
-        Order::make()->id('456')->cart('def')->customer(['name' => 'Bar', 'email' => 'bar@example.com'])->data(['foo' => false])->save();
-        Order::make()->id('789')->cart('ghi')->customer(['name' => 'Baz', 'email' => 'baz@example.com'])->data(['foo' => true])->save();
+        $order = tap(Order::make())->save();
+        $order->status(OrderStatus::PaymentReceived)->save();
 
-        $query = Order::query()->where('foo', true)->get();
+        Event::assertDispatched(OrderPaymentReceived::class, function ($event) use ($order) {
+            return $event->order->id() === $order->id();
+        });
+    }
 
-        $this->assertCount(2, $query);
-        $this->assertEquals([123, 789], $query->map->id()->all());
+    #[Test]
+    public function order_shipped_event_is_dispatched()
+    {
+        Event::fake();
+
+        $order = tap(Order::make())->save();
+        $order->status(OrderStatus::Shipped)->save();
+
+        Event::assertDispatched(OrderShipped::class, function ($event) use ($order) {
+            return $event->order->id() === $order->id();
+        });
+    }
+
+    #[Test]
+    public function order_returned_event_is_dispatched()
+    {
+        Event::fake();
+
+        $order = tap(Order::make())->save();
+        $order->status(OrderStatus::Returned)->save();
+
+        Event::assertDispatched(OrderReturned::class, function ($event) use ($order) {
+            return $event->order->id() === $order->id();
+        });
+    }
+
+    #[Test]
+    public function order_cancelled_event_is_dispatched()
+    {
+        Event::fake();
+
+        $order = tap(Order::make())->save();
+        $order->status(OrderStatus::Cancelled)->save();
+
+        Event::assertDispatched(OrderCancelled::class, function ($event) use ($order) {
+            return $event->order->id() === $order->id();
+        });
+    }
+
+    #[Test]
+    public function order_status_events_are_not_dispatched_when_status_stays_the_same()
+    {
+        $order = tap(Order::make()->status(OrderStatus::Shipped))->save();
+
+        Event::fake();
+
+        $order->save();
+        Event::assertNotDispatched(OrderShipped::class);
+
+        $order->status(OrderStatus::Shipped)->save();
+        Event::assertNotDispatched(OrderShipped::class);
+    }
+
+    #[Test]
+    public function order_can_be_deleted()
+    {
+        Event::fake();
+
+        $order = tap(Order::make())->save();
+
+        $this->assertFileExists($order->path());
+
+        $order->delete();
+
+        $this->assertFileDoesNotExist($order->path());
+
+        Event::assertDispatched(OrderDeleted::class, function ($event) use ($order) {
+            return $event->order->id() === $order->id();
+        });
+    }
+
+    #[Test]
+    public function order_can_be_deleted_quietly()
+    {
+        Event::fake();
+
+        $order = tap(Order::make())->save();
+
+        $this->assertFileExists($order->path());
+
+        $order->deleteQuietly();
+
+        $this->assertFileDoesNotExist($order->path());
+
+        Event::assertNotDispatched(OrderDeleted::class, function ($event) use ($order) {
+            return $event->order->id() === $order->id();
+        });
     }
 }

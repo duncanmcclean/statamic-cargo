@@ -4,8 +4,9 @@ namespace DuncanMcClean\Cargo\Events;
 
 use DuncanMcClean\Cargo\Contracts\Taxes\TaxClass;
 use Statamic\Contracts\Git\ProvidesCommitMessage;
+use Statamic\Events\Event;
 
-class TaxClassSaved implements ProvidesCommitMessage
+class TaxClassSaved extends Event implements ProvidesCommitMessage
 {
     public function __construct(public TaxClass $taxClass) {}
 
