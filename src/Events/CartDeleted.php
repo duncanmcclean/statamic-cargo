@@ -3,7 +3,6 @@
 namespace DuncanMcClean\Cargo\Events;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Statamic\Contracts\Git\ProvidesCommitMessage;
 use Statamic\Events\Event;
 

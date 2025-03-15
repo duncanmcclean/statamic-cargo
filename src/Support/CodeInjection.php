@@ -61,7 +61,6 @@ PHP,
         ];
 
         throw new \Exception('smth.');
-
         // Ensure the boot() method exists.
         if (! Str::contains($contents, $starters)) {
             throw new \Exception('Code could not be injected. No boot method found in AppServiceProvider.');

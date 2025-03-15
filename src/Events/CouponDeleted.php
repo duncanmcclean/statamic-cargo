@@ -3,7 +3,6 @@
 namespace DuncanMcClean\Cargo\Events;
 
 use DuncanMcClean\Cargo\Contracts\Coupons\Coupon;
-use Illuminate\Foundation\Events\Dispatchable;
 use Statamic\Contracts\Git\ProvidesCommitMessage;
 use Statamic\Events\Event;
 
