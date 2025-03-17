@@ -162,6 +162,7 @@ PHP;
 
         CodeInjection::injectImportsIntoAppServiceProvider([
             'Illuminate\Support\Facades\Event',
+            'Illuminate\Support\Facades\Mail',
             'App\Mail\OrderConfirmation',
             'DuncanMcClean\Cargo\Events\OrderPaymentReceived',
         ]);

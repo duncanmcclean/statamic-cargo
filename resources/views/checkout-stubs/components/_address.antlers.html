@@ -51,7 +51,7 @@
         {{ partial:checkout/components/select name="{type}_state" label="State/County" autocomplete="{type} address-level1" required="true" }}
             <option disabled value="">{{ 'Select a state' | trans }}</option>
             <template x-for="state in states" :key="state.code">
-                <option :value="state.code" :selected="state.code === cart.{{ type }}_state" x-text="state.name"></option>
+                <option :value="state.code" :selected="state.code === cart.{{ type }}_state?.code" x-text="state.name"></option>
             </template>
         {{ /partial:checkout/components/select }}
     </template>

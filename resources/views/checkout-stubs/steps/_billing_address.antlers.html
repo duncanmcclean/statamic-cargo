@@ -13,12 +13,12 @@
     <!-- We'll use hidden inputs to fall back to the shipping address if the user chooses to use it for billing. -->
     <template x-if="useShippingAddressForBilling">
         <div>
-            <input type="hidden" name="billing_line_1" x-model="cart.shipping_line_1">
-            <input type="hidden" name="billing_line_2" x-model="cart.shipping_line_2">
-            <input type="hidden" name="billing_city" x-model="cart.shipping_city">
-            <input type="hidden" name="billing_postcode" x-model="cart.shipping_postcode">
-            <input type="hidden" name="billing_state" x-model="cart.shipping_state?.code">
-            <input type="hidden" name="billing_country" x-model="cart.shipping_country.value">
+            <input type="hidden" name="billing_line_1" :value="cart.shipping_line_1">
+            <input type="hidden" name="billing_line_2" :value="cart.shipping_line_2">
+            <input type="hidden" name="billing_city" :value="cart.shipping_city">
+            <input type="hidden" name="billing_postcode" :value="cart.shipping_postcode">
+            <input type="hidden" name="billing_state" :value="cart.shipping_state?.code">
+            <input type="hidden" name="billing_country" :value="cart.shipping_country.value">
         </div>
     </template>
 

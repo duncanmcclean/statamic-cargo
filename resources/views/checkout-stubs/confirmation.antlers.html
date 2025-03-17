@@ -1,4 +1,12 @@
 {{ orders :id:is="get:order_id" }}
+    {{#
+        We need to pass the summary total here manually, since there's no "cart" object in the Alpine.js data.
+        This total is displayed in the cart summary section on mobile.
+    #}}
+    {{ section:summary_total }}
+        <span class="font-bold">{{ grand_total }}</span>
+    {{ /section:summary_total }}
+
     <div>
         <div class="mb-12">
             <h1 class="text-2xl font-semibold text-gray-900 mb-4">{{ 'Thanks for your order!' | trans }}</h1>
