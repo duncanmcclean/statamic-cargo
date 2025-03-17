@@ -376,6 +376,7 @@ export default {
                 clearTimeout(this.trackDirtyStateTimeout);
                 this.trackDirtyState = false;
                 this.values = this.resetValuesFromResponse(response.data.values);
+                this.meta = response.data.meta;
                 this.trackDirtyStateTimeout = setTimeout(() => (this.trackDirtyState = true), 500);
                 this.itemActions = response.data.itemActions;
             }

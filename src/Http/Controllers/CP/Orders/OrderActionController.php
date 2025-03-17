@@ -24,9 +24,10 @@ class OrderActionController extends ActionController
 
         $blueprint = $order->blueprint();
 
-        [$values] = $this->extractFromFields($order, $blueprint);
+        [$values, $meta] = $this->extractFromFields($order, $blueprint);
 
         return array_merge((new OrderResource($order))->resolve()['data'], [
+            'meta' => $meta,
             'values' => $values,
             'itemActions' => Action::for($order, $context),
         ]);

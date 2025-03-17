@@ -8,7 +8,7 @@
                 <div class="text-right text-sm">{{ __('Total') }}</div>
             </div>
             <LineItem
-                v-for="lineItem in receipt.line_items"
+                v-for="lineItem in value.line_items"
                 :lineItem="lineItem"
                 :key="lineItem.id"
                 :form-component="meta.product.formComponent"
@@ -17,36 +17,36 @@
             />
             <div class="receipt-total font-semibold border-t dark:border-dark-500">
                 <div>{{ __('Subtotal') }}</div>
-                <div>{{ receipt.totals.sub_total }}</div>
+                <div>{{ value.totals.sub_total }}</div>
             </div>
-            <div v-if="receipt.coupon" class="receipt-total">
+            <div v-if="value.coupon" class="receipt-total">
                 <div>
-                    <span>{{ __('Coupon Discount (:code)', {code: receipt.coupon.code}) }}</span>
-                    <span class="help-block mb-0">{{ receipt.coupon.discount }}</span>
+                    <span>{{ __('Coupon Discount (:code)', {code: value.coupon.code}) }}</span>
+                    <span class="help-block mb-0">{{ value.coupon.discount }}</span>
                 </div>
-                <div>-{{ receipt.totals.discount_total }}</div>
+                <div>-{{ value.totals.discount_total }}</div>
             </div>
-            <div v-if="receipt.shipping" class="receipt-total">
+            <div v-if="value.shipping" class="receipt-total">
                 <div>
                     <span>{{ __('Shipping') }}</span>
-                    <span class="help-block mb-0">{{ receipt.shipping.name }}</span>
+                    <span class="help-block mb-0">{{ value.shipping.name }}</span>
                 </div>
-                <div>{{ receipt.shipping.price }}</div>
+                <div>{{ value.shipping.price }}</div>
             </div>
-            <div v-if="receipt.taxes" class="receipt-total">
+            <div v-if="value.taxes" class="receipt-total">
                 <div>
                     <span>{{ __('Taxes') }}</span>
-                    <span v-for="item in receipt.taxes.breakdown" class="help-block mb-0">{{ item.rate }}% {{ item.description }} ({{ item.amount }})</span>
+                    <span v-for="item in value.taxes.breakdown" class="help-block mb-0">{{ item.rate }}% {{ item.description }} ({{ item.amount }})</span>
                 </div>
-                <div>{{ receipt.totals.tax_total }}</div>
+                <div>{{ value.totals.tax_total }}</div>
             </div>
             <div class="receipt-total font-bold">
                 <div>{{ __('Grand Total') }}</div>
-                <div>{{ receipt.totals.grand_total }}</div>
+                <div>{{ value.totals.grand_total }}</div>
             </div>
-            <div v-if="receipt.refund.issued" class="receipt-total">
-                <div>{{ __('Refund') }}</div>
-                <div>-{{ receipt.totals.amount_refunded }}</div>
+            <div v-if="value.refund.issued" class="receipt-total">
+                <div>{{ __('Refunded') }}</div>
+                <div>-{{ value.totals.amount_refunded }}</div>
             </div>
         </div>
     </div>
@@ -68,7 +68,7 @@ export default {
 
     methods: {
         lineItemUpdated(lineItem) {
-            this.receipt.line_items = this.receipt.line_items.map(item => {
+            this.value.line_items = this.value.line_items.map(item => {
                 if (item.id === lineItem.id) {
                     return lineItem
                 }
