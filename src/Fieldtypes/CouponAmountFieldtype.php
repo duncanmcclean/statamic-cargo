@@ -4,6 +4,7 @@ namespace DuncanMcClean\Cargo\Fieldtypes;
 
 use Statamic\Fields\Field;
 use Statamic\Fields\Fieldtype;
+use Statamic\Support\Arr;
 
 class CouponAmountFieldtype extends Fieldtype
 {
@@ -29,18 +30,21 @@ class CouponAmountFieldtype extends Fieldtype
             return null;
         }
 
-        return $this
-            ->resolveValueField($this->field->parent()->type()->value)
-            ->fieldtype()
-            ->preProcess($data);
+        return [
+            'mode' => $this->field->parent()->type()->value,
+            'value' => $this
+                ->resolveValueField($this->field->parent()->type()->value)
+                ->fieldtype()
+                ->preProcess($data),
+        ];
     }
 
     public function process($data)
     {
         return $this
-            ->resolveValueField($data['mode'])
+            ->resolveValueField(Arr::get($data, 'mode'))
             ->fieldtype()
-            ->process($data['value']);
+            ->process(Arr::get($data, 'value'));
     }
 
     public function augment($value)
@@ -72,6 +76,7 @@ class CouponAmountFieldtype extends Fieldtype
         if ($mode === 'fixed') {
             return new Field('coupon_value', [
                 'type' => 'money',
+                'save_zero_value' => true,
             ]);
         }
 

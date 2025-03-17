@@ -56,7 +56,7 @@ export default {
                 value: couponValue,
             }
 
-            if (JSON.stringify(this.couponValue) !== JSON.stringify(this.value)) {
+            if (JSON.stringify(value) !== JSON.stringify(this.value)) {
                 this.update(value);
             }
         },
