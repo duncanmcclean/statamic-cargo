@@ -2,7 +2,9 @@
 
 namespace Tests\Tags;
 
+use DuncanMcClean\Cargo\Coupons\CouponType;
 use DuncanMcClean\Cargo\Facades\Cart;
+use DuncanMcClean\Cargo\Facades\Coupon;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
@@ -41,8 +43,21 @@ class CartTest extends TestCase
 
         Cart::setCurrent($cart);
 
-        $this->assertEquals('£15.23', (string) $this->tag('{{ cart:grand_total }}'));
-        $this->assertEquals('bar', (string) $this->tag('{{ cart:foo }}'));
+        $this->assertEquals('£15.23', (string)$this->tag('{{ cart:grand_total }}'));
+        $this->assertEquals('bar', (string)$this->tag('{{ cart:foo }}'));
+    }
+
+    #[Test]
+    public function can_get_nested_data_using_wildcard()
+    {
+        $coupon = tap(Coupon::make()->code('FOOBAR')->type(CouponType::Fixed)->amount(450))->save();
+
+        $cart = tap(Cart::make()->coupon($coupon->id())->set('foo', ['bar' => 'baz']))->saveWithoutRecalculating();
+
+        Cart::setCurrent($cart);
+
+        $this->assertEquals('FOOBAR', (string) $this->tag('{{ cart:coupon:code }}'));
+        $this->assertEquals('baz', (string) $this->tag('{{ cart:foo:bar }}'));
     }
 
     #[Test]

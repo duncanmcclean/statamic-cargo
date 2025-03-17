@@ -8,7 +8,9 @@ use DuncanMcClean\Cargo\Support\Money;
 use Illuminate\Support\Str;
 use Statamic\Facades\Blink;
 use Statamic\Facades\Site;
+use Statamic\Support\Arr;
 use Statamic\Tags\Tags;
+use function Statamic\View\Blade\tag;
 
 class Cart extends Tags
 {
@@ -23,11 +25,16 @@ class Cart extends Tags
         return CartFacade::current()->toAugmentedArray();
     }
 
-    public function wildcard($field)
+    public function customer()
     {
+        return CartFacade::current()->customer()->toAugmentedArray();
+    }
+
+    public function wildcard($tag)
+    {
+        // To prevent empty carts being created unintentionally, we'll return default values for some fields.
         if (! CartFacade::hasCurrentCart()) {
-            // To prevent empty carts, we'll return default values for some fields.
-            if (in_array($field, ['grand_total', 'sub_total', 'discount_total', 'tax_total', 'shipping_total'])) {
+            if (in_array($tag, ['grand_total', 'sub_total', 'discount_total', 'tax_total', 'shipping_total'])) {
                 return Money::format(0, Site::current());
             }
 
@@ -36,11 +43,20 @@ class Cart extends Tags
 
         $cart = Blink::once('cart', fn () => CartFacade::current());
 
-        if (method_exists($this, $method = Str::camel($field))) {
+        if (method_exists($this, $method = Str::camel($tag))) {
             return $this->{$method}();
         }
 
-        return $cart->augmentedValue($field);
+        // When doing something like `{{ cart:coupon:code }}`, we need to get coupon first,
+        // then we can use Laravel's Arr helper to get the value from the array.
+        if (Str::contains($tag, ':')) {
+            $field = Str::before($tag, ':');
+            $key = Str::of($tag)->after(':')->replace(':', '.')->__toString();
+
+            return Arr::get($cart->augmentedValue($field), $key);
+        }
+
+        return $cart->augmentedValue($tag);
     }
 
     public function exists(): bool
