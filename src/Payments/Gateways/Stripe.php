@@ -28,7 +28,7 @@ class Stripe extends PaymentGateway
         \Stripe\Stripe::setApiKey($this->config()->get('secret'));
 
         \Stripe\Stripe::setAppInfo(
-            appName: 'Simple Commerce (Statamic)', // TODO: Do we need to update the app name in Stripe?
+            appName: 'Cargo (Statamic)',
             appVersion: Cargo::version(),
             appUrl: 'https://statamic.com/addons/duncanmcclean/cargo',
             appPartnerId: 'pp_partner_Jnvy4cdwcRmxfh'
