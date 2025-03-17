@@ -10,7 +10,6 @@ use Statamic\Facades\Blink;
 use Statamic\Facades\Site;
 use Statamic\Support\Arr;
 use Statamic\Tags\Tags;
-use function Statamic\View\Blade\tag;
 
 class Cart extends Tags
 {
