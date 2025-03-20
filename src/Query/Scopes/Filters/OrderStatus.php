@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Scopes\Filters;
+namespace DuncanMcClean\Cargo\Query\Scopes\Filters;
 
 use DuncanMcClean\Cargo\Orders\OrderStatus as OrderStatusEnum;
 use Statamic\Query\Scopes\Filter;

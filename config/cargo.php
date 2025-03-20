@@ -36,7 +36,7 @@ return [
 
         'unique_metadata' => false,
 
-        'purge_abandoned_carts_after' => 90,
+        'purge_abandoned_carts_after' => 30,
 
         // When a user logs in, and they've already started a cart elsewhere, should the two carts be merged?
         'merge_on_login' => true,

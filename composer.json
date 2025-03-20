@@ -25,7 +25,8 @@
         "laravel": {
             "providers": [
                 "DuncanMcClean\\Cargo\\ServiceProvider",
-                "DuncanMcClean\\Cargo\\Payments\\PaymentServiceProvider"
+                "DuncanMcClean\\Cargo\\Payments\\PaymentServiceProvider",
+                "DuncanMcClean\\Cargo\\Shipping\\ShippingServiceProvider"
             ]
         }
     },

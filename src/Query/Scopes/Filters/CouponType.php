@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Scopes\Filters;
+namespace DuncanMcClean\Cargo\Query\Scopes\Filters;
 
 use DuncanMcClean\Cargo\Coupons\CouponType as CouponTypeEnum;
 use Statamic\Query\Scopes\Filter;

@@ -31,9 +31,9 @@ class ServiceProvider extends AddonServiceProvider
 
     // TODO: AddonServiceProvider::bootScopes() only autoloads from src/Scopes, not src/Scopes/Filters.
     protected $scopes = [
-        Scopes\Filters\CouponType::class,
-        Scopes\Filters\OrderSite::class,
-        Scopes\Filters\OrderStatus::class,
+        Query\Scopes\Filters\CouponType::class,
+        Query\Scopes\Filters\OrderSite::class,
+        Query\Scopes\Filters\OrderStatus::class,
     ];
 
     protected $vite = [
@@ -44,10 +44,6 @@ class ServiceProvider extends AddonServiceProvider
             'resources/js/cp.js',
             'resources/css/cp.css',
         ],
-    ];
-
-    protected array $shippingMethods = [
-        Shipping\FreeShipping::class,
     ];
 
     public function bootAddon()
@@ -123,36 +119,32 @@ class ServiceProvider extends AddonServiceProvider
             );
         }
 
-        foreach ($this->shippingMethods as $shippingMethod) {
-            $shippingMethod::register();
-        }
-
         $this->app->bind(Contracts\Taxes\Driver::class, Taxes\DefaultTaxDriver::class);
 
         $this->app->make(Schedule::class)->job(PurgeAbandonedCarts::class)->daily();
 
         Nav::extend(function ($nav) {
             $nav->create(__('Orders'))
-                ->section(__('Cargo'))
+                ->section('Store')
                 ->route('cargo.orders.index')
                 ->icon(Cargo::svg('shop'))
                 ->can('view orders');
 
             $nav->create(__('Coupons'))
-                ->section(__('Cargo'))
+                ->section('Store')
                 ->route('cargo.coupons.index')
                 ->icon('tags')
                 ->can('view coupons');
 
             if (Cargo::usingDefaultTaxDriver()) {
                 $nav->create(__('Tax Classes'))
-                    ->section(__('Cargo'))
+                    ->section('Store')
                     ->route('cargo.tax-classes.index')
                     ->icon(Cargo::svg('money-cash-file-dollar'))
                     ->can('manage taxes');
 
                 $nav->create(__('Tax Zones'))
-                    ->section(__('Cargo'))
+                    ->section('Store')
                     ->route('cargo.tax-zones.index')
                     ->icon(Cargo::svg('money-cash-file-dollar'))
                     ->can('manage taxes');
@@ -200,33 +192,37 @@ class ServiceProvider extends AddonServiceProvider
         MultisiteCommand::hook('after', function ($payload, $next) {
             Config::set('statamic.system.multisite', false);
 
-            $this->components->task(
-                description: 'Updating carts',
-                task: function () {
-                    $base = \Statamic\Facades\Stache::store('carts')->directory();
+            if (config('statamic.cargo.carts.repository') === 'file') {
+                $this->components->task(
+                    description: 'Updating carts',
+                    task: function () {
+                        $base = \Statamic\Facades\Stache::store('carts')->directory();
 
-                    File::makeDirectory("{$base}/{$this->siteHandle}");
+                        File::makeDirectory("{$base}/{$this->siteHandle}");
 
-                    File::getFiles($base)->each(function ($file) use ($base) {
-                        $filename = pathinfo($file, PATHINFO_BASENAME);
-                        File::move($file, "{$base}/{$this->siteHandle}/{$filename}");
-                    });
-                }
-            );
+                        File::getFiles($base)->each(function ($file) use ($base) {
+                            $filename = pathinfo($file, PATHINFO_BASENAME);
+                            File::move($file, "{$base}/{$this->siteHandle}/{$filename}");
+                        });
+                    }
+                );
+            }
 
-            $this->components->task(
-                description: 'Updating orders',
-                task: function () {
-                    $base = \Statamic\Facades\Stache::store('orders')->directory();
+            if (config('statamic.cargo.orders.repository') === 'file') {
+                $this->components->task(
+                    description: 'Updating orders',
+                    task: function () {
+                        $base = \Statamic\Facades\Stache::store('orders')->directory();
 
-                    File::makeDirectory("{$base}/{$this->siteHandle}");
+                        File::makeDirectory("{$base}/{$this->siteHandle}");
 
-                    File::getFiles($base)->each(function ($file) use ($base) {
-                        $filename = pathinfo($file, PATHINFO_BASENAME);
-                        File::move($file, "{$base}/{$this->siteHandle}/{$filename}");
-                    });
-                }
-            );
+                        File::getFiles($base)->each(function ($file) use ($base) {
+                            $filename = pathinfo($file, PATHINFO_BASENAME);
+                            File::move($file, "{$base}/{$this->siteHandle}/{$filename}");
+                        });
+                    }
+                );
+            }
 
             Config::set('statamic.system.multisite', true);
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Scopes\Filters;
+namespace DuncanMcClean\Cargo\Query\Scopes\Filters;
 
 use Statamic\Facades\Site;
 use Statamic\Query\Scopes\Filter;
