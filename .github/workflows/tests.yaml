@@ -27,7 +27,7 @@ jobs:
 
       - name: Get changed files (Payments)
         id: changed-files-payments
-        uses: tj-actions/changed-files@v44
+        uses: tj-actions/changed-files@v46
         with:
           files: |
             .github/workflows/tests.yaml
