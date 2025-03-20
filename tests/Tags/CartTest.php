@@ -43,8 +43,8 @@ class CartTest extends TestCase
 
         Cart::setCurrent($cart);
 
-        $this->assertEquals('£15.23', (string)$this->tag('{{ cart:grand_total }}'));
-        $this->assertEquals('bar', (string)$this->tag('{{ cart:foo }}'));
+        $this->assertEquals('£15.23', (string) $this->tag('{{ cart:grand_total }}'));
+        $this->assertEquals('bar', (string) $this->tag('{{ cart:foo }}'));
     }
 
     #[Test]
