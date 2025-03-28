@@ -142,15 +142,15 @@ class DatabaseCarts extends Command
 
     private function updateConfig(): self
     {
-        if (config('statamic.cargo.carts.repository') === 'eloquent') {
+        if (config('statamic.cargo.carts.driver') === 'eloquent') {
             $this->components->info('Carts repository is already set to `eloquent`.');
 
             return $this;
         }
 
-        ConfigWriter::write('statamic.cargo.carts.repository', 'eloquent');
+        ConfigWriter::write('statamic.cargo.carts.driver', 'eloquent');
 
-        $this->components->info('Cargo carts repository set to `eloquent`.');
+        $this->components->info('Cargo carts driver set to `eloquent`.');
 
         return $this;
     }

@@ -87,7 +87,7 @@ class ServiceProvider extends AddonServiceProvider
             }
         });
 
-        if (config('statamic.cargo.carts.repository') === 'eloquent') {
+        if (config('statamic.cargo.carts.driver') === 'eloquent') {
             $this->app->bind('cargo.carts.eloquent.model', function () {
                 return config('statamic.cargo.carts.model', \DuncanMcClean\Cargo\Cart\Eloquent\CartModel::class);
             });
@@ -102,7 +102,7 @@ class ServiceProvider extends AddonServiceProvider
             );
         }
 
-        if (config('statamic.cargo.orders.repository') === 'eloquent') {
+        if (config('statamic.cargo.orders.driver') === 'eloquent') {
             $this->app->bind('cargo.orders.eloquent.model', function () {
                 return config('statamic.cargo.orders.model', \DuncanMcClean\Cargo\Orders\Eloquent\OrderModel::class);
             });
@@ -190,7 +190,7 @@ class ServiceProvider extends AddonServiceProvider
         MultisiteCommand::hook('after', function ($payload, $next) {
             Config::set('statamic.system.multisite', false);
 
-            if (config('statamic.cargo.carts.repository') === 'file') {
+            if (config('statamic.cargo.carts.driver') === 'file') {
                 $this->components->task(
                     description: 'Updating carts',
                     task: function () {
@@ -206,7 +206,7 @@ class ServiceProvider extends AddonServiceProvider
                 );
             }
 
-            if (config('statamic.cargo.orders.repository') === 'file') {
+            if (config('statamic.cargo.orders.driver') === 'file') {
                 $this->components->task(
                     description: 'Updating orders',
                     task: function () {
@@ -228,8 +228,8 @@ class ServiceProvider extends AddonServiceProvider
         });
 
         AboutCommand::add('Cargo', fn () => [
-            'Carts' => config('statamic.cargo.carts.repository'),
-            'Orders' => config('statamic.cargo.orders.repository'),
+            'Carts' => config('statamic.cargo.carts.driver'),
+            'Orders' => config('statamic.cargo.orders.driver'),
             'Payment Gateways' => collect(config('statamic.cargo.payments.gateways'))
                 ->map(function (array $gateway, string $handle) {
                     $paymentGateway = PaymentGateway::find($handle);

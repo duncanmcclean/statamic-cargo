@@ -20,7 +20,7 @@ return [
     ],
 
     'carts' => [
-        'repository' => 'file',
+        'driver' => 'file',
 
         // Flat file repository
         'directory' => base_path('content/cargo/carts'),
@@ -43,7 +43,7 @@ return [
     ],
 
     'orders' => [
-        'repository' => 'file',
+        'driver' => 'file',
 
         // Flat file repository
         'directory' => base_path('content/cargo/orders'),

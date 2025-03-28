@@ -144,15 +144,15 @@ class DatabaseOrders extends Command
 
     private function updateConfig(): self
     {
-        if (config('statamic.cargo.orders.repository') === 'eloquent') {
+        if (config('statamic.cargo.orders.driver') === 'eloquent') {
             $this->components->info('Orders repository is already set to `eloquent`.');
 
             return $this;
         }
 
-        ConfigWriter::write('statamic.cargo.orders.repository', 'eloquent');
+        ConfigWriter::write('statamic.cargo.orders.driver', 'eloquent');
 
-        $this->components->info('Cargo orders repository set to `eloquent`.');
+        $this->components->info('Cargo orders driver set to `eloquent`.');
 
         return $this;
     }

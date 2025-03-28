@@ -14,6 +14,7 @@ class CodeInjection
         $lines = explode("\n", $contents);
 
         $useLines = array_filter($lines, fn ($line) => Str::startsWith($line, 'use '));
+        $originalUseLines = $useLines;
 
         foreach ($imports as $import) {
             $useLines[] = "use $import;";
@@ -26,8 +27,8 @@ class CodeInjection
         usort($useLines, fn ($a, $b) => strcasecmp(substr($a, 4), substr($b, 4)));
 
         // Get the position of the first and last "use " lines.
-        $firstUseLine = array_search('use '.ltrim($useLines[0], 'use '), $lines);
-        $lastUseLine = array_search('use '.ltrim($useLines[count($useLines) - 1], 'use '), $lines);
+        $firstUseLine = array_key_first($originalUseLines);
+        $lastUseLine = array_key_last($originalUseLines);
 
         // Replace everything in between the first and last "use " lines with the new imports.
         $contents = implode("\n", array_merge(

@@ -3,6 +3,7 @@
 namespace DuncanMcClean\Cargo\Console\Commands;
 
 use DuncanMcClean\Cargo\Data\Currencies;
+use DuncanMcClean\Cargo\Facades\TaxClass;
 use DuncanMcClean\Cargo\Support\CodeInjection;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -35,7 +36,8 @@ class InstallCommand extends Command
             ->promptToPublishMailables()
             ->promptToGitignoreCartsDirectory()
             ->promptToGitignoreOrdersDirectory()
-            ->schedulePurgeAbandonedCartsCommand();
+            ->schedulePurgeAbandonedCartsCommand()
+            ->createGeneralTaxClass();
 
         $this->line('  <fg=green;options=bold>Cargo has been installed!</> 🎉');
         $this->newLine();
@@ -82,15 +84,15 @@ class InstallCommand extends Command
             label: 'Which collection contains your products?',
             options: Collection::all()
                 ->mapWithKeys(fn ($collection) => [$collection->handle() => $collection->title()])
-                ->push('Create a "Products" collection')
+                ->merge(['new' => 'Create a "Products" collection'])
                 ->all(),
             hint: 'If you need to, you can always add additional collections later.'
         );
 
-        if ($collection === 'Create a "Products" collection') {
+        if ($collection === 'new') {
             $name = text('What should the collection be called?', default: 'Products');
 
-            Collection::make($collection = Str::studly($name))
+            Collection::make($collection = Str::kebab($name))
                 ->title($name)
                 ->routes([Site::default()->handle() => Str::plural(Str::kebab($name)).'/{slug}'])
                 ->save();
@@ -224,6 +226,13 @@ PHP;
         File::put(base_path('routes/console.php'), $consoleRoutes);
 
         $this->components->info('Command [cargo:purge-abandoned-carts] has been scheduled to run daily.');
+
+        return $this;
+    }
+
+    private function createGeneralTaxClass(): self
+    {
+        TaxClass::make()->handle('general')->set('name', __('General'))->save();
 
         return $this;
     }
