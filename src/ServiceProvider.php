@@ -123,8 +123,6 @@ class ServiceProvider extends AddonServiceProvider
 
         $this->app->bind(Contracts\Taxes\Driver::class, Taxes\DefaultTaxDriver::class);
 
-        $this->app->make(Schedule::class)->job(PurgeAbandonedCarts::class)->daily();
-
         Nav::extend(function ($nav) {
             $nav->create(__('Orders'))
                 ->section('Store')
