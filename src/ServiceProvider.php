@@ -6,14 +6,12 @@ use DuncanMcClean\Cargo\Facades\Coupon;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Facades\PaymentGateway;
 use DuncanMcClean\Cargo\Facades\TaxClass;
-use DuncanMcClean\Cargo\Jobs\PurgeAbandonedCarts;
 use DuncanMcClean\Cargo\Stache\Query\CartQueryBuilder;
 use DuncanMcClean\Cargo\Stache\Query\CouponQueryBuilder;
 use DuncanMcClean\Cargo\Stache\Query\OrderQueryBuilder;
 use DuncanMcClean\Cargo\Stache\Stores\CartsStore;
 use DuncanMcClean\Cargo\Stache\Stores\CouponsStore;
 use DuncanMcClean\Cargo\Stache\Stores\OrdersStore;
-use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Support\Facades\Route;
 use DuncanMcClean\Cargo\Facades\TaxZone;
@@ -34,10 +32,18 @@ class ServiceProvider extends AddonServiceProvider
 {
     protected $config = false;
 
+    protected $policies = [
+        Contracts\Coupons\Coupon::class => Policies\CouponPolicy::class,
+        Contracts\Orders\Order::class => Policies\OrderPolicy::class,
+    ];
+
+    public $singletons = [
+        Contracts\Taxes\Driver::class => Taxes\DefaultTaxDriver::class,
+    ];
+
     protected $vite = [
-        //        'hotFile' => 'vendor/cargo/dist/hot',
-        'hotFile' => 'vendor/cargo/hot',
-        'publicDirectory' => 'dist',
+        'hotFile' => __DIR__.'/../resources/dist/hot',
+        'publicDirectory' => 'resources/dist',
         'input' => [
             'resources/js/cp.js',
             'resources/css/cp.css',
@@ -60,6 +66,24 @@ class ServiceProvider extends AddonServiceProvider
             __DIR__.'/../resources/views/packing-slip.antlers.html' => resource_path('views/vendor/cargo/packing-slip.antlers.html'),
         ], 'cargo-packing-slip');
 
+        User::computed('orders', function ($user) {
+            return Order::query()->where('customer', $user->getKey())->orderByDesc('date')->pluck('id')->all();
+        });
+
+        $this
+            ->bootStacheStores()
+            ->bootRepositories()
+            ->bootNav()
+            ->bootPermissions()
+            ->bootRouteBindings()
+            ->bootGit()
+            ->registerBlueprintNamespace()
+            ->addAboutCommandInfo()
+            ->addMultisiteCommandHook();
+    }
+
+    protected function bootStacheStores(): self
+    {
         $this->app['stache']->registerStores([
             (new CartsStore)->directory(config('statamic.cargo.carts.directory')),
             (new CouponsStore)->directory(config('statamic.cargo.coupons.directory')),
@@ -78,6 +102,11 @@ class ServiceProvider extends AddonServiceProvider
             return new OrderQueryBuilder($this->app->make(Stache::class)->store('orders'));
         });
 
+        return $this;
+    }
+
+    protected function bootRepositories(): self
+    {
         collect([
             \DuncanMcClean\Cargo\Contracts\Cart\CartRepository::class => \DuncanMcClean\Cargo\Stache\Repositories\CartRepository::class,
             \DuncanMcClean\Cargo\Contracts\Coupons\CouponRepository::class => \DuncanMcClean\Cargo\Stache\Repositories\CouponRepository::class,
@@ -121,8 +150,11 @@ class ServiceProvider extends AddonServiceProvider
             );
         }
 
-        $this->app->bind(Contracts\Taxes\Driver::class, Taxes\DefaultTaxDriver::class);
+        return $this;
+    }
 
+    protected function bootNav(): self
+    {
         Nav::extend(function ($nav) {
             $nav->create(__('Orders'))
                 ->section('Store')
@@ -151,6 +183,11 @@ class ServiceProvider extends AddonServiceProvider
             }
         });
 
+        return $this;
+    }
+
+    protected function bootPermissions(): self
+    {
         Permission::extend(function () {
             Permission::group('cargo', __('Cargo'), function () {
                 Permission::register('view coupons', function ($permission) {
@@ -179,16 +216,128 @@ class ServiceProvider extends AddonServiceProvider
             });
         });
 
-        User::computed('orders', function ($user) {
-            return Order::query()->where('customer', $user->getKey())->orderByDesc('date')->pluck('id')->all();
+        return $this;
+    }
+
+    protected function bootRouteBindings(): self
+    {
+        Route::bind('coupon', function ($id, $route = null) {
+            if (! $route || ! $this->isCpRoute($route)) {
+                return false;
+            }
+
+            $field = $route->bindingFieldFor('coupon') ?? 'id';
+
+            return $field == 'id'
+                ? Coupon::find($id)
+                : Coupon::query()->where($field, $id)->first();
         });
 
+        Route::bind('order', function ($id, $route = null) {
+            if (! $route || ! $this->isCpRoute($route)) {
+                return false;
+            }
+
+            $field = $route->bindingFieldFor('order') ?? 'id';
+
+            return $field == 'id'
+                ? Order::find($id)
+                : Order::query()->where($field, $id)->first();
+        });
+
+        Route::bind('tax-class', function ($handle, $route = null) {
+            if (! $route || ! $this->isCpRoute($route)) {
+                return false;
+            }
+
+            return TaxClass::find($handle);
+        });
+
+        Route::bind('tax-zone', function ($handle, $route = null) {
+            if (! $route || ! $this->isCpRoute($route)) {
+                return false;
+            }
+
+            return TaxZone::find($handle);
+        });
+
+        return $this;
+    }
+
+    protected function isCpRoute(\Illuminate\Routing\Route $route)
+    {
+        $cp = \Statamic\Support\Str::ensureRight(config('statamic.cp.route'), '/');
+
+        if ($cp === '/') {
+            return true;
+        }
+
+        return Str::startsWith($route->uri(), $cp);
+    }
+
+    protected function bootGit(): self
+    {
+        if (config('statamic.git.enabled')) {
+            $gitEvents = [
+                Events\CartDeleted::class,
+                Events\CartSaved::class,
+                Events\CouponDeleted::class,
+                Events\CouponSaved::class,
+                Events\OrderDeleted::class,
+                Events\OrderSaved::class,
+                Events\TaxClassDeleted::class,
+                Events\TaxClassSaved::class,
+                Events\TaxZoneDeleted::class,
+                Events\TaxZoneSaved::class,
+            ];
+
+            foreach ($gitEvents as $event) {
+                Git::listen($event);
+            }
+        }
+
+        return $this;
+    }
+
+    protected function registerBlueprintNamespace(): self
+    {
         Blueprint::addNamespace('cargo', __DIR__.'/../resources/blueprints');
 
         if (! Blueprint::find('cargo::order')) {
             Blueprint::make('order')->setNamespace('cargo')->save();
         }
 
+        return $this;
+    }
+
+    protected function addAboutCommandInfo(): self
+    {
+        AboutCommand::add('Cargo', fn () => [
+            'Carts' => config('statamic.cargo.carts.driver'),
+            'Orders' => config('statamic.cargo.orders.driver'),
+            'Payment Gateways' => collect(config('statamic.cargo.payments.gateways'))
+                ->map(function (array $gateway, string $handle) {
+                    $paymentGateway = PaymentGateway::find($handle);
+
+                    if (! $paymentGateway) {
+                        return $handle;
+                    }
+
+                    if (! Str::startsWith(get_class($paymentGateway), 'DuncanMcClean\\Cargo')) {
+                        return "{$paymentGateway->title()} (Custom)";
+                    }
+
+                    return $paymentGateway->title();
+                })
+                ->filter()
+                ->join(', '),
+        ]);
+
+        return $this;
+    }
+
+    protected function addMultisiteCommandHook(): self
+    {
         MultisiteCommand::hook('after', function ($payload, $next) {
             Config::set('statamic.system.multisite', false);
 
@@ -229,95 +378,6 @@ class ServiceProvider extends AddonServiceProvider
             return $next($payload);
         });
 
-        AboutCommand::add('Cargo', fn () => [
-            'Carts' => config('statamic.cargo.carts.driver'),
-            'Orders' => config('statamic.cargo.orders.driver'),
-            'Payment Gateways' => collect(config('statamic.cargo.payments.gateways'))
-                ->map(function (array $gateway, string $handle) {
-                    $paymentGateway = PaymentGateway::find($handle);
-
-                    if (! $paymentGateway) {
-                        return $handle;
-                    }
-
-                    if (! Str::startsWith(get_class($paymentGateway), 'DuncanMcClean\\Cargo')) {
-                        return "{$paymentGateway->title()} (Custom)";
-                    }
-
-                    return $paymentGateway->title();
-                })
-                ->filter()
-                ->join(', '),
-        ]);
-
-        if (config('statamic.git.enabled')) {
-            $gitEvents = [
-                Events\CartDeleted::class,
-                Events\CartSaved::class,
-                Events\CouponDeleted::class,
-                Events\CouponSaved::class,
-                Events\OrderDeleted::class,
-                Events\OrderSaved::class,
-                Events\TaxClassDeleted::class,
-                Events\TaxClassSaved::class,
-                Events\TaxZoneDeleted::class,
-                Events\TaxZoneSaved::class,
-            ];
-
-            foreach ($gitEvents as $event) {
-                Git::listen($event);
-            }
-        }
-
-        Route::bind('coupon', function ($id, $route = null) {
-            if (! $route || ! $this->isCpRoute($route)) {
-                return false;
-            }
-
-            $field = $route->bindingFieldFor('coupon') ?? 'id';
-
-            return $field == 'id'
-                ? Coupon::find($id)
-                : Coupon::query()->where($field, $id)->first();
-        });
-
-        Route::bind('order', function ($id, $route = null) {
-            if (! $route || ! $this->isCpRoute($route)) {
-                return false;
-            }
-
-            $field = $route->bindingFieldFor('order') ?? 'id';
-
-            return $field == 'id'
-                ? Order::find($id)
-                : Order::query()->where($field, $id)->first();
-        });
-
-        Route::bind('tax-class', function ($handle, $route = null) {
-            if (! $route || ! $this->isCpRoute($route)) {
-                return false;
-            }
-
-            return TaxClass::find($handle);
-        });
-
-        Route::bind('tax-zone', function ($handle, $route = null) {
-            if (! $route || ! $this->isCpRoute($route)) {
-                return false;
-            }
-
-            return TaxZone::find($handle);
-        });
-    }
-
-    private function isCpRoute(\Illuminate\Routing\Route $route)
-    {
-        $cp = \Statamic\Support\Str::ensureRight(config('statamic.cp.route'), '/');
-
-        if ($cp === '/') {
-            return true;
-        }
-
-        return Str::startsWith($route->uri(), $cp);
+        return $this;
     }
 }

@@ -6,8 +6,8 @@ import svgLoader from './vite-svg-loader';
 export default defineConfig({
     plugins: [
         laravel({
-            hotFile: 'dist/hot',
-            publicDirectory: 'dist',
+            hotFile: 'resources/dist/hot',
+            publicDirectory: 'resources/dist',
             input: ['resources/js/cp.js', 'resources/css/cp.css'],
         }),
         vue2(),
