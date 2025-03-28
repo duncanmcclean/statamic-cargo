@@ -185,6 +185,8 @@ class CartTest extends TestCase
     {
         FakeShippingMethod::register();
 
+        config()->set('statamic.cargo.shipping.methods', ['fake_shipping_method' => []]);
+
         $cart = Cart::make()->set('shipping_method', 'fake_shipping_method');
 
         $this->assertInstanceOf(FakeShippingMethod::class, $cart->shippingMethod());
@@ -194,6 +196,8 @@ class CartTest extends TestCase
     public function it_returns_the_shipping_option()
     {
         FakeShippingMethod::register();
+
+        config()->set('statamic.cargo.shipping.methods', ['fake_shipping_method' => []]);
 
         $cart = Cart::make()
             ->set('shipping_method', 'fake_shipping_method')

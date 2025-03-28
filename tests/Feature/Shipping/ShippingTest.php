@@ -17,6 +17,8 @@ class ShippingTest extends TestCase
         parent::setUp();
 
         FakeShippingMethod::register();
+
+        config()->set('statamic.cargo.shipping.methods', ['fake_shipping_method' => []]);
     }
 
     #[Test]

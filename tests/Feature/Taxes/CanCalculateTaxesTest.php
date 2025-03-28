@@ -30,6 +30,8 @@ class CanCalculateTaxesTest extends TestCase
 
         PaidShipping::register();
 
+        config()->set('statamic.cargo.shipping.methods', ['paid_shipping' => []]);
+
         Collection::make('products')->save();
 
         TaxClass::make()->handle('standard')->set('name', 'Standard')->save();

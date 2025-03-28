@@ -14,12 +14,12 @@ abstract class ShippingMethod
 {
     use HasHandle, HasTitle, RegistersItself;
 
+    abstract public function options(Cart $cart): Collection;
+
     public function logo(): ?string
     {
         return null;
     }
-
-    abstract public function options(Cart $cart): Collection;
 
     public function fieldtypeDetails(Order $order): array
     {
@@ -27,5 +27,10 @@ abstract class ShippingMethod
             __('Amount') => Money::format($order->shippingTotal(), $order->site()),
             __('Tracking Number') => $order->get('tracking_number'),
         ]);
+    }
+
+    public function config(): Collection
+    {
+        return collect(config("statamic.cargo.shipping.methods.{$this->handle()}"));
     }
 }

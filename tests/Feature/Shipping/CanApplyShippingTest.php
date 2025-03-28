@@ -18,6 +18,8 @@ class CanApplyShippingTest extends TestCase
         parent::setUp();
 
         PaidShipping::register();
+
+        config()->set('statamic.cargo.shipping.methods', ['paid_shipping' => []]);
     }
 
     #[Test]

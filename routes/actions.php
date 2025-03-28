@@ -28,7 +28,6 @@ Route::name('cargo.')->group(function () {
 
     Route::name('payments.')
         ->prefix('payments')
-        ->withoutMiddleware()
         ->withoutMiddleware(['App\Http\Middleware\VerifyCsrfToken', 'Illuminate\Foundation\Http\Middleware\VerifyCsrfToken'])
         ->group(function () {
             Route::post('{paymentGateway}/webhook', WebhookController::class)->name('webhook');

@@ -22,6 +22,7 @@ class Manager
 
     public function classes(): Collection
     {
-        return app('statamic.extensions')[ShippingMethod::class];
+        return app('statamic.extensions')[ShippingMethod::class]
+            ->filter(fn ($class) => config()->has('statamic.cargo.shipping.methods.'.$class::handle()));
     }
 }

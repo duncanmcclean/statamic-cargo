@@ -28,16 +28,16 @@ abstract class PaymentGateway
 
     abstract public function refund(Order $order, int $amount): void;
 
+    public function logo(): ?string
+    {
+        return null;
+    }
+
     public function fieldtypeDetails(Order $order): array
     {
         return [
             __('Amount') => Money::format($order->grandTotal(), $order->site()),
         ];
-    }
-
-    public function logo(): ?string
-    {
-        return null;
     }
 
     public function config(): Collection

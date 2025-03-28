@@ -169,6 +169,8 @@ class OrderTest extends TestCase
     {
         FakeShippingMethod::register();
 
+        config()->set('statamic.cargo.shipping.methods', ['fake_shipping_method' => []]);
+
         $order = Order::make()->set('shipping_method', 'fake_shipping_method');
 
         $this->assertInstanceOf(FakeShippingMethod::class, $order->shippingMethod());
@@ -178,6 +180,8 @@ class OrderTest extends TestCase
     public function it_returns_the_shipping_option()
     {
         FakeShippingMethod::register();
+
+        config()->set('statamic.cargo.shipping.methods', ['fake_shipping_method' => []]);
 
         $order = Order::make()
             ->set('shipping_method', 'fake_shipping_method')
