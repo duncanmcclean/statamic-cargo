@@ -4,6 +4,7 @@ namespace Tests;
 
 use DuncanMcClean\Cargo\Payments\PaymentServiceProvider;
 use DuncanMcClean\Cargo\ServiceProvider;
+use DuncanMcClean\Cargo\Shipping\ShippingServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Statamic\Facades\Config;
 use Statamic\Facades\Site;
@@ -50,6 +51,7 @@ abstract class TestCase extends AddonTestCase
     {
         return array_merge(parent::getPackageProviders($app), [
             PaymentServiceProvider::class,
+            ShippingServiceProvider::class,
         ]);
     }
 
