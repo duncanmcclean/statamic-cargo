@@ -2,7 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Tags\Concerns;
 
-use Statamic\Tags\Concerns\GetsFormSession;
 use Statamic\Tags\Concerns\GetsRedirects;
 use Statamic\Tags\Concerns\RendersForms;
 

@@ -39,4 +39,3 @@ class CartShippingController
             ->isNotEmpty();
     }
 }
-

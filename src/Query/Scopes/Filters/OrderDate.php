@@ -2,7 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Query\Scopes\Filters;
 
-use DuncanMcClean\Cargo\Orders\OrderStatus as OrderStatusEnum;
 use Illuminate\Support\Arr;
 use Statamic\Query\Scopes\Filter;
 

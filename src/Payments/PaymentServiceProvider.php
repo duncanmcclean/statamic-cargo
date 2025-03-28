@@ -3,7 +3,6 @@
 namespace DuncanMcClean\Cargo\Payments;
 
 use DuncanMcClean\Cargo\Payments\Gateways\PaymentGateway;
-use DuncanMcClean\Cargo\Shipping\ShippingMethod;
 use Statamic\Providers\AddonServiceProvider;
 
 class PaymentServiceProvider extends AddonServiceProvider
