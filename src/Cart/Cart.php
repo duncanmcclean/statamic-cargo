@@ -16,7 +16,6 @@ use DuncanMcClean\Cargo\Facades;
 use DuncanMcClean\Cargo\Facades\Cart as CartFacade;
 use DuncanMcClean\Cargo\Facades\Coupon as CouponFacade;
 use DuncanMcClean\Cargo\Facades\Order;
-use DuncanMcClean\Cargo\Orders\AugmentedOrder;
 use DuncanMcClean\Cargo\Orders\HasTotals;
 use DuncanMcClean\Cargo\Orders\LineItems;
 use DuncanMcClean\Cargo\Payments\Gateways\PaymentGateway;

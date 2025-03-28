@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Statamic\Facades\User;
 use Statamic\Http\Controllers\CP\CpController;
-use Statamic\Statamic;
 
 class ConvertGuestCustomerController extends CpController
 {

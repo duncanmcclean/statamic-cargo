@@ -39,6 +39,7 @@ class InstallCommand extends Command
 
         if (! $this->input->isInteractive()) {
             $this->components->warn('Please run this command interactively.');
+
             return;
         }
 

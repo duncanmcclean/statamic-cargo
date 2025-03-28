@@ -2,7 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Http\Controllers\CP\Orders;
 
-use DuncanMcClean\Cargo\Facades\Order;
 use Illuminate\Http\Request;
 use Statamic\Http\Controllers\CP\CpController;
 

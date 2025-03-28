@@ -3,7 +3,6 @@
 namespace DuncanMcClean\Cargo\Orders;
 
 use DuncanMcClean\Cargo\Cart\AugmentedCart;
-use Statamic\Data\AbstractAugmented;
 
 class AugmentedOrder extends AugmentedCart
 {
