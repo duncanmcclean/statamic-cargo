@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Statamic\Exceptions\NotFoundHttpException;
+use Statamic\Sites\Site;
 
 class CheckoutController
 {
@@ -69,14 +70,14 @@ class CheckoutController
             }
 
             return redirect()
-                ->route(config('statamic.cargo.routes.checkout'))
+                ->route($this->getCheckoutRoute($cart->site()))
                 ->withErrors($e->errors());
         }
 
-        Cart::forgetCurrentCart($cart);
+        Cart::forgetCurrentCart();
 
         return redirect()->temporarySignedRoute(
-            route: config('statamic.cargo.routes.checkout_confirmation'),
+            route: $this->getCheckoutConfirmationRoute($cart->site()),
             expiration: now()->addHour(),
             parameters: ['order_id' => $order->id()]
         );
@@ -157,5 +158,23 @@ class CheckoutController
                 }
             }
         });
+    }
+
+    private function getCheckoutRoute(Site $site): string
+    {
+        if ($route = config("statamic.cargo.routes.{$site->handle()}.checkout")) {
+            return $route;
+        }
+
+        return config('statamic.cargo.routes.checkout');
+    }
+
+    private function getCheckoutConfirmationRoute(Site $site): string
+    {
+        if ($route = config("statamic.cargo.routes.{$site->handle()}.checkout_confirmation")) {
+            return $route;
+        }
+
+        return config('statamic.cargo.routes.checkout_confirmation');
     }
 }

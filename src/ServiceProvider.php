@@ -19,6 +19,7 @@ use Statamic\Facades\Blueprint;
 use Statamic\Facades\Config;
 use Statamic\Facades\CP\Nav;
 use Statamic\Facades\File;
+use Statamic\Facades\Git;
 use Statamic\Facades\Permission;
 use Statamic\Facades\User;
 use Statamic\Providers\AddonServiceProvider;
@@ -143,7 +144,7 @@ class ServiceProvider extends AddonServiceProvider
                 $nav->create(__('Tax Zones'))
                     ->section('Store')
                     ->route('cargo.tax-zones.index')
-                    ->icon(Cargo::svg('money-cash-file-dollar'))
+                    ->icon('pin')
                     ->can('manage taxes');
             }
         });
@@ -246,5 +247,24 @@ class ServiceProvider extends AddonServiceProvider
                 ->filter()
                 ->join(', '),
         ]);
+
+        if (config('statamic.git.enabled')) {
+            $gitEvents = [
+                Events\CartDeleted::class,
+                Events\CartSaved::class,
+                Events\CouponDeleted::class,
+                Events\CouponSaved::class,
+                Events\OrderDeleted::class,
+                Events\OrderSaved::class,
+                Events\TaxClassDeleted::class,
+                Events\TaxClassSaved::class,
+                Events\TaxZoneDeleted::class,
+                Events\TaxZoneSaved::class,
+            ];
+
+            foreach ($gitEvents as $event) {
+                Git::listen($event);
+            }
+        }
     }
 }
