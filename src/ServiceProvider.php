@@ -58,6 +58,10 @@ class ServiceProvider extends AddonServiceProvider
             __DIR__.'/../resources/views/checkout-stubs' => resource_path('views/checkout'),
         ], 'cargo-checkout-stubs');
 
+        $this->publishes([
+            __DIR__.'/../resources/views/packing-slip.antlers.html' => resource_path('views/vendor/cargo/packing-slip.antlers.html'),
+        ], 'cargo-packing-slip');
+
         $this->app['stache']->registerStores([
             (new CartsStore)->directory(config('statamic.cargo.carts.directory')),
             (new CouponsStore)->directory(config('statamic.cargo.coupons.directory')),

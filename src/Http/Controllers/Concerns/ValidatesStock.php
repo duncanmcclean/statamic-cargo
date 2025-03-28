@@ -13,7 +13,7 @@ trait ValidatesStock
     protected function validateStock(Request $request, Cart $cart, ?LineItem $lineItem = null): void
     {
         $product = Product::find($request->product ?? $lineItem->product);
-        $quantity = (int) ($request->quantity ?? $lineItem->quantity());
+        $quantity = (int) ($request->quantity ?? $lineItem?->quantity() ?? 1);
 
         if (
             $product->isStandardProduct()

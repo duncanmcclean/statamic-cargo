@@ -8,6 +8,7 @@ use DuncanMcClean\Cargo\Support\Money;
 use Illuminate\Support\Str;
 use Statamic\Facades\Blink;
 use Statamic\Facades\Site;
+use Statamic\Fields\Value;
 use Statamic\Support\Arr;
 use Statamic\Tags\Tags;
 
@@ -22,11 +23,6 @@ class Cart extends Tags
         }
 
         return CartFacade::current()->toAugmentedArray();
-    }
-
-    public function customer()
-    {
-        return CartFacade::current()->customer()->toAugmentedArray();
     }
 
     public function wildcard($tag)
@@ -52,7 +48,13 @@ class Cart extends Tags
             $field = Str::before($tag, ':');
             $key = Str::of($tag)->after(':')->replace(':', '.')->__toString();
 
-            return Arr::get($cart->augmentedValue($field), $key);
+            $array = $cart->augmentedValue($field);
+
+            if ($array instanceof Value) {
+                $array = $array->value();
+            }
+
+            return Arr::get($array, $key);
         }
 
         return $cart->augmentedValue($tag);

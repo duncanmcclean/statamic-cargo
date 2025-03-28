@@ -32,6 +32,8 @@ class CheckoutController
             $paymentGateway = PaymentGateway::find($paymentGateway);
 
             throw_if(! $paymentGateway, NotFoundHttpException::class);
+        } else {
+            $paymentGateway = null;
         }
 
         try {

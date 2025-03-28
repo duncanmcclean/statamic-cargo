@@ -9,8 +9,6 @@ use Illuminate\Support\Collection;
 
 class DummyClass extends ShippingMethod
 {
-    protected static $title = 'Free Shipping';
-
     public function options(Cart $cart): Collection
     {
         return collect([

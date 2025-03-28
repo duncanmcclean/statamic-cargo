@@ -2,13 +2,15 @@
 
 namespace DuncanMcClean\Cargo\Customers;
 
+use ArrayAccess;
+use Illuminate\Contracts\Support\Arrayable;
 use Statamic\Contracts\Data\Augmentable;
 use Statamic\Contracts\Data\Augmented;
 use Statamic\Data\ContainsData;
 use Statamic\Data\HasAugmentedInstance;
 use Statamic\Support\Traits\FluentlyGetsAndSets;
 
-class GuestCustomer implements Augmentable
+class GuestCustomer implements Arrayable, ArrayAccess, Augmentable
 {
     use ContainsData, FluentlyGetsAndSets, HasAugmentedInstance;
 

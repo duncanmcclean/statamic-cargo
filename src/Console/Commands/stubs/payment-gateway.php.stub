@@ -4,7 +4,6 @@ namespace DummyNamespace;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Orders\Order;
-use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Payments\Gateways\PaymentGateway;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
