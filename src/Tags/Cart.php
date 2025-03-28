@@ -87,7 +87,11 @@ class Cart extends Tags
 
     public function add()
     {
-        return $this->createForm(route('statamic.cargo.cart.line-items.store'));
+        if (! Str::contains($this->content, ['name="product"', 'name=\'product\'']) && $this->context->has('id')) {
+            $this->content .= '<input type="hidden" name="product" value="'.$this->context->get('id').'">';
+        }
+
+        return $this->createForm(route('statamic.cargo.cart.line-items.store'), knownParams: ['product']);
     }
 
     public function updateLineItem()

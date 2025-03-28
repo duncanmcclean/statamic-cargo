@@ -110,9 +110,12 @@ class CartTest extends TestCase
     #[Test]
     public function it_outputs_add_form()
     {
-        $output = $this->tag('{{ cart:add class="add-to-cart" }}<button>Add to Cart</button>{{ /cart:add }}');
+        $output = $this->tag('{{ cart:add class="add-to-cart" }}<button>Add to Cart</button>{{ /cart:add }}', [
+            'id' => '123',
+        ]);
 
         $this->assertStringContainsString('<form method="POST" action="http://localhost/!/cargo/cart/line-items" class="add-to-cart">', $output);
+        $this->assertStringContainsString('<input type="hidden" name="product" value="123">', $output);
         $this->assertStringContainsString('<button>Add to Cart</button>', $output);
     }
 

@@ -29,13 +29,6 @@ class ServiceProvider extends AddonServiceProvider
 {
     protected $config = false;
 
-    // TODO: AddonServiceProvider::bootScopes() only autoloads from src/Scopes, not src/Scopes/Filters.
-    protected $scopes = [
-        Query\Scopes\Filters\CouponType::class,
-        Query\Scopes\Filters\OrderSite::class,
-        Query\Scopes\Filters\OrderStatus::class,
-    ];
-
     protected $vite = [
         //        'hotFile' => 'vendor/cargo/dist/hot',
         'hotFile' => 'vendor/cargo/hot',

@@ -71,9 +71,19 @@ class OrderController extends CpController
 
         if ($search = request('search')) {
             $query
-                ->where('order_number', 'LIKE', '%'.Str::remove('#', $search).'%')
+                ->where('id', $search)
                 ->orWhere('date', 'LIKE', '%'.$search.'%')
-                ->orWhere('grand_total', 'LIKE', '%'.$search.'%');
+                ->orWhere('order_number', 'LIKE', '%'.Str::remove('#', $search).'%')
+                ->orWhere(function ($query) use ($search) {
+                    $users = User::query()
+                        ->where('name', 'LIKE', '%'.$search.'%')
+                        ->orWhere('email', 'LIKE', '%'.$search.'%')
+                        ->pluck('id')
+                        ->all();
+
+                    $query->whereIn('customer', $users);
+                })
+                ->orWhere('customer', "guest::$search%");
         }
 
         return $query;
