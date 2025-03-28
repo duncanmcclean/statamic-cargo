@@ -8,7 +8,7 @@
                     v-text="value.id" />
 
                 <div v-else>
-                    <a v-if="value.type === 'user' && value.viewable" :href="value.edit_url" @click.prevent="edit" class="truncate v-popper--has-tooltip">
+                    <a v-if="value.type === 'user' && value.editable" :href="value.edit_url" @click.prevent="edit" class="truncate v-popper--has-tooltip">
                         {{ value.name }}
                     </a>
 
@@ -33,9 +33,8 @@
 
                 <div class="flex items-center flex-1 justify-end">
                     <div class="flex items-center">
-                        <dropdown-list>
+                        <dropdown-list v-if="(value.type === 'user' && value.editable) || (value.type === 'guest' && meta.canCreateUsers)" class="ml-2">
                             <dropdown-item v-if="value.type === 'user' && value.editable" :text="__('Edit')" @click="edit" />
-                            <dropdown-item v-else-if="value.type === 'user' && value.viewable" :text="__('View')" @click="edit" />
                             <dropdown-item v-else-if="value.type === 'guest' && meta.canCreateUsers" :text="__('Convert to User')" @click="convertToUser" />
                         </dropdown-list>
                     </div>

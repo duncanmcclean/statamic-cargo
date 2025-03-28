@@ -52,7 +52,7 @@ class CustomerFieldtype extends Fieldtype
             'name' => $data->name(),
             'email' => $data->email(),
             'viewable' => User::current()->can('view', $data),
-            'editable' => User::current()->can('view', $data),
+            'editable' => User::current()->can('edit', $data),
             'edit_url' => $data->editUrl(),
         ];
     }

@@ -13,7 +13,7 @@ class EnsureUserFields
                 'type' => 'order',
                 'display' => 'Orders',
                 'listable' => false,
-                'visibility' => 'read_only',
+                'visibility' => 'computed',
             ]);
         }
     }

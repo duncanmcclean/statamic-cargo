@@ -40,8 +40,8 @@ class ListedCoupon extends JsonResource
             $this->merge($this->values()),
 
             'edit_url' => $coupon->editUrl(),
-            'editable' => User::current()->can('edit coupons'),
-            'viewable' => User::current()->can('view coupons'),
+            'viewable' => User::current()->can('view', $coupon),
+            'editable' => User::current()->can('edit', $coupon),
             'actions' => Action::for($coupon),
         ];
     }
