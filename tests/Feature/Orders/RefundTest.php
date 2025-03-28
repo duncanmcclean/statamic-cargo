@@ -28,7 +28,7 @@ class RefundTest extends TestCase
     {
         $order = Order::make()
             ->grandTotal(2500)
-            ->data(['amount_refunded' => 0, 'payment_gateway' => 'stripe']);
+            ->data(['amount_refunded' => 0, 'payment_gateway' => 'dummy']);
 
         $this->assertTrue($this->action->visibleTo($order));
     }
@@ -38,7 +38,7 @@ class RefundTest extends TestCase
     {
         $order = Order::make()
             ->grandTotal(2500)
-            ->data(['amount_refunded' => 2500, 'payment_gateway' => 'stripe']);
+            ->data(['amount_refunded' => 2500, 'payment_gateway' => 'dummy']);
 
         $this->assertFalse($this->action->visibleTo($order));
     }
