@@ -8,7 +8,11 @@
                     <div class="flex items-center">
                         <SvgIcon v-if="value.logo" :name="value.logo" class="h-10 w-10 mr-3" />
 
-                        <div class="font-semibold text-md">{{ value.title }}</div>
+                        <div
+                            class="font-semibold text-md"
+                            :class="{ 'text-red-500 dark:text-red-950': value.invalid }"
+                            v-tooltip.top="value.invalid ? __('This payment gateway is no longer installed') : null"
+                        >{{ value.title }}</div>
                     </div>
 
                     <div v-if="value.details" :class="{ 'mt-3': !value.logo, 'mt-5': value.logo }">

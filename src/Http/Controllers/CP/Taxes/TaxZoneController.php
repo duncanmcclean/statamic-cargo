@@ -113,8 +113,6 @@ class TaxZoneController extends CpController
     {
         $this->authorize('manage taxes');
 
-        $taxZone = TaxZone::find($taxZone);
-
         $blueprint = TaxZone::blueprint();
 
         $values = $taxZone->data();
@@ -155,8 +153,6 @@ class TaxZoneController extends CpController
     {
         $this->authorize('manage taxes');
 
-        $taxZone = TaxZone::find($taxZone);
-
         $blueprint = TaxZone::blueprint();
 
         $data = $request->except('handle');
@@ -190,7 +186,7 @@ class TaxZoneController extends CpController
     {
         $this->authorize('manage taxes');
 
-        TaxZone::find($taxZone)->delete();
+        $taxZone->delete();
 
         return response('', 204);
     }

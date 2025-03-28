@@ -149,8 +149,6 @@ class CouponController extends CpController
 
     public function edit(Request $request, $coupon)
     {
-        $coupon = Coupon::find($coupon);
-
         $this->authorize('view', $coupon);
 
         $blueprint = Coupon::blueprint();
@@ -192,8 +190,6 @@ class CouponController extends CpController
 
     public function update(Request $request, $coupon)
     {
-        $coupon = Coupon::find($coupon);
-
         $this->authorize('update', $coupon);
 
         $blueprint = Coupon::blueprint();

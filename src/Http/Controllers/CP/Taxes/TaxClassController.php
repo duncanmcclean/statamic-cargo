@@ -107,8 +107,6 @@ class TaxClassController extends CpController
     {
         $this->authorize('manage taxes');
 
-        $taxClass = TaxClass::find($taxClass);
-
         $blueprint = TaxClass::blueprint();
 
         $values = $taxClass->data();
@@ -149,8 +147,6 @@ class TaxClassController extends CpController
     {
         $this->authorize('manage taxes');
 
-        $taxClass = TaxClass::find($taxClass);
-
         $blueprint = TaxClass::blueprint();
 
         $data = $request->except('handle');
@@ -184,7 +180,7 @@ class TaxClassController extends CpController
     {
         $this->authorize('manage taxes');
 
-        TaxClass::find($taxClass)->delete();
+        $taxClass->delete();
 
         return response('', 204);
     }

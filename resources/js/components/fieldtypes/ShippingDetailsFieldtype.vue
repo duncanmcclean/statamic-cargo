@@ -10,7 +10,11 @@
 
                         <div class="flex flex-col space-y-1">
                             <span class="font-semibold text-md">{{ value.name }}</span>
-                            <span class="text-xs">{{ value.shipping_method.name }}</span>
+                            <span
+                                class="text-xs"
+                                :class="{ 'text-red-500 dark:text-red-950': value.invalid }"
+                                v-tooltip.top="value.invalid ? __('This shipping method is no longer installed') : null"
+                            >{{ value.shipping_method.name }}</span>
                         </div>
                     </div>
 

@@ -25,7 +25,7 @@ class UniqueTaxZone implements DataAwareRule, ValidationRule
                 ->filter(fn ($taxZone) => $taxZone->get('type') === 'countries')
                 ->when(
                     request()->route('tax_zone'),
-                    fn ($taxZones) => $taxZones->reject(fn ($taxZone) => $taxZone->handle() === request()->route('tax_zone'))
+                    fn ($taxZones) => $taxZones->reject(fn ($taxZone) => $taxZone->handle() === request()->route('tax_zone')->handle())
                 )
                 ->filter(function ($taxZone) use ($countries) {
                     return count(array_intersect($taxZone->get('countries'), $countries)) === count($countries);
@@ -44,7 +44,7 @@ class UniqueTaxZone implements DataAwareRule, ValidationRule
                 ->filter(fn ($taxZone) => $taxZone->get('type') === 'states')
                 ->when(
                     request()->route('tax_zone'),
-                    fn ($taxZones) => $taxZones->reject(fn ($taxZone) => $taxZone->handle() === request()->route('tax_zone'))
+                    fn ($taxZones) => $taxZones->reject(fn ($taxZone) => $taxZone->handle() === request()->route('tax_zone')->handle())
                 )
                 ->filter(function ($taxZone) use ($states) {
                     return count(array_intersect($taxZone->get('states'), $states)) === count($states);
@@ -63,7 +63,7 @@ class UniqueTaxZone implements DataAwareRule, ValidationRule
                 ->filter(fn ($taxZone) => $taxZone->get('type') === 'postcodes')
                 ->when(
                     request()->route('tax_zone'),
-                    fn ($taxZones) => $taxZones->reject(fn ($taxZone) => $taxZone->handle() === request()->route('tax_zone'))
+                    fn ($taxZones) => $taxZones->reject(fn ($taxZone) => $taxZone->handle() === request()->route('tax_zone')->handle())
                 )
                 ->filter(function ($taxZone) use ($postcodes) {
                     return count(array_intersect($taxZone->get('postcodes'), $postcodes)) === count($postcodes);

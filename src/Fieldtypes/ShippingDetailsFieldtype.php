@@ -3,6 +3,7 @@
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
 use Statamic\Fields\Fieldtype;
+use Statamic\Support\Arr;
 
 class ShippingDetailsFieldtype extends Fieldtype
 {
@@ -12,8 +13,23 @@ class ShippingDetailsFieldtype extends Fieldtype
     {
         $order = $this->field->parent();
 
-        if (! $order->shippingOption()) {
+        if (! $order->get('shipping_option')) {
             return ['has_shipping_option' => false];
+        }
+
+        if (! $order->shippingOption()) {
+            return [
+                'has_shipping_option' => true,
+                'invalid' => true,
+                'name' => Arr::get($order->get('shipping_option'), 'name'),
+                'handle' => Arr::get($order->get('shipping_option'), 'handle'),
+                'details' => [],
+                'shipping_method' => [
+                    'name' => $order->get('shipping_method'),
+                    'handle' => $order->get('shipping_method'),
+                    'logo' => null,
+                ],
+            ];
         }
 
         return [

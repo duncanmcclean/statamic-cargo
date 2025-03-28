@@ -46,7 +46,7 @@ class ShippingMethodFieldtype extends Relationship
         return collect($data)->map(function ($item) {
             $shippingMethod = ShippingMethod::find($item);
 
-            return $shippingMethod->title();
+            return $shippingMethod?->title();
         })->implode(', ');
     }
 

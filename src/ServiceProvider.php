@@ -2,8 +2,10 @@
 
 namespace DuncanMcClean\Cargo;
 
+use DuncanMcClean\Cargo\Facades\Coupon;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Facades\PaymentGateway;
+use DuncanMcClean\Cargo\Facades\TaxClass;
 use DuncanMcClean\Cargo\Jobs\PurgeAbandonedCarts;
 use DuncanMcClean\Cargo\Stache\Query\CartQueryBuilder;
 use DuncanMcClean\Cargo\Stache\Query\CouponQueryBuilder;
@@ -13,6 +15,8 @@ use DuncanMcClean\Cargo\Stache\Stores\CouponsStore;
 use DuncanMcClean\Cargo\Stache\Stores\OrdersStore;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\AboutCommand;
+use Illuminate\Support\Facades\Route;
+use DuncanMcClean\Cargo\Facades\TaxZone;
 use Illuminate\Support\Str;
 use Statamic\Console\Commands\Multisite as MultisiteCommand;
 use Statamic\Facades\Blueprint;
@@ -266,5 +270,56 @@ class ServiceProvider extends AddonServiceProvider
                 Git::listen($event);
             }
         }
+
+        Route::bind('coupon', function ($id, $route = null) {
+            if (! $route || ! $this->isCpRoute($route)) {
+                return false;
+            }
+
+            $field = $route->bindingFieldFor('coupon') ?? 'id';
+
+            return $field == 'id'
+                ? Coupon::find($id)
+                : Coupon::query()->where($field, $id)->first();
+        });
+
+        Route::bind('order', function ($id, $route = null) {
+            if (! $route || ! $this->isCpRoute($route)) {
+                return false;
+            }
+
+            $field = $route->bindingFieldFor('order') ?? 'id';
+
+            return $field == 'id'
+                ? Order::find($id)
+                : Order::query()->where($field, $id)->first();
+        });
+
+        Route::bind('tax-class', function ($handle, $route = null) {
+            if (! $route || ! $this->isCpRoute($route)) {
+                return false;
+            }
+
+            return TaxClass::find($handle);
+        });
+
+        Route::bind('tax-zone', function ($handle, $route = null) {
+            if (! $route || ! $this->isCpRoute($route)) {
+                return false;
+            }
+
+            return TaxZone::find($handle);
+        });
+    }
+
+    private function isCpRoute(\Illuminate\Routing\Route $route)
+    {
+        $cp = \Statamic\Support\Str::ensureRight(config('statamic.cp.route'), '/');
+
+        if ($cp === '/') {
+            return true;
+        }
+
+        return Str::startsWith($route->uri(), $cp);
     }
 }

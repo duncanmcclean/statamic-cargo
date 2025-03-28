@@ -91,8 +91,6 @@ class OrderController extends CpController
 
     public function edit(Request $request, $order)
     {
-        $order = Order::find($order);
-
         $this->authorize('edit', $order);
 
         $blueprint = Order::blueprint();
@@ -129,8 +127,6 @@ class OrderController extends CpController
 
     public function update(Request $request, $order)
     {
-        $order = Order::find($order);
-
         $this->authorize('update', $order);
 
         $blueprint = Order::blueprint();
