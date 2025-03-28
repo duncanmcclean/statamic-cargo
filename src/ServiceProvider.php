@@ -49,8 +49,8 @@ class ServiceProvider extends AddonServiceProvider
         ], 'cargo-config');
 
         $this->publishes([
-            __DIR__.'/../resources/views/checkout-stubs' => resource_path('views/checkout'),
-        ], 'cargo-checkout-stubs');
+            __DIR__.'/../resources/views/checkout' => resource_path('views/checkout'),
+        ], 'cargo-prebuilt-checkout');
 
         $this->publishes([
             __DIR__.'/../resources/views/packing-slip.antlers.html' => resource_path('views/vendor/cargo/packing-slip.antlers.html'),

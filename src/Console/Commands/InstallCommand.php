@@ -28,20 +28,35 @@ class InstallCommand extends Command
 
     public function handle(): void
     {
+        $this->output->write(PHP_EOL.'<fg=#02747E;options=bold>
+     ______                     
+    / ____/___ __________ _____ 
+   / /   / __ `/ ___/ __ `/ __ \
+  / /___/ /_/ / /  / /_/ / /_/ /
+  \____/\__,_/_/   \__, /\____/ 
+                  /____/        
+                </>'.PHP_EOL);
+
+        if (! $this->input->isInteractive()) {
+            $this->components->warn('Please run this command interactively.');
+            return;
+        }
+
         $this
             ->publishConfig()
-            ->promptForSiteCurrencies()
-            ->promptForProductsCollection()
-            ->promptToPublishCheckoutStubs()
-            ->promptToPublishMailables()
+            ->configureSiteCurrencies()
+            ->configureProductsCollection()
             ->promptToGitignoreCartsDirectory()
             ->promptToGitignoreOrdersDirectory()
+            ->publishMailables()
+            ->publishPrebuiltCheckout()
             ->schedulePurgeAbandonedCartsCommand()
             ->createGeneralTaxClass();
 
-        $this->line('  <fg=green;options=bold>Cargo has been installed!</> 🎉');
+        $this->line('  <fg=green;options=bold>Cargo has been installed successfully!</> 🎉');
         $this->newLine();
-        $this->line('  For more information on getting started, please review the documentation: <comment>https://builtwithcargo.com</comment>');
+        $this->line('  For more information on getting started, please review the documentation: <comment>https://builtwithcargo.dev</comment>');
+        $this->newLine();
     }
 
     private function publishConfig(): self
@@ -56,11 +71,15 @@ class InstallCommand extends Command
         return $this;
     }
 
-    private function promptForSiteCurrencies(): self
+    private function configureSiteCurrencies(): self
     {
         $sites = Site::all()->map(function ($site) {
+            $label = Site::hasMultiple()
+                ? "Which currency do you want to use for [{$site->name()}]?"
+                : 'Which currency do you want to use?';
+
             $currency = search(
-                label: "Which currency should the {$site->name()} site use?",
+                label: $label,
                 options: fn (string $value) => Currencies::mapWithKeys(fn ($currency) => [$currency['code'] => "{$currency['name']} ({$currency['code']})"])
                     ->when(strlen($value) > 0, fn ($currencies) => $currencies->filter(fn ($name) => Str::contains($name, $value, ignoreCase: true)))
                     ->when(strlen($value) === 0 && $site->attribute('currency'), fn ($currencies) => $currencies->sortBy(fn ($name, $code) => $code === $site->attribute('currency') ? 0 : 1))
@@ -78,7 +97,7 @@ class InstallCommand extends Command
         return $this;
     }
 
-    private function promptForProductsCollection(): self
+    private function configureProductsCollection(): self
     {
         $collection = select(
             label: 'Which collection contains your products?',
@@ -105,49 +124,27 @@ class InstallCommand extends Command
         return $this;
     }
 
-    private function promptToPublishCheckoutStubs(): self
+    private function promptToGitignoreCartsDirectory(): self
     {
-        if (File::exists(resource_path('views/checkout'))) {
-            return $this;
+        if (confirm('Would you like to ignore the carts directory from Git?')) {
+            File::ensureDirectoryExists(config('statamic.cargo.carts.directory'));
+            File::put(config('statamic.cargo.carts.directory').'/.gitignore', "*\n!.gitignore");
         }
-
-        $this->line('  Cargo is designed to be flexible and customizable, and that includes the checkout process.');
-        $this->line('  You can either publish the pre-built Checkout page provided by Cargo, or build your own from scratch.');
-
-        $choice = select('What would you like to do?', [
-            'Publish the pre-built Checkout page',
-            'I will build my own Checkout page',
-        ]);
-
-        if ($choice === 'I will build my own Checkout page') {
-            return $this;
-        }
-
-        $this->call('vendor:publish', [
-            '--tag' => 'cargo-checkout-stubs',
-            '--force' => true,
-        ]);
-
-        $routes = File::get(base_path('routes/web.php'));
-
-        $routes .= <<<'PHP'
-
-Route::statamic('checkout', 'checkout.index', ['title' => 'Checkout', 'layout' => 'checkout.layout'])
-    ->name('checkout');
-
-Route::statamic('checkout/confirmation', 'checkout.confirmation', ['title' => 'Order Confirmation', 'layout' => 'checkout.layout'])
-    ->name('checkout.confirmation')
-    ->middleware('signed');
-PHP;
-
-        File::put(base_path('routes/web.php'), $routes);
-
-        $this->components->info("Checkout stubs published. You'll find them in <comment>resources/views/checkout</comment>. You can customize these views to suit your needs.");
 
         return $this;
     }
 
-    private function promptToPublishMailables(): self
+    private function promptToGitignoreOrdersDirectory(): self
+    {
+        if (confirm('Would you like to ignore the orders directory from Git?', default: false)) {
+            File::ensureDirectoryExists(config('statamic.cargo.orders.directory'));
+            File::put(config('statamic.cargo.orders.directory').'/.gitignore', "*\n!.gitignore");
+        }
+
+        return $this;
+    }
+
+    private function publishMailables(): self
     {
         $mailablePath = app_path('Mail/OrderConfirmation.php');
         $mailableViewPath = resource_path('views/emails/order-confirmation.blade.php');
@@ -190,22 +187,43 @@ PHP);
         return $this;
     }
 
-    private function promptToGitignoreCartsDirectory(): self
+    private function publishPrebuiltCheckout(): self
     {
-        if (confirm('Would you like to ignore the carts directory from Git?')) {
-            File::ensureDirectoryExists(config('statamic.cargo.carts.directory'));
-            File::put(config('statamic.cargo.carts.directory').'/.gitignore', "*\n!.gitignore");
+        if (File::exists(resource_path('views/checkout'))) {
+            return $this;
         }
 
-        return $this;
-    }
+        $this->line('  Cargo includes a <fg=green;options=bold>pre-built checkout flow</> - featuring a minimal design and flexible Antlers templates.');
 
-    private function promptToGitignoreOrdersDirectory(): self
-    {
-        if (confirm('Would you like to ignore the orders directory from Git?', default: false)) {
-            File::ensureDirectoryExists(config('statamic.cargo.orders.directory'));
-            File::put(config('statamic.cargo.orders.directory').'/.gitignore', "*\n!.gitignore");
+        if (! confirm(
+            label: 'Would you like to publish the pre-built checkout flow?',
+            yes: 'Yes, please.',
+            no: 'No, I will build my own checkout page.',
+            hint: 'You can always change your mind later.'
+        )) {
+            return $this;
         }
+
+        $this->call('vendor:publish', [
+            '--tag' => 'cargo-prebuilt-checkout',
+            '--force' => true,
+        ]);
+
+        $routes = File::get(base_path('routes/web.php'));
+
+        $routes .= <<<'PHP'
+
+Route::statamic('checkout', 'checkout.index', ['title' => 'Checkout', 'layout' => 'checkout.layout'])
+    ->name('checkout');
+
+Route::statamic('checkout/confirmation', 'checkout.confirmation', ['title' => 'Order Confirmation', 'layout' => 'checkout.layout'])
+    ->name('checkout.confirmation')
+    ->middleware('signed');
+PHP;
+
+        File::put(base_path('routes/web.php'), $routes);
+
+        $this->components->info('Registered checkout routes in [routes/web.php].');
 
         return $this;
     }
