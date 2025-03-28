@@ -14,9 +14,19 @@ class CartResource extends JsonResource
      */
     public function toArray($request)
     {
-        return $this->resource
+        $response = $this->resource
             ->toAugmentedCollection()
             ->withShallowNesting()
             ->toArray();
+
+        $response['line_items'] = array_map(function ($item) {
+            $item['product'] = $item['product']->value()->toAugmentedArray();
+
+            unset($item['product']['updated_by']);
+
+            return $item;
+        }, $response['line_items']->value());
+
+        return $response;
     }
 }
