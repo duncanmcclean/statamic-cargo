@@ -2,10 +2,10 @@
 
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
-use DuncanMcClean\Cargo\Orders\OrderStatus;
+use DuncanMcClean\Cargo\Orders\OrderStatus as OrderStatusEnum;
 use Statamic\Fields\Fieldtype;
 
-class OrderStatusFieldtype extends Fieldtype
+class OrderStatus extends Fieldtype
 {
     protected $selectable = false;
 
@@ -15,26 +15,26 @@ class OrderStatusFieldtype extends Fieldtype
             return null;
         }
 
-        if (! $data instanceof OrderStatus) {
-            $data = OrderStatus::from($data);
+        if (! $data instanceof OrderStatusEnum) {
+            $data = OrderStatusEnum::from($data);
         }
 
         return [
             'value' => $data,
-            'label' => OrderStatus::label($data),
+            'label' => OrderStatusEnum::label($data),
         ];
     }
 
     public function preload()
     {
         return [
-            'options' => collect(OrderStatus::cases())
+            'options' => collect(OrderStatusEnum::cases())
                 ->when(! $this->field()->parent()?->shippingMethod(), function ($collection) {
-                    return $collection->reject(OrderStatus::Shipped);
+                    return $collection->reject(OrderStatusEnum::Shipped);
                 })
                 ->map(fn ($status) => [
                     'value' => $status,
-                    'label' => OrderStatus::label($status),
+                    'label' => OrderStatusEnum::label($status),
                 ])
                 ->values(),
         ];

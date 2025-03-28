@@ -104,7 +104,7 @@ class TaxZoneRepository implements Contract
                                 [
                                     'handle' => 'states',
                                     'field' => [
-                                        'type' => 'state',
+                                        'type' => 'states',
                                         'display' => __('States'),
                                         'from' => 'countries',
                                         'validate' => [

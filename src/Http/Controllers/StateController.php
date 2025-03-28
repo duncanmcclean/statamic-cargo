@@ -2,7 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Http\Controllers;
 
-use DuncanMcClean\Cargo\Fieldtypes\StateFieldtype;
+use DuncanMcClean\Cargo\Fieldtypes\States;
 use Illuminate\Http\Request;
 
 class StateController
@@ -13,6 +13,6 @@ class StateController
             'country' => ['required', 'string'],
         ]);
 
-        return (new StateFieldtype)->getStates($validated['country']);
+        return (new States)->getStates($validated['country']);
     }
 }

@@ -5,7 +5,7 @@ namespace DuncanMcClean\Cargo\Fieldtypes;
 use Statamic\Fields\Fieldtype;
 use Statamic\Support\Arr;
 
-class ShippingDetailsFieldtype extends Fieldtype
+class ShippingDetails extends Fieldtype
 {
     protected $selectable = false;
 

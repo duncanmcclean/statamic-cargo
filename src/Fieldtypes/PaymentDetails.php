@@ -4,7 +4,7 @@ namespace DuncanMcClean\Cargo\Fieldtypes;
 
 use Statamic\Fields\Fieldtype;
 
-class PaymentDetailsFieldtype extends Fieldtype
+class PaymentDetails extends Fieldtype
 {
     protected $selectable = false;
 

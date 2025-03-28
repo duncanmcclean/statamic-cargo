@@ -3,12 +3,12 @@
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
 use DuncanMcClean\Cargo\Cargo;
-use DuncanMcClean\Cargo\Support\Money;
+use DuncanMcClean\Cargo\Support;
 use Statamic\Facades\Site;
 use Statamic\Fields\Fieldtype;
 use Statamic\Statamic;
 
-class MoneyFieldtype extends Fieldtype
+class Money extends Fieldtype
 {
     public function configFieldItems(): array
     {
@@ -28,7 +28,7 @@ class MoneyFieldtype extends Fieldtype
 
     public function preload()
     {
-        return Money::get($this->determineSite());
+        return Support\Money::get($this->determineSite());
     }
 
     public function preProcess($data)
@@ -68,7 +68,7 @@ class MoneyFieldtype extends Fieldtype
             return null;
         }
 
-        return Money::format($value ?? 0, $this->determineSite());
+        return Support\Money::format($value ?? 0, $this->determineSite());
     }
 
     public function preProcessIndex($data)
@@ -77,7 +77,7 @@ class MoneyFieldtype extends Fieldtype
             return null;
         }
 
-        return Money::format($data ?? 0, $this->determineSite());
+        return Support\Money::format($data ?? 0, $this->determineSite());
     }
 
     private function determineSite(): \Statamic\Sites\Site

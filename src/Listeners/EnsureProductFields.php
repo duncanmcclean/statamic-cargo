@@ -42,7 +42,7 @@ class EnsureProductFields
 
         if (Cargo::usingDefaultTaxDriver() && ! $event->blueprint->hasField('tax_class')) {
             $event->blueprint->ensureField('tax_class', [
-                'type' => 'tax_class',
+                'type' => 'tax_classes',
                 'display' => 'Tax Class',
                 'instructions' => __('Determines how this product is taxed.'),
                 'listable' => 'hidden',

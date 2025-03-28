@@ -5,19 +5,19 @@ namespace DuncanMcClean\Cargo\Fieldtypes;
 use DuncanMcClean\Cargo\Facades\ShippingMethod;
 use Statamic\Fieldtypes\Relationship;
 
-class ShippingMethodFieldtype extends Relationship
+class ShippingMethods extends Relationship
 {
     protected $selectable = false;
     protected $indexComponent = null;
 
     protected function toItemArray($id)
     {
-        // TODO: Implement toItemArray() method.
+        //
     }
 
     public function getIndexItems($request)
     {
-        // TODO: Implement getIndexItems() method.
+        //
     }
 
     public function augment($values)

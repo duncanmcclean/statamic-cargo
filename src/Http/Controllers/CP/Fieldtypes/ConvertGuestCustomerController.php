@@ -3,16 +3,19 @@
 namespace DuncanMcClean\Cargo\Http\Controllers\CP\Fieldtypes;
 
 use DuncanMcClean\Cargo\Facades\Order;
-use DuncanMcClean\Cargo\Fieldtypes\CustomerFieldtype;
+use DuncanMcClean\Cargo\Fieldtypes\Customers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Statamic\Facades\User;
 use Statamic\Http\Controllers\CP\CpController;
+use Statamic\Statamic;
 
 class ConvertGuestCustomerController extends CpController
 {
     public function __invoke(Request $request)
     {
+        $this->authorize('create', \Statamic\Contracts\Auth\User::class);
+
         $validated = $request->validate([
             'email' => ['required', 'email'],
             'order_id' => ['required', 'string'],
@@ -35,6 +38,6 @@ class ConvertGuestCustomerController extends CpController
             ->get()
             ->each(fn ($order) => $order->customer($user->id())->save());
 
-        return (new CustomerFieldtype)->preProcess($user);
+        return (new Customers)->preProcess($user);
     }
 }

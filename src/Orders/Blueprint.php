@@ -79,7 +79,7 @@ class Blueprint
                                 ],
                                 [
                                     'handle' => 'shipping_state',
-                                    'field' => ['type' => 'state', 'from' => 'shipping_country', 'display' => __('State'), 'listable' => false, 'max_items' => 1, 'width' => 50],
+                                    'field' => ['type' => 'states', 'from' => 'shipping_country', 'display' => __('State'), 'listable' => false, 'max_items' => 1, 'width' => 50],
                                 ],
                             ],
                         ],
@@ -122,7 +122,7 @@ class Blueprint
                                 ],
                                 [
                                     'handle' => 'billing_state',
-                                    'field' => ['type' => 'state', 'from' => 'billing_country', 'display' => __('State/County'), 'listable' => false, 'max_items' => 1, 'width' => 50],
+                                    'field' => ['type' => 'states', 'from' => 'billing_country', 'display' => __('State/County'), 'listable' => false, 'max_items' => 1, 'width' => 50],
                                 ],
                             ],
                         ],
@@ -138,7 +138,7 @@ class Blueprint
                                 ],
                                 [
                                     'handle' => 'customer',
-                                    'field' => ['type' => 'customer', 'display' => __('Customer'), 'listable' => true],
+                                    'field' => ['type' => 'customers', 'display' => __('Customer'), 'listable' => true],
                                 ],
                                 [
                                     'handle' => 'grand_total',
@@ -162,19 +162,19 @@ class Blueprint
                                 ],
                                 [
                                     'handle' => 'coupon',
-                                    'field' => ['type' => 'coupon', 'display' => __('Coupon'), 'visibility' => 'hidden', 'listable' => 'hidden', 'max_items' => 1],
+                                    'field' => ['type' => 'coupons', 'display' => __('Coupon'), 'visibility' => 'hidden', 'listable' => 'hidden', 'max_items' => 1],
                                 ],
                                 [
                                     'handle' => 'payment_gateway',
-                                    'field' => ['type' => 'payment_gateway', 'display' => __('Payment Gateway'), 'visibility' => 'hidden', 'listable' => 'hidden', 'max_items' => 1],
+                                    'field' => ['type' => 'payment_gateways', 'display' => __('Payment Gateway'), 'visibility' => 'hidden', 'listable' => 'hidden', 'max_items' => 1],
                                 ],
                                 [
                                     'handle' => 'shipping_method',
-                                    'field' => ['type' => 'shipping_method', 'display' => __('Shipping Method'), 'visibility' => 'hidden', 'listable' => 'hidden', 'max_items' => 1],
+                                    'field' => ['type' => 'shipping_methods', 'display' => __('Shipping Method'), 'visibility' => 'hidden', 'listable' => 'hidden', 'max_items' => 1],
                                 ],
                                 [
                                     'handle' => 'shipping_option',
-                                    'field' => ['type' => 'shipping_option', 'display' => __('Shipping Option'), 'visibility' => 'hidden', 'listable' => 'hidden', 'max_items' => 1],
+                                    'field' => ['type' => 'shipping_options', 'display' => __('Shipping Option'), 'visibility' => 'hidden', 'listable' => 'hidden', 'max_items' => 1],
                                 ],
                                 [
                                     'handle' => 'tracking_number',

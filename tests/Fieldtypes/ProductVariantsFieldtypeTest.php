@@ -2,7 +2,7 @@
 
 namespace Tests\Fieldtypes;
 
-use DuncanMcClean\Cargo\Fieldtypes\ProductVariantsFieldtype;
+use DuncanMcClean\Cargo\Fieldtypes\ProductVariants;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Fields\Field;
 use Tests\TestCase;
@@ -12,7 +12,7 @@ class ProductVariantsFieldtypeTest extends TestCase
     #[Test]
     public function can_preload()
     {
-        $preload = (new ProductVariantsFieldtype)
+        $preload = (new ProductVariants)
             ->setField(new Field('product_variants', []))
             ->preload();
 
@@ -33,7 +33,7 @@ class ProductVariantsFieldtypeTest extends TestCase
     #[Test]
     public function can_preload_with_configured_option_fields()
     {
-        $preload = (new ProductVariantsFieldtype)
+        $preload = (new ProductVariants)
             ->setField(new Field('product_variants', [
                 'option_fields' => [
                     [
@@ -68,7 +68,7 @@ class ProductVariantsFieldtypeTest extends TestCase
     #[Test]
     public function can_pre_process()
     {
-        $preProcess = (new ProductVariantsFieldtype)
+        $preProcess = (new ProductVariants)
             ->setField(new Field('product_variants', []))
             ->preProcess([
                 'variants' => [['name' => 'Colour', 'values' => ['Red', 'Yellow', 'Blue']]],
@@ -93,7 +93,7 @@ class ProductVariantsFieldtypeTest extends TestCase
     #[Test]
     public function can_process()
     {
-        $process = (new ProductVariantsFieldtype)
+        $process = (new ProductVariants)
             ->setField(new Field('product_variants', []))
             ->process([
                 'variants' => [['name' => 'Colour', 'values' => ['Red', 'Yellow', 'Blue']]],
@@ -118,7 +118,7 @@ class ProductVariantsFieldtypeTest extends TestCase
     #[Test]
     public function can_process_with_no_variants_and_no_options()
     {
-        $process = (new ProductVariantsFieldtype)
+        $process = (new ProductVariants)
             ->setField(new Field('product_variants', []))
             ->process([
                 'variants' => [],
@@ -131,7 +131,7 @@ class ProductVariantsFieldtypeTest extends TestCase
     #[Test]
     public function can_augment()
     {
-        $augment = (new ProductVariantsFieldtype)
+        $augment = (new ProductVariants)
             ->setField(new Field('product_variants', []))
             ->augment([
                 'variants' => [['name' => 'Colour', 'values' => ['Red', 'Yellow', 'Blue']]],
@@ -171,7 +171,7 @@ class ProductVariantsFieldtypeTest extends TestCase
     #[Test]
     public function can_pre_process_index_with_no_variants()
     {
-        $preProcessIndex = (new ProductVariantsFieldtype)
+        $preProcessIndex = (new ProductVariants)
             ->setField(new Field('product_variants', []))
             ->preProcessIndex([
                 'variants' => [],
@@ -185,7 +185,7 @@ class ProductVariantsFieldtypeTest extends TestCase
     #[Test]
     public function can_pre_process_index_with_one_variant()
     {
-        $preProcessIndex = (new ProductVariantsFieldtype)
+        $preProcessIndex = (new ProductVariants)
             ->setField(new Field('product_variants', []))
             ->preProcessIndex([
                 'variants' => ['name' => 'Colour', 'values' => ['Red']],
@@ -201,7 +201,7 @@ class ProductVariantsFieldtypeTest extends TestCase
     #[Test]
     public function can_pre_process_index_with_multiple_variants()
     {
-        $preProcessIndex = (new ProductVariantsFieldtype)
+        $preProcessIndex = (new ProductVariants)
             ->setField(new Field('product_variants', []))
             ->preProcessIndex([
                 'variants' => [['name' => 'Colour', 'values' => ['Red', 'Yellow', 'Blue']]],
@@ -219,7 +219,7 @@ class ProductVariantsFieldtypeTest extends TestCase
     #[Test]
     public function returns_extra_validation_rules()
     {
-        $extraRules = (new ProductVariantsFieldtype)
+        $extraRules = (new ProductVariants)
             ->setField(new Field('product_variants', [
                 'option_fields' => [
                     [

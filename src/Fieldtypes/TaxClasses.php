@@ -6,7 +6,7 @@ use DuncanMcClean\Cargo\Facades\TaxClass;
 use Statamic\Facades\User;
 use Statamic\Fieldtypes\Relationship;
 
-class TaxClassFieldtype extends Relationship
+class TaxClasses extends Relationship
 {
     protected $canEdit = true;
     protected $canCreate = true;

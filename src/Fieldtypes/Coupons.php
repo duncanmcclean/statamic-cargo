@@ -5,18 +5,18 @@ namespace DuncanMcClean\Cargo\Fieldtypes;
 use DuncanMcClean\Cargo\Facades\Coupon;
 use Statamic\Fieldtypes\Relationship;
 
-class CouponFieldtype extends Relationship
+class Coupons extends Relationship
 {
     protected $selectable = false;
 
     protected function toItemArray($id)
     {
-        // TODO: Implement toItemArray() method.
+        //
     }
 
     public function getIndexItems($request)
     {
-        // TODO: Implement getIndexItems() method.
+        //
     }
 
     public function augment($values)

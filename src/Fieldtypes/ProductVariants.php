@@ -10,7 +10,7 @@ use Statamic\Fields\FieldtypeRepository;
 use Statamic\Fields\Validator;
 use Statamic\Fieldtypes\Textarea;
 
-class ProductVariantsFieldtype extends Fieldtype
+class ProductVariants extends Fieldtype
 {
     public function configFieldItems(): array
     {
@@ -43,7 +43,7 @@ class ProductVariantsFieldtype extends Fieldtype
                     ->toArray(),
 
                 'variant' => resolve(Textarea::class)->preload(),
-                'price' => resolve(MoneyFieldtype::class)->preload(),
+                'price' => resolve(Money::class)->preload(),
             ],
             collect($this->config('option_fields'))
                 ->mapWithKeys(function ($field) {

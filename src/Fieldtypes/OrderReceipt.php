@@ -7,7 +7,7 @@ use DuncanMcClean\Cargo\Orders\LineItems;
 use DuncanMcClean\Cargo\Support\Money;
 use Statamic\Fields\Fieldtype;
 
-class OrderReceiptFieldtype extends Fieldtype
+class OrderReceipt extends Fieldtype
 {
     protected $selectable = false;
 

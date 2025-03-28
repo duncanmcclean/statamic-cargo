@@ -100,7 +100,10 @@ class Orders extends Relationship
 
         $columns->setPreferred('cargo.orders.columns');
 
-        return $columns->rejectUnlisted()->values();
+        return $columns
+            ->rejectUnlisted()
+            ->reject(fn ($column) => $column->field() === 'status') // The "status" column doesn't play well with the generic listing
+            ->values();
     }
 
     private function addColumn(Columns $columns, string $columnKey): void

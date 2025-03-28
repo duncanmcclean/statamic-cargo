@@ -5,7 +5,7 @@ namespace DuncanMcClean\Cargo\Fieldtypes;
 use DuncanMcClean\Cargo\Facades\PaymentGateway;
 use Statamic\Fields\Fieldtype;
 
-class PaymentGatewayFieldtype extends Fieldtype
+class PaymentGateways extends Fieldtype
 {
     protected $selectable = false;
 

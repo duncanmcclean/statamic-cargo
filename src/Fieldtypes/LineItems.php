@@ -5,7 +5,7 @@ namespace DuncanMcClean\Cargo\Fieldtypes;
 use Illuminate\Support\Str;
 use Statamic\Fields\Fieldtype;
 
-class LineItemsFieldtype extends Fieldtype
+class LineItems extends Fieldtype
 {
     protected $selectable = false;
 

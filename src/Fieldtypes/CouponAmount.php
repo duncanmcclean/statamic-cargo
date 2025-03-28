@@ -6,7 +6,7 @@ use Statamic\Fields\Field;
 use Statamic\Fields\Fieldtype;
 use Statamic\Support\Arr;
 
-class CouponAmountFieldtype extends Fieldtype
+class CouponAmount extends Fieldtype
 {
     protected $selectable = false;
 

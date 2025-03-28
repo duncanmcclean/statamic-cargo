@@ -8,7 +8,7 @@ use Statamic\Fields\Field;
 use Statamic\Fields\Fieldtype;
 use Statamic\Statamic;
 
-class CustomerFieldtype extends Fieldtype
+class Customers extends Fieldtype
 {
     public function preload()
     {
@@ -19,8 +19,8 @@ class CustomerFieldtype extends Fieldtype
 
         return [
             'user' => $userField->meta(),
-            'canCreateUsers' => Statamic::pro() && (User::current()->isSuper() || User::current()->hasPermission('create users')),
             'convertGuestToUserUrl' => cp_route('cargo.fieldtypes.convert-guest-customer'),
+            'canCreateUsers' => Statamic::pro() && User::current()->can('create', \Statamic\Contracts\Auth\User::class),
         ];
     }
 
