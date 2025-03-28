@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
+use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Support\Money;
 use Statamic\Facades\Site;
 use Statamic\Fields\Fieldtype;
@@ -18,6 +19,11 @@ class MoneyFieldtype extends Fieldtype
                 'instructions' => __('When the value is zero, should it be saved as zero or be left empty?'),
             ],
         ];
+    }
+
+    public function icon()
+    {
+        return Cargo::svg('tag-dollar');
     }
 
     public function preload()

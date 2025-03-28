@@ -31,7 +31,7 @@ class ListedOrder extends JsonResource
         $order = $this->resource;
 
         return [
-            'id' => $order->orderNumber(),
+            'id' => $order->id(),
             'order_number' => $order->orderNumber(),
 
             $this->merge($this->values([
