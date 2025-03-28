@@ -2,4 +2,23 @@
 
 namespace DuncanMcClean\Cargo\Contracts\Taxes;
 
-interface TaxClass {}
+interface TaxClass
+{
+    public function handle($handle = null);
+
+    public function save(): bool;
+
+    public function delete(): bool;
+
+    public function editUrl(): string;
+
+    public function updateUrl(): string;
+
+    public function deleteUrl(): string;
+
+    public function toArray(): array;
+
+    public function fileData(): array;
+
+    public function augmentedArrayData(): array;
+}

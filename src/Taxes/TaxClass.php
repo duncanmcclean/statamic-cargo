@@ -45,17 +45,17 @@ class TaxClass implements Augmentable, Contract
         return true;
     }
 
-    public function editUrl()
+    public function editUrl(): string
     {
         return cp_route('cargo.tax-classes.edit', $this->handle());
     }
 
-    public function updateUrl()
+    public function updateUrl(): string
     {
         return cp_route('cargo.tax-classes.update', $this->handle());
     }
 
-    public function deleteUrl()
+    public function deleteUrl(): string
     {
         return cp_route('cargo.tax-classes.destroy', $this->handle());
     }
@@ -70,7 +70,7 @@ class TaxClass implements Augmentable, Contract
         return $this->data()->filter()->all();
     }
 
-    public function augmentedArrayData()
+    public function augmentedArrayData(): array
     {
         return $this->toArray();
     }

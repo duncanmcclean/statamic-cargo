@@ -24,7 +24,7 @@ class TaxClassRepository implements Contract
         });
     }
 
-    public function find($handle): ?TaxClass
+    public function find(string $handle): ?TaxClass
     {
         return $this->all()->firstWhere('handle', $handle);
     }
@@ -34,7 +34,7 @@ class TaxClassRepository implements Contract
         return app(TaxClass::class);
     }
 
-    public function save($taxClass): bool
+    public function save(TaxClass $taxClass): void
     {
         File::ensureDirectoryExists(dirname($this->getPath()));
 
@@ -45,22 +45,22 @@ class TaxClassRepository implements Contract
 
         $contents = YAML::dump($data);
 
-        return File::put($this->getPath(), $contents);
+        File::put($this->getPath(), $contents);
     }
 
-    public function delete($id): bool
+    public function delete(string $handle): void
     {
         $data = $this->all()
-            ->reject(fn ($taxClass) => $taxClass->handle() === $id)
+            ->reject(fn ($taxClass) => $taxClass->handle() === $handle)
             ->mapWithKeys(fn ($taxClass) => [$taxClass->handle() => $taxClass->fileData()])
             ->all();
 
         $contents = YAML::dump($data);
 
-        return File::put($this->getPath(), $contents);
+        File::put($this->getPath(), $contents);
     }
 
-    public function blueprint()
+    public function blueprint(): \Statamic\Fields\Blueprint
     {
         return Blueprint::make('tax-class')->setContents([
             'sections' => [

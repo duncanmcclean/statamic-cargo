@@ -20,7 +20,7 @@ class Manager
         return app($this->classes()->get($handle));
     }
 
-    public function classes(): Collection
+    protected function classes(): Collection
     {
         return app('statamic.extensions')[ShippingMethod::class]
             ->filter(fn ($class) => config()->has('statamic.cargo.shipping.methods.'.$class::handle()));

@@ -20,7 +20,7 @@ class Manager
         return app($this->classes()->get($handle));
     }
 
-    public function classes(): Collection
+    protected function classes(): Collection
     {
         return app('statamic.extensions')[PaymentGateway::class]
             ->filter(fn ($class) => config()->has('statamic.cargo.payments.gateways.'.$class::handle()));

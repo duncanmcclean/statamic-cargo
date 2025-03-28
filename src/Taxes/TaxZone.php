@@ -51,17 +51,17 @@ class TaxZone implements Augmentable, Contract
         return true;
     }
 
-    public function editUrl()
+    public function editUrl(): string
     {
         return cp_route('cargo.tax-zones.edit', $this->handle());
     }
 
-    public function updateUrl()
+    public function updateUrl(): string
     {
         return cp_route('cargo.tax-zones.update', $this->handle());
     }
 
-    public function deleteUrl()
+    public function deleteUrl(): string
     {
         return cp_route('cargo.tax-zones.destroy', $this->handle());
     }
@@ -73,14 +73,14 @@ class TaxZone implements Augmentable, Contract
         ])->all();
     }
 
-    public function fileData()
+    public function fileData(): array
     {
         return $this->data()->merge([
             'rates' => $this->rates()->all(),
         ])->filter()->all();
     }
 
-    public function augmentedArrayData()
+    public function augmentedArrayData(): array
     {
         return $this->toArray();
     }

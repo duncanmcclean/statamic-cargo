@@ -356,8 +356,7 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
 
     public function newAugmentedInstance(): Augmented
     {
-        // TODO: Should this be shared or should this be separate between carts and orders??
-        return new AugmentedOrder($this);
+        return new AugmentedCart($this);
     }
 
     public function getCurrentDirtyStateAttributes(): array

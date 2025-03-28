@@ -5,6 +5,7 @@ namespace DuncanMcClean\Cargo\Products;
 use DuncanMcClean\Cargo\Contracts\Products\Product as Contract;
 use DuncanMcClean\Cargo\Contracts\Purchasable;
 use DuncanMcClean\Cargo\Contracts\Taxes\TaxClass as TaxClassContract;
+use DuncanMcClean\Cargo\Facades;
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -90,7 +91,7 @@ class Product extends Entry implements Contract, Purchasable
 
     public function fresh(): self
     {
-        return \DuncanMcClean\Cargo\Facades\Product::find($this->id);
+        return Facades\Product::find($this->id);
     }
 
     public function purchasablePrice(): int
@@ -100,6 +101,10 @@ class Product extends Entry implements Contract, Purchasable
 
     public function purchasableTaxClass(): ?TaxClassContract
     {
-        return TaxClass::find($this->value('tax_class'));
+        if (! $taxClass = $this->value('tax_class')) {
+            return null;
+        }
+
+        return TaxClass::find($taxClass);
     }
 }

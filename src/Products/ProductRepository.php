@@ -5,6 +5,7 @@ namespace DuncanMcClean\Cargo\Products;
 use DuncanMcClean\Cargo\Contracts\Products\Product;
 use DuncanMcClean\Cargo\Contracts\Products\ProductRepository as RepositoryContract;
 use DuncanMcClean\Cargo\Exceptions\ProductNotFound;
+use Illuminate\Support\Collection;
 use Statamic\Contracts\Entries\Entry as EntryContract;
 use Statamic\Facades\Entry;
 
@@ -17,7 +18,7 @@ class ProductRepository implements RepositoryContract
         $this->collections = config('statamic.cargo.products.collections', ['products']);
     }
 
-    public function all()
+    public function all(): Collection
     {
         return Entry::query()
             ->whereIn('collection', $this->collections)

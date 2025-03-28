@@ -26,7 +26,7 @@ class TaxZoneRepository implements Contract
         });
     }
 
-    public function find($handle): ?TaxZone
+    public function find(string $handle): ?TaxZone
     {
         return $this->all()->firstWhere('handle', $handle);
     }
@@ -36,7 +36,7 @@ class TaxZoneRepository implements Contract
         return app(TaxZone::class);
     }
 
-    public function save($taxZone): bool
+    public function save(TaxZone $taxZone): void
     {
         File::ensureDirectoryExists(dirname($this->getPath()));
 
@@ -47,22 +47,22 @@ class TaxZoneRepository implements Contract
 
         $contents = YAML::dump($data);
 
-        return File::put($this->getPath(), $contents);
+        File::put($this->getPath(), $contents);
     }
 
-    public function delete($id): bool
+    public function delete(string $handle): void
     {
         $data = $this->all()
-            ->reject(fn ($taxZone) => $taxZone->handle() === $id)
+            ->reject(fn ($taxZone) => $taxZone->handle() === $handle)
             ->mapWithKeys(fn ($taxZone) => [$taxZone->handle() => $taxZone->fileData()])
             ->all();
 
         $contents = YAML::dump($data);
 
-        return File::put($this->getPath(), $contents);
+        File::put($this->getPath(), $contents);
     }
 
-    public function blueprint()
+    public function blueprint(): \Statamic\Fields\Blueprint
     {
         return Blueprint::make('tax-zone')->setContents([
             'tabs' => [
