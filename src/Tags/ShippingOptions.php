@@ -4,7 +4,6 @@ namespace DuncanMcClean\Cargo\Tags;
 
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\ShippingMethod;
-use DuncanMcClean\Cargo\Payments\Gateways\PaymentGateway;
 use Statamic\Facades\Blink;
 use Statamic\Tags\Tags;
 

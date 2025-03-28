@@ -4,7 +4,6 @@ namespace DuncanMcClean\Cargo\Http\Controllers\Payments;
 
 use DuncanMcClean\Cargo\Facades\PaymentGateway;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Statamic\Exceptions\NotFoundHttpException;
 
 class WebhookController
