@@ -31,6 +31,7 @@ use Statamic\Statamic;
 class ServiceProvider extends AddonServiceProvider
 {
     protected $config = false;
+    protected $viewNamespace = 'cargo';
 
     protected $policies = [
         Contracts\Coupons\Coupon::class => Policies\CouponPolicy::class,
