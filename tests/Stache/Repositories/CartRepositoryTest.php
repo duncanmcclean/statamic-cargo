@@ -3,12 +3,10 @@
 namespace Tests\Stache\Repositories;
 
 use DuncanMcClean\Cargo\Facades\Cart;
-use DuncanMcClean\Cargo\Stache\Repositories\CartRepository;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
 use Statamic\Facades\YAML;
-use Statamic\Stache\Stache;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
 

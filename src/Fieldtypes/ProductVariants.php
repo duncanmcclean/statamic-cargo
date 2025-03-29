@@ -2,7 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
-use DuncanMcClean\Cargo\Cargo;
 use Illuminate\Support\Arr;
 use Statamic\Fields\Field;
 use Statamic\Fields\Fields;

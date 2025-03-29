@@ -3,12 +3,10 @@
 namespace Tests\Stache\Query;
 
 use DuncanMcClean\Cargo\Facades\Cart;
-use DuncanMcClean\Cargo\Stache\Query\CartQueryBuilder;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
 use Statamic\Facades\User;
-use Statamic\Stache\Stache;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
 

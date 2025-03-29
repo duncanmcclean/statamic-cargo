@@ -3,14 +3,11 @@
 namespace Tests\Cart\Eloquent;
 
 use DuncanMcClean\Cargo\Cart\Eloquent\CartModel;
-use DuncanMcClean\Cargo\Cart\Eloquent\CartRepository;
-use DuncanMcClean\Cargo\Contracts\Cart\QueryBuilder;
 use DuncanMcClean\Cargo\Facades\Cart;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
-use Statamic\Stache\Stache;
 use Statamic\Statamic;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
