@@ -39,7 +39,7 @@ class Order extends StacheOrder
             ->taxTotal($model->tax_total)
             ->shippingTotal($model->shipping_total)
             ->data([
-                ...$model->data,
+                ...$model->data ?? [],
                 'updated_at' => $model->updated_at,
             ]);
     }
