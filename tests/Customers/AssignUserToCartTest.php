@@ -4,7 +4,6 @@ namespace Tests\Customers;
 
 use DuncanMcClean\Cargo\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Blink;
 use Statamic\Facades\Collection;
