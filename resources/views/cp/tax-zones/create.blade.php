@@ -2,6 +2,7 @@
 @section('title', __('Create Tax Zone'))
 
 @section('content')
+
     <base-tax-zone-create-form
         title="{{ __('Create Tax Zone') }}"
         :actions="{{ json_encode($actions) }}"
@@ -12,4 +13,5 @@
         create-another-url="{{ cp_route('cargo.tax-zones.create') }}"
         listing-url="{{ cp_route('cargo.tax-zones.index') }}"
     ></base-tax-zone-create-form>
+
 @endsection

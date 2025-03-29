@@ -6,7 +6,7 @@
 
     <coupon-publish-form
         publish-container="base"
-         :initial-actions="{{ json_encode($actions) }}"
+        :initial-actions="{{ json_encode($actions) }}"
         method="patch"
         initial-title="{{ $title }}"
         initial-reference="{{ $coupon->reference() }}"

@@ -18,7 +18,7 @@ class ProductVariants extends Fieldtype
             'option_fields' => [
                 'display' => __('Option Fields'),
                 'type' => 'fields',
-                'instructions' => __('Configure fields that will be shown when an option is created.'),
+                'instructions' => __('cargo::fieldtypes.product_variants.config.option_fields'),
             ],
         ];
     }
@@ -209,7 +209,7 @@ class ProductVariants extends Fieldtype
                 'field' => [
                     'type' => 'text',
                     'listable' => 'hidden',
-                    'display' => 'Name',
+                    'display' => __('Name'),
                     'width' => 50,
                     'input_type' => 'text',
                     'validate' => ['required'],
@@ -220,7 +220,7 @@ class ProductVariants extends Fieldtype
                 'field' => [
                     'type' => 'taggable',
                     'listable' => 'hidden',
-                    'display' => 'Values',
+                    'display' => __('Values'),
                     'width' => 50,
                     'validate' => ['required'],
                 ],
@@ -238,7 +238,7 @@ class ProductVariants extends Fieldtype
                 'field' => [
                     'type' => 'hidden',
                     'listable' => 'hidden',
-                    'display' => 'Key',
+                    'display' => __('Key'),
                     'read_only' => true,
                     'validate' => ['required'],
                 ],
@@ -248,7 +248,7 @@ class ProductVariants extends Fieldtype
                 'field' => [
                     'type' => 'textarea',
                     'listable' => 'hidden',
-                    'display' => 'Variant',
+                    'display' => __('Variant'),
                     'read_only' => true,
                     'validate' => ['required'],
                     'width' => 50,
@@ -260,7 +260,7 @@ class ProductVariants extends Fieldtype
                     'type' => 'money',
                     'read_only' => false,
                     'listable' => 'hidden',
-                    'display' => 'Price',
+                    'display' => __('Price'),
                     'validate' => ['required'],
                     'width' => 50,
                 ],

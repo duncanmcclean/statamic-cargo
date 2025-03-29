@@ -53,7 +53,7 @@ class CheckoutController
             if ($order->isFree()) {
                 $order->status(OrderStatus::PaymentReceived)->save();
             } else {
-                $paymentGateway->process($order, $request);
+                $paymentGateway->process($order);
                 $order->set('payment_gateway', $paymentGateway::handle())->save();
             }
 
@@ -92,7 +92,7 @@ class CheckoutController
         $isValid = $cart->lineItems()->every(fn (LineItem $lineItem) => $cart->coupon()->isValid($cart, $lineItem));
 
         if (! $isValid) {
-            throw new PreventCheckout(__('The coupon code is no longer valid for the items in your cart. Please remove it to continue.'));
+            throw new PreventCheckout(__('cargo:validation.coupon_no_longer_valid'));
         }
     }
 
@@ -102,7 +102,7 @@ class CheckoutController
             try {
                 $this->validateStock($request, $cart, $lineItem);
             } catch (ValidationException) {
-                throw new PreventCheckout(__('One or more items in your cart are no longer available.'));
+                throw new PreventCheckout(__('cargo::validation.products_no_longer_available'));
             }
         });
     }

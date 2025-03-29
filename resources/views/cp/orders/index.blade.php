@@ -6,11 +6,11 @@
     <div class="flex items-center justify-between mb-6">
         <h1 class="flex-1">{{ __('Orders') }}</h1>
 
-        <dropdown-list class="rtl:ml-2 ltr:mr-2">
-            @can('configure fields')
+        @can('configure fields')
+            <dropdown-list class="rtl:ml-2 ltr:mr-2">
                 <dropdown-item :text="__('Edit Blueprint')" redirect="{{ cp_route('blueprints.edit', ['cargo', 'order']) }}"></dropdown-item>
-            @endcan
-        </dropdown-list>
+            </dropdown-list>
+        @endcan
     </div>
 
     <orders-listing

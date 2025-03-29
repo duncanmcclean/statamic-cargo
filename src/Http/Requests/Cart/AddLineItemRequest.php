@@ -22,11 +22,11 @@ class AddLineItemRequest extends FormRequest
                     $product = Product::find($value);
 
                     if (! $product) {
-                        return $fail(__('The product is invalid.'));
+                        return $fail(__('cargo::validation.product_not_found'));
                     }
 
                     if (! in_array($product->collectionHandle(), config('statamic.cargo.products.collections'))) {
-                        $fail(__('The product is invalid.'));
+                        $fail(__('cargo::validation.product_not_found'));
                     }
                 },
             ],
@@ -39,7 +39,7 @@ class AddLineItemRequest extends FormRequest
                         $variant = $product->variant($value);
 
                         if (! $variant) {
-                            return $fail(__('The variant is invalid.'));
+                            return $fail(__('cargo::validation.variant_not_found'));
                         }
                     }
 

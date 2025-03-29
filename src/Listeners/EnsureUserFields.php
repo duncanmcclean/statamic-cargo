@@ -11,7 +11,7 @@ class EnsureUserFields
         if (! $event->blueprint->hasField('orders')) {
             $event->blueprint->ensureField('orders', [
                 'type' => 'orders',
-                'display' => 'Orders',
+                'display' => __('Orders'),
                 'listable' => false,
                 'visibility' => 'computed',
             ]);

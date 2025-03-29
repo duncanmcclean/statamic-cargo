@@ -5,7 +5,7 @@ namespace DuncanMcClean\Cargo\Http\Controllers\CP\Orders;
 use Illuminate\Http\Request;
 use Statamic\Http\Controllers\CP\CpController;
 
-class DownloadPackingSlipController extends CpController
+class PackingSlipController extends CpController
 {
     public function __invoke(Request $request, $order)
     {

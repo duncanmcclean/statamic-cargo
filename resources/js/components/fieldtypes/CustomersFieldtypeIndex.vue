@@ -8,7 +8,7 @@
                     </a>
                     <a v-else-if="value.type === 'guest'" class="truncate">
                         {{ value.name }}
-                        <div class="status-index-field select-none status-draft ml-2">Guest</div>
+                        <div class="status-index-field select-none status-draft ml-2">{{ __('Guest') }}</div>
                     </a>
                     <div v-else v-text="value.name" />
                 </div>

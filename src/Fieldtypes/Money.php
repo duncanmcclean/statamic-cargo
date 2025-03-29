@@ -16,7 +16,7 @@ class Money extends Fieldtype
             'save_zero_value' => [
                 'type' => 'toggle',
                 'display' => __('Save Zero Value?'),
-                'instructions' => __('When the value is zero, should it be saved as zero or be left empty?'),
+                'instructions' => __('cargo::fieldtypes.money.config.save_zero_value'),
             ],
         ];
     }

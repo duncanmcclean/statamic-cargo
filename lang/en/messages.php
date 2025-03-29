@@ -3,10 +3,24 @@
 return [
     'coupon_configure_intro' => 'Coupons are a great way to offer discounts to your customers. You can create either a percentage or fixed amount discount.',
     'coupon_discount_text' => ':amount off',
-
+    'coupons' => [
+        'active_dates' => 'Configure when this coupon is active. Leave both dates blank to make the coupon active indefinitely.',
+        'code' => 'Customers will enter this code to redeem the coupon.',
+        'customers_by_domain' => 'Provide a list of domains that are eligible for this coupon. One per line.',
+        'description' => 'Give yourself a reminder of what this coupon is for.',
+        'maximum_uses' => 'By default, coupons can be redeemed an unlimited amount of times. You can set a maximum here if you wish.',
+        'minimum_cart_value' => "The minimum value the customer's cart should have before this coupon can be redeemed.",
+        'products' => 'This coupon will only be redeemable when *any* of these products are present in the order.',
+    ],
+    'products' => [
+        'price.exclusive_of_tax' => 'Enter the price of the product, exclusive of tax.',
+        'price.inclusive_of_tax' => 'Enter the price of the product, inclusive of tax.',
+        'tax_class' => 'Determines how this product is taxed.',
+        'type' => 'Used to determine how the product is delivered.',
+    ],
     'tax_class_intro' => 'Tax Classes allow you to group products by tax classification. Useful if you have products which should be taxed at different rates.',
     'tax_classes_name_instructions' => 'This may be visible to customers in the order\'s tax breakdown.',
     'tax_zones_intro' => 'Tax Rates allow you to define the tax rates for each tax class, with different rates per country, state or postal code.',
-    'tax_zones_type_instructions' => 'Where should this tax zone apply?',
     'tax_zones_rates_instructions' => 'Define the tax rates available for this zone, per tax class.',
+    'tax_zones_type_instructions' => 'Where should this tax zone apply?',
 ];

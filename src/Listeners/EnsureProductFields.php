@@ -17,8 +17,8 @@ class EnsureProductFields
         if (config('statamic.cargo.products.digital_products') && ! $event->blueprint->hasField('type')) {
             $event->blueprint->ensureField('type', [
                 'type' => 'button_group',
-                'display' => 'Product Type',
-                'instructions' => __('Used to determine how the product is delivered.'),
+                'display' => __('Product Type'),
+                'instructions' => __('cargo::messages.products.type'),
                 'options' => [
                     'physical' => __('Physical'),
                     'digital' => __('Digital'),
@@ -31,10 +31,10 @@ class EnsureProductFields
         if (! $event->blueprint->hasField('price') && ! $event->blueprint->hasField('product_variants')) {
             $event->blueprint->ensureField('price', [
                 'type' => 'money',
-                'display' => 'Price',
+                'display' => __('Price'),
                 'instructions' => config('statamic.cargo.taxes.price_includes_tax')
-                    ? __('Enter the price of the product, inclusive of tax.')
-                    : __('Enter the price of the product, exclusive of tax.'),
+                    ? __('cargo::messages.products.price.inclusive_of_tax')
+                    : __('cargo::messages.products.price.exclusive_of_tax'),
                 'listable' => 'hidden',
                 'validate' => 'required',
             ], 'sidebar');
@@ -43,8 +43,8 @@ class EnsureProductFields
         if (Cargo::usingDefaultTaxDriver() && ! $event->blueprint->hasField('tax_class')) {
             $event->blueprint->ensureField('tax_class', [
                 'type' => 'tax_classes',
-                'display' => 'Tax Class',
-                'instructions' => __('Determines how this product is taxed.'),
+                'display' => __('Tax Class'),
+                'instructions' => __('cargo::messages.products.tax_class'),
                 'listable' => 'hidden',
                 'max_items' => 1,
                 'create' => true,

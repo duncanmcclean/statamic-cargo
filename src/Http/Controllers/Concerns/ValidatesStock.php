@@ -21,7 +21,7 @@ trait ValidatesStock
             && $quantity > $product->stock()
         ) {
             throw ValidationException::withMessages([
-                'product' => __('This product is currently out of stock. Please try again later.'),
+                'product' => __('cargo::validation.product_out_of_stock'),
             ]);
         }
 
@@ -30,7 +30,7 @@ trait ValidatesStock
 
             if ($variant->isStockEnabled() && $quantity > $variant->stock()) {
                 throw ValidationException::withMessages([
-                    'variant' => __('This variant is currently out of stock. Please try again later.'),
+                    'variant' => __('cargo::validation.variant_out_of_stock'),
                 ]);
             }
         }

@@ -336,7 +336,7 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
             'shipping_option' => $this->get('shipping_option'),
             'taxable_state' => $this->taxableAddress()?->state,
             'taxable_country' => $this->taxableAddress()?->country,
-            'taxable_post_code' => $this->taxableAddress()?->postcode,
+            'taxable_postcode' => $this->taxableAddress()?->postcode,
             'tax_config' => config('statamic.cargo.taxes'),
         ];
 

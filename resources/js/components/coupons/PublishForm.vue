@@ -82,18 +82,17 @@
                                     </div>
                                 </header>
                                 <div class="px-4 @lg:px-6 pt-4 pb-3">
-<!--                                    TODO: Make these translatable-->
                                     <ul class="list-disc ltr:pl-3 flex flex-col gap-y-1.5 text-sm">
                                         <li v-if="values.type === 'fixed' && values.value?.value">
-                                            <span class="font-semibold" v-text="formatCurrency(values.value.value)"></span> off entire order
+                                            <span class="font-semibold" v-text="formatCurrency(values.value.value)"></span> {{ __('off entire order') }}
                                         </li>
 
                                         <li v-if="values.type === 'percentage' && values.value?.value">
-                                            <span class="font-semibold" v-text="`${values.value.value}%`"></span> off entire order
+                                            <span class="font-semibold" v-text="`${values.value.value}%`"></span> {{ __('off entire order') }}
                                         </li>
 
                                         <li v-if="values.minimum_cart_value">
-                                            Redeemable when items total is above <span v-text="formatCurrency(this.values.minimum_cart_value)"></span>
+                                            {{ __('Redeemable when items total is above :amount', { amount: formatCurrency(this.values.minimum_cart_value) }) }}
                                         </li>
 
                                         <li v-if="values.customer_eligibility === 'all'">
@@ -101,28 +100,28 @@
                                         </li>
 
                                         <li v-if="values.customer_eligibility === 'specific_customers'">
-                                            Only redeemable by specific customers
+                                            {{ __('Only redeemable by specific customers') }}
                                         </li>
 
                                         <li v-if="values.maximum_uses">
-                                            Can only be used {{ values.maximum_uses }} times
+                                            {{ __('Can only be used :count times', { count: values.maximum_uses }) }}
                                         </li>
 
                                         <li v-if="values.products.length > 0">
-                                            Can only be used when certain products are part of the order
+                                            {{ __('Can only be used when certain products are part of the order') }}
                                         </li>
 
                                         <li v-if="values.valid_from?.date">
-                                            Redeemable after {{ values.valid_from.date }}
+                                            {{ __('Can be redeemed after :date', { date: values.valid_from.date }) }}
                                         </li>
 
                                         <li v-if="values.expires_at?.date">
-                                            Redeemable until {{ values.expires_at.date }}
+                                            {{ __('Can be redeemed until :date', { date: value.expires_at.date }) }}
                                         </li>
                                     </ul>
 
                                     <ul v-if="!isCreating" class="list-disc ltr:pl-3 flex flex-col gap-y-1.5 text-sm mt-3 pt-3 border-t dark:border-dark-900">
-                                        <li>Redeemed {{ values.redeemed_count }} times</li>
+                                        <li>{{ __('Redeemed :count times', { count: values.redeemed_count }) }}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -144,7 +143,6 @@
     </div>
 
 </template>
-
 
 <script>
 import SaveButtonOptions from '../../../../vendor/statamic/cms/resources/js/components/publish/SaveButtonOptions.vue'
@@ -330,8 +328,8 @@ export default {
                         window.location = this.listingUrl;
                     }
 
-                        // Otherwise, leave them on the edit form and emit an event. We need to wait until after
-                        // the hooks are resolved because if this form is being shown in a stack, we only
+                    // Otherwise, leave them on the edit form and emit an event. We need to wait until after
+                    // the hooks are resolved because if this form is being shown in a stack, we only
                     // want to close it once everything's done.
                     else {
                         clearTimeout(this.trackDirtyStateTimeout);

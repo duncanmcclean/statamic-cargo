@@ -71,13 +71,12 @@
                 class="btn-lg btn-primary w-full"
                 :disabled="!canSave"
                 @click.prevent="save">
-                Save
+                {{ __('Save') }}
             </button>
         </div>
     </div>
 
 </template>
-
 
 <script>
 import SaveButtonOptions from '../../../../vendor/statamic/cms/resources/js/components/publish/SaveButtonOptions.vue'
@@ -176,13 +175,6 @@ export default {
 
         saving(saving) {
             this.$progress.loading(`${this.publishContainer}-coupon-publish-form`, saving);
-        },
-
-        title(title) {
-            if (this.isBase) {
-                const arrow = this.direction === 'ltr' ? '‹' : '›';
-                document.title = `${title} ${arrow} ${this.breadcrumbs[1].text} ${arrow} ${this.breadcrumbs[0].text} ${arrow} ${__('Statamic')}`;
-            }
         },
 
     },

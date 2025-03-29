@@ -32,7 +32,7 @@
                         class="btn-primary"
                         :disabled="!canSave"
                         @click.prevent="save"
-                        v-text="`Save`"
+                        v-text="__('Save')"
                     />
                 </save-button-options>
             </div>
@@ -103,7 +103,7 @@
                                                 <input type="text" class="input-text w-full" id="tracking_number" name="tracking_number" v-model="values.tracking_number">
                                             </div>
 
-                                            <a :href="cp_url(`orders/${values.id}/download-packing-slip`)" target="_blank" class="text-blue text-sm flex items-center">
+                                            <a :href="cp_url(`orders/${values.id}/packing-slip`)" target="_blank" class="text-blue text-sm flex items-center">
                                                 <SvgIcon name="printer" class="w-5 h-5 mr-2" />
                                                 {{ __('Print Packing Slip') }}
                                             </a>
@@ -250,13 +250,6 @@ export default {
 
         saving(saving) {
             this.$progress.loading(`${this.publishContainer}-order-publish-form`, saving);
-        },
-
-        title(title) {
-            if (this.isBase) {
-                const arrow = this.direction === 'ltr' ? '‹' : '›';
-                document.title = `${title} ${arrow} ${this.breadcrumbs[1].text} ${arrow} ${this.breadcrumbs[0].text} ${arrow} ${__('Statamic')}`;
-            }
         },
 
     },

@@ -273,7 +273,7 @@ class FakePaymentGateway extends PaymentGateway
 
     public function setup(\DuncanMcClean\Cargo\Contracts\Cart\Cart $cart): array
     {
-        // TODO: Implement setup() method.
+        //
 
         return [];
     }
@@ -286,23 +286,23 @@ class FakePaymentGateway extends PaymentGateway
 
     public function capture(Order $order): void
     {
-        // TODO: Implement capture() method.
+        //
     }
 
     public function cancel(\DuncanMcClean\Cargo\Contracts\Cart\Cart $cart): void
     {
-        // TODO: Implement cancel() method.
+        //
     }
 
     public function webhook(Request $request): Response
     {
-        // TODO: Implement webhook() method.
+        //
 
         return response();
     }
 
     public function refund(Order $order, int $amount): void
     {
-        // TODO: Implement refund() method.
+        //
     }
 }

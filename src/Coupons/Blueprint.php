@@ -20,7 +20,7 @@ class Blueprint
                                     'field' => [
                                         'type' => 'coupon_code',
                                         'display' => __('Coupon Code'),
-                                        'instructions' => __('Customers will enter this code to redeem the coupon.'),
+                                        'instructions' => __('cargo::messages.coupons.code'),
                                         'listable' => true,
                                         'validate' => ['required', 'uppercase', new Handle],
                                     ],
@@ -29,8 +29,8 @@ class Blueprint
                                     'handle' => 'description',
                                     'field' => [
                                         'type' => 'textarea',
-                                        'instructions' => __('Give yourself a reminder of what this coupon is for.'),
                                         'display' => __('Description'),
+                                        'instructions' => __('cargo::messages.coupons.description'),
                                         'listable' => true,
                                     ],
                                 ],
@@ -91,9 +91,9 @@ class Blueprint
                                     'handle' => 'minimum_cart_value',
                                     'field' => [
                                         'type' => 'money',
-                                        'instructions' => __("The minimum value the customer's cart should have before this coupon can be redeemed."),
-                                        'width' => 50,
                                         'display' => __('Minimum Order Value'),
+                                        'instructions' => __('cargo::messages.coupons.minimum_cart_value'),
+                                        'width' => 50,
                                         'listable' => 'hidden',
                                     ],
                                 ],
@@ -105,14 +105,14 @@ class Blueprint
                                 [
                                     'handle' => 'customer_eligibility',
                                     'field' => [
+                                        'type' => 'radio',
+                                        'display' => __('Which customers are eligible for this coupon?'),
                                         'options' => [
                                             'all' => __('All'),
                                             'specific_customers' => __('Specific customers'),
                                             'customers_by_domain' => __('Specific customers (by domain)'),
                                         ],
                                         'inline' => false,
-                                        'type' => 'radio',
-                                        'display' => __('Which customers are eligible for this coupon?'),
                                         'validate' => ['required'],
                                         'default' => 'all',
                                         'listable' => false,
@@ -135,7 +135,7 @@ class Blueprint
                                     'field' => [
                                         'type' => 'list',
                                         'display' => __('Domains'),
-                                        'instructions' => __('Provide a list of domains that are eligible for this coupon. One per line.'),
+                                        'instructions' => __('cargo::messages.coupons.customers_by_domain'),
                                         'add_button' => __('Add Domain'),
                                         'listable' => false,
                                         'if' => [
@@ -152,9 +152,9 @@ class Blueprint
                                     'handle' => 'maximum_uses',
                                     'field' => [
                                         'type' => 'integer',
-                                        'width' => 50,
                                         'display' => __('Maximum times coupon can be redeemed'),
-                                        'instructions' => __('By default, coupons can be redeemed an unlimited amount of times. You can set a maximum here if you wish.'),
+                                        'instructions' => __('cargo::messages.coupons.maximum_uses'),
+                                        'width' => 50,
                                         'listable' => 'hidden',
                                     ],
                                 ],
@@ -164,7 +164,7 @@ class Blueprint
                                         'mode' => 'default',
                                         'collections' => config('statamic.cargo.products.collections'),
                                         'display' => __('Limit to certain products'),
-                                        'instructions' => __('This coupon will only be redeemable when *any* of these products are present in the order.'),
+                                        'instructions' => __('cargo::messages.coupons.products'),
                                         'type' => 'entries',
                                         'icon' => 'entries',
                                         'width' => 50,
@@ -175,7 +175,7 @@ class Blueprint
                         ],
                         [
                             'display' => __('Active Dates'),
-                            'instructions' => __('Configure when this coupon is active. Leave both dates blank to make the coupon active indefinitely.'),
+                            'instructions' => __('cargo::messages.coupons.active_dates'),
                             'fields' => [
                                 [
                                     'handle' => 'valid_from',

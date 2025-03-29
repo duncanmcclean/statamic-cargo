@@ -23,7 +23,7 @@ trait RedeemsCoupons
 
             if (! $coupon) {
                 throw ValidationException::withMessages([
-                    'coupon' => __('Invalid coupon code.'),
+                    'coupon' => __('cargo::validation.invalid_coupon'),
                 ]);
             }
 
@@ -31,7 +31,7 @@ trait RedeemsCoupons
 
             if (! $isValid) {
                 throw ValidationException::withMessages([
-                    'coupon' => __('Invalid coupon code.'),
+                    'coupon' => __('cargo::validation.invalid_coupon'),
                 ]);
             }
 

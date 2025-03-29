@@ -3,21 +3,21 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Packing Slip for Order #{{ order:order_number }}</title>
+    <title>{{ trans key="Packing Slip for Order #:orderNumber" :orderNumber="order:order_number" }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>window.addEventListener('load', () => window.print());</script>
 </head>
 <body>
     <main class="max-w-4xl mx-auto py-12 flex flex-col gap-y-10 px-2">
         <header>
-            <h1 class="text-4xl font-bold mb-3">Packing Slip</h1>
-            <h3 class="text-xl font-semibold text-[#02747E]">{{ config:app:name }} - Order #{{ order:order_number }}</h3>
+            <h1 class="text-4xl font-bold mb-3">{{ trans key="Packing Slip" }}</h1>
+            <h3 class="text-xl font-semibold text-[#02747E]">{{ config:app:name }} - {{ trans key="Order #:orderNumber" :orderNumber="order:order_number" }}</h3>
         </header>
 
         <div class="grid grid-cols-2">
             {{# Billing Address #}}
             <div class="py-2">
-                <h2 class="text-[#02747E] font-bold text-lg mb-1">Bill to:</h2>
+                <h2 class="text-[#02747E] font-bold text-lg mb-1">{{ trans key="Bill to:" }}</h2>
                 <div>
                     <p>{{ order:customer:name }}</p>
                     <p>{{ order:billing_line_1 }}</p>
@@ -31,7 +31,7 @@
 
             {{# Shipping Address #}}
             <div class="py-2">
-                <h2 class="text-[#02747E] font-bold text-lg mb-1">Ship to:</h2>
+                <h2 class="text-[#02747E] font-bold text-lg mb-1">{{ trans key="Ship to:" }}</h2>
                 <div>
                     <p>{{ order:customer:name }}</p>
                     <p>{{ order:shipping_line_1 }}</p>
@@ -50,17 +50,17 @@
             {{ ['grid-cols-3' => order:shipping_method, 'grid-cols-1' => !order_shipping_method] | classes }}
         ">
             <div class="flex flex-col justify-center items-center space-y-1 py-4 px-6">
-                <span class="text-sm">Order Date</span>
+                <span class="text-sm">{{ trans key="Order Date" }}</span>
                 <h3 class="text-lg font-bold">{{ order:date format="Y-m-d" }}</h3>
             </div>
             {{ if order:shipping_option }}
                 <div class="flex flex-col justify-center items-center space-y-1 px-6">
-                    <span class="text-sm">Shipping Option</span>
+                    <span class="text-sm">{{ trans key="Shipping Option" }}</span>
                     <h3 class="text-lg font-bold">{{ order:shipping_option:name }}</h3>
                 </div>
 
                 <div class="flex flex-col justify-center items-center space-y-1 px-6">
-                    <span class="text-sm">Shipping Cost</span>
+                    <span class="text-sm">{{ trans key="Shipping Cost" }}</span>
                     <h3 class="text-lg font-bold">{{ order:shipping_total }}</h3>
                 </div>
             {{ /if }}
@@ -70,8 +70,8 @@
         <table class="w-full rounded-t-lg border border-zinc-300">
             <thead class="border-b border-zinc-300 font-bold text-lg">
                 <tr class="divide-x divide-zinc-300">
-                    <th class="px-3 py-3 text-sm text-center w-[10%]">Qty</th>
-                    <th class="px-3 py-3 text-sm text-left">Description</th>
+                    <th class="px-3 py-3 text-sm text-center w-[10%]">{{ trans key="Qty" }}</th>
+                    <th class="px-3 py-3 text-sm text-left">{{ trans key="Description" }}</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-zinc-300">

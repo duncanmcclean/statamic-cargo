@@ -87,11 +87,11 @@ class Refund extends Action
         $amountRemaining = $order->grandTotal() - $order->get('amount_refunded');
 
         if ($values['amount'] <= 0) {
-            throw new \Exception('You must enter an amount greater than 0.');
+            throw new \Exception('cargo::validation.refund_greater_than_zero');
         }
 
         if ($amountRemaining < $values['amount']) {
-            throw new \Exception('You cannot refund more than the remaining amount.');
+            throw new \Exception('cargo::validation.refund_greater_than_remaining');
         }
 
         $order->paymentGateway()->refund($order, $values['amount']);

@@ -33,7 +33,7 @@ class UniqueTaxZone implements DataAwareRule, ValidationRule
                 ->isNotEmpty();
 
             if ($overlapsWithAnotherTaxZone) {
-                $fail(__('One or more countries have already been assigned to another tax zone.'));
+                $fail(__('cargo::validation.unique_tax_zone.countries'));
             }
         }
 
@@ -52,7 +52,7 @@ class UniqueTaxZone implements DataAwareRule, ValidationRule
                 ->isNotEmpty();
 
             if ($overlapsWithAnotherTaxZone) {
-                $fail(__('One or more states have already been assigned to another tax zone.'));
+                $fail(__('cargo::validation.unique_tax_zone.states'));
             }
         }
 
@@ -71,7 +71,7 @@ class UniqueTaxZone implements DataAwareRule, ValidationRule
                 ->isNotEmpty();
 
             if ($overlapsWithAnotherTaxZone) {
-                $fail(__('One or more postcodes have already been assigned to another tax zone.'));
+                $fail(__('cargo::validation.unique_tax_zone.postcodes'));
             }
         }
     }

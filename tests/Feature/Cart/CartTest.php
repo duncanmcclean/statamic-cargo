@@ -138,7 +138,50 @@ class CartTest extends TestCase
         $this->assertNull($cart->fresh()->coupon());
     }
 
-    // todo: more coupon tests (ensure now-invalid coupons are removed, ensure code is valid, etc)
+    #[Test]
+    public function it_cant_add_coupon_when_coupon_is_invalid()
+    {
+        $coupon = Coupon::make()->code('FOOBAR')->type(CouponType::Percentage)->amount(10)->set('expires_at', '2025-01-01');
+        $coupon->save();
+
+        $cart = tap($this->makeCart())->save();
+
+        $this->assertNull($cart->coupon());
+
+        $this
+            ->from('/cart')
+            ->patch('/!/cargo/cart', [
+                'coupon' => 'FOOBAR',
+            ])
+            ->assertSessionHasErrors('coupon');
+
+        $this->assertNull($cart->fresh()->coupon());
+    }
+
+    #[Test]
+    public function it_removes_invalid_coupon_when_recalculating_totals()
+    {
+        $coupon = Coupon::make()->code('FOOBAR')->type(CouponType::Percentage)->amount(10)->set('expires_at', '2025-01-01');
+        $coupon->save();
+
+        $cart = $this->makeCart()->coupon($coupon);
+        $cart->saveWithoutRecalculating();
+
+        $this->assertEquals($coupon->id(), $cart->coupon()->id());
+
+        $this
+            ->from('/cart')
+            ->patch('/!/cargo/cart', [
+                // This will trigger the cart to recalculate totals.
+                'customer' => [
+                    'name' => 'Jane Doe',
+                    'email' => 'jane.doe@example.com',
+                ],
+            ])
+            ->assertRedirect('/cart');
+
+        $this->assertNull($cart->fresh()->coupon());
+    }
 
     #[Test]
     public function it_deletes_the_cart()

@@ -16,7 +16,7 @@ trait HandlePrerequisiteProducts
         if ($prerequisiteProduct = $product->prerequisite_product) {
             if (! $cart->customer() || $cart->customer() instanceof GuestCustomer) {
                 throw ValidationException::withMessages([
-                    'product' => __('This product requires another product to be purchased first. Please login or register to continue.'),
+                    'product' => __('cargo::validation.prerequisite_product_logged_out'),
                 ]);
             }
 
@@ -31,7 +31,9 @@ trait HandlePrerequisiteProducts
 
             if (! $hasPurchasedPrerequisiteProduct) {
                 throw ValidationException::withMessages([
-                    'product' => __("Before purchasing this product, you must purchase {$prerequisiteProduct->title} first."),
+                    'product' => __('cargo::validation.prerequisite_product', [
+                        'product' => $prerequisiteProduct->name(),
+                    ]),
                 ]);
             }
         }

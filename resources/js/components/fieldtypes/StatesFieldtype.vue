@@ -152,7 +152,6 @@ export default {
         vueSelectUpdated(value) {
             if (this.multiple) {
                 this.update(value.map(v => v.value));
-                // value.forEach((option) => this.states.push(option));
             } else {
                 if (value) {
                     this.update(value.value)

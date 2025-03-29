@@ -85,7 +85,7 @@ class TaxClasses extends Relationship
         return [
             function ($attribute, $value, $fail) {
                 if (! TaxClass::find($value[0])) {
-                    $fail(__('The selected tax class is invalid'));
+                    $fail(__('cargo::validation.tax_class_invalid'));
                 }
             },
         ];
