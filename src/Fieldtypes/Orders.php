@@ -4,8 +4,10 @@ namespace DuncanMcClean\Cargo\Fieldtypes;
 
 use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Facades\Order;
+use Illuminate\Support\Str;
 use Statamic\CP\Column;
 use Statamic\CP\Columns;
+use Statamic\Facades\User;
 use Statamic\Fieldtypes\Relationship;
 use Statamic\Query\Scopes\Filters\Concerns\QueriesFilters;
 use Statamic\Statamic;
@@ -77,7 +79,22 @@ class Orders extends Relationship
     {
         $query = Order::query();
 
-        //        $query = $this->toSearchQuery($query, $request);
+        if ($search = $request->search) {
+            $query
+                ->where('id', $search)
+                ->orWhere('date', 'LIKE', '%'.$search.'%')
+                ->orWhere('order_number', 'LIKE', '%'.Str::remove('#', $search).'%')
+                ->orWhere(function ($query) use ($search) {
+                    $users = User::query()
+                        ->where('name', 'LIKE', '%'.$search.'%')
+                        ->orWhere('email', 'LIKE', '%'.$search.'%')
+                        ->pluck('id')
+                        ->all();
+
+                    $query->whereIn('customer', $users);
+                })
+                ->orWhere('customer', "guest::$search%");
+        }
 
         if ($site = $request->site) {
             $query->where('site', $site);
