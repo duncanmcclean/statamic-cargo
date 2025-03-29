@@ -56,26 +56,31 @@ class AssignUserToCartTest extends TestCase
     #[Test]
     public function the_current_cart_is_merged_into_the_recent_cart()
     {
-        Config::set('statamic.cargo.carts.merge_on_login', true);
+        config()->set('statamic.cargo.carts.merge_on_login', true);
 
         $user = User::make()->save();
 
         $productOne = $this->makeProduct();
         $productTwo = $this->makeProduct();
 
-        $recentCart = tap(Cart::make()->customer($user))->save();
-        $recentCart->set('foo', 'bar');
+        $recentCart = Cart::make()->customer($user)->data(['foo' => 'bar']);
         $recentCart->lineItems()->create(['product' => $productOne->id(), 'quantity' => 1]);
+        $recentCart->save();
 
-        $currentCart = $this->makeCart();
-        $currentCart->set('bar', 'baz');
+        $currentCart = $this->makeCart()->data(['bar' => 'baz']);
         $currentCart->lineItems()->create(['product' => $productTwo->id(), 'quantity' => 2]);
+        $currentCart->save();
 
         Auth::login($user);
 
         $this->assertEquals($recentCart->id(), Cart::current()->id());
-        $this->assertEquals('bar', Cart::current()->get('foo'));
-        $this->assertEquals('baz', Cart::current()->get('bar'));
+
+        $recentCart = $recentCart->fresh();
+
+        $this->assertEquals([
+            'foo' => 'bar',
+            'bar' => 'baz',
+        ], $recentCart->data()->except('updated_at', 'fingerprint')->all());
 
         $this->assertCount(2, $recentCart->lineItems());
 
@@ -87,9 +92,9 @@ class AssignUserToCartTest extends TestCase
     }
 
     #[Test]
-    public function the_recent_cart_is_deleted()
+    public function the_recent_cart_is_deleted_and_user_is_assigned_to_current_cart()
     {
-        Config::set('statamic.cargo.carts.merge_on_login', false);
+        config()->set('statamic.cargo.carts.merge_on_login', false);
 
         $user = User::make()->save();
 
@@ -102,6 +107,8 @@ class AssignUserToCartTest extends TestCase
 
         $this->assertNull(Cart::find($recentCart->id()));
         $this->assertNotNull(Cart::find($currentCart->id()));
+
+        $this->assertEquals($user->id(), $currentCart->fresh()->customer()->id());
     }
 
     protected function makeCart()

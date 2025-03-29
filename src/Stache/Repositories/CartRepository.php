@@ -69,6 +69,8 @@ class CartRepository implements RepositoryContract
     public function setCurrent(Cart $cart): void
     {
         self::$current = $cart;
+
+        $this->persistCart($cart);
     }
 
     public function hasCurrentCart(): bool

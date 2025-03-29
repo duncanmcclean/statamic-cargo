@@ -35,10 +35,14 @@ class AssignUserToCart
         if ($shouldMerge) {
             $currentCart = Cart::current();
 
-            $recentCart->merge($currentCart);
+            $recentCart->merge($currentCart->data());
+
             $currentCart->lineItems()->each(function (LineItem $lineItem) use ($recentCart) {
                 $recentCart->lineItems()->create($lineItem->fileData());
             });
+
+            $recentCart->save();
+            $currentCart->delete();
 
             Cart::setCurrent($recentCart);
         } else {
