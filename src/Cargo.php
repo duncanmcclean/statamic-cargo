@@ -13,7 +13,7 @@ class Cargo
             return 'v1.0.0';
         }
 
-        return Addon::get('duncanmcclean/cargo')->version();
+        return Addon::get('duncanmcclean/statamic-cargo')->version();
     }
 
     public static function svg($name): ?string

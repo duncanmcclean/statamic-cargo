@@ -1,5 +1,5 @@
 {
-    "name": "duncanmcclean/cargo",
+    "name": "duncanmcclean/statamic-cargo",
     "description": "",
     "license": "proprietary",
     "autoload": {
@@ -15,7 +15,7 @@
     },
     "extra": {
         "download-dist": {
-            "url": "https://github.com/duncanmcclean/cargo/releases/download/{$version}/dist.tar.gz",
+            "url": "https://github.com/duncanmcclean/statamic-cargo/releases/download/{$version}/dist.tar.gz",
             "path": "dist"
         },
         "statamic": {
