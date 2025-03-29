@@ -9,6 +9,6 @@
     "psr_autoloading": true
   },
   "notPath": [
-    "tests/Feature/Taxes/CanCalculateTaxesTest.php"
+    "tests/Taxes/CalculateTaxesTest.php"
   ]
 }
