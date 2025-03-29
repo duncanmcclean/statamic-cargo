@@ -32,7 +32,7 @@ trait HandlePrerequisiteProducts
             if (! $hasPurchasedPrerequisiteProduct) {
                 throw ValidationException::withMessages([
                     'product' => __('cargo::validation.prerequisite_product', [
-                        'product' => $prerequisiteProduct->name(),
+                        'product' => $prerequisiteProduct->get('title'),
                     ]),
                 ]);
             }

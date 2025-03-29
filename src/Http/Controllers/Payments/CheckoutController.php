@@ -92,7 +92,7 @@ class CheckoutController
         $isValid = $cart->lineItems()->every(fn (LineItem $lineItem) => $cart->coupon()->isValid($cart, $lineItem));
 
         if (! $isValid) {
-            throw new PreventCheckout(__('cargo:validation.coupon_no_longer_valid'));
+            throw new PreventCheckout(__('cargo::validation.coupon_no_longer_valid'));
         }
     }
 
