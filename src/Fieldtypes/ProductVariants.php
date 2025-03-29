@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
+use DuncanMcClean\Cargo\Cargo;
 use Illuminate\Support\Arr;
 use Statamic\Fields\Field;
 use Statamic\Fields\Fields;
@@ -12,6 +13,8 @@ use Statamic\Fieldtypes\Textarea;
 
 class ProductVariants extends Fieldtype
 {
+    protected $icon = 'tags';
+
     public function configFieldItems(): array
     {
         return [
@@ -151,11 +154,6 @@ class ProductVariants extends Fieldtype
                     ->toArray();
             })
             ->toArray();
-    }
-
-    public static function docsUrl()
-    {
-        return 'https://cargo.duncanmcclean.com/product-variants';
     }
 
     public function preProcessIndex($value)
