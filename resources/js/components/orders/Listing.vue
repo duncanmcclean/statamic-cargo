@@ -21,7 +21,8 @@
                         <data-list-filter-presets
                             ref="presets"
                             :active-preset="activePreset"
-                            :active-preset-payload="activePresetPayload"                            :active-filters="activeFilters"
+                            :active-preset-payload="activePresetPayload"
+                            :active-filters="activeFilters"
                             :has-active-filters="hasActiveFilters"
                             :preferences-prefix="preferencesPrefix"
                             :search-query="searchQuery"
