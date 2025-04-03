@@ -34,9 +34,8 @@
 </style>
 
 <script>
-// import GridCell from '../../../vendor/statamic/cms/resources/js/components/fieldtypes/grid/Cell.vue';
 import GridCell from './Cell.vue'
-import { ValidatesFieldConditions } from '../../../vendor/statamic/cms/resources/js/components/field-conditions/FieldConditions.js'
+import { ValidatesFieldConditions } from '@statamic/components/field-conditions/FieldConditions.js'
 
 export default {
     components: { GridCell },
