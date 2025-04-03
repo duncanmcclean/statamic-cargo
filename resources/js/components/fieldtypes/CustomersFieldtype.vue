@@ -56,7 +56,7 @@ export default {
 
     mixins: [Fieldtype],
 
-    inject: ['storeName'],
+    inject: ['store'],
 
     data() {
         return {
@@ -69,10 +69,11 @@ export default {
             if (! this.value.editable) return;
             if (this.value.invalid) return;
 
-            if (this.value.reference && Object.entries(this.$store.state.publish).find(([key, value]) => value.reference === this.value.reference)) {
-                this.$toast.error(__("You're already editing this item."));
-                return;
-            }
+            // todo: pinia refactor
+            // if (this.value.reference && Object.entries(this.$store.state.publish).find(([key, value]) => value.reference === this.value.reference)) {
+            //     this.$toast.error(__("You're already editing this item."));
+            //     return;
+            // }
 
             this.isEditingUser = true;
         },
@@ -87,7 +88,7 @@ export default {
         convertToUser() {
             axios.post(this.meta.convertGuestToUserUrl, {
                 email: this.value.email,
-                order_id: this.$store.state.publish[this.storeName].values.id,
+                order_id: this.store.values.id,
             }).then(response => {
                 this.$emit('update:value', response.data);
                 this.$toast.success(__('Guest has been converted to a user.'));

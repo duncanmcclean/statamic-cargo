@@ -48,10 +48,11 @@ export default {
             // if (! this.editable) return;
             // if (this.item.invalid) return;
 
-            if (this.lineItem.product.reference && Object.entries(this.$store.state.publish).find(([key, value]) => value.reference === this.lineItem.product.reference)) {
-                this.$toast.error(__("You're already editing this item."));
-                return;
-            }
+            // todo: refactor to work with pinia
+            // if (this.lineItem.product.reference && Object.entries(this.$store.state.publish).find(([key, value]) => value.reference === this.lineItem.product.reference)) {
+            //     this.$toast.error(__("You're already editing this item."));
+            //     return;
+            // }
 
             this.isEditing = true;
         },

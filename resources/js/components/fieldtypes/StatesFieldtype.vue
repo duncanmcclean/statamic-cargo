@@ -77,6 +77,10 @@ export default {
 
     inject: ['storeName'],
 
+    inject: [
+        'store',
+    ],
+
     data() {
         return {
             states: this.meta?.states,
@@ -86,7 +90,7 @@ export default {
 
     computed: {
         country() {
-            return this.$store.state.publish[this.storeName].values[this.config.from];
+            return this.store.values[this.config.from];
         },
 
         options() {

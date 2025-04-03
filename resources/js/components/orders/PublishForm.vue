@@ -198,6 +198,9 @@ export default {
 
     computed: {
 
+      store() {
+          return this.$refs.container.store;
+      },
 
         formattedTitle() {
             return striptags(__(this.title));
@@ -226,6 +229,7 @@ export default {
         isDirty() {
             return this.$dirty.has(this.publishContainer);
         },
+
         afterSaveOption() {
             return this.getPreference('after_save');
         },

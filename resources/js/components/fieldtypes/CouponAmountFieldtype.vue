@@ -38,19 +38,20 @@ export default {
 
     mounted() {
         this.couponValue = this.value?.value || this.value || null;
-        this.mode = this.value?.mode || this.$store.state.publish.base.values.type;
+        this.mode = this.value?.mode || this.store.values.type;
 
-        this.$store.watch(
-            (state) => state.publish.base.values.type,
-            (type) => {
-                // Keep track of the previous amount, so we can restore it when switching between modes.
-                this.previousAmounts[this.mode] = this.couponValue;
-
-                this.mode = type;
-                this.couponValue = this.previousAmounts[type] || null;
-            },
-            { immediate: false }
-        )
+        // todo: refactor to work with pinia
+        // this.$store.watch(
+        //     (state) => state.publish.base.values.type,
+        //     (type) => {
+        //         // Keep track of the previous amount, so we can restore it when switching between modes.
+        //         this.previousAmounts[this.mode] = this.couponValue;
+        //
+        //         this.mode = type;
+        //         this.couponValue = this.previousAmounts[type] || null;
+        //     },
+        //     { immediate: false }
+        // )
     },
 
     watch: {
