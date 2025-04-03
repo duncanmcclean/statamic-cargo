@@ -8,23 +8,22 @@
         "@shopify/draggable": "^1.0.0-beta.8",
         "@tailwindcss/container-queries": "^0.1.1",
         "@tailwindcss/typography": "^0.5.13",
-        "@vue/compiler-sfc": "^2.6.11",
         "autoprefixer": "^10.4.20",
         "axios": "^1.8.2",
         "cross-env": "^7.0.2",
+        "lodash-es": "^4.17.21",
         "marked": "^4.0.12",
         "postcss": "^8.4.41",
         "postcss-import": "^16.1.0",
+        "striptags": "^3.2.0",
         "svgo": "^3.3.2",
         "tailwindcss": "^3.4.7",
-        "underscore": "^1.13.2",
-        "uniqid": "^5.4.0",
-        "vue": "^2.6.11",
-        "vue-chartjs": "^4.0.6"
+        "uniqid": "^5.4.0"
     },
     "devDependencies": {
-        "@vitejs/plugin-vue2": "^2.3.3",
+        "@vitejs/plugin-vue": "^5.2.3",
         "laravel-vite-plugin": "^1.2.0",
-        "vite": "^6.2.3"
+        "vite": "^6.2.3",
+        "vite-plugin-externals": "^0.6.2"
     }
 }
