@@ -6,15 +6,14 @@
         <div class="flex items-center mb-6">
             <h1 class="flex-1">
                 <div class="flex items-center">
-                    <span v-html="$options.filters.striptags(__(title))" />
+                    <span v-html="formattedTitle" />
                 </div>
             </h1>
 
             <dropdown-list v-if="itemActions.length" class="rtl:ml-4 ltr:mr-4">
                 <data-list-inline-actions
                     :item="values.id"
-                    :url="itemActionUrl"
-                    :actions="itemActions"
+                    :url="itemActionUrl"                    :actions="itemActions"
                     :is-dirty="isDirty"
                     @started="actionStarted"
                     @completed="actionCompleted"
@@ -199,6 +198,11 @@ export default {
 
     computed: {
 
+
+        formattedTitle() {
+            return striptags(__(this.title));
+        },
+
         hasErrors() {
             return this.error || Object.keys(this.errors).length;
         },
@@ -222,7 +226,6 @@ export default {
         isDirty() {
             return this.$dirty.has(this.publishContainer);
         },
-
         afterSaveOption() {
             return this.getPreference('after_save');
         },

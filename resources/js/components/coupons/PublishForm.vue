@@ -6,7 +6,7 @@
         <div class="flex items-center mb-6">
             <h1 class="flex-1">
                 <div class="flex items-center">
-                    <span v-html="$options.filters.striptags(__(title))" />
+                    <span v-html="formattedTitle" />
                 </div>
             </h1>
 
@@ -204,6 +204,10 @@ export default {
     },
 
     computed: {
+
+        formattedTitle() {
+            return striptags(__(this.title));
+        },
 
         hasErrors() {
             return this.error || Object.keys(this.errors).length;
