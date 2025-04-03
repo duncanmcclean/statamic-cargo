@@ -2,43 +2,34 @@
     <component v-if="icon" :is="icon" />
 </template>
 
-<script>
-import { defineAsyncComponent } from 'vue';
+<script setup>
+import { defineAsyncComponent, shallowRef, watch } from 'vue';
 
-export default {
+const props = defineProps({
+    name: String,
+    default: String,
+    directory: String,
+});
 
-    props: {
-        name: String,
-    },
+const icon = shallowRef(null);
 
-    data() {
-        return {
-            icon: null,
-        }
-    },
-
-    mounted() {
-        this.icon = this.evaluateIcon();
-    },
-
-    watch: {
-        name() {
-            this.icon = this.evaluateIcon();
-        }
-    },
-
-    methods: {
-        evaluateIcon() {
-            if (this.name.startsWith('<svg')) {
-                return defineAsyncComponent(() => {
-                    return new Promise(resolve => resolve({ template: this.name }));
-                });
-            }
-
-            return defineAsyncComponent(() => {
-                return import(`./../../svg/${this.name}.svg`);
-            });
-        },
+const evaluateIcon = () => {
+    if (props.name.startsWith('<svg')) {
+        return defineAsyncComponent(() => {
+          return new Promise((resolve) => resolve({ template: props.name }));
+        });
     }
-}
+
+    return defineAsyncComponent(() => {
+        return import(`./../../svg/${props.name}.svg`);
+    });
+};
+
+watch(
+    () => props.name,
+    () => {
+      icon.value = evaluateIcon();
+    },
+    { immediate: true },
+);
 </script>
