@@ -45,7 +45,7 @@ class Orders extends Relationship
             'id' => $order->id(),
             'reference' => $order->reference(),
             'title' => "#{$order->orderNumber()}",
-            'hint' => $order->date()->format(Statamic::cpDateFormat()),
+            'hint' => $order->date()->format('Y-m-d'),
             'edit_url' => cp_route('cargo.orders.edit', $order->id()),
         ];
     }
