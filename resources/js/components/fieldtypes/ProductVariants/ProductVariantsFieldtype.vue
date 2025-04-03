@@ -121,12 +121,13 @@ export default {
             this.updateVariantsAndOptions();
         }
 
-        // todo: this should be a pinia watcher?
-        // this.$store.watch((state) => state.publish[this.storeName].site, (newValue, oldValue) => {
-        //     if (newValue !== oldValue) {
-        //         this.updateVariantsAndOptions();
-        //     }
-        // })
+      this.store.$subscribe((mutation, state) => {
+        if (mutation.events.key === 'site') {
+          if (mutation.events.newValue !== mutations.events.oldValue) {
+            this.updateVariantsAndOptions();
+          }
+        }
+      });
     },
 
     methods: {
