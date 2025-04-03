@@ -2,18 +2,20 @@
     <div>
         <money-fieldtype
             v-if="mode === 'fixed'"
-            :value="couponValue"
-            @input="couponValue = $event"
+            :handle="config.handle"
             :meta="meta.meta.money"
             :config="meta.config.money"
+            :value="couponValue"
+            @update:value="updateCouponValue"
         />
 
         <integer-fieldtype
             v-else-if="mode === 'percentage'"
-            :value="couponValue"
-            @input="couponValue = $event"
+            :handle="config.handle"
             :meta="meta.meta.integer"
             :config="meta.config.integer"
+            :value="couponValue"
+            @update:value="updateCouponValue"
         />
     </div>
 </template>

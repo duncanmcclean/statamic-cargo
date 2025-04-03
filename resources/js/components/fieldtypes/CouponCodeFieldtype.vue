@@ -8,7 +8,7 @@
             input_type: 'text',
         }"
         :value="value"
-        @input="updateDebounced"
+        @update:value="updateDebounced"
         @keydown.native.space.prevent
     />
 </template>
