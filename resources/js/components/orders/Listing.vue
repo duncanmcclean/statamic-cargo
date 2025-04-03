@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import Listing from '../../../../vendor/statamic/cms/resources/js/components/Listing.vue'
+import Listing from '@statamic/components/Listing.vue'
 
 export default {
     mixins: [Listing],

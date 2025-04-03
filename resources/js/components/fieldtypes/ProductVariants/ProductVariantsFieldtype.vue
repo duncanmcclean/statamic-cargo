@@ -63,11 +63,12 @@
 </template>
 
 <script>
-import GridRow from '../../../statamic/Row.vue'
-import SortableList from '../../../../../vendor/statamic/cms/resources/js/components/sortable/SortableList.vue'
-import GridHeaderCell from '../../../../../vendor/statamic/cms/resources/js/components/fieldtypes/grid/HeaderCell.vue'
-import View from '../../../statamic/View.vue'
+import GridRow from '../../statamic/Row.vue'
+import SortableList from '@statamic/components/sortable/SortableList.vue'
+import GridHeaderCell from '@statamic/components/fieldtypes/grid/HeaderCell.vue'
+import View from '../../statamic/View.vue'
 import VariantOptionRow from './VariantOptionRow.vue'
+import { Fieldtype } from 'statamic';
 
 export default {
     name: 'product-variants-fieldtype',

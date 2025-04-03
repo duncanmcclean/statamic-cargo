@@ -69,13 +69,17 @@
 </template>
 
 <script>
-import PositionsSelectOptions from '../../../../vendor/statamic/cms/resources/js/mixins/PositionsSelectOptions';
-import HasInputOptions from '../../../../vendor/statamic/cms/resources/js/components/fieldtypes/HasInputOptions.js';
+import PositionsSelectOptions from '@statamic/mixins/PositionsSelectOptions.js';
+import HasInputOptions from '@statamic/components/fieldtypes/HasInputOptions.js';
+import SortableList from '@statamic/components/Sortable/SortableList.vue';
+import { Fieldtype } from 'statamic';
 
 export default {
     mixins: [Fieldtype, HasInputOptions, PositionsSelectOptions],
 
-    inject: ['storeName'],
+    components: {
+        SortableList,
+    },
 
     inject: [
         'store',
