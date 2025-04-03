@@ -3,7 +3,6 @@
 @section('wrapper_class', 'max-w-3xl')
 
 @section('content')
-
     <base-coupon-create-form
         title="{{ $title }}"
         :actions="{{ json_encode($actions) }}"
@@ -14,5 +13,4 @@
         create-another-url="{{ cp_route('cargo.coupons.create') }}"
         listing-url="{{ cp_route('cargo.coupons.index') }}"
     ></base-coupon-create-form>
-
 @endsection

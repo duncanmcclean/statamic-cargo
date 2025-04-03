@@ -1,30 +1,30 @@
 <script>
 export default {
-  props: ['fields', 'rows', 'meta', 'name', 'canDeleteRows', 'canAddRows', 'allowFullscreen', 'hideDisplay'],
+    props: ['fields', 'rows', 'meta', 'name', 'canDeleteRows', 'canAddRows', 'allowFullscreen', 'hideDisplay'],
 
-  // inject: ['grid'],
+    // inject: ['grid'],
 
-  computed: {
-    sortableItemClass() {
-      return `${this.name}-sortable-item`;
+    computed: {
+        sortableItemClass() {
+            return `${this.name}-sortable-item`;
+        },
+
+        sortableHandleClass() {
+            return `${this.name}-drag-handle`;
+        },
+
+        fieldPathPrefix() {
+            return 'variants-view-error-key-prefix';
+
+            // return this.grid.fieldPathPrefix || this.grid.handle;
+        },
     },
 
-    sortableHandleClass() {
-      return `${this.name}-drag-handle`;
+    provide() {
+        return {
+            sortableItemClass: this.sortableItemClass,
+            sortableHandleClass: this.sortableHandleClass,
+        };
     },
-
-    fieldPathPrefix() {
-      return 'variants-view-error-key-prefix';
-
-      // return this.grid.fieldPathPrefix || this.grid.handle;
-    },
-  },
-
-  provide() {
-    return {
-      sortableItemClass: this.sortableItemClass,
-      sortableHandleClass: this.sortableHandleClass,
-    };
-  },
 };
 </script>

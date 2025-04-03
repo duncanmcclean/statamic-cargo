@@ -1,28 +1,22 @@
 <template>
-
     <div>
         <breadcrumb v-if="breadcrumbs" :url="breadcrumbs[0].url" :title="breadcrumbs[0].text" />
 
-        <div class="flex items-center mb-6">
+        <div class="mb-6 flex items-center">
             <h1 class="flex-1">
                 <div class="flex items-center">
                     <span v-html="formattedTitle" />
                 </div>
             </h1>
 
-            <div class="hidden md:flex items-center">
+            <div class="hidden items-center md:flex">
                 <save-button-options
                     v-if="!readOnly"
                     :show-options="!isInline"
                     button-class="btn-primary"
                     :preferences-prefix="preferencesPrefix"
                 >
-                    <button
-                        class="btn-primary"
-                        :disabled="!canSave"
-                        @click.prevent="save"
-                        v-text="`Save`"
-                    />
+                    <button class="btn-primary" :disabled="!canSave" @click.prevent="save" v-text="`Save`" />
                 </save-button-options>
             </div>
 
@@ -64,34 +58,24 @@
             </div>
         </publish-container>
 
-        <div class="md:hidden mt-6 flex items-center">
-            <button
-                v-if="!readOnly"
-                class="btn-lg btn-primary w-full"
-                :disabled="!canSave"
-                @click.prevent="save">
+        <div class="mt-6 flex items-center md:hidden">
+            <button v-if="!readOnly" class="btn-lg btn-primary w-full" :disabled="!canSave" @click.prevent="save">
                 {{ __('Save') }}
             </button>
         </div>
     </div>
-
 </template>
 
 <script>
-import SaveButtonOptions from '@statamic/components/publish/SaveButtonOptions.vue'
-import HasPreferences from '@statamic/components/data-list/HasPreferences.js'
-import HasHiddenFields from '@statamic/components/publish/HasHiddenFields.js'
-import HasActions from '@statamic/components/publish/HasActions.js'
+import SaveButtonOptions from '@statamic/components/publish/SaveButtonOptions.vue';
+import HasPreferences from '@statamic/components/data-list/HasPreferences.js';
+import HasHiddenFields from '@statamic/components/publish/HasHiddenFields.js';
+import HasActions from '@statamic/components/publish/HasActions.js';
 import clone from '@statamic/util/clone.js';
 import striptags from 'striptags';
 
 export default {
-
-    mixins: [
-        HasPreferences,
-        HasHiddenFields,
-        HasActions,
-    ],
+    mixins: [HasPreferences, HasHiddenFields, HasActions],
 
     components: {
         SaveButtonOptions,
@@ -133,18 +117,17 @@ export default {
             saveKeyBinding: null,
             quickSaveKeyBinding: null,
             quickSave: false,
-        }
+        };
     },
 
     computed: {
+        store() {
+            return this.$refs.container.store;
+        },
 
-      store() {
-          return this.$refs.container.store;
-      },
-
-      formattedTitle() {
-          return striptags(__(this.title));
-      },
+        formattedTitle() {
+            return striptags(__(this.title));
+        },
 
         hasErrors() {
             return this.error || Object.keys(this.errors).length;
@@ -177,19 +160,15 @@ export default {
         direction() {
             return this.$config.get('direction', 'ltr');
         },
-
     },
 
     watch: {
-
         saving(saving) {
             this.$progress.loading(`${this.publishContainer}-coupon-publish-form`, saving);
         },
-
     },
 
     methods: {
-
         clearErrors() {
             this.error = null;
             this.errors = {};
@@ -210,29 +189,32 @@ export default {
         runBeforeSaveHook() {
             this.$refs.container.saving();
 
-            Statamic.$hooks.run('tax-zone.saving', {
-                values: this.values,
-                container: this.$refs.container,
-                storeName: this.publishContainer,
-            })
+            Statamic.$hooks
+                .run('tax-zone.saving', {
+                    values: this.values,
+                    container: this.$refs.container,
+                    storeName: this.publishContainer,
+                })
                 .then(this.performSaveRequest)
-                .catch(error => {
+                .catch((error) => {
                     this.saving = false;
                     this.$toast.error(error || 'Something went wrong');
                 });
         },
 
         performSaveRequest() {
-            this.$axios[this.method](this.actions.save, this.visibleValues).then(response => {
-                this.saving = false;
-                if (!response.data.saved) {
-                    return this.$toast.error(__(`Couldn't save tax zone`));
-                }
-                this.title = response.data.data.title;
-                this.$toast.success(__('Saved'));
-                this.$refs.container.saved();
-                this.runAfterSaveHook(response);
-            }).catch(error => this.handleAxiosError(error));
+            this.$axios[this.method](this.actions.save, this.visibleValues)
+                .then((response) => {
+                    this.saving = false;
+                    if (!response.data.saved) {
+                        return this.$toast.error(__(`Couldn't save tax zone`));
+                    }
+                    this.title = response.data.data.title;
+                    this.$toast.success(__('Saved'));
+                    this.$refs.container.saved();
+                    this.runAfterSaveHook(response);
+                })
+                .catch((error) => this.handleAxiosError(error));
         },
 
         runAfterSaveHook(response) {
@@ -241,7 +223,7 @@ export default {
             Statamic.$hooks
                 .run('tax-zone.saved', {
                     reference: this.initialReference,
-                    response
+                    response,
                 })
                 .then(() => {
                     let nextAction = this.quickSave ? 'continue_editing' : this.afterSaveOption;
@@ -268,7 +250,8 @@ export default {
                     }
 
                     this.quickSave = false;
-                }).catch(e => console.error(e));
+                })
+                .catch((e) => console.error(e));
         },
 
         handleAxiosError(e) {
@@ -297,20 +280,19 @@ export default {
                 this.itemActions = response.data.itemActions;
             }
         },
-
     },
 
     mounted() {
         this.$nextTick(() => {
             document.getElementById('field_name').focus();
-        })
+        });
 
-        this.saveKeyBinding = this.$keys.bindGlobal(['mod+return'], e => {
+        this.saveKeyBinding = this.$keys.bindGlobal(['mod+return'], (e) => {
             e.preventDefault();
             this.save();
         });
 
-        this.quickSaveKeyBinding = this.$keys.bindGlobal(['mod+s'], e => {
+        this.quickSaveKeyBinding = this.$keys.bindGlobal(['mod+s'], (e) => {
             e.preventDefault();
             this.quickSave = true;
             this.save();
@@ -328,7 +310,6 @@ export default {
     destroyed() {
         this.saveKeyBinding.destroy();
         this.quickSaveKeyBinding.destroy();
-    }
-
-}
+    },
+};
 </script>

@@ -19,7 +19,8 @@
             @update:model-value="vueSelectUpdated"
             @focus="$emit('focus')"
             @search:focus="$emit('focus')"
-            @search:blur="$emit('blur')">
+            @search:blur="$emit('blur')"
+        >
             <template #selected-option-container v-if="multiple"><i class="hidden"></i></template>
             <template #search="{ events, attributes }" v-if="multiple">
                 <input
@@ -28,7 +29,7 @@
                     type="search"
                     v-on="events"
                     v-bind="attributes"
-                >
+                />
             </template>
             <template #option="{ label }">
                 <div v-html="label" />
@@ -37,7 +38,10 @@
                 <div v-html="label" />
             </template>
             <template #no-options>
-                <div class="text-sm text-gray-700 rtl:text-right ltr:text-left py-2 px-4" v-text="__('No options to choose from.')" />
+                <div
+                    class="px-4 py-2 text-sm text-gray-700 ltr:text-left rtl:text-right"
+                    v-text="__('No options to choose from.')"
+                />
             </template>
             <template #footer="{ deselect }" v-if="multiple">
                 <sortable-list
@@ -49,9 +53,20 @@
                     @update:model-value="update"
                 >
                     <div class="vs__selected-options-outside flex flex-wrap">
-                        <span v-for="option in selectedOptions" :key="option.value" class="vs__selected mt-2 sortable-item" :class="{'invalid': option.invalid}">
+                        <span
+                            v-for="option in selectedOptions"
+                            :key="option.value"
+                            class="vs__selected sortable-item mt-2"
+                            :class="{ invalid: option.invalid }"
+                        >
                             <div v-html="option.label" />
-                            <button v-if="!readOnly" @click="deselect(option)" type="button" :aria-label="__('Deselect option')" class="vs__deselect">
+                            <button
+                                v-if="!readOnly"
+                                @click="deselect(option)"
+                                type="button"
+                                :aria-label="__('Deselect option')"
+                                class="vs__deselect"
+                            >
                                 <span>×</span>
                             </button>
                             <button v-else type="button" class="vs__deselect">
@@ -62,7 +77,7 @@
                 </sortable-list>
             </template>
         </v-select>
-        <div class="text-xs rtl:mr-2 ltr:ml-2 mt-3" :class="limitIndicatorColor" v-if="config.max_items > 1">
+        <div class="mt-3 text-xs ltr:ml-2 rtl:mr-2" :class="limitIndicatorColor" v-if="config.max_items > 1">
             <span v-text="currentLength"></span>/<span v-text="config.max_items"></span>
         </div>
     </div>
@@ -81,15 +96,13 @@ export default {
         SortableList,
     },
 
-    inject: [
-        'store',
-    ],
+    inject: ['store'],
 
     data() {
         return {
             states: this.meta?.states,
             loading: false,
-        }
+        };
     },
 
     computed: {
@@ -98,7 +111,7 @@ export default {
         },
 
         options() {
-            return this.normalizeInputOptions(this.states?.map(state => ({ value: state.code, label: state.name })));
+            return this.normalizeInputOptions(this.states?.map((state) => ({ value: state.code, label: state.name })));
         },
 
         configParameter() {
@@ -116,12 +129,12 @@ export default {
                 selections = [selections];
             }
 
-            return selections.map(value => {
-                let option = this.options.find(option => option.value === value);
+            return selections.map((value) => {
+                let option = this.options.find((option) => option.value === value);
 
-                if (! option) return {value, label: value};
+                if (!option) return { value, label: value };
 
-                return {value: option.value, label: option.label, invalid: false};
+                return { value: option.value, label: option.label, invalid: false };
             });
         },
 
@@ -139,7 +152,7 @@ export default {
 
         currentLength() {
             if (this.value) {
-                return (typeof this.value == 'string') ? 1 : this.value.length;
+                return typeof this.value == 'string' ? 1 : this.value.length;
             }
 
             return 0;
@@ -159,10 +172,10 @@ export default {
     methods: {
         vueSelectUpdated(value) {
             if (this.multiple) {
-                this.update(value.map(v => v.value));
+                this.update(value.map((v) => v.value));
             } else {
                 if (value) {
-                    this.update(value.value)
+                    this.update(value.value);
                     // this.states.push(value)
                 } else {
                     this.update(null);
@@ -174,9 +187,9 @@ export default {
             params = {
                 config: this.configParameter,
                 ...params,
-            }
+            };
 
-            return this.$axios.get(this.meta.url, { params }).then(response => {
+            return this.$axios.get(this.meta.url, { params }).then((response) => {
                 this.states = response.data.data;
                 return Promise.resolve(response);
             });
@@ -184,15 +197,15 @@ export default {
     },
 
     watch: {
-        country (country) {
+        country(country) {
             this.loading = true;
 
             if (this.config.max_items === 1) {
                 this.update(null);
             }
 
-            this.request({ country }).then(response => this.loading = false);
+            this.request({ country }).then((response) => (this.loading = false));
         },
     },
-}
+};
 </script>

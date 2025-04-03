@@ -1,16 +1,15 @@
 <template>
-
     <div>
         <breadcrumb v-if="breadcrumbs" :url="breadcrumbs[0].url" :title="breadcrumbs[0].text" />
 
-        <div class="flex items-center mb-6">
+        <div class="mb-6 flex items-center">
             <h1 class="flex-1">
                 <div class="flex items-center">
                     <span v-html="formattedTitle" />
                 </div>
             </h1>
 
-            <dropdown-list v-if="itemActions.length" class="rtl:ml-4 ltr:mr-4">
+            <dropdown-list v-if="itemActions.length" class="ltr:mr-4 rtl:ml-4">
                 <data-list-inline-actions
                     :item="values.id"
                     :url="itemActionUrl"
@@ -21,19 +20,14 @@
                 />
             </dropdown-list>
 
-            <div class="hidden md:flex items-center">
+            <div class="hidden items-center md:flex">
                 <save-button-options
                     v-if="!readOnly"
                     :show-options="!isInline"
                     button-class="btn-primary"
                     :preferences-prefix="preferencesPrefix"
                 >
-                    <button
-                        class="btn-primary"
-                        :disabled="!canSave"
-                        @click.prevent="save"
-                        v-text="__('Save')"
-                    />
+                    <button class="btn-primary" :disabled="!canSave" @click.prevent="save" v-text="__('Save')" />
                 </save-button-options>
             </div>
 
@@ -73,10 +67,14 @@
                         @blur="container.$emit('blur', $event)"
                     >
                         <template #actions="{ shouldShowSidebar }">
-                            <div class="card p-0 mb-5">
-                                <div v-if="!updatingStatus" class="p-4 flex items-center justify-between text-md">
+                            <div class="card mb-5 p-0">
+                                <div v-if="!updatingStatus" class="text-md flex items-center justify-between p-4">
                                     <div class="flex items-center gap-x-2">
-                                        <span class="little-dot size-2.5" v-tooltip="statusLabel" :class="statusClass" />
+                                        <span
+                                            class="little-dot size-2.5"
+                                            v-tooltip="statusLabel"
+                                            :class="statusClass"
+                                        />
                                         {{ statusLabel }}
                                     </div>
 
@@ -87,7 +85,9 @@
 
                                 <div v-if="updatingStatus" class="publish-field form-group">
                                     <div class="field-inner flex flex-col dark:border-dark-900">
-                                        <label for="field_status" class="publish-field-label mb-1.5">{{ __('Status') }}</label>
+                                        <label for="field_status" class="publish-field-label mb-1.5">{{
+                                            __('Status')
+                                        }}</label>
                                         <select-input
                                             class="w-full"
                                             name="field_status"
@@ -95,19 +95,34 @@
                                             :model-value="values.status"
                                             @update:model-value="setFieldValue('status', $event)"
                                         />
-                                        <div v-if="values.status === 'shipped'" class="mt-4 mb-0 flex flex-col gap-y-4">
+                                        <div v-if="values.status === 'shipped'" class="mb-0 mt-4 flex flex-col gap-y-4">
                                             <div>
-                                                <label for="tracking_number" class="mb-1.5">{{ __('Tracking Number') }}</label>
-                                                <input type="text" class="input-text w-full" id="tracking_number" name="tracking_number" v-model="values.tracking_number">
+                                                <label for="tracking_number" class="mb-1.5">{{
+                                                    __('Tracking Number')
+                                                }}</label>
+                                                <input
+                                                    type="text"
+                                                    class="input-text w-full"
+                                                    id="tracking_number"
+                                                    name="tracking_number"
+                                                    v-model="values.tracking_number"
+                                                />
                                             </div>
 
-                                            <a :href="cp_url(`orders/${values.id}/packing-slip`)" target="_blank" class="text-blue text-sm flex items-center">
-                                                <SvgIcon name="printer" class="w-5 h-5 mr-2" />
+                                            <a
+                                                :href="cp_url(`orders/${values.id}/packing-slip`)"
+                                                target="_blank"
+                                                class="flex items-center text-sm text-blue"
+                                            >
+                                                <SvgIcon name="printer" class="mr-2 h-5 w-5" />
                                                 {{ __('Print Packing Slip') }}
                                             </a>
                                         </div>
-                                        <div v-if="values.status === 'cancelled'" class="help-block mt-3 mb-0">
-                                            <p class="mb-0"><span class="font-semibold">{{ __('Note') }}:</span> {{ __('You will still need to refund the payment manually.') }}</p>
+                                        <div v-if="values.status === 'cancelled'" class="help-block mb-0 mt-3">
+                                            <p class="mb-0">
+                                                <span class="font-semibold">{{ __('Note') }}:</span>
+                                                {{ __('You will still need to refund the payment manually.') }}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -118,36 +133,25 @@
             </div>
         </publish-container>
 
-        <div class="md:hidden mt-6 flex items-center">
-            <button
-                v-if="!readOnly"
-                class="btn-lg btn-primary w-full"
-                :disabled="!canSave"
-                @click.prevent="save">
+        <div class="mt-6 flex items-center md:hidden">
+            <button v-if="!readOnly" class="btn-lg btn-primary w-full" :disabled="!canSave" @click.prevent="save">
                 Save
             </button>
         </div>
     </div>
-
 </template>
 
-
 <script>
-import SaveButtonOptions from '@statamic/components/publish/SaveButtonOptions.vue'
-import HasPreferences from '@statamic/components/data-list/HasPreferences.js'
-import HasHiddenFields from '@statamic/components/publish/HasHiddenFields.js'
-import HasActions from '@statamic/components/publish/HasActions.js'
-import SvgIcon from '../SvgIcon.vue'
+import SaveButtonOptions from '@statamic/components/publish/SaveButtonOptions.vue';
+import HasPreferences from '@statamic/components/data-list/HasPreferences.js';
+import HasHiddenFields from '@statamic/components/publish/HasHiddenFields.js';
+import HasActions from '@statamic/components/publish/HasActions.js';
+import SvgIcon from '../SvgIcon.vue';
 import clone from '@statamic/util/clone.js';
 import striptags from 'striptags';
 
 export default {
-
-    mixins: [
-        HasPreferences,
-        HasHiddenFields,
-        HasActions,
-    ],
+    mixins: [HasPreferences, HasHiddenFields, HasActions],
 
     components: {
         SvgIcon,
@@ -192,11 +196,10 @@ export default {
             quickSave: false,
 
             updatingStatus: false,
-        }
+        };
     },
 
     computed: {
-
         store() {
             return this.$refs.container.store;
         },
@@ -210,7 +213,7 @@ export default {
         },
 
         somethingIsLoading() {
-            return ! this.$progress.isComplete();
+            return !this.$progress.isComplete();
         },
 
         canSave() {
@@ -238,7 +241,7 @@ export default {
         },
 
         statusLabel() {
-            return this.meta.status.options.find(option => option.value === this.values.status).label;
+            return this.meta.status.options.find((option) => option.value === this.values.status).label;
         },
 
         statusClass() {
@@ -251,26 +254,22 @@ export default {
                     return 'bg-green-500';
             }
         },
-
     },
 
     watch: {
-
         saving(saving) {
             this.$progress.loading(`${this.publishContainer}-order-publish-form`, saving);
         },
-
     },
 
     methods: {
-
         clearErrors() {
             this.error = null;
             this.errors = {};
         },
 
         save() {
-            if (! this.canSave) {
+            if (!this.canSave) {
                 this.quickSave = false;
                 return;
             }
@@ -284,13 +283,14 @@ export default {
         runBeforeSaveHook() {
             this.$refs.container.saving();
 
-            Statamic.$hooks.run('order.saving', {
-                values: this.values,
-                container: this.$refs.container,
-                storeName: this.publishContainer,
-            })
+            Statamic.$hooks
+                .run('order.saving', {
+                    values: this.values,
+                    container: this.$refs.container,
+                    storeName: this.publishContainer,
+                })
                 .then(this.performSaveRequest)
-                .catch(error => {
+                .catch((error) => {
                     this.saving = false;
                     this.$toast.error(error || 'Something went wrong');
                 });
@@ -299,20 +299,25 @@ export default {
         performSaveRequest() {
             // Once the hook has completed, we need to make the actual request.
             // We build the payload here because the before hook may have modified values.
-            const payload = { ...this.visibleValues, ...{
+            const payload = {
+                ...this.visibleValues,
+                ...{
                     _blueprint: this.fieldset.handle,
-                }};
+                },
+            };
 
-            this.$axios[this.method](this.actions.save, payload).then(response => {
-                this.saving = false;
-                if (! response.data.saved) {
-                    return this.$toast.error(__(`Couldn't save order`));
-                }
-                this.title = response.data.data.title;
-                this.$toast.success(__('Saved'));
-                this.$refs.container.saved();
-                this.runAfterSaveHook(response);
-            }).catch(error => this.handleAxiosError(error));
+            this.$axios[this.method](this.actions.save, payload)
+                .then((response) => {
+                    this.saving = false;
+                    if (!response.data.saved) {
+                        return this.$toast.error(__(`Couldn't save order`));
+                    }
+                    this.title = response.data.data.title;
+                    this.$toast.success(__('Saved'));
+                    this.$refs.container.saved();
+                    this.runAfterSaveHook(response);
+                })
+                .catch((error) => this.handleAxiosError(error));
         },
 
         runAfterSaveHook(response) {
@@ -321,7 +326,7 @@ export default {
             Statamic.$hooks
                 .run('order.saved', {
                     reference: this.initialReference,
-                    response
+                    response,
                 })
                 .then(() => {
                     let nextAction = this.quickSave ? 'continue_editing' : this.afterSaveOption;
@@ -349,7 +354,8 @@ export default {
                     }
 
                     this.quickSave = false;
-                }).catch(e => console.error(e));
+                })
+                .catch((e) => console.error(e));
         },
 
         handleAxiosError(e) {
@@ -382,16 +388,15 @@ export default {
                 this.itemActions = response.data.itemActions;
             }
         },
-
     },
 
     mounted() {
-        this.saveKeyBinding = this.$keys.bindGlobal(['mod+return'], e => {
+        this.saveKeyBinding = this.$keys.bindGlobal(['mod+return'], (e) => {
             e.preventDefault();
             this.save();
         });
 
-        this.quickSaveKeyBinding = this.$keys.bindGlobal(['mod+s'], e => {
+        this.quickSaveKeyBinding = this.$keys.bindGlobal(['mod+s'], (e) => {
             e.preventDefault();
             this.quickSave = true;
             this.save();
@@ -407,7 +412,6 @@ export default {
 
         this.saveKeyBinding.destroy();
         this.quickSaveKeyBinding.destroy();
-    }
-
-}
+    },
+};
 </script>

@@ -23,8 +23,8 @@ export default {
 
     methods: {
         updateDebounced: debounce(function (value) {
-            this.$emit('update:value', value.toUpperCase())
+            this.$emit('update:value', value.toUpperCase());
         }, 500),
-    }
-}
+    },
+};
 </script>

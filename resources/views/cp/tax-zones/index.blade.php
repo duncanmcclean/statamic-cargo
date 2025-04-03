@@ -2,27 +2,26 @@
 @section('title', __('Tax Zones'))
 
 @section('content')
-    @unless($taxZones->isEmpty())
-
-        <div class="flex mb-6">
+    @unless ($taxZones->isEmpty())
+        <div class="mb-6 flex">
             <h1 class="flex-1">{{ __('Tax Zones') }}</h1>
             <a href="{{ cp_route('cargo.tax-zones.create') }}" class="btn-primary">{{ __('Create Tax Zone') }}</a>
         </div>
 
         <tax-class-listing
             :initial-rows="{{ json_encode($taxZones) }}"
-            :initial-columns="{{ json_encode($columns) }}">
-        </tax-class-listing>
-
+            :initial-columns="{{ json_encode($columns) }}"
+        ></tax-class-listing>
     @else
-
-        @include('statamic::partials.empty-state', [
-            'title' => __('Tax Zones'),
-            'description' => __('cargo::messages.tax_zones_intro'),
-            'svg' => 'empty/fieldsets',
-            'button_text' => __('Create Tax Zones'),
-            'button_url' => cp_route('cargo.tax-zones.create'),
-        ])
-
+        @include(
+            'statamic::partials.empty-state',
+            [
+                'title' => __('Tax Zones'),
+                'description' => __('cargo::messages.tax_zones_intro'),
+                'svg' => 'empty/fieldsets',
+                'button_text' => __('Create Tax Zones'),
+                'button_url' => cp_route('cargo.tax-zones.create'),
+            ]
+        )
     @endunless
 @endsection

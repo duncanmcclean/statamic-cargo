@@ -60,12 +60,12 @@ export default {
             let value = {
                 mode: this.mode,
                 value: couponValue,
-            }
+            };
 
             if (JSON.stringify(value) !== JSON.stringify(this.value)) {
                 this.update(value);
             }
         },
     },
-}
+};
 </script>

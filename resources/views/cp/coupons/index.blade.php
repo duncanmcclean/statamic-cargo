@@ -3,10 +3,10 @@
 @section('wrapper_class', 'max-w-3xl')
 
 @section('content')
-    <div class="flex items-center justify-between mb-6">
+    <div class="mb-6 flex items-center justify-between">
         <h1 class="flex-1">{{ __('Coupons') }}</h1>
 
-        @if(auth()->user()->can('create coupons'))
+        @if (auth()->user()->can('create coupons'))
             <a class="btn-primary" href="{{ cp_route('cargo.coupons.create') }}">{{ __('Create Coupon') }}</a>
         @endif
     </div>

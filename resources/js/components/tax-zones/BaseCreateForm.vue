@@ -1,5 +1,4 @@
 <template>
-
     <tax-zone-publish-form
         :is-creating="true"
         publish-container="base"
@@ -14,28 +13,16 @@
         :initial-listing-url="listingUrl"
         @saved="saved"
     ></tax-zone-publish-form>
-
 </template>
 
 <script>
 export default {
-
-    props: [
-        'actions',
-        'title',
-        'fieldset',
-        'values',
-        'meta',
-        'breadcrumbs',
-        'createAnotherUrl',
-        'listingUrl',
-    ],
+    props: ['actions', 'title', 'fieldset', 'values', 'meta', 'breadcrumbs', 'createAnotherUrl', 'listingUrl'],
 
     methods: {
         saved(response) {
             window.location = response.data.data.edit_url + '?created=true';
-        }
-    }
-
-}
+        },
+    },
+};
 </script>

@@ -2,7 +2,6 @@
 @section('title', $breadcrumbs->title($title))
 
 @section('content')
-
     <tax-class-publish-form
         publish-container="base"
         :initial-actions="{{ json_encode($actions) }}"
@@ -14,5 +13,4 @@
         :breadcrumbs="{{ $breadcrumbs->toJson() }}"
         initial-listing-url="{{ cp_route('cargo.tax-classes.index') }}"
     ></tax-class-publish-form>
-
 @endsection

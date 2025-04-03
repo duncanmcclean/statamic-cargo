@@ -15,13 +15,13 @@
                 :form-component-props="meta.product.formComponentProps"
                 @updated="lineItemUpdated"
             />
-            <div class="receipt-total font-semibold border-t dark:border-dark-500">
+            <div class="receipt-total border-t font-semibold dark:border-dark-500">
                 <div>{{ __('Subtotal') }}</div>
                 <div>{{ value.totals.sub_total }}</div>
             </div>
             <div v-if="value.coupon" class="receipt-total">
                 <div>
-                    <span>{{ __('Coupon Discount (:code)', {code: value.coupon.code}) }}</span>
+                    <span>{{ __('Coupon Discount (:code)', { code: value.coupon.code }) }}</span>
                     <span class="help-block mb-0">{{ value.coupon.discount }}</span>
                 </div>
                 <div>-{{ value.totals.discount_total }}</div>
@@ -36,7 +36,9 @@
             <div v-if="value.taxes" class="receipt-total">
                 <div>
                     <span>{{ __('Taxes') }}</span>
-                    <span v-for="item in value.taxes.breakdown" class="help-block mb-0">{{ item.rate }}% {{ item.description }} ({{ item.amount }})</span>
+                    <span v-for="item in value.taxes.breakdown" class="help-block mb-0"
+                        >{{ item.rate }}% {{ item.description }} ({{ item.amount }})</span
+                    >
                 </div>
                 <div>{{ value.totals.tax_total }}</div>
             </div>
@@ -54,7 +56,7 @@
 
 <script>
 import { Fieldtype } from 'statamic';
-import LineItem from './OrderReceipt/LineItem.vue'
+import LineItem from './OrderReceipt/LineItem.vue';
 
 export default {
     components: { LineItem },
@@ -64,19 +66,19 @@ export default {
     data() {
         return {
             receipt: this.value,
-        }
+        };
     },
 
     methods: {
         lineItemUpdated(lineItem) {
-            this.value.line_items = this.value.line_items.map(item => {
+            this.value.line_items = this.value.line_items.map((item) => {
                 if (item.id === lineItem.id) {
-                    return lineItem
+                    return lineItem;
                 }
 
-                return item
-            })
+                return item;
+            });
         },
     },
-}
+};
 </script>

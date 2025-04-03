@@ -1,90 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ trans key="Packing Slip for Order #:orderNumber" :orderNumber="order:order_number" }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>window.addEventListener('load', () => window.print());</script>
-</head>
-<body>
-    <main class="max-w-4xl mx-auto py-12 flex flex-col gap-y-10 px-2">
-        <header>
-            <h1 class="text-4xl font-bold mb-3">{{ trans key="Packing Slip" }}</h1>
-            <h3 class="text-xl font-semibold text-[#02747E]">{{ config:app:name }} - {{ trans key="Order #:orderNumber" :orderNumber="order:order_number" }}</h3>
-        </header>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{{ trans key="Packing Slip for Order #:orderNumber" :orderNumber="order:order_number" }}</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            window.addEventListener('load', () => window.print());
+        </script>
+    </head>
+    <body>
+        <main class="mx-auto flex max-w-4xl flex-col gap-y-10 px-2 py-12">
+            <header>
+                <h1 class="mb-3 text-4xl font-bold">{{ trans key="Packing Slip" }}</h1>
+                <h3 class="text-xl font-semibold text-[#02747E]">
+                    {{ config:app:name }} - {{ trans key="Order #:orderNumber" :orderNumber="order:order_number" }}
+                </h3>
+            </header>
 
-        <div class="grid grid-cols-2">
-            {{# Billing Address #}}
-            <div class="py-2">
-                <h2 class="text-[#02747E] font-bold text-lg mb-1">{{ trans key="Bill to:" }}</h2>
-                <div>
-                    <p>{{ order:customer:name }}</p>
-                    <p>{{ order:billing_line_1 }}</p>
-                    <p>{{ order:billing_line_2 }}</p>
-                    <p>{{ order:billing_city }}</p>
-                    <p>{{ order:billing_state:name }}</p>
-                    <p>{{ order:billing_postcode }}</p>
-                    <p>{{ order:billing_country:label }}</p>
+            <div class="grid grid-cols-2">
+                {{# Billing Address #}}
+                <div class="py-2">
+                    <h2 class="mb-1 text-lg font-bold text-[#02747E]">{{ trans key="Bill to:" }}</h2>
+                    <div>
+                        <p>{{ order:customer:name }}</p>
+                        <p>{{ order:billing_line_1 }}</p>
+                        <p>{{ order:billing_line_2 }}</p>
+                        <p>{{ order:billing_city }}</p>
+                        <p>{{ order:billing_state:name }}</p>
+                        <p>{{ order:billing_postcode }}</p>
+                        <p>{{ order:billing_country:label }}</p>
+                    </div>
+                </div>
+
+                {{# Shipping Address #}}
+                <div class="py-2">
+                    <h2 class="mb-1 text-lg font-bold text-[#02747E]">{{ trans key="Ship to:" }}</h2>
+                    <div>
+                        <p>{{ order:customer:name }}</p>
+                        <p>{{ order:shipping_line_1 }}</p>
+                        <p>{{ order:shipping_line_2 }}</p>
+                        <p>{{ order:shipping_city }}</p>
+                        <p>{{ order:shipping_state:name }}</p>
+                        <p>{{ order:shipping_postcode }}</p>
+                        <p>{{ order:shipping_country:label }}</p>
+                    </div>
                 </div>
             </div>
 
-            {{# Shipping Address #}}
-            <div class="py-2">
-                <h2 class="text-[#02747E] font-bold text-lg mb-1">{{ trans key="Ship to:" }}</h2>
-                <div>
-                    <p>{{ order:customer:name }}</p>
-                    <p>{{ order:shipping_line_1 }}</p>
-                    <p>{{ order:shipping_line_2 }}</p>
-                    <p>{{ order:shipping_city }}</p>
-                    <p>{{ order:shipping_state:name }}</p>
-                    <p>{{ order:shipping_postcode }}</p>
-                    <p>{{ order:shipping_country:label }}</p>
+            {{# Order Details #}}
+            <div
+                class="border-zinc-300 divide-zinc-300 {{ ['grid-cols-3' => order:shipping_method, 'grid-cols-1' => !order_shipping_method] | classes }} grid divide-x-2 rounded-lg border"
+            >
+                <div class="flex flex-col items-center justify-center space-y-1 px-6 py-4">
+                    <span class="text-sm">{{ trans key="Order Date" }}</span>
+                    <h3 class="text-lg font-bold">{{ order:date format="Y-m-d" }}</h3>
                 </div>
+                {{ if order:shipping_option }}
+                    <div class="flex flex-col items-center justify-center space-y-1 px-6">
+                        <span class="text-sm">{{ trans key="Shipping Option" }}</span>
+                        <h3 class="text-lg font-bold">{{ order:shipping_option:name }}</h3>
+                    </div>
+
+                    <div class="flex flex-col items-center justify-center space-y-1 px-6">
+                        <span class="text-sm">{{ trans key="Shipping Cost" }}</span>
+                        <h3 class="text-lg font-bold">{{ order:shipping_total }}</h3>
+                    </div>
+                {{ /if }}
             </div>
-        </div>
 
-        {{# Order Details #}}
-        <div class="
-            rounded-lg border border-zinc-300 grid divide-x-2 divide-zinc-300
-            {{ ['grid-cols-3' => order:shipping_method, 'grid-cols-1' => !order_shipping_method] | classes }}
-        ">
-            <div class="flex flex-col justify-center items-center space-y-1 py-4 px-6">
-                <span class="text-sm">{{ trans key="Order Date" }}</span>
-                <h3 class="text-lg font-bold">{{ order:date format="Y-m-d" }}</h3>
-            </div>
-            {{ if order:shipping_option }}
-                <div class="flex flex-col justify-center items-center space-y-1 px-6">
-                    <span class="text-sm">{{ trans key="Shipping Option" }}</span>
-                    <h3 class="text-lg font-bold">{{ order:shipping_option:name }}</h3>
-                </div>
-
-                <div class="flex flex-col justify-center items-center space-y-1 px-6">
-                    <span class="text-sm">{{ trans key="Shipping Cost" }}</span>
-                    <h3 class="text-lg font-bold">{{ order:shipping_total }}</h3>
-                </div>
-            {{ /if }}
-        </div>
-
-        {{# Line Items #}}
-        <table class="w-full rounded-t-lg border border-zinc-300">
-            <thead class="border-b border-zinc-300 font-bold text-lg">
-                <tr class="divide-x divide-zinc-300">
-                    <th class="px-3 py-3 text-sm text-center w-[10%]">{{ trans key="Qty" }}</th>
-                    <th class="px-3 py-3 text-sm text-left">{{ trans key="Description" }}</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-zinc-300">
-                {{ order:line_items }}
-                    {{ if product:type === 'physical' }}
-                        <tr class="divide-x divide-zinc-300">
-                            <td class="px-3 py-3 text-center">{{ quantity }}</td>
-                            <td class="px-3 py-3">{{ product:title }}</td>
-                        </tr>
-                    {{ /if }}
-                {{ /order:line_items }}
-            </tbody>
-        </table>
-    </main>
-</body>
+            {{# Line Items #}}
+            <table class="border-zinc-300 w-full rounded-t-lg border">
+                <thead class="border-zinc-300 border-b text-lg font-bold">
+                    <tr class="divide-zinc-300 divide-x">
+                        <th class="w-[10%] px-3 py-3 text-center text-sm">{{ trans key="Qty" }}</th>
+                        <th class="px-3 py-3 text-left text-sm">{{ trans key="Description" }}</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-zinc-300 divide-y">
+                    {{ order:line_items }}
+                        {{ if product:type === 'physical' }}
+                            <tr class="divide-zinc-300 divide-x">
+                                <td class="px-3 py-3 text-center">{{ quantity }}</td>
+                                <td class="px-3 py-3">{{ product:title }}</td>
+                            </tr>
+                        {{ /if }}
+                    {{ /order:line_items }}
+                </tbody>
+            </table>
+        </main>
+    </body>
 </html>
