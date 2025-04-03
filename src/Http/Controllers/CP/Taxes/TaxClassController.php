@@ -34,6 +34,7 @@ class TaxClassController extends CpController
             'taxClasses' => $taxClasses,
             'columns' => [
                 Column::make('name')->label(__('Name')),
+                Column::make('handle')->label(__('Handle')),
             ],
         ]);
     }
