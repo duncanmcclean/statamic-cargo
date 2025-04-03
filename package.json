@@ -1,7 +1,9 @@
 {
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "prettier:format": "prettier --write \"**/*.{js,ts,jsx,tsx,cjs,cts,mjs,mts,vue,blade.php,antlers.html,css}\"",
+        "prettier:check": "prettier --check \"**/*.{js,ts,jsx,tsx,cjs,cts,mjs,mts,vue,blade.php,antlers.html,css}\""
     },
     "dependencies": {
         "@floating-ui/dom": "^1.6.12",
@@ -17,6 +19,10 @@
         "postcss-import": "^16.1.0",
         "striptags": "^3.2.0",
         "svgo": "^3.3.2",
+        "prettier": "^3.4.2",
+        "prettier-plugin-antlers": "^2.0.5",
+        "prettier-plugin-blade": "^2.1.19",
+        "prettier-plugin-tailwindcss": "^0.6.11",
         "tailwindcss": "^3.4.7",
         "uniqid": "^5.4.0"
     },
