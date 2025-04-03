@@ -51,8 +51,9 @@
             :errors="errors"
             :track-dirty-state="trackDirtyState"
             @updated="values = $event"
+            v-slot="{ container, components, setFieldMeta }"
         >
-            <div slot-scope="{ container, components, setFieldMeta }">
+            <div>
                 <component
                     v-for="component in components"
                     :key="component.id"
@@ -66,11 +67,8 @@
                     <publish-tabs
                         v-show="tabsVisible"
                         :read-only="readOnly"
-                        :syncable="hasOrigin"
                         @updated="setFieldValue"
                         @meta-updated="setFieldMeta"
-                        @synced="syncField"
-                        @desynced="desyncField"
                         @focus="container.$emit('focus', $event)"
                         @blur="container.$emit('blur', $event)"
                     >
@@ -204,6 +202,10 @@ export default {
     },
 
     computed: {
+
+        store() {
+            return this.$refs.container.store;
+        },
 
         formattedTitle() {
             return striptags(__(this.title));
