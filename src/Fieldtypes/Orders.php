@@ -10,7 +10,6 @@ use Statamic\CP\Columns;
 use Statamic\Facades\User;
 use Statamic\Fieldtypes\Relationship;
 use Statamic\Query\Scopes\Filters\Concerns\QueriesFilters;
-use Statamic\Statamic;
 
 class Orders extends Relationship
 {
