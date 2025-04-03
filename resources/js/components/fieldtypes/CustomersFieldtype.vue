@@ -69,11 +69,16 @@ export default {
             if (! this.value.editable) return;
             if (this.value.invalid) return;
 
-            // todo: pinia refactor
-            // if (this.value.reference && Object.entries(this.$store.state.publish).find(([key, value]) => value.reference === this.value.reference)) {
-            //     this.$toast.error(__("You're already editing this item."));
-            //     return;
-            // }
+            if (this.value.reference) {
+                const storeRefs = this.$pinia
+                    ?._s.values()
+                    .map((store) => store.reference);
+
+                if (Array.from(storeRefs).includes(this.value.reference)) {
+                    this.$toast.error(__("You're already editing this item."));
+                    return;
+                }
+            }
 
             this.isEditingUser = true;
         },
