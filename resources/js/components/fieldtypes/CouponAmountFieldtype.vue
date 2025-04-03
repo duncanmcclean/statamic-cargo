@@ -42,18 +42,18 @@ export default {
         this.couponValue = this.value?.value || this.value || null;
         this.mode = this.value?.mode || this.store.values.type;
 
-        // todo: refactor to work with pinia
-        // this.$store.watch(
-        //     (state) => state.publish.base.values.type,
-        //     (type) => {
-        //         // Keep track of the previous amount, so we can restore it when switching between modes.
-        //         this.previousAmounts[this.mode] = this.couponValue;
-        //
-        //         this.mode = type;
-        //         this.couponValue = this.previousAmounts[type] || null;
-        //     },
-        //     { immediate: false }
-        // )
+        this.store.$subscribe((mutation, state) => {
+            if (mutation.events.key === 'type') {
+                let type = mutation.events.newValue;
+
+                // Keep track of the previous amount, so we can restore it when switching between modes.
+                this.previousAmounts[this.mode] = this.couponValue;
+
+                this.mode = type;
+                this.couponValue = this.previousAmounts[type] || null;
+            }
+        });
+    },
 
     methods: {
         updateCouponValue(value) {
