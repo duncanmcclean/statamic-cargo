@@ -14,6 +14,10 @@ class ShippingMethods extends Relationship
     {
         $shippingMethod = ShippingMethod::find($id);
 
+        if (! $shippingMethod) {
+            return [];
+        }
+
         return [
             'name' => $shippingMethod->title(),
             'handle' => $shippingMethod->handle(),
