@@ -60,7 +60,6 @@
 
                     <data-list-bulk-actions
                         :url="actionUrl"
-                        :context="actionContext"
                         @started="actionStarted"
                         @completed="actionCompleted"
                     />
@@ -85,7 +84,8 @@
                                     <data-list-inline-actions
                                         :item="order.id"
                                         :url="actionUrl"
-                                        :actions="order.actions"                                        @started="actionStarted"
+                                        :actions="order.actions"
+                                        @started="actionStarted"
                                         @completed="actionCompleted"
                                     />
                                 </dropdown-list>
@@ -120,11 +120,5 @@ export default {
             pushQuery: true,
         }
     },
-
-    methods: {
-        columnShowing(column) {
-            return this.visibleColumns.find(c => c.field === column);
-        },
-    }
 }
 </script>

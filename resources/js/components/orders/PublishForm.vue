@@ -13,7 +13,8 @@
             <dropdown-list v-if="itemActions.length" class="rtl:ml-4 ltr:mr-4">
                 <data-list-inline-actions
                     :item="values.id"
-                    :url="itemActionUrl"                    :actions="itemActions"
+                    :url="itemActionUrl"
+                    :actions="itemActions"
                     :is-dirty="isDirty"
                     @started="actionStarted"
                     @completed="actionCompleted"
@@ -66,18 +67,16 @@
                     <publish-tabs
                         v-show="tabsVisible"
                         :read-only="readOnly"
-                        :syncable="hasOrigin"
                         @updated="setFieldValue"
                         @meta-updated="setFieldMeta"
-                        @synced="syncField"
-                        @desynced="desyncField"
                         @focus="container.$emit('focus', $event)"
                         @blur="container.$emit('blur', $event)"
                     >
                         <template #actions="{ shouldShowSidebar }">
                             <div class="card p-0 mb-5">
                                 <div v-if="!updatingStatus" class="p-4 flex items-center justify-between text-md">
-                                    <div class="flex items-center gap-x-2">                                        <span class="little-dot size-2.5" v-tooltip="statusLabel" :class="statusClass" />
+                                    <div class="flex items-center gap-x-2">
+                                        <span class="little-dot size-2.5" v-tooltip="statusLabel" :class="statusClass" />
                                         {{ statusLabel }}
                                     </div>
 
@@ -405,9 +404,7 @@ export default {
 
     unmounted() {
         clearTimeout(this.trackDirtyStateTimeout);
-    },
 
-    destroyed() {
         this.saveKeyBinding.destroy();
         this.quickSaveKeyBinding.destroy();
     }
