@@ -54,6 +54,11 @@ export default {
         //     },
         //     { immediate: false }
         // )
+
+    methods: {
+        updateCouponValue(value) {
+            this.couponValue = value;
+        },
     },
 
     watch: {
