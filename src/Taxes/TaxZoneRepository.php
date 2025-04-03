@@ -109,7 +109,6 @@ class TaxZoneRepository implements Contract
                                         'from' => 'countries',
                                         'validate' => [
                                             'required_if:type,states',
-                                            'min:1',
                                         ],
                                         'if' => ['type' => 'states'],
                                     ],
@@ -123,7 +122,6 @@ class TaxZoneRepository implements Contract
                                         'rows' => 10,
                                         'validate' => [
                                             'required_if:type,postcodes',
-                                            'min:1',
                                         ],
                                         'if' => ['type' => 'postcodes'],
                                     ],
