@@ -1,9 +1,10 @@
 <template>
     <text-fieldtype
+        :handle="config.handle"
         :meta="{}"
         :config="{
             classes: 'uppercase font-mono',
-            focus: 'code',
+            focus: true,
             autoselect: true,
             input_type: 'text',
         }"
