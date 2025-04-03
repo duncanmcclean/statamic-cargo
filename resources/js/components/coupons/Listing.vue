@@ -14,7 +14,7 @@
             :sort-direction="sortDirection"
             @visible-columns-updated="visibleColumns = $event"
         >
-            <div slot-scope="{ hasSelections }">
+            <div>
                 <div class="card overflow-hidden p-0 relative">
                     <div class="flex flex-wrap items-center justify-between px-2 pb-2 text-sm border-b dark:border-dark-900">
 
@@ -61,7 +61,6 @@
 
                     <data-list-bulk-actions
                         :url="actionUrl"
-                        :context="actionContext"
                         @started="actionStarted"
                         @completed="actionCompleted"
                     />
@@ -74,21 +73,21 @@
                             :toggle-selection-on-row-click="true"
                             @sorted="sorted"
                         >
-                            <template slot="cell-code" slot-scope="{ row, value }">
+                            <template #cell-code="{ row: coupon, value }">
                                 <div class="title-index-field">
-                                    <a class="title-index-field inline-flex items-center" :href="row.edit_url" @click.stop>
-                                        {{ row.code }}
+                                    <a class="title-index-field inline-flex items-center" :href="coupon.edit_url" @click.stop>
+                                        {{ coupon.code }}
                                     </a>
                                 </div>
                             </template>
 
-                            <template slot="cell-value" slot-scope="{ row, value }">
+                            <template #cell-value="{ row: coupon, value }">
                                 <div>
-                                    {{ row.discount_text }}
+                                    {{ coupon.discount_text }}
                                 </div>
                             </template>
 
-                            <template slot="actions" slot-scope="{ row: coupon, index }">
+                            <template #actions="{ row: coupon, index }">
                                 <dropdown-list placement="left-start">
                                     <dropdown-item :text="__('Edit')" :redirect="coupon.edit_url" v-if="coupon.editable" />
                                     <div class="divider" v-if="coupon.actions.length" />
@@ -118,7 +117,7 @@
 </template>
 
 <script>
-import Listing from '../../../../vendor/statamic/cms/resources/js/components/Listing.vue'
+import Listing from '@statamic/components/Listing.vue'
 
 export default {
     mixins: [Listing],
@@ -130,12 +129,6 @@ export default {
             requestUrl: cp_url(`coupons`),
             pushQuery: true,
         }
-    },
-
-    methods: {
-        columnShowing(column) {
-            return this.visibleColumns.find(c => c.field === column);
-        },
     },
 }
 </script>

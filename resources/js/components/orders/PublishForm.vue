@@ -6,7 +6,7 @@
         <div class="flex items-center mb-6">
             <h1 class="flex-1">
                 <div class="flex items-center">
-                    <span v-html="$options.filters.striptags(__(title))" />
+                    <span v-html="formattedTitle" />
                 </div>
             </h1>
 
@@ -51,8 +51,9 @@
             :errors="errors"
             :track-dirty-state="trackDirtyState"
             @updated="values = $event"
+            v-slot="{ container, components, setFieldMeta }"
         >
-            <div slot-scope="{ container, components, setFieldMeta }">
+            <div>
                 <component
                     v-for="component in components"
                     :key="component.id"
@@ -66,11 +67,8 @@
                     <publish-tabs
                         v-show="tabsVisible"
                         :read-only="readOnly"
-                        :syncable="hasOrigin"
                         @updated="setFieldValue"
                         @meta-updated="setFieldMeta"
-                        @synced="syncField"
-                        @desynced="desyncField"
                         @focus="container.$emit('focus', $event)"
                         @blur="container.$emit('blur', $event)"
                     >
@@ -94,8 +92,8 @@
                                             class="w-full"
                                             name="field_status"
                                             :options="meta.status.options"
-                                            :value="values.status"
-                                            @input="setFieldValue('status', $event)"
+                                            :model-value="values.status"
+                                            @update:model-value="setFieldValue('status', $event)"
                                         />
                                         <div v-if="values.status === 'shipped'" class="mt-4 mb-0 flex flex-col gap-y-4">
                                             <div>
@@ -135,11 +133,13 @@
 
 
 <script>
-import SaveButtonOptions from '../../../../vendor/statamic/cms/resources/js/components/publish/SaveButtonOptions.vue'
-import HasPreferences from '../../../../vendor/statamic/cms/resources/js/components/data-list/HasPreferences'
-import HasHiddenFields from '../../../../vendor/statamic/cms/resources/js/components/publish/HasHiddenFields'
-import HasActions from '../../../../vendor/statamic/cms/resources/js/components/publish/HasActions'
+import SaveButtonOptions from '@statamic/components/publish/SaveButtonOptions.vue'
+import HasPreferences from '@statamic/components/data-list/HasPreferences.js'
+import HasHiddenFields from '@statamic/components/publish/HasHiddenFields.js'
+import HasActions from '@statamic/components/publish/HasActions.js'
 import SvgIcon from '../SvgIcon.vue'
+import clone from '@statamic/util/clone.js';
+import striptags from 'striptags';
 
 export default {
 
@@ -178,8 +178,8 @@ export default {
             trackDirtyState: true,
             fieldset: this.initialFieldset,
             title: this.initialTitle,
-            values: _.clone(this.initialValues),
-            meta: _.clone(this.initialMeta),
+            values: clone(this.initialValues),
+            meta: clone(this.initialMeta),
             error: null,
             errors: {},
             tabsVisible: true,
@@ -196,6 +196,14 @@ export default {
     },
 
     computed: {
+
+        store() {
+            return this.$refs.container.store;
+        },
+
+        formattedTitle() {
+            return striptags(__(this.title));
+        },
 
         hasErrors() {
             return this.error || Object.keys(this.errors).length;
@@ -396,9 +404,7 @@ export default {
 
     unmounted() {
         clearTimeout(this.trackDirtyStateTimeout);
-    },
 
-    destroyed() {
         this.saveKeyBinding.destroy();
         this.quickSaveKeyBinding.destroy();
     }

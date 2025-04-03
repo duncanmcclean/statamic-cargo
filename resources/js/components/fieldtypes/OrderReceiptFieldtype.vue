@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import { Fieldtype } from 'statamic';
 import LineItem from './OrderReceipt/LineItem.vue'
 
 export default {

@@ -1,16 +1,21 @@
+import path from 'path';
 import { defineConfig } from 'vite'
 import laravel from 'laravel-vite-plugin'
-import vue2 from '@vitejs/plugin-vue2'
+import vue from '@vitejs/plugin-vue';
 import svgLoader from './vite-svg-loader';
+import { viteExternalsPlugin } from 'vite-plugin-externals'
+import statamic from './vendor/statamic/cms/resources/js/vite-plugin';
 
 export default defineConfig({
     plugins: [
+        statamic(),
         laravel({
             hotFile: 'resources/dist/hot',
             publicDirectory: 'resources/dist',
             input: ['resources/js/cp.js', 'resources/css/cp.css'],
         }),
-        vue2(),
+        vue(),
+        viteExternalsPlugin({vue: 'Vue', pinia: 'Pinia'}),
         svgLoader(),
     ],
 })

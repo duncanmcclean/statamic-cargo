@@ -34,6 +34,7 @@
 
 <script>
 import SvgIcon from '../SvgIcon.vue'
+import { Fieldtype } from 'statamic';
 
 export default {
     components: { SvgIcon },

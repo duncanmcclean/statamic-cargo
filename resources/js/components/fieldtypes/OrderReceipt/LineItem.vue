@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import InlineEditForm from '../../../../../vendor/statamic/cms/resources/js/components/inputs/relationship/InlineEditForm.vue'
+import InlineEditForm from '@statamic/components/inputs/relationship/InlineEditForm.vue'
 
 export default {
     components: {
@@ -47,11 +47,6 @@ export default {
         edit() {
             // if (! this.editable) return;
             // if (this.item.invalid) return;
-
-            if (this.lineItem.product.reference && Object.entries(this.$store.state.publish).find(([key, value]) => value.reference === this.lineItem.product.reference)) {
-                this.$toast.error(__("You're already editing this item."));
-                return;
-            }
 
             this.isEditing = true;
         },

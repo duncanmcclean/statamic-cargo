@@ -14,7 +14,7 @@
             :sort-direction="sortDirection"
             @visible-columns-updated="visibleColumns = $event"
         >
-            <div slot-scope="{ hasSelections }">
+            <div>
                 <div class="card overflow-hidden p-0 relative">
                     <div class="flex flex-wrap items-center justify-between px-2 pb-2 text-sm border-b dark:border-dark-900">
 
@@ -61,7 +61,6 @@
 
                     <data-list-bulk-actions
                         :url="actionUrl"
-                        :context="actionContext"
                         @started="actionStarted"
                         @completed="actionCompleted"
                     />
@@ -74,12 +73,12 @@
                             :toggle-selection-on-row-click="true"
                             @sorted="sorted"
                         >
-                            <template slot="cell-order_number" slot-scope="{ row: order }">
+                            <template #cell-order_number="{ row: order }">
                                 <a class="title-index-field inline-flex items-center" :href="order.edit_url" @click.stop>
                                     <span v-text="`#${order.order_number}`" />
                                 </a>
                             </template>
-                            <template slot="actions" slot-scope="{ row: order, index }">
+                            <template #actions="{ row: order, index }">
                                 <dropdown-list placement="left-start">
                                     <dropdown-item :text="__('Edit')" :redirect="order.edit_url" v-if="order.editable" />
                                     <div class="divider" v-if="order.actions.length" />
@@ -109,7 +108,7 @@
 </template>
 
 <script>
-import Listing from '../../../../vendor/statamic/cms/resources/js/components/Listing.vue'
+import Listing from '@statamic/components/Listing.vue'
 
 export default {
     mixins: [Listing],
@@ -122,11 +121,5 @@ export default {
             pushQuery: true,
         }
     },
-
-    methods: {
-        columnShowing(column) {
-            return this.visibleColumns.find(c => c.field === column);
-        },
-    }
 }
 </script>

@@ -1,11 +1,11 @@
 <template>
     <data-list :rows="rows" :columns="columns">
-        <div class="card p-0" slot-scope="{ }">
+        <div class="card p-0">
             <data-list-table>
-                <template slot="cell-name" slot-scope="{ row: taxZone, index }">
+                <template #cell-name="{ row: taxZone, index }">
                     <a :href="taxZone.edit_url">{{ __(taxZone.name) }}</a>
                 </template>
-                <template slot="actions" slot-scope="{ row: taxZone, index }">
+                <template #actions="{ row: taxZone, index }">
                     <dropdown-list>
                         <dropdown-item :text="__('Edit')" :redirect="taxZone.edit_url" />
                         <dropdown-item
@@ -27,10 +27,9 @@
 </template>
 
 <script>
-import Listing from '../../../../vendor/statamic/cms/resources/js/components/Listing.vue'
+import Listing from '@statamic/components/Listing.vue'
 
 export default {
-
     mixins: [Listing],
 
     props: [
@@ -44,6 +43,5 @@ export default {
             columns: this.initialColumns
         }
     }
-
 }
 </script>

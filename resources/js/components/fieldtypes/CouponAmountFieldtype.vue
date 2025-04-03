@@ -2,25 +2,31 @@
     <div>
         <money-fieldtype
             v-if="mode === 'fixed'"
-            :value="couponValue"
-            @input="couponValue = $event"
+            :handle="config.handle"
             :meta="meta.meta.money"
             :config="meta.config.money"
+            :value="couponValue"
+            @update:value="couponValue = $event"
         />
 
         <integer-fieldtype
             v-else-if="mode === 'percentage'"
-            :value="couponValue"
-            @input="couponValue = $event"
+            :handle="config.handle"
             :meta="meta.meta.integer"
             :config="meta.config.integer"
+            :value="couponValue"
+            @update:value="couponValue = $event"
         />
     </div>
 </template>
 
 <script>
+import { Fieldtype } from 'statamic';
+
 export default {
     mixins: [Fieldtype],
+
+    inject: ['store'],
 
     props: ['meta'],
 
@@ -34,19 +40,19 @@ export default {
 
     mounted() {
         this.couponValue = this.value?.value || this.value || null;
-        this.mode = this.value?.mode || this.$store.state.publish.base.values.type;
+        this.mode = this.value?.mode || this.store.values.type;
 
-        this.$store.watch(
-            (state) => state.publish.base.values.type,
-            (type) => {
+        this.store.$subscribe((mutation, state) => {
+            if (mutation.events.key === 'type') {
+                let type = mutation.events.newValue;
+
                 // Keep track of the previous amount, so we can restore it when switching between modes.
                 this.previousAmounts[this.mode] = this.couponValue;
 
                 this.mode = type;
                 this.couponValue = this.previousAmounts[type] || null;
-            },
-            { immediate: false }
-        )
+            }
+        });
     },
 
     watch: {

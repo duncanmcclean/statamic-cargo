@@ -10,7 +10,6 @@ use Statamic\CP\Columns;
 use Statamic\Facades\User;
 use Statamic\Fieldtypes\Relationship;
 use Statamic\Query\Scopes\Filters\Concerns\QueriesFilters;
-use Statamic\Statamic;
 
 class Orders extends Relationship
 {
@@ -45,7 +44,7 @@ class Orders extends Relationship
             'id' => $order->id(),
             'reference' => $order->reference(),
             'title' => "#{$order->orderNumber()}",
-            'hint' => $order->date()->format(Statamic::cpDateFormat()),
+            'hint' => $order->date()->format('Y-m-d'),
             'edit_url' => cp_route('cargo.orders.edit', $order->id()),
         ];
     }

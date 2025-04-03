@@ -46,7 +46,8 @@
 
 <script>
 import axios from 'axios'
-import InlineEditForm from '../../../../vendor/statamic/cms/resources/js/components/inputs/relationship/InlineEditForm.vue'
+import InlineEditForm from '@statamic/components/inputs/relationship/InlineEditForm.vue'
+import { Fieldtype } from 'statamic';
 
 export default {
     components: {
@@ -55,7 +56,7 @@ export default {
 
     mixins: [Fieldtype],
 
-    inject: ['storeName'],
+    inject: ['store'],
 
     data() {
         return {
@@ -68,16 +69,22 @@ export default {
             if (! this.value.editable) return;
             if (this.value.invalid) return;
 
-            if (this.value.reference && Object.entries(this.$store.state.publish).find(([key, value]) => value.reference === this.value.reference)) {
-                this.$toast.error(__("You're already editing this item."));
-                return;
+            if (this.value.reference) {
+                const storeRefs = this.$pinia
+                    ?._s.values()
+                    .map((store) => store.reference);
+
+                if (Array.from(storeRefs).includes(this.value.reference)) {
+                    this.$toast.error(__("You're already editing this item."));
+                    return;
+                }
             }
 
             this.isEditingUser = true;
         },
 
         itemUpdated(responseData) {
-            this.$emit('input', {
+            this.$emit('update:value', {
                 ...this.value,
                 // in case we need to merge anything in here
             })
@@ -86,9 +93,9 @@ export default {
         convertToUser() {
             axios.post(this.meta.convertGuestToUserUrl, {
                 email: this.value.email,
-                order_id: this.$store.state.publish[this.storeName].values.id,
+                order_id: this.store.values.id,
             }).then(response => {
-                this.$emit('input', response.data);
+                this.$emit('update:value', response.data);
                 this.$toast.success(__('Guest has been converted to a user.'));
             }).catch(error => {
                 this.$toast.error(error.response.data.message);

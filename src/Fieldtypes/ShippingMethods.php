@@ -12,7 +12,16 @@ class ShippingMethods extends Relationship
 
     protected function toItemArray($id)
     {
-        //
+        $shippingMethod = ShippingMethod::find($id);
+
+        if (! $shippingMethod) {
+            return [];
+        }
+
+        return [
+            'name' => $shippingMethod->title(),
+            'handle' => $shippingMethod->handle(),
+        ];
     }
 
     public function getIndexItems($request)
