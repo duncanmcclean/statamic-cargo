@@ -93,8 +93,8 @@
                                             class="w-full"
                                             name="field_status"
                                             :options="meta.status.options"
-                                            :value="values.status"
-                                            @input="setFieldValue('status', $event)"
+                                            :model-value="values.status"
+                                            @update:model-value="setFieldValue('status', $event)"
                                         />
                                         <div v-if="values.status === 'shipped'" class="mt-4 mb-0 flex flex-col gap-y-4">
                                             <div>

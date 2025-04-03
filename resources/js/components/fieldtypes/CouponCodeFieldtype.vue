@@ -21,8 +21,8 @@ export default {
     mixins: [Fieldtype],
 
     methods: {
-        updateDebounced: _.debounce(function (value) {
-            this.$emit('input', value.toUpperCase())
+        updateDebounced: debounce(function (value) {
+            this.$emit('update:value', value.toUpperCase())
         }, 500),
     }
 }

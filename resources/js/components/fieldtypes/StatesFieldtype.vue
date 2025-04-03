@@ -13,10 +13,10 @@
             :disabled="config.disabled || isReadOnly || (multiple && limitReached)"
             :options="options"
             :multiple="multiple"
-            :value="selectedOptions"
+            :model-value="selectedOptions"
             :get-option-key="(option) => option.value"
             :loading="loading"
-            @input="vueSelectUpdated"
+            @update:model-value="vueSelectUpdated"
             @focus="$emit('focus')"
             @search:focus="$emit('focus')"
             @search:blur="$emit('blur')">

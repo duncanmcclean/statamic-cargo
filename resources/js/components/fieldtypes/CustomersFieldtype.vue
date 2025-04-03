@@ -78,7 +78,7 @@ export default {
         },
 
         itemUpdated(responseData) {
-            this.$emit('input', {
+            this.$emit('update:value', {
                 ...this.value,
                 // in case we need to merge anything in here
             })
@@ -89,7 +89,7 @@ export default {
                 email: this.value.email,
                 order_id: this.$store.state.publish[this.storeName].values.id,
             }).then(response => {
-                this.$emit('input', response.data);
+                this.$emit('update:value', response.data);
                 this.$toast.success(__('Guest has been converted to a user.'));
             }).catch(error => {
                 this.$toast.error(error.response.data.message);

@@ -162,7 +162,7 @@ export default {
         },
 
         saveData() {
-            this.$emit('input', {
+            this.$emit('update:value', {
                 variants: this.variants,
                 options: this.options,
             })
