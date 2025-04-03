@@ -21,34 +21,36 @@ import BaseTaxZoneCreateForm from './components/tax-zones/BaseCreateForm.vue'
 import TaxZoneListing from './components/tax-zones/Listing.vue'
 import TaxZonePublishForm from './components/tax-zones/PublishForm.vue'
 
-// Coupons
-Statamic.$components.register('base-coupon-create-form', BaseCouponCreateForm)
-Statamic.$components.register('coupons-listing', CouponsListing)
-Statamic.$components.register('coupon-publish-form', CouponPublishForm)
+Statamic.booting(() => {
+    // Coupons
+    Statamic.$components.register('base-coupon-create-form', BaseCouponCreateForm);
+    Statamic.$components.register('coupons-listing', CouponsListing);
+    Statamic.$components.register('coupon-publish-form', CouponPublishForm);
 
-// Fieldtypes
-Statamic.$components.register('coupon_amount-fieldtype', CouponAmountFieldtype)
-Statamic.$components.register('coupon_code-fieldtype', CouponCodeFieldtype)
-Statamic.$components.register('customers-fieldtype', CustomersFieldtype)
-Statamic.$components.register('customers-fieldtype-index', CustomersFieldtypeIndex)
-Statamic.$components.register('money-fieldtype', MoneyFieldtype)
-Statamic.$components.register('order_receipt-fieldtype', OrderReceiptFieldtype)
-Statamic.$components.register('product-variants-fieldtype', ProductVariantsFieldtype)
-Statamic.$components.register('order_status-fieldtype-index', OrderStatusFieldtypeIndex)
-Statamic.$components.register('payment_details-fieldtype', PaymentDetailsFieldtype)
-Statamic.$components.register('shipping_details-fieldtype', ShippingDetailsFieldtype)
-Statamic.$components.register('states-fieldtype', StatesFieldtype)
+    // Fieldtypes
+    Statamic.$components.register('coupon_amount-fieldtype', CouponAmountFieldtype);
+    Statamic.$components.register('coupon_code-fieldtype', CouponCodeFieldtype);
+    Statamic.$components.register('customers-fieldtype', CustomersFieldtype);
+    Statamic.$components.register('customers-fieldtype-index', CustomersFieldtypeIndex);
+    Statamic.$components.register('money-fieldtype', MoneyFieldtype);
+    Statamic.$components.register('order_receipt-fieldtype', OrderReceiptFieldtype);
+    Statamic.$components.register('product-variants-fieldtype', ProductVariantsFieldtype);
+    Statamic.$components.register('order_status-fieldtype-index', OrderStatusFieldtypeIndex);
+    Statamic.$components.register('payment_details-fieldtype', PaymentDetailsFieldtype);
+    Statamic.$components.register('shipping_details-fieldtype', ShippingDetailsFieldtype);
+    Statamic.$components.register('states-fieldtype', StatesFieldtype);
 
-// Orders
-Statamic.$components.register('orders-listing', OrdersListing)
-Statamic.$components.register('order-publish-form', OrderPublishForm)
+    // Orders
+    Statamic.$components.register('orders-listing', OrdersListing);
+    Statamic.$components.register('order-publish-form', OrderPublishForm);
 
-// Tax Classes
-Statamic.$components.register('tax-class-create-form', TaxClassCreateForm)
-Statamic.$components.register('tax-class-listing', TaxClassListing)
-Statamic.$components.register('tax-class-publish-form', TaxClassPublishForm);
+    // Tax Classes
+    Statamic.$components.register('tax-class-create-form', TaxClassCreateForm);
+    Statamic.$components.register('tax-class-listing', TaxClassListing);
+    Statamic.$components.register('tax-class-publish-form', TaxClassPublishForm);
 
-// Tax Zones
-Statamic.$components.register('base-tax-zone-create-form', BaseTaxZoneCreateForm)
-Statamic.$components.register('tax-zone-listing', TaxZoneListing)
-Statamic.$components.register('tax-zone-publish-form', TaxZonePublishForm);
+    // Tax Zones
+    Statamic.$components.register('base-tax-zone-create-form', BaseTaxZoneCreateForm);
+    Statamic.$components.register('tax-zone-listing', TaxZoneListing);
+    Statamic.$components.register('tax-zone-publish-form', TaxZonePublishForm);
+});
