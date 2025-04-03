@@ -6,7 +6,7 @@
             :meta="meta.meta.money"
             :config="meta.config.money"
             :value="couponValue"
-            @update:value="updateCouponValue"
+            @update:value="couponValue = $event"
         />
 
         <integer-fieldtype
@@ -15,7 +15,7 @@
             :meta="meta.meta.integer"
             :config="meta.config.integer"
             :value="couponValue"
-            @update:value="updateCouponValue"
+            @update:value="couponValue = $event"
         />
     </div>
 </template>
@@ -53,12 +53,6 @@ export default {
                 this.couponValue = this.previousAmounts[type] || null;
             }
         });
-    },
-
-    methods: {
-        updateCouponValue(value) {
-            this.couponValue = value;
-        },
     },
 
     watch: {
