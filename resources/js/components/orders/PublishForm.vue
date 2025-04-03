@@ -50,8 +50,9 @@
             :errors="errors"
             :track-dirty-state="trackDirtyState"
             @updated="values = $event"
+            v-slot="{ container, components, setFieldMeta }"
         >
-            <div slot-scope="{ container, components, setFieldMeta }">
+            <div>
                 <component
                     v-for="component in components"
                     :key="component.id"
@@ -76,8 +77,7 @@
                         <template #actions="{ shouldShowSidebar }">
                             <div class="card p-0 mb-5">
                                 <div v-if="!updatingStatus" class="p-4 flex items-center justify-between text-md">
-                                    <div class="flex items-center gap-x-2">
-                                        <span class="little-dot size-2.5" v-tooltip="statusLabel" :class="statusClass" />
+                                    <div class="flex items-center gap-x-2">                                        <span class="little-dot size-2.5" v-tooltip="statusLabel" :class="statusClass" />
                                         {{ statusLabel }}
                                     </div>
 
