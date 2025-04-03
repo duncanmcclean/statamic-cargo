@@ -14,15 +14,14 @@
             :sort-direction="sortDirection"
             @visible-columns-updated="visibleColumns = $event"
         >
-            <div slot-scope="{ hasSelections }">
+            <div>
                 <div class="card overflow-hidden p-0 relative">
                     <div class="flex flex-wrap items-center justify-between px-2 pb-2 text-sm border-b dark:border-dark-900">
 
                         <data-list-filter-presets
                             ref="presets"
                             :active-preset="activePreset"
-                            :active-preset-payload="activePresetPayload"
-                            :active-filters="activeFilters"
+                            :active-preset-payload="activePresetPayload"                            :active-filters="activeFilters"
                             :has-active-filters="hasActiveFilters"
                             :preferences-prefix="preferencesPrefix"
                             :search-query="searchQuery"
@@ -74,20 +73,19 @@
                             :toggle-selection-on-row-click="true"
                             @sorted="sorted"
                         >
-                            <template slot="cell-order_number" slot-scope="{ row: order }">
+                            <template #cell-order_number="{ row: order }">
                                 <a class="title-index-field inline-flex items-center" :href="order.edit_url" @click.stop>
                                     <span v-text="`#${order.order_number}`" />
                                 </a>
                             </template>
-                            <template slot="actions" slot-scope="{ row: order, index }">
+                            <template #actions="{ row: order, index }">
                                 <dropdown-list placement="left-start">
                                     <dropdown-item :text="__('Edit')" :redirect="order.edit_url" v-if="order.editable" />
                                     <div class="divider" v-if="order.actions.length" />
                                     <data-list-inline-actions
                                         :item="order.id"
                                         :url="actionUrl"
-                                        :actions="order.actions"
-                                        @started="actionStarted"
+                                        :actions="order.actions"                                        @started="actionStarted"
                                         @completed="actionCompleted"
                                     />
                                 </dropdown-list>
