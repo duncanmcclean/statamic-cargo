@@ -46,7 +46,8 @@
 
 <script>
 import axios from 'axios'
-import InlineEditForm from '../../../../vendor/statamic/cms/resources/js/components/inputs/relationship/InlineEditForm.vue'
+import InlineEditForm from '@statamic/components/inputs/relationship/InlineEditForm.vue'
+import { Fieldtype } from 'statamic';
 
 export default {
     components: {

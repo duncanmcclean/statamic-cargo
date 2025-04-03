@@ -14,6 +14,9 @@
 </template>
 
 <script>
+import { Fieldtype } from 'statamic';
+import debounce from '@statamic/util/debounce.js';
+
 export default {
     mixins: [Fieldtype],
 

@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import InlineEditForm from '../../../../../vendor/statamic/cms/resources/js/components/inputs/relationship/InlineEditForm.vue'
+import InlineEditForm from '@statamic/components/inputs/relationship/InlineEditForm.vue'
 
 export default {
     components: {

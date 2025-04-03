@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { ValidatesFieldConditions } from '../../../../../vendor/statamic/cms/resources/js/components/field-conditions/FieldConditions'
+import { ValidatesFieldConditions } from '@statamic/components/field-conditions/FieldConditions.js'
 
 export default {
     mixins: [ValidatesFieldConditions],

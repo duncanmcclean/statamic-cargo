@@ -19,8 +19,12 @@
 </template>
 
 <script>
+import { Fieldtype } from 'statamic';
+
 export default {
     mixins: [Fieldtype],
+
+    inject: ['store'],
 
     props: ['meta'],
 

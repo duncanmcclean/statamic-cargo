@@ -79,10 +79,11 @@
 </template>
 
 <script>
-import SaveButtonOptions from '../../../../vendor/statamic/cms/resources/js/components/publish/SaveButtonOptions.vue'
-import HasPreferences from '../../../../vendor/statamic/cms/resources/js/components/data-list/HasPreferences'
-import HasHiddenFields from '../../../../vendor/statamic/cms/resources/js/components/publish/HasHiddenFields'
-import HasActions from '../../../../vendor/statamic/cms/resources/js/components/publish/HasActions'
+import SaveButtonOptions from '@statamic/components/publish/SaveButtonOptions.vue'
+import HasPreferences from '@statamic/components/data-list/HasPreferences.js'
+import HasHiddenFields from '@statamic/components/publish/HasHiddenFields.js'
+import HasActions from '@statamic/components/publish/HasActions.js'
+import clone from '@statamic/util/clone.js';
 
 export default {
 
@@ -120,8 +121,8 @@ export default {
             trackDirtyState: true,
             fieldset: this.initialFieldset,
             title: this.initialTitle,
-            values: _.clone(this.initialValues),
-            meta: _.clone(this.initialMeta),
+            values: clone(this.initialValues),
+            meta: clone(this.initialMeta),
             error: null,
             errors: {},
             tabsVisible: true,
