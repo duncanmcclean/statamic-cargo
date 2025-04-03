@@ -24,11 +24,11 @@
                             v-for="field in meta.variant_fields"
                             :key="field.handle"
                             :config="field"
-                            :value="variant[field.handle]"
+                            :model-value="variant[field.handle]"
                             :meta="meta[field.handle]"
                             :errors="errors(field.handle)"
                             class="p-3 w-1/2"
-                            @input="updated(variantIndex, field.handle, $event)"
+                            @update:model-value="updated(variantIndex, field.handle, $event)"
                             @meta-updated="metaUpdated(field.handle, $event)"
                             @focus="$emit('focus')"
                             @blur="$emit('blur')"
@@ -71,8 +71,6 @@ import VariantOptionRow from './VariantOptionRow.vue'
 import { Fieldtype } from 'statamic';
 
 export default {
-    name: 'product-variants-fieldtype',
-
     mixins: [Fieldtype, View],
 
     components: {
@@ -84,7 +82,7 @@ export default {
 
     props: ['meta'],
 
-    inject: ['storeName'],
+    inject: ['store'],
 
     data() {
         return {
@@ -115,19 +113,6 @@ export default {
             return data.reduce((acc, curr) =>
                 acc.flatMap((c) => curr.map((n) => [].concat(c, n)))
             )
-        },
-
-        baseContainer() {
-            let parent = this.$parent
-
-            while (
-                parent &&
-                parent.$options._componentTag !== 'publish-container'
-            ) {
-                parent = parent.$parent
-            }
-
-            return parent
         },
     },
 
@@ -169,7 +154,7 @@ export default {
                 options: this.options,
             })
 
-            this.baseContainer.saved()
+            // this.baseContainer.saved()
         },
 
         errors(fieldHandle) {

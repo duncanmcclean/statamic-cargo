@@ -4,23 +4,23 @@
             {{ option.variant || __('Variants') }}
         </div>
 
-        <publish-fields-container>
+        <div class="publish-fields @container">
             <publish-field
                 v-for="(optionField, optionIndex) in meta.option_fields"
                 v-show="showField(optionField, fieldPath(optionIndex, optionField.handle))"
                 :key="'option-' + optionField.handle"
                 :config="optionField"
-                :value="option[optionField.handle]"
+                :model-value="option[optionField.handle]"
                 :meta="meta[optionField.handle]"
                 :errors="errors(optionField.handle)"
                 :field-path-prefix="fieldPath(optionIndex, optionField.handle)"
                 class="p-3"
-                @input="updatedOptions(optionField.handle, $event)"
+                @update:model-value="updatedOptions(optionField.handle, $event)"
                 @meta-updated="metaUpdated(option.handle, $event)"
                 @focus="$emit('focus')"
                 @blur="$emit('blur')"
             />
-        </publish-fields-container>
+        </div>
     </div>
 </template>
 
@@ -36,6 +36,12 @@ export default {
         meta: Object,
         fieldPathPrefix: String,
         values: Object,
+    },
+
+    data() {
+        return {
+            extraValues: {},
+        };
     },
 
     methods: {
