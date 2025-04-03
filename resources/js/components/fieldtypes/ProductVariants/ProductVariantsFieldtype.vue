@@ -121,13 +121,13 @@ export default {
             this.updateVariantsAndOptions();
         }
 
-      this.store.$subscribe((mutation, state) => {
-        if (mutation.events.key === 'site') {
-          if (mutation.events.newValue !== mutations.events.oldValue) {
-            this.updateVariantsAndOptions();
-          }
-        }
-      });
+        this.store.$subscribe((mutation, state) => {
+            if (mutation.events.key === 'site') {
+                if (mutation.events.newValue !== mutations.events.oldValue) {
+                    this.updateVariantsAndOptions();
+                }
+            }
+        });
     },
 
     methods: {
@@ -154,8 +154,6 @@ export default {
                 variants: this.variants,
                 options: this.options,
             })
-
-            // this.baseContainer.saved()
         },
 
         errors(fieldHandle) {
