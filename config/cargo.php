@@ -76,9 +76,9 @@ return [
         'directory' => base_path('content/cargo/carts'),
 
         // 'model' => \DuncanMcClean\Cargo\Cart\Eloquent\CartModel::class,
-        // 'table' => 'carts',
+        // 'table' => 'cargo_carts',
         // 'line_items_model' => \DuncanMcClean\Cargo\Cart\Eloquent\LineItemModel::class,
-        // 'line_items_table' => 'cart_line_items',
+        // 'line_items_table' => 'cargo_cart_line_items',
 
         /*
         |--------------------------------------------------------------------------
@@ -152,9 +152,9 @@ return [
         'directory' => base_path('content/cargo/orders'),
 
         // 'model' => \DuncanMcClean\Cargo\Orders\Eloquent\OrderModel::class,
-        // 'table' => 'orders',
+        // 'table' => 'cargo_orders',
         // 'line_items_model' => \DuncanMcClean\Cargo\Orders\Eloquent\LineItemModel::class,
-        // 'line_items_table' => 'order_line_items',
+        // 'line_items_table' => 'cargo_order_line_items',
 
     ],
 
