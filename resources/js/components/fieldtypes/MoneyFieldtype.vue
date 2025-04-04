@@ -19,11 +19,11 @@ export default {
     methods: {
         inputUpdated(value) {
             if (!this.config.debounce) {
-              return this.update(value);
+                return this.update(value);
             }
 
             this.updateDebounced(value);
         },
     },
-}
+};
 </script>

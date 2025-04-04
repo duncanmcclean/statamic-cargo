@@ -1,16 +1,15 @@
 <template>
-
     <div>
         <breadcrumb v-if="breadcrumbs" :url="breadcrumbs[0].url" :title="breadcrumbs[0].text" />
 
-        <div class="flex items-center mb-6">
+        <div class="mb-6 flex items-center">
             <h1 class="flex-1">
                 <div class="flex items-center">
                     <span v-html="formattedTitle" />
                 </div>
             </h1>
 
-            <dropdown-list v-if="itemActions.length" class="rtl:ml-4 ltr:mr-4">
+            <dropdown-list v-if="itemActions.length" class="ltr:mr-4 rtl:ml-4">
                 <data-list-inline-actions
                     :item="values.id"
                     :url="itemActionUrl"
@@ -21,19 +20,14 @@
                 />
             </dropdown-list>
 
-            <div class="hidden md:flex items-center">
+            <div class="hidden items-center md:flex">
                 <save-button-options
                     v-if="!readOnly"
                     :show-options="!isInline"
                     button-class="btn-primary"
                     :preferences-prefix="preferencesPrefix"
                 >
-                    <button
-                        class="btn-primary"
-                        :disabled="!canSave"
-                        @click.prevent="save"
-                        v-text="`Save`"
-                    />
+                    <button class="btn-primary" :disabled="!canSave" @click.prevent="save" v-text="`Save`" />
                 </save-button-options>
             </div>
 
@@ -73,24 +67,33 @@
                         @blur="container.$emit('blur', $event)"
                     >
                         <template #actions="{ shouldShowSidebar }">
-                            <div class="card p-0 mb-5">
+                            <div class="card mb-5 p-0">
                                 <header class="publish-section-header @container">
                                     <div class="publish-section-header-inner">
                                         <label class="text-base font-semibold">Summary</label>
                                     </div>
                                 </header>
-                                <div class="px-4 @lg:px-6 pt-4 pb-3">
-                                    <ul class="list-disc ltr:pl-3 flex flex-col gap-y-1.5 text-sm">
+                                <div class="@lg:px-6 px-4 pb-3 pt-4">
+                                    <ul class="flex list-disc flex-col gap-y-1.5 text-sm ltr:pl-3">
                                         <li v-if="values.type === 'fixed' && values.value?.value">
-                                            <span class="font-semibold" v-text="formatCurrency(values.value.value)"></span> {{ __('off entire order') }}
+                                            <span
+                                                class="font-semibold"
+                                                v-text="formatCurrency(values.value.value)"
+                                            ></span>
+                                            {{ __('off entire order') }}
                                         </li>
 
                                         <li v-if="values.type === 'percentage' && values.value?.value">
-                                            <span class="font-semibold" v-text="`${values.value.value}%`"></span> {{ __('off entire order') }}
+                                            <span class="font-semibold" v-text="`${values.value.value}%`"></span>
+                                            {{ __('off entire order') }}
                                         </li>
 
                                         <li v-if="values.minimum_cart_value">
-                                            {{ __('Redeemable when items total is above :amount', { amount: formatCurrency(this.values.minimum_cart_value) }) }}
+                                            {{
+                                                __('Redeemable when items total is above :amount', {
+                                                    amount: formatCurrency(this.values.minimum_cart_value),
+                                                })
+                                            }}
                                         </li>
 
                                         <li v-if="values.customer_eligibility === 'all'">
@@ -118,7 +121,10 @@
                                         </li>
                                     </ul>
 
-                                    <ul v-if="!isCreating" class="list-disc ltr:pl-3 flex flex-col gap-y-1.5 text-sm mt-3 pt-3 border-t dark:border-dark-900">
+                                    <ul
+                                        v-if="!isCreating"
+                                        class="mt-3 flex list-disc flex-col gap-y-1.5 border-t pt-3 text-sm dark:border-dark-900 ltr:pl-3"
+                                    >
                                         <li>{{ __('Redeemed :count times', { count: values.redeemed_count }) }}</li>
                                     </ul>
                                 </div>
@@ -129,34 +135,24 @@
             </div>
         </publish-container>
 
-        <div class="md:hidden mt-6 flex items-center">
-            <button
-                v-if="!readOnly"
-                class="btn-lg btn-primary w-full"
-                :disabled="!canSave"
-                @click.prevent="save">
+        <div class="mt-6 flex items-center md:hidden">
+            <button v-if="!readOnly" class="btn-lg btn-primary w-full" :disabled="!canSave" @click.prevent="save">
                 Save
             </button>
         </div>
     </div>
-
 </template>
 
 <script>
-import SaveButtonOptions from '@statamic/components/publish/SaveButtonOptions.vue'
-import HasPreferences from '@statamic/components/data-list/HasPreferences.js'
-import HasHiddenFields from '@statamic/components/publish/HasHiddenFields.js'
-import HasActions from '@statamic/components/publish/HasActions.js'
+import SaveButtonOptions from '@statamic/components/publish/SaveButtonOptions.vue';
+import HasPreferences from '@statamic/components/data-list/HasPreferences.js';
+import HasHiddenFields from '@statamic/components/publish/HasHiddenFields.js';
+import HasActions from '@statamic/components/publish/HasActions.js';
 import clone from '@statamic/util/clone.js';
 import striptags from 'striptags';
 
 export default {
-
-    mixins: [
-        HasPreferences,
-        HasHiddenFields,
-        HasActions,
-    ],
+    mixins: [HasPreferences, HasHiddenFields, HasActions],
 
     components: {
         SaveButtonOptions,
@@ -198,11 +194,10 @@ export default {
             saveKeyBinding: null,
             quickSaveKeyBinding: null,
             quickSave: false,
-        }
+        };
     },
 
     computed: {
-
         store() {
             return this.$refs.container.store;
         },
@@ -242,11 +237,9 @@ export default {
         direction() {
             return this.$config.get('direction', 'ltr');
         },
-
     },
 
     watch: {
-
         saving(saving) {
             this.$progress.loading(`${this.publishContainer}-coupon-publish-form`, saving);
         },
@@ -257,11 +250,9 @@ export default {
                 document.title = `${title} ${arrow} ${this.breadcrumbs[1].text} ${arrow} ${this.breadcrumbs[0].text} ${arrow} ${__('Statamic')}`;
             }
         },
-
     },
 
     methods: {
-
         clearErrors() {
             this.error = null;
             this.errors = {};
@@ -282,13 +273,14 @@ export default {
         runBeforeSaveHook() {
             this.$refs.container.saving();
 
-            Statamic.$hooks.run('coupon.saving', {
-                values: this.values,
-                container: this.$refs.container,
-                storeName: this.publishContainer,
-            })
+            Statamic.$hooks
+                .run('coupon.saving', {
+                    values: this.values,
+                    container: this.$refs.container,
+                    storeName: this.publishContainer,
+                })
                 .then(this.performSaveRequest)
-                .catch(error => {
+                .catch((error) => {
                     this.saving = false;
                     this.$toast.error(error || 'Something went wrong');
                 });
@@ -298,21 +290,24 @@ export default {
             // Once the hook has completed, we need to make the actual request.
             // We build the payload here because the before hook may have modified values.
             const payload = {
-                ...this.visibleValues, ...{
+                ...this.visibleValues,
+                ...{
                     _blueprint: this.fieldset.handle,
-                }
+                },
             };
 
-            this.$axios[this.method](this.actions.save, payload).then(response => {
-                this.saving = false;
-                if (!response.data.saved) {
-                    return this.$toast.error(__(`Couldn't save coupon`));
-                }
-                this.title = response.data.data.title;
-                this.$toast.success(__('Saved'));
-                this.$refs.container.saved();
-                this.runAfterSaveHook(response);
-            }).catch(error => this.handleAxiosError(error));
+            this.$axios[this.method](this.actions.save, payload)
+                .then((response) => {
+                    this.saving = false;
+                    if (!response.data.saved) {
+                        return this.$toast.error(__(`Couldn't save coupon`));
+                    }
+                    this.title = response.data.data.title;
+                    this.$toast.success(__('Saved'));
+                    this.$refs.container.saved();
+                    this.runAfterSaveHook(response);
+                })
+                .catch((error) => this.handleAxiosError(error));
         },
 
         runAfterSaveHook(response) {
@@ -321,7 +316,7 @@ export default {
             Statamic.$hooks
                 .run('coupon.saved', {
                     reference: this.initialReference,
-                    response
+                    response,
                 })
                 .then(() => {
                     let nextAction = this.quickSave ? 'continue_editing' : this.afterSaveOption;
@@ -348,7 +343,8 @@ export default {
                     }
 
                     this.quickSave = false;
-                }).catch(e => console.error(e));
+                })
+                .catch((e) => console.error(e));
         },
 
         handleAxiosError(e) {
@@ -384,16 +380,15 @@ export default {
                 currency: 'GBP',
             }).format(amount);
         },
-
     },
 
     mounted() {
-        this.saveKeyBinding = this.$keys.bindGlobal(['mod+return'], e => {
+        this.saveKeyBinding = this.$keys.bindGlobal(['mod+return'], (e) => {
             e.preventDefault();
             this.save();
         });
 
-        this.quickSaveKeyBinding = this.$keys.bindGlobal(['mod+s'], e => {
+        this.quickSaveKeyBinding = this.$keys.bindGlobal(['mod+s'], (e) => {
             e.preventDefault();
             this.quickSave = true;
             this.save();
@@ -411,7 +406,6 @@ export default {
     destroyed() {
         this.saveKeyBinding.destroy();
         this.quickSaveKeyBinding.destroy();
-    }
-
-}
+    },
+};
 </script>

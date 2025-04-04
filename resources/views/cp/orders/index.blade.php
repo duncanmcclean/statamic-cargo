@@ -3,12 +3,15 @@
 @section('wrapper_class', 'max-w-full')
 
 @section('content')
-    <div class="flex items-center justify-between mb-6">
+    <div class="mb-6 flex items-center justify-between">
         <h1 class="flex-1">{{ __('Orders') }}</h1>
 
         @can('configure fields')
-            <dropdown-list class="rtl:ml-2 ltr:mr-2">
-                <dropdown-item :text="__('Edit Blueprint')" redirect="{{ cp_route('blueprints.edit', ['cargo', 'order']) }}"></dropdown-item>
+            <dropdown-list class="ltr:mr-2 rtl:ml-2">
+                <dropdown-item
+                    :text="__('Edit Blueprint')"
+                    redirect="{{ cp_route('blueprints.edit', ['cargo', 'order']) }}"
+                ></dropdown-item>
             </dropdown-list>
         @endcan
     </div>

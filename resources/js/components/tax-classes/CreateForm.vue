@@ -1,22 +1,21 @@
 <template>
-    <div class="max-w-lg mt-4 mx-auto">
-
-        <div class="rounded p-6 lg:px-20 lg:py-10 shadow bg-white dark:bg-dark-600 dark:shadow-dark">
-            <header class="text-center mb-16">
+    <div class="mx-auto mt-4 max-w-lg">
+        <div class="dark:shadow-dark rounded bg-white p-6 shadow dark:bg-dark-600 lg:px-20 lg:py-10">
+            <header class="mb-16 text-center">
                 <h1 class="mb-6">{{ __('Create Tax Class') }}</h1>
                 <p class="text-gray" v-text="__('cargo::messages.tax_class_intro')" />
             </header>
             <div class="mb-10">
-                <label class="font-bold text-base mb-1" for="name">{{ __('Name') }}</label>
-                <input type="text" v-model="name" class="input-text" autofocus tabindex="1">
-                <div class="text-2xs text-gray-600 mt-2 flex items-center">
+                <label class="mb-1 text-base font-bold" for="name">{{ __('Name') }}</label>
+                <input type="text" v-model="name" class="input-text" autofocus tabindex="1" />
+                <div class="text-2xs mt-2 flex items-center text-gray-600">
                     <span>{{ __('cargo::messages.tax_classes_name_instructions') }}</span>
                 </div>
             </div>
         </div>
 
-        <div class="flex justify-center mt-8">
-            <button tabindex="4" class="btn-primary mx-auto btn-lg" :disabled="! canSubmit" @click="submit">
+        <div class="mt-8 flex justify-center">
+            <button tabindex="4" class="btn-primary btn-lg mx-auto" :disabled="!canSubmit" @click="submit">
                 {{ __('Create Tax Class') }}
             </button>
         </div>
@@ -25,17 +24,16 @@
 
 <script>
 export default {
-
     props: {
         route: {
-            type: String
-        }
+            type: String,
+        },
     },
 
     data() {
         return {
             name: null,
-        }
+        };
     },
 
     computed: {
@@ -46,20 +44,23 @@ export default {
 
     methods: {
         submit() {
-            this.$axios.post(this.route, {name: this.name}).then(response => {
-                window.location = response.data.redirect;
-            }).catch(error => {
-                this.$toast.error(error.response.data.message);
-            });
-        }
+            this.$axios
+                .post(this.route, { name: this.name })
+                .then((response) => {
+                    window.location = response.data.redirect;
+                })
+                .catch((error) => {
+                    this.$toast.error(error.response.data.message);
+                });
+        },
     },
 
     mounted() {
-        this.$keys.bindGlobal(['return'], e => {
+        this.$keys.bindGlobal(['return'], (e) => {
             if (this.canSubmit) {
                 this.submit();
             }
         });
-    }
-}
+    },
+};
 </script>

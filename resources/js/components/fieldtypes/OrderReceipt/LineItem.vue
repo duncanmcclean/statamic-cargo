@@ -1,7 +1,11 @@
 <template>
     <div class="receipt-line-item">
         <div>
-            <div v-if="lineItem.product.invalid" v-tooltip.top="__('A product with this ID could not be found')" v-text="lineItem.product.title" />
+            <div
+                v-if="lineItem.product.invalid"
+                v-tooltip.top="__('A product with this ID could not be found')"
+                v-text="lineItem.product.title"
+            />
 
             <a v-else @click.prevent="edit" :href="lineItem.product.edit_url">
                 {{ lineItem.product.title }}
@@ -24,11 +28,11 @@
 </template>
 
 <script>
-import InlineEditForm from '@statamic/components/inputs/relationship/InlineEditForm.vue'
+import InlineEditForm from '@statamic/components/inputs/relationship/InlineEditForm.vue';
 
 export default {
     components: {
-        InlineEditForm
+        InlineEditForm,
     },
 
     props: {
@@ -40,7 +44,7 @@ export default {
     data() {
         return {
             isEditing: false,
-        }
+        };
     },
 
     methods: {
@@ -60,9 +64,9 @@ export default {
                     published: responseData.published,
                     private: responseData.private,
                     status: responseData.status,
-                }
-            })
+                },
+            });
         },
-    }
-}
+    },
+};
 </script>

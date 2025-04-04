@@ -16,7 +16,7 @@ const icon = shallowRef(null);
 const evaluateIcon = () => {
     if (props.name.startsWith('<svg')) {
         return defineAsyncComponent(() => {
-          return new Promise((resolve) => resolve({ template: props.name }));
+            return new Promise((resolve) => resolve({ template: props.name }));
         });
     }
 
@@ -28,7 +28,7 @@ const evaluateIcon = () => {
 watch(
     () => props.name,
     () => {
-      icon.value = evaluateIcon();
+        icon.value = evaluateIcon();
     },
     { immediate: true },
 );

@@ -15,9 +15,10 @@
             @visible-columns-updated="visibleColumns = $event"
         >
             <div>
-                <div class="card overflow-hidden p-0 relative">
-                    <div class="flex flex-wrap items-center justify-between px-2 pb-2 text-sm border-b dark:border-dark-900">
-
+                <div class="card relative overflow-hidden p-0">
+                    <div
+                        class="flex flex-wrap items-center justify-between border-b px-2 pb-2 text-sm dark:border-dark-900"
+                    >
                         <data-list-filter-presets
                             ref="presets"
                             :active-preset="activePreset"
@@ -30,11 +31,26 @@
                             @reset="filtersReset"
                         />
 
-                        <data-list-search class="h-8 mt-2 min-w-[240px] w-full" ref="search" v-model="searchQuery" :placeholder="searchPlaceholder" />
+                        <data-list-search
+                            class="mt-2 h-8 w-full min-w-[240px]"
+                            ref="search"
+                            v-model="searchQuery"
+                            :placeholder="searchPlaceholder"
+                        />
 
-                        <div class="flex space-x-2 mt-2">
-                            <button class="btn btn-sm rtl:mr-2 ltr:ml-2" v-text="__('Reset')" v-show="isDirty" @click="$refs.presets.refreshPreset()" />
-                            <button class="btn btn-sm rtl:mr-2 ltr:ml-2" v-text="__('Save')" v-show="isDirty" @click="$refs.presets.savePreset()" />
+                        <div class="mt-2 flex space-x-2">
+                            <button
+                                class="btn btn-sm ltr:ml-2 rtl:mr-2"
+                                v-text="__('Reset')"
+                                v-show="isDirty"
+                                @click="$refs.presets.refreshPreset()"
+                            />
+                            <button
+                                class="btn btn-sm ltr:ml-2 rtl:mr-2"
+                                v-text="__('Save')"
+                                v-show="isDirty"
+                                @click="$refs.presets.savePreset()"
+                            />
                             <data-list-column-picker :preferences-key="preferencesKey('columns')" />
                         </div>
                     </div>
@@ -59,11 +75,7 @@
 
                     <div v-show="items.length === 0" class="p-6 text-center text-gray-500" v-text="__('No results')" />
 
-                    <data-list-bulk-actions
-                        :url="actionUrl"
-                        @started="actionStarted"
-                        @completed="actionCompleted"
-                    />
+                    <data-list-bulk-actions :url="actionUrl" @started="actionStarted" @completed="actionCompleted" />
                     <div class="overflow-x-auto overflow-y-hidden">
                         <data-list-table
                             v-show="items.length"
@@ -75,7 +87,11 @@
                         >
                             <template #cell-code="{ row: coupon, value }">
                                 <div class="title-index-field">
-                                    <a class="title-index-field inline-flex items-center" :href="coupon.edit_url" @click.stop>
+                                    <a
+                                        class="title-index-field inline-flex items-center"
+                                        :href="coupon.edit_url"
+                                        @click.stop
+                                    >
                                         {{ coupon.code }}
                                     </a>
                                 </div>
@@ -89,7 +105,11 @@
 
                             <template #actions="{ row: coupon, index }">
                                 <dropdown-list placement="left-start">
-                                    <dropdown-item :text="__('Edit')" :redirect="coupon.edit_url" v-if="coupon.editable" />
+                                    <dropdown-item
+                                        :text="__('Edit')"
+                                        :redirect="coupon.edit_url"
+                                        v-if="coupon.editable"
+                                    />
                                     <div class="divider" v-if="coupon.actions.length" />
                                     <data-list-inline-actions
                                         :item="coupon.id"
@@ -117,7 +137,7 @@
 </template>
 
 <script>
-import Listing from '@statamic/components/Listing.vue'
+import Listing from '@statamic/components/Listing.vue';
 
 export default {
     mixins: [Listing],
@@ -128,7 +148,7 @@ export default {
             preferencesPrefix: `cargo.coupons`,
             requestUrl: cp_url(`coupons`),
             pushQuery: true,
-        }
+        };
     },
-}
+};
 </script>

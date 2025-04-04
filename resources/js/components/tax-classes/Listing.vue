@@ -19,7 +19,8 @@
                             <resource-deleter
                                 :ref="`deleter_${taxClass.id}`"
                                 :resource="taxClass"
-                                @deleted="removeRow(taxClass)">
+                                @deleted="removeRow(taxClass)"
+                            >
                             </resource-deleter>
                         </dropdown-item>
                     </dropdown-list>
@@ -30,21 +31,18 @@
 </template>
 
 <script>
-import Listing from '@statamic/components/Listing.vue'
+import Listing from '@statamic/components/Listing.vue';
 
 export default {
     mixins: [Listing],
 
-    props: [
-        'initialRows',
-        'initialColumns',
-    ],
+    props: ['initialRows', 'initialColumns'],
 
     data() {
         return {
             rows: this.initialRows,
-            columns: this.initialColumns
-        }
-    }
-}
+            columns: this.initialColumns,
+        };
+    },
+};
 </script>

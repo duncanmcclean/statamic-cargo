@@ -1,5 +1,4 @@
 <template>
-
     <coupon-publish-form
         :is-creating="true"
         publish-container="base"
@@ -14,30 +13,16 @@
         :initial-listing-url="listingUrl"
         @saved="saved"
     ></coupon-publish-form>
-
 </template>
 
 <script>
 export default {
-
-    props: [
-        'title',
-        'actions',
-        'fieldset',
-        'values',
-        'meta',
-        'breadcrumbs',
-        'createAnotherUrl',
-        'listingUrl'
-    ],
+    props: ['title', 'actions', 'fieldset', 'values', 'meta', 'breadcrumbs', 'createAnotherUrl', 'listingUrl'],
 
     methods: {
-
         saved(response) {
             window.location = response.data.data.edit_url + '?created=true';
-        }
-
-    }
-
-}
+        },
+    },
+};
 </script>

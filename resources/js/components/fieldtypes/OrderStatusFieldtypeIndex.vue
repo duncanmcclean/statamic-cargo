@@ -21,6 +21,6 @@ export default {
                     return 'bg-green-500 text-green-900 dark:text-green-950 bg-green-200 dark:bg-green-300';
             }
         },
-    }
-}
+    },
+};
 </script>

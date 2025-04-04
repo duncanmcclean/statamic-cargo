@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-grey-10 shadow-sm mb-4 rounded border variants-sortable-item">
+    <div class="bg-grey-10 variants-sortable-item mb-4 rounded border shadow-sm">
         <div class="grid-item-header rounded-t">
             {{ option.variant || __('Variants') }}
         </div>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { ValidatesFieldConditions } from '@statamic/components/field-conditions/FieldConditions.js'
+import { ValidatesFieldConditions } from '@statamic/components/field-conditions/FieldConditions.js';
 
 export default {
     mixins: [ValidatesFieldConditions],
@@ -46,23 +46,23 @@ export default {
 
     methods: {
         updatedOptions(fieldHandle, value) {
-            let values = this.values
-            values[fieldHandle] = value
+            let values = this.values;
+            values[fieldHandle] = value;
 
-            this.$emit('updated', this.index, values)
+            this.$emit('updated', this.index, values);
         },
 
         metaUpdated(fieldHandle, event) {
-            this.$emit('metaUpdated', fieldHandle, event)
+            this.$emit('metaUpdated', fieldHandle, event);
         },
 
         fieldPath(index, fieldHandle) {
-            return `${this.fieldPathPrefix}.${index}.${fieldHandle}`
+            return `${this.fieldPathPrefix}.${index}.${fieldHandle}`;
         },
 
         errors(fieldHandle) {
             //
         },
     },
-}
+};
 </script>
