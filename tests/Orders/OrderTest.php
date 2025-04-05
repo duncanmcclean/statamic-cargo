@@ -18,6 +18,7 @@ use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Shipping\ShippingOption;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Event;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
@@ -29,6 +30,71 @@ use Tests\TestCase;
 class OrderTest extends TestCase
 {
     use PreventsSavingStacheItemsToDisk;
+
+    #[Test]
+    #[DataProvider('dateProvider')]
+    public function can_get_date(
+        string|Carbon $date,
+        string $expectedDate,
+        string $expectedPath
+    ) {
+        Carbon::setTestNow(Carbon::parse('2015-09-24 13:45:23'));
+
+        $order = Order::make()
+            ->orderNumber('1234')
+            ->date($date);
+
+        $this->assertEquals($expectedDate, $order->date()->format('Y-m-d H:i:s'));
+        $this->assertEquals($expectedPath, pathinfo($order->path(), PATHINFO_FILENAME));
+    }
+
+    public static function dateProvider(): array
+    {
+        return [
+            'date from string' => ['2025-04-05', '2025-04-05 00:00:00', '2025-04-05.1234'],
+            'date from string, with time' => ['2025-04-05-1241', '2025-04-05 12:41:00', '2025-04-05-1241.1234'],
+            'date from string, with seconds' => ['2025-04-05-124124', '2025-04-05 12:41:24', '2025-04-05-124124.1234'],
+
+            'date from carbon instance' => [Carbon::parse('2025-04-05'), '2025-04-05 00:00:00', '2025-04-05.1234'],
+            'date from carbon instance, with time' => [Carbon::parse('2025-04-05 12:41:00'), '2025-04-05 12:41:00', '2025-04-05-1241.1234'],
+            'date from carbon instance, with seconds' => [Carbon::parse('2025-04-05 12:41:24'), '2025-04-05 12:41:24', '2025-04-05-124124.1234'],
+
+            'date from carbon instance in another timezone' => [Carbon::parse('2025-04-05 22:00', 'America/New_York'), '2025-04-06 02:00:00', '2025-04-06-0200.1234'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('datesAsStringProvider')]
+    public function can_convert_date_strings_to_utc(
+        string $appTimezone,
+        string|Carbon $date,
+        string $expectedDate
+    ) {
+        config(['app.timezone' => $appTimezone]);
+
+        Carbon::setTestNow(Carbon::parse('2015-09-24 13:45:23'));
+
+        $order = Order::make()->date($date);
+
+        $this->assertEquals($expectedDate, $order->date()->toIso8601String());
+    }
+
+    public static function datesAsStringProvider()
+    {
+        // The date is treated as UTC regardless of the timezone so no conversion should be done.
+        return [
+            'utc' => [
+                'UTC',
+                '2023-02-20-033513',
+                '2023-02-20T03:35:13+00:00',
+            ],
+            'not utc' => [
+                'America/New_York',
+                '2023-02-20-033513',
+                '2023-02-20T03:35:13+00:00',
+            ],
+        ];
+    }
 
     #[Test]
     public function can_get_and_set_guest_customer()

@@ -84,25 +84,39 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
                 }
 
                 if ($date instanceof \Carbon\CarbonInterface) {
-                    return $date->setTimezone('UTC');
+                    return $date->utc();
                 }
 
-                if (strlen($date) === 10) {
-                    return Carbon::createFromFormat('Y-m-d', $date)
-                        ->setTimezone('UTC')
-                        ->startOfDay();
-                }
-
-                if (strlen($date) === 15) {
-                    return Carbon::createFromFormat('Y-m-d-Hi', $date)
-                        ->setTimezone('UTC')
-                        ->startOfMinute();
-                }
-
-                return Carbon::createFromFormat('Y-m-d-His', $date)
-                    ->setTimezone('UTC');
+                return $this->parseDateFromString($date);
             })
             ->args(func_get_args());
+    }
+
+    private function parseDateFromString($date)
+    {
+        if (strlen($date) === 10) {
+            return Carbon::createFromFormat('Y-m-d', $date)->startOfDay();
+        }
+
+        if (strlen($date) === 15) {
+            return Carbon::createFromFormat('Y-m-d-Hi', $date)->startOfMinute();
+        }
+
+        return Carbon::createFromFormat('Y-m-d-His', $date);
+    }
+
+    public function hasTime()
+    {
+        return $this->date && ! $this->date->isStartOfDay();
+    }
+
+    public function hasSeconds()
+    {
+        if (! $this->hasTime()) {
+            return false;
+        }
+
+        return $this->date && $this->date->second !== 0;
     }
 
     public function cart($cart = null)
@@ -333,10 +347,26 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
 
     public function buildPath(): string
     {
-        return vsprintf('%s/%s%s.%s.yaml', [
+        $prefix = '';
+
+        if ($this->date) {
+            $format = 'Y-m-d';
+
+            if ($this->hasTime()) {
+                $format .= '-Hi';
+            }
+
+            if ($this->hasSeconds()) {
+                $format .= 's';
+            }
+
+            $prefix = $this->date->format($format).'.';
+        }
+
+        return vsprintf('%s/%s%s%s.yaml', [
             rtrim(Stache::store('orders')->directory(), '/'),
             Site::multiEnabled() ? $this->site()->handle().'/' : '',
-            $this->date()->format('Y-m-d-His'),
+            $prefix,
             $this->orderNumber(),
         ]);
     }

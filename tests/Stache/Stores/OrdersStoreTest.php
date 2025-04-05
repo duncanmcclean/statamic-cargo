@@ -41,6 +41,29 @@ class OrdersStoreTest extends TestCase
     }
 
     #[Test]
+    #[DataProvider('timezoneProvider')]
+    public function it_makes_order_instances_from_files_with_different_timezone($filename, $expectedDate)
+    {
+        config(['app.timezone' => 'America/New_York']);
+
+        $item = $this->store->makeItemFromFile(
+            $this->directory.'/'.$filename,
+            "id: foo\norder_number: 12345\nbar: baz",
+        );
+
+        $this->assertEquals($expectedDate, $item->date()->format('Y-m-d H:i:s'));
+    }
+
+    public static function timezoneProvider()
+    {
+        return [
+            'midnight' => ['2017-01-02.12345.yaml', '2017-01-02 05:00:00'],
+            '10pm' => ['2017-01-02-2200.12345.yaml', '2017-01-03 03:00:00'],
+            '10pm with seconds' => ['2017-01-02-220013.12345.yaml', '2017-01-03 03:00:13'],
+        ];
+    }
+
+    #[Test]
     public function it_saves_to_disk()
     {
         $order = Facades\Order::make()

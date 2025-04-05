@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Stache\Stores;
 
+use Carbon\Carbon;
 use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
 use DuncanMcClean\Cargo\Facades\Order;
 use Illuminate\Support\Str;
@@ -37,7 +38,7 @@ class OrdersStore extends BasicStore
             ->site($site)
             ->id(Arr::pull($data, 'id'))
             ->orderNumber((new GetSlugFromPath)($path))
-            ->date((new GetDateFromPath)($path))
+            ->date($this->getDateFromPath($path))
             ->cart(Arr::pull($data, 'cart'))
             ->status(Arr::pull($data, 'status'))
             ->customer(Arr::pull($data, 'customer'))
@@ -49,6 +50,27 @@ class OrdersStore extends BasicStore
             ->taxTotal(Arr::pull($data, 'tax_total'))
             ->shippingTotal(Arr::pull($data, 'shipping_total'))
             ->data($data);
+    }
+
+    private function getDateFromPath($path)
+    {
+        if (! $date = (new GetDateFromPath)($path)) {
+            return null;
+        }
+
+        $format = match (strlen($date)) {
+            10 => 'Y-m-d',
+            15 => 'Y-m-d-Hi',
+            17 => 'Y-m-d-His',
+        };
+
+        $carbon = Carbon::createFromFormat($format, $date, config('app.timezone'));
+
+        if (strlen($date) === 10) {
+            $carbon->startOfDay();
+        }
+
+        return $carbon->utc();
     }
 
     protected function extractSiteFromPath($path)
