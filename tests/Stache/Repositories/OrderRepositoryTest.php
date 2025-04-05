@@ -127,7 +127,7 @@ class OrderRepositoryTest extends TestCase
 
         $this->repo->save($order);
 
-        $this->assertStringContainsString('content/cargo/orders/2025-01-01-120000.1234.yaml', $order->path());
+        $this->assertStringContainsString('content/cargo/orders/2025-01-01-1200.1234.yaml', $order->path());
 
         $yaml = YAML::file($order->path())->parse();
 
