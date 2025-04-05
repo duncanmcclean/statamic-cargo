@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Shipping;
+namespace Tests\Cart\Calculator;
 
 use DuncanMcClean\Cargo\Cart\Calculator\ApplyShipping;
 use DuncanMcClean\Cargo\Contracts\Cart\Cart as CartContract;
@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-class CanApplyShippingTest extends TestCase
+class ApplyShippingTest extends TestCase
 {
     protected function setUp(): void
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Orders;
+namespace Tests\Tags;
 
 use DuncanMcClean\Cargo\Facades\Order;
 use PHPUnit\Framework\Attributes\Test;

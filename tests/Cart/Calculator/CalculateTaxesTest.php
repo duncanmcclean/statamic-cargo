@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Taxes;
+namespace Tests\Cart\Calculator;
 
 use DuncanMcClean\Cargo\Cart\Calculator\CalculateTaxes;
 use DuncanMcClean\Cargo\Contracts\Cart\Cart as CartContract;
@@ -20,7 +20,7 @@ use Statamic\Facades\Entry;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
 
-class CanCalculateTaxesTest extends TestCase
+class CalculateTaxesTest extends TestCase
 {
     use PreventsSavingStacheItemsToDisk;
 
