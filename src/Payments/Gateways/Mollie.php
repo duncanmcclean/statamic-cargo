@@ -47,7 +47,7 @@ class Mollie extends PaymentGateway
         if ($cart->get('mollie_payment_id')) {
             $payment = $this->mollie->payments->get($cart->get('mollie_payment_id'));
 
-            if ($payment->metadata->cart_fingerprint === $cart->fingerprint()) {
+            if (! $payment->isExpired() && $payment->metadata->cart_fingerprint === $cart->fingerprint()) {
                 return ['checkout_url' => $payment->getCheckoutUrl()];
             }
 
