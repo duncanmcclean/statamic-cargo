@@ -2,12 +2,13 @@
 
 namespace DuncanMcClean\Cargo\Tags\Concerns;
 
+use Statamic\Support\Str;
 use Statamic\Tags\Concerns\GetsRedirects;
 use Statamic\Tags\Concerns\RendersForms;
 
 trait FormBuilder
 {
-    use GetsRedirects, RendersForms;
+    use GetsRedirects, RendersForms, GetsFormRequests;
 
     protected function createForm(
         string $action,
@@ -19,7 +20,7 @@ trait FormBuilder
         $params = [];
 
         $knownParams = array_merge($knownParams, [
-            'redirect', 'error_redirect', 'line_item', 'product', 'variant',
+            'request', 'redirect', 'error_redirect', 'line_item', 'product', 'variant',
         ]);
 
         if ($errors = $this->errors()) {
@@ -32,6 +33,10 @@ trait FormBuilder
 
         if ($errorRedirect = $this->getErrorRedirectUrl()) {
             $params['error_redirect'] = $this->parseRedirect($errorRedirect);
+        }
+
+        if ($formRequest = $this->getFormRequest()) {
+            $params['request'] = $this->parseFormRequest($formRequest);
         }
 
         if (! $this->canParseContents()) {

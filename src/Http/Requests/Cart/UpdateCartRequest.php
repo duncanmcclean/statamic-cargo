@@ -3,18 +3,28 @@
 namespace DuncanMcClean\Cargo\Http\Requests\Cart;
 
 use DuncanMcClean\Cargo\Facades\Cart;
+use DuncanMcClean\Cargo\Http\Requests\Concerns\AcceptsCustomFormRequests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
+use Statamic\Exceptions\NotFoundHttpException;
 
 class UpdateCartRequest extends FormRequest
 {
+    use AcceptsCustomFormRequests;
+
     public $blueprintFields;
     public $submittedValues;
 
     public function authorize()
     {
-        return Cart::hasCurrentCart();
+        throw_if(! Cart::hasCurrentCart(), NotFoundHttpException::class);
+
+        if ($this->hasCustomFormRequest()) {
+            return $this->resolveCustomFormRequest()->authorize();
+        }
+
+        return true;
     }
 
     protected function failedValidation(Validator $validator)

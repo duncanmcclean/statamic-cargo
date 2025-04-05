@@ -4,6 +4,7 @@ namespace Tests\Cart;
 
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
+use Illuminate\Foundation\Http\FormRequest;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
@@ -11,7 +12,7 @@ use Statamic\Facades\User;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
 
-class CartLineItemFormsTest extends TestCase
+class CartLineItemsControllerTest extends TestCase
 {
     use PreventsSavingStacheItemsToDisk;
 
@@ -64,6 +65,25 @@ class CartLineItemFormsTest extends TestCase
 
         $this->assertEquals($product->id(), $cart->lineItems()->first()->product()->id());
         $this->assertEquals(1, $cart->lineItems()->first()->quantity());
+    }
+
+    #[Test]
+    public function it_adds_a_product_to_the_cart_and_uses_custom_form_request()
+    {
+        $cart = $this->makeCart();
+        $product = $this->makeProduct();
+
+        $this
+            ->post('/!/cargo/cart/line-items', [
+                '_request' => encrypt('Tests\Cart\CartLineItemsFormRequest'),
+                'product' => $product->id(),
+                'quantity' => 1,
+            ])
+            ->assertSessionHasErrors('gift_note');
+
+        $cart = $cart->fresh();
+
+        $this->assertCount(0, $cart->lineItems());
     }
 
     #[Test]
@@ -485,6 +505,25 @@ class CartLineItemFormsTest extends TestCase
     }
 
     #[Test]
+    public function it_updates_a_line_item_and_uses_custom_form_request()
+    {
+        $cart = $this->makeCartWithLineItems();
+
+        $this
+            ->patch('/!/cargo/cart/line-items/line-item-1', [
+                '_request' => encrypt('Tests\Cart\CartLineItemsFormRequest'),
+                'quantity' => 3,
+            ])
+            ->assertSessionHasErrors('gift_note');
+
+        $cart = $cart->fresh();
+
+        $this->assertCount(1, $cart->lineItems());
+
+        $this->assertEquals(1, $cart->lineItems()->first()->quantity());
+    }
+
+    #[Test]
     public function it_updates_a_line_item_with_a_different_variant()
     {
         $cart = $this->makeCart();
@@ -611,5 +650,35 @@ class CartLineItemFormsTest extends TestCase
         $product->save();
 
         return $product;
+    }
+}
+
+class CartLineItemsFormRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'gift_note' => 'required',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'bar.required' => 'Remember to leave a gift note.',
+        ];
     }
 }

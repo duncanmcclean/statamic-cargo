@@ -6,13 +6,14 @@ use DuncanMcClean\Cargo\Coupons\CouponType;
 use DuncanMcClean\Cargo\Customers\GuestCustomer;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Coupon;
+use Illuminate\Foundation\Http\FormRequest;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
 
-class CartFormsTest extends TestCase
+class CartControllerTest extends TestCase
 {
     use PreventsSavingStacheItemsToDisk;
 
@@ -115,6 +116,25 @@ class CartFormsTest extends TestCase
             ->assertOk()
             ->assertJsonStructure(['data' => ['id', 'customer', 'line_items']])
             ->assertJsonPath('data.id', $cart->id());
+    }
+
+    #[Test]
+    public function it_updates_the_cart_and_uses_custom_form_request()
+    {
+        $cart = $this->makeCart();
+
+        $this
+            ->from('/cart')
+            ->patch('/!/cargo/cart', [
+                '_request' => encrypt('Tests\Cart\CartFormRequest'),
+                'foo' => 'bar',
+            ])
+            ->assertSessionHasErrors('baz');
+
+        $cart = $cart->fresh();
+
+        $this->assertNull($cart->get('foo'));
+        $this->assertNull($cart->get('baz'));
     }
 
     #[Test]
@@ -227,5 +247,35 @@ class CartFormsTest extends TestCase
         Cart::setCurrent($cart);
 
         return $cart;
+    }
+}
+
+class CartFormRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'baz' => 'required',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'bar.required' => 'The baz thingy should be here...',
+        ];
     }
 }

@@ -3,18 +3,29 @@
 namespace DuncanMcClean\Cargo\Http\Requests\Cart;
 
 use DuncanMcClean\Cargo\Facades\Product;
+use DuncanMcClean\Cargo\Http\Requests\Concerns\AcceptsCustomFormRequests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class AddLineItemRequest extends FormRequest
 {
+    use AcceptsCustomFormRequests;
+
     public function authorize()
     {
+        if ($this->hasCustomFormRequest()) {
+            return $this->resolveCustomFormRequest()->authorize();
+        }
+
         return true;
     }
 
     public function rules()
     {
+        if ($this->hasCustomFormRequest()) {
+            return $this->resolveCustomFormRequest()->rules();
+        }
+
         return [
             'product' => [
                 'required',
