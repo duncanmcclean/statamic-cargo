@@ -9,6 +9,7 @@ use DuncanMcClean\Cargo\Shipping\ShippingMethod;
 use DuncanMcClean\Cargo\Shipping\ShippingOption;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\ShippingMethods\PaidShipping;
 use Tests\TestCase;
 
 class ApplyShippingTest extends TestCase
@@ -59,17 +60,5 @@ class ApplyShippingTest extends TestCase
         $this->assertFalse($cart->has('shipping_option'));
 
         $this->assertEquals(0, $cart->shippingTotal());
-    }
-}
-
-class PaidShipping extends ShippingMethod
-{
-    public function options(CartContract $cart): Collection
-    {
-        return collect([
-            ShippingOption::make($this)
-                ->name('The Only Option')
-                ->price(500),
-        ]);
     }
 }

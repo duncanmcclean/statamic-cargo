@@ -18,6 +18,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
+use Tests\Fixtures\ShippingMethods\PaidShipping;
 use Tests\TestCase;
 
 class CalculateTaxesTest extends TestCase
@@ -694,17 +695,5 @@ class CalculateTaxesTest extends TestCase
         $this->assertEquals(750, $cart->shippingTotal());
 
         $this->assertEquals(1250, $cart->taxTotal());
-    }
-}
-
-class PaidShipping extends ShippingMethod
-{
-    public function options(CartContract $cart): \Illuminate\Support\Collection
-    {
-        return collect([
-            ShippingOption::make($this)
-                ->name('The Only Option')
-                ->price(500),
-        ]);
     }
 }
