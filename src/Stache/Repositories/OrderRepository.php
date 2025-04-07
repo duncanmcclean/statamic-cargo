@@ -9,6 +9,7 @@ use DuncanMcClean\Cargo\Contracts\Orders\QueryBuilder;
 use DuncanMcClean\Cargo\Exceptions\OrderNotFound;
 use DuncanMcClean\Cargo\Orders\Blueprint;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Statamic\Fields\Blueprint as StatamicBlueprint;
 use Statamic\Stache\Stache;
 
@@ -94,13 +95,15 @@ class OrderRepository implements RepositoryContract
 
     private function generateOrderNumber(): int
     {
-        $lastOrder = $this->query()->orderByDesc('order_number')->first();
+        return Cache::lock('cargo-order-number', 5)->get(function () {
+            $lastOrder = $this->query()->orderByDesc('order_number')->first();
 
-        if (! $lastOrder) {
-            return config('statamic.cargo.minimum_order_number', 1000);
-        }
+            if (! $lastOrder) {
+                return config('statamic.cargo.minimum_order_number', 1000);
+            }
 
-        return (int) $lastOrder->orderNumber() + 1;
+            return (int) $lastOrder->orderNumber() + 1;
+        });
     }
 
     public function blueprint(): StatamicBlueprint
