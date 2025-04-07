@@ -70,7 +70,7 @@ class Cart extends Tags
         return ! CartFacade::hasCurrentCart() || CartFacade::current()->lineItems()->isEmpty();
     }
 
-    public function alreadyExists(): bool
+    public function added(): bool
     {
         if (! CartFacade::hasCurrentCart()) {
             return false;
@@ -155,7 +155,7 @@ class Cart extends Tags
         );
     }
 
-    public function empty()
+    public function delete()
     {
         return $this->createForm(
             action: route('statamic.cargo.cart.destroy'),
