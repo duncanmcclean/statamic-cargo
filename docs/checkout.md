@@ -444,7 +444,7 @@ Once the order has been created, the customer will be redirected to the confirma
 
 Cargo generates a temporary signed URL, meaning the confirmation page will be valid for one hour after checkout.
 
-The URL contains the `order_id` as a query parameter, which you can pass into the [`{{ orders }}`](/frontend/orders-tag) tag to display the order information:
+The URL contains the `order_id` as a query parameter, which you can pass into the [`{{ orders }}`](/docs/orders-tag) tag to display the order information:
 
 ```html
 {{ orders :id:is="get:order_id" }}

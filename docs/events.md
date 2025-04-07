@@ -121,7 +121,7 @@ public function handle(CouponSaved $event)
 ### OrderCancelled
 `DuncanMcClean\Cargo\Events\OrderCancelled`
 
-Dispatched when an order's status is changed to ["Cancelled"](/the-basics/carts-and-orders#statuses).
+Dispatched when an order's status is changed to ["Cancelled"](/docs/carts-and-orders#statuses).
 
 ```php
 public function handle(OrderCancelled $event)
@@ -157,7 +157,7 @@ public function handle(OrderDeleted $event)
 ### OrderPaymentPending
 `DuncanMcClean\Cargo\Events\OrderPaymentPending`
 
-Dispatched when an order's status is changed to ["Payment Pending"](/the-basics/carts-and-orders#statuses).
+Dispatched when an order's status is changed to ["Payment Pending"](/docs/carts-and-orders#statuses).
 
 ```php
 public function handle(OrderPaymentPending $event)
@@ -169,7 +169,7 @@ public function handle(OrderPaymentPending $event)
 ### OrderPaymentReceived
 `DuncanMcClean\Cargo\Events\OrderPaymentReceived`
 
-Dispatched when an order's status is changed to ["Payment Received"](/the-basics/carts-and-orders#statuses).
+Dispatched when an order's status is changed to ["Payment Received"](/docs/carts-and-orders#statuses).
 
 ```php
 public function handle(OrderPaymentReceived $event)
@@ -194,7 +194,7 @@ public function handle(OrderRefunded $event)
 ### OrderReturned
 `DuncanMcClean\Cargo\Events\OrderReturned`
 
-Dispatched when an order's status is changed to ["Returned"](/the-basics/carts-and-orders#statuses).
+Dispatched when an order's status is changed to ["Returned"](/docs/carts-and-orders#statuses).
 
 ```php
 public function handle(OrderReturned $event)
@@ -218,7 +218,7 @@ public function handle(OrderSaved $event)
 ### OrderShipped
 `DuncanMcClean\Cargo\Events\OrderShipped`
 
-Dispatched when an order's status is changed to ["Shipped"](/the-basics/carts-and-orders#statuses).
+Dispatched when an order's status is changed to ["Shipped"](/docs/carts-and-orders#statuses).
 
 ```php
 public function handle(OrderShipped $event)

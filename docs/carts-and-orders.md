@@ -34,7 +34,7 @@ Cargo will automatically inject the product `id` from [the context](https://stat
 <input type="hidden" name="product" value="{{ page:id }}">
 ``` 
 
-This example only scratches the surface of what you can do using Cargo's Antlers tags. To find out more, see the [Antlers Tags](/docs/frontend/antlers-tags) page.
+This example only scratches the surface of what you can do using the cart tag. To find out more, see the [Cart Tag](/docs/cart-tag) page.
 
 ### Storage
 Out of the box, carts are stored as YAML files in the `content/cargo/carts` directory. If you wish, you can change the directory in the `cargo.php` config file:
@@ -106,7 +106,7 @@ CalculateLineItems::priceHook(function ($cart, $lineItem) {
 ```
 
 #### Taxes
-To override how taxes are calculated, you should investigate [building your own](/docs/the-basics/taxes) tax driver.
+To override how taxes are calculated, you should investigate [building your own](/docs/taxes) tax driver.
 
 #### Custom Calculations
 If you need to implement your own custom calculations, you can build your own calculator class and place it inside Cargo's calculator [pipeline](https://laravel.com/docs/master/processes#process-pipelines).
