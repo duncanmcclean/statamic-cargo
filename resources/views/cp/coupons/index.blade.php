@@ -18,4 +18,9 @@
         :filters="{{ $filters->toJson() }}"
         :action-url="{{ json_encode(cp_route('cargo.coupons.actions.run')) }}"
     ></coupons-listing>
+
+    @include('statamic::partials.docs-callout', [
+        'topic' => __('Discounts'),
+        'url' => 'https://builtwithcargo.dev/docs/discounts',
+    ])
 @endsection
