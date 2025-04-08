@@ -27,7 +27,7 @@ There's a couple of things you should bear in mind going into the alpha:
 First, install Cargo using Composer:
 
 ```
-composer require duncanmcclean/simple-commerce
+composer require duncanmcclean/statamic-cargo
 ```
 
 Then, once Composer has finished doing its thing, run Cargo's install command. It'll publish various stubs, setup your products collection, and more.
@@ -37,16 +37,16 @@ php please cargo:install
 ```
 
 ### Existing Simple Commerce site
-First, remove Simple Commerce from your project's `composer.json` file:
+First, uninstall Simple Commerce via Composer:
 
-```json
-"duncanmcclean/simple-commerce": "^7.0"
+```
+composer remove duncanmcclean/simple-commerce
 ```
 
 Then, install Cargo using Composer:
 
 ```
-composer require duncanmcclean/simple-commerce
+composer require duncanmcclean/statamic-cargo
 ```
 
 Once Composer has finished doing its thing, run Cargo's install command. It'll publish various stubs, setup your products collection, and more.

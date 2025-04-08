@@ -149,10 +149,10 @@ We're also going to create a `summary.antlers.html` view, which we'll use to dis
 <table>
 	<tbody>
 		{{ line_items }}
-		<tr>
-			<td>{{ quantity }}x {{ product:title }}</td>
-			<td align="right">{{ sub_total }}</td>
-		</tr>
+			<tr>
+				<td>{{ quantity }}x {{ product:title }}</td>
+				<td align="right">{{ sub_total }}</td>
+			</tr>
 		{{ /line_items }}
 		<tr>
 			<td>Subtotal:</td>
