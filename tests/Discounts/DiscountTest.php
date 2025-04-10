@@ -30,7 +30,7 @@ class DiscountTest extends TestCase
         $cart = Cart::make()->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->code('FOOBAR')
+            ->name('Foo Bar')
             ->type(DiscountType::Percentage)
             ->amount(10)
             ->set('products', ['product-1']);
@@ -47,7 +47,7 @@ class DiscountTest extends TestCase
         $cart = Cart::make()->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->code('FOOBAR')
+            ->name('Foo Bar')
             ->type(DiscountType::Percentage)
             ->amount(10)
             ->set('products', ['product-2']);
@@ -66,7 +66,7 @@ class DiscountTest extends TestCase
         $cart = Cart::make()->customer($user)->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->code('FOOBAR')
+            ->name('Foo Bar')
             ->type(DiscountType::Percentage)
             ->amount(10)
             ->set('customer_eligibility', 'specific_customers')
@@ -86,7 +86,7 @@ class DiscountTest extends TestCase
         $cart = Cart::make()->customer($user)->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->code('FOOBAR')
+            ->name('Foo Bar')
             ->type(DiscountType::Percentage)
             ->amount(10)
             ->set('customer_eligibility', 'specific_customers')
@@ -109,7 +109,7 @@ class DiscountTest extends TestCase
             ->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->code('FOOBAR')
+            ->name('Foo Bar')
             ->type(DiscountType::Percentage)
             ->amount(10)
             ->set('customer_eligibility', 'specific_customers')
@@ -129,7 +129,7 @@ class DiscountTest extends TestCase
         $cart = Cart::make()->customer($user)->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->code('FOOBAR')
+            ->name('Foo Bar')
             ->type(DiscountType::Percentage)
             ->amount(10)
             ->set('customer_eligibility', 'customers_by_domain')
@@ -149,7 +149,7 @@ class DiscountTest extends TestCase
         $cart = Cart::make()->customer($user)->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->code('FOOBAR')
+            ->name('Foo Bar')
             ->type(DiscountType::Percentage)
             ->amount(10)
             ->set('customer_eligibility', 'customers_by_domain')
@@ -167,7 +167,7 @@ class DiscountTest extends TestCase
         $cart = Cart::make()->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->code('FOOBAR')
+            ->name('Foo Bar')
             ->type(DiscountType::Percentage)
             ->amount(10)
             ->set('valid_from', '2030-01-01');
@@ -184,7 +184,7 @@ class DiscountTest extends TestCase
         $cart = Cart::make()->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->code('FOOBAR')
+            ->name('Foo Bar')
             ->type(DiscountType::Percentage)
             ->amount(10)
             ->set('valid_from', '2024-01-01')
@@ -202,7 +202,7 @@ class DiscountTest extends TestCase
         $cart = Cart::make()->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->code('FOOBAR')
+            ->name('Foo Bar')
             ->type(DiscountType::Percentage)
             ->amount(10)
             ->set('expires_at', '2024-01-01');
@@ -219,7 +219,7 @@ class DiscountTest extends TestCase
 
         $discount = Discount::make()
             ->id('abc')
-            ->code('FOOBAR')
+            ->name('Foo Bar')
             ->type(DiscountType::Percentage)
             ->amount(10);
 
@@ -228,10 +228,11 @@ class DiscountTest extends TestCase
         $this->assertInstanceOf(DiscountContract::class, $discount = Discount::find($discount->id()));
         $this->assertEquals('abc', $discount->id());
         $this->assertFileExists($discount->path());
-        $this->assertStringContainsString('content/cargo/discounts/FOOBAR.yaml', $discount->path());
+        $this->assertStringContainsString('content/cargo/discounts/foo-bar.yaml', $discount->path());
 
         $this->assertEquals(<<<'YAML'
 id: abc
+name: 'Foo Bar'
 amount: 10
 type: percentage
 
@@ -256,7 +257,7 @@ YAML
 
         $discount = Discount::make()
             ->id('abc')
-            ->code('FOOBAR')
+            ->name('Foo Bar')
             ->type(DiscountType::Percentage)
             ->amount(10);
 
@@ -265,10 +266,11 @@ YAML
         $this->assertInstanceOf(DiscountContract::class, $discount = Discount::find($discount->id()));
         $this->assertEquals('abc', $discount->id());
         $this->assertFileExists($discount->path());
-        $this->assertStringContainsString('content/cargo/discounts/FOOBAR.yaml', $discount->path());
+        $this->assertStringContainsString('content/cargo/discounts/foo-bar.yaml', $discount->path());
 
         $this->assertEquals(<<<'YAML'
 id: abc
+name: 'Foo Bar'
 amount: 10
 type: percentage
 
@@ -291,7 +293,7 @@ YAML
 
         $discount = Discount::make()
             ->id('abc')
-            ->code('FOOBAR')
+            ->name('Foo Bar')
             ->type(DiscountType::Percentage)
             ->amount(10);
 
@@ -315,7 +317,7 @@ YAML
 
         $discount = Discount::make()
             ->id('abc')
-            ->code('FOOBAR')
+            ->name('Foo Bar')
             ->type(DiscountType::Percentage)
             ->amount(10);
 

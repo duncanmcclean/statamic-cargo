@@ -33,6 +33,7 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
     use ContainsData, ExistsAsFile, FluentlyGetsAndSets, HasAugmentedInstance, HasDirtyState, TracksQueriedColumns, TracksQueriedRelations;
 
     protected $id;
+    protected $name;
     protected $code;
     protected $amount;
     protected $type;
@@ -51,11 +52,22 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
             ->args(func_get_args());
     }
 
+    public function name($name = null)
+    {
+        return $this
+            ->fluentlyGetOrSet('name')
+            ->args(func_get_args());
+    }
+
     public function code($id = null)
     {
         return $this
             ->fluentlyGetOrSet('code')
             ->setter(function ($code) {
+                if (! $code) {
+                    return null;
+                }
+
                 return Str::upper($code);
             })
             ->args(func_get_args());
@@ -245,7 +257,7 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
     {
         return vsprintf('%s/%s.yaml', [
             rtrim(Stache::store('discounts')->directory(), '/'),
-            $this->code(),
+            Str::slug($this->name()),
         ]);
     }
 
@@ -253,6 +265,8 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
     {
         return array_merge([
             'id' => $this->id(),
+            'name' => $this->name(),
+            'code' => $this->code(),
             'amount' => $this->amount(),
             'type' => $this->type()?->value,
         ], $this->data->all());
@@ -275,7 +289,7 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
 
     public function shallowAugmentedArrayKeys()
     {
-        return ['id', 'code', 'type', 'amount'];
+        return ['id', 'name', 'code', 'type', 'amount'];
     }
 
     public function newAugmentedInstance(): Augmented
@@ -286,6 +300,7 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
     public function getCurrentDirtyStateAttributes(): array
     {
         return array_merge([
+            'name' => $this->name(),
             'code' => $this->code(),
             'amount' => $this->amount(),
             'type' => $this->type()?->value,

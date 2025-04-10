@@ -30,6 +30,7 @@ class UpdateDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->patch(cp_route('cargo.discounts.update', $discount->id()), [
+                'name' => 'Bazqux',
                 'code' => 'BAZQUX50',
                 'type' => 'percentage',
                 'amount' => ['mode' => 'percentage', 'value' => 50],

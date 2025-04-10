@@ -30,10 +30,9 @@ class ListedDiscount extends JsonResource
     {
         $discount = $this->resource;
 
-        ray($discount);
-
         return [
             'id' => $discount->id(),
+            'name' => $discount->name(),
             'code' => $discount->code(),
             'type' => $discount->type()->value,
             'amount' => $discount->amount(),

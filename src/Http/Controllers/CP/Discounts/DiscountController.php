@@ -33,7 +33,7 @@ class DiscountController extends CpController
             $sortDirection = request('order', 'asc');
 
             if (! $sortField && ! request('search')) {
-                $sortField = 'code';
+                $sortField = 'name';
                 $sortDirection = 'desc';
             }
 
@@ -75,7 +75,8 @@ class DiscountController extends CpController
 
         if ($search = request('search')) {
             $query
-                ->where('code', 'LIKE', '%'.$search.'%')
+                ->where('name', 'LIKE', '%'.$search.'%')
+                ->orWhere('code', 'LIKE', '%'.$search.'%')
                 ->orWhere('description', 'LIKE', '%'.$search.'%');
         }
 
@@ -134,6 +135,7 @@ class DiscountController extends CpController
         $values = $fields->process()->values();
 
         $discount = Discount::make()
+            ->name($values->get('name'))
             ->code($values->get('code'))
             ->type($values->get('type'))
             ->amount($values->get('amount'))
@@ -157,7 +159,7 @@ class DiscountController extends CpController
         [$values, $meta] = $this->extractFromFields($discount, $blueprint);
 
         $viewData = [
-            'title' => $discount->code(),
+            'title' => $discount->name(),
             'reference' => $discount->reference(),
             'actions' => [
                 'save' => $discount->updateUrl(),
@@ -214,6 +216,7 @@ class DiscountController extends CpController
         $values = $fields->process()->values();
 
         $discount
+            ->name($values->get('name'))
             ->code($values->get('code'))
             ->type($values->get('type'))
             ->amount($values->get('amount'))

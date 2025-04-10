@@ -8,6 +8,7 @@ trait ExtractsFromDiscountFields
     {
         $values = $discount->data()
             ->merge([
+                'name' => $discount->name(),
                 'code' => $discount->code(),
                 'type' => $discount->type(),
                 'amount' => $discount->amount(),

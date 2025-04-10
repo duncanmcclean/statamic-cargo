@@ -85,14 +85,14 @@
                             :toggle-selection-on-row-click="true"
                             @sorted="sorted"
                         >
-                            <template #cell-code="{ row: discount, value }">
+                            <template #cell-name="{ row: discount, value }">
                                 <div class="title-index-field">
                                     <a
                                         class="title-index-field inline-flex items-center"
                                         :href="discount.edit_url"
                                         @click.stop
                                     >
-	                                    {{ discount.code }}
+	                                    {{ discount.name }}
                                     </a>
                                 </div>
                             </template>

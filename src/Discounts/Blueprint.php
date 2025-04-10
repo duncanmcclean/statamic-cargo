@@ -16,6 +16,16 @@ class Blueprint
                         [
                             'fields' => [
                                 [
+                                    'handle' => 'name',
+                                    'field' => [
+                                        'type' => 'text',
+                                        'display' => __('Name'),
+                                        'instructions' => __('cargo::messages.discounts.name'),
+                                        'listable' => true,
+                                        'validate' => ['required', 'string', 'max:255'],
+                                    ],
+                                ],
+                                [
                                     'handle' => 'code',
                                     'field' => [
                                         'type' => 'coupon_code',

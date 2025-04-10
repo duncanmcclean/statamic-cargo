@@ -12,7 +12,7 @@ class Discount extends JsonResource
         $data = [
             'id' => $this->resource->id(),
             'reference' => $this->resource->reference(),
-            'title' => $this->resource->code(),
+            'title' => $this->resource->name(),
             'code' => $this->resource->code(),
             'type' => $this->resource->type(),
             'amount' => $this->resource->amount(),

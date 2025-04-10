@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
 use Statamic\Facades\Parse;
+use Statamic\Facades\User;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
 
@@ -50,13 +51,13 @@ class CartTagTest extends TestCase
     #[Test]
     public function can_get_nested_data_using_wildcard()
     {
-        $coupon = tap(Discount::make()->code('FOOBAR')->type(DiscountType::Fixed)->amount(450))->save();
+        $user = tap(User::make()->email('joe.bloggs@example.com'))->save();
 
-        $cart = tap(Cart::make()->coupon($coupon->id())->set('foo', ['bar' => 'baz']))->saveWithoutRecalculating();
+        $cart = tap(Cart::make()->customer($user->id())->set('foo', ['bar' => 'baz']))->saveWithoutRecalculating();
 
         Cart::setCurrent($cart);
 
-        $this->assertEquals('FOOBAR', (string) $this->tag('{{ cart:coupon:code }}'));
+        $this->assertEquals('joe.bloggs@example.com', (string) $this->tag('{{ cart:customer:email }}'));
         $this->assertEquals('baz', (string) $this->tag('{{ cart:foo:bar }}'));
     }
 

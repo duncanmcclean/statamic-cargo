@@ -28,6 +28,7 @@ class StoreDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
+                'name' => 'Bazqux',
                 'code' => 'BAZQUX50',
                 'type' => 'percentage',
                 'amount' => ['mode' => 'percentage', 'value' => 50],
@@ -38,6 +39,7 @@ class StoreDiscountsTest extends TestCase
 
         $discount = Discount::findByCode('BAZQUX50');
 
+        $this->assertEquals($discount->name(), 'Bazqux');
         $this->assertEquals($discount->code(), 'BAZQUX50');
         $this->assertEquals($discount->type(), DiscountType::Percentage);
         $this->assertEquals($discount->amount(), 50);

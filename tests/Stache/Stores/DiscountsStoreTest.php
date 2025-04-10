@@ -29,13 +29,13 @@ class DiscountsStoreTest extends TestCase
     public function it_makes_discount_instances_from_files()
     {
         $item = $this->store->makeItemFromFile(
-            $this->directory.'/BLACKFRIDAY.yaml',
-            "id: foo\namount: 25\ntype: percentage\nbar: baz",
+            $this->directory.'/black-friday.yaml',
+            "id: foo\nname: Black Friday\namount: 25\ntype: percentage\nbar: baz",
         );
 
         $this->assertInstanceOf(Discount::class, $item);
         $this->assertEquals('foo', $item->id());
-        $this->assertEquals('BLACKFRIDAY', $item->code());
+        $this->assertEquals('Black Friday', $item->name());
         $this->assertEquals(25, $item->amount());
         $this->assertEquals(DiscountType::Percentage, $item->type());
         $this->assertEquals('baz', $item->get('bar'));
@@ -46,12 +46,12 @@ class DiscountsStoreTest extends TestCase
     {
         $discount = Facades\Discount::make()
             ->id('123')
-            ->code('BLACKFRIDAY')
+            ->name('Black Friday')
             ->type(DiscountType::Percentage);
 
         $this->store->save($discount);
 
-        $this->assertStringEqualsFile($path = $this->directory.'/BLACKFRIDAY.yaml', $discount->fileContents());
+        $this->assertStringEqualsFile($path = $this->directory.'/black-friday.yaml', $discount->fileContents());
         @unlink($path);
         $this->assertFileDoesNotExist($path);
 
@@ -63,18 +63,18 @@ class DiscountsStoreTest extends TestCase
     {
         $discount = Facades\Discount::make()
             ->id('123')
-            ->code('BLACKFRIDAY')
+            ->name('Black Friday')
             ->type(DiscountType::Percentage);
 
         $this->store->save($discount);
 
-        $this->assertStringEqualsFile($initialPath = $this->directory.'/BLACKFRIDAY.yaml', $discount->fileContents());
+        $this->assertStringEqualsFile($initialPath = $this->directory.'/black-friday.yaml', $discount->fileContents());
         $this->assertEquals($initialPath, $this->store->paths()->get('123'));
 
-        $discount->code('CYBERWEEKEND');
+        $discount->name('Cyber Weekend');
         $discount->save();
 
-        $this->assertStringEqualsFile($path = $this->directory.'/CYBERWEEKEND.yaml', $discount->fileContents());
+        $this->assertStringEqualsFile($path = $this->directory.'/cyber-weekend.yaml', $discount->fileContents());
         $this->assertEquals($path, $this->store->paths()->get('123'));
 
         @unlink($initialPath);

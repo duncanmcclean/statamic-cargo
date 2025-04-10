@@ -13,7 +13,7 @@ use Statamic\Stache\Stores\BasicStore;
 class DiscountsStore extends BasicStore
 {
     protected $storeIndexes = [
-        'code',
+        'name', 'code',
     ];
 
     public function key()
@@ -27,7 +27,8 @@ class DiscountsStore extends BasicStore
 
         return Discount::make()
             ->id(Arr::pull($data, 'id'))
-            ->code(Str::upper((new GetSlugFromPath)($path)))
+            ->name(Arr::pull($data, 'name'))
+            ->code(Arr::pull($data, 'code'))
             ->type(Arr::pull($data, 'type'))
             ->amount(Arr::pull($data, 'amount'))
             ->data($data);
