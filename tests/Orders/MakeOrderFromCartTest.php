@@ -2,9 +2,9 @@
 
 namespace Tests\Orders;
 
-use DuncanMcClean\Cargo\Coupons\CouponType;
+use DuncanMcClean\Cargo\Discounts\DiscountType;
 use DuncanMcClean\Cargo\Facades\Cart;
-use DuncanMcClean\Cargo\Facades\Coupon;
+use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\Order;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
@@ -27,7 +27,7 @@ class MakeOrderFromCartTest extends TestCase
     public function it_can_make_an_order_from_a_cart()
     {
         $product = tap(Entry::make()->collection('products')->set('price', 2500))->save();
-        $coupon = tap(Coupon::make()->code('foobar')->type(CouponType::Percentage)->amount(50))->save();
+        $coupon = tap(Discount::make()->code('foobar')->type(DiscountType::Percentage)->amount(50))->save();
 
         $cart = Cart::make()
             ->id('123')

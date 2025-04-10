@@ -3,7 +3,7 @@
 namespace DuncanMcClean\Cargo\Http\Controllers\Concerns;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
-use DuncanMcClean\Cargo\Facades\Coupon;
+use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Orders\LineItem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -19,11 +19,11 @@ trait RedeemsCoupons
                 return $cart;
             }
 
-            $coupon = Coupon::findByCode($request->coupon);
+            $coupon = Discount::findByCode($request->coupon);
 
             if (! $coupon) {
                 throw ValidationException::withMessages([
-                    'coupon' => __('cargo::validation.invalid_coupon'),
+                    'coupon' => __('cargo::validation.invalid_coupon_code'),
                 ]);
             }
 
@@ -31,7 +31,7 @@ trait RedeemsCoupons
 
             if (! $isValid) {
                 throw ValidationException::withMessages([
-                    'coupon' => __('cargo::validation.invalid_coupon'),
+                    'coupon' => __('cargo::validation.invalid_coupon_code'),
                 ]);
             }
 

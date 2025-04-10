@@ -3,13 +3,13 @@
 namespace Tests;
 
 use DuncanMcClean\Cargo\Contracts\Orders\Order;
-use DuncanMcClean\Cargo\Coupons\CouponType;
-use DuncanMcClean\Cargo\Events\CouponRedeemed;
+use DuncanMcClean\Cargo\Discounts\DiscountType;
+use DuncanMcClean\Cargo\Events\DiscountRedeemed;
 use DuncanMcClean\Cargo\Events\ProductNoStockRemaining;
 use DuncanMcClean\Cargo\Events\ProductStockLow;
 use DuncanMcClean\Cargo\Facades;
 use DuncanMcClean\Cargo\Facades\Cart;
-use DuncanMcClean\Cargo\Facades\Coupon;
+use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Payments\Gateways\PaymentGateway;
 use Illuminate\Http\Request;
@@ -203,12 +203,12 @@ class CheckoutTest extends TestCase
     }
 
     #[Test]
-    public function cant_checkout_with_invalid_coupon()
+    public function cant_checkout_with_invalid_coupon_code()
     {
-        $coupon = tap(Coupon::make()->code('foobar')->type(CouponType::Percentage)->amount(50)->set('expires_at', '2025-01-01'))->save();
+        $discount = tap(Discount::make()->code('foobar')->type(DiscountType::Percentage)->amount(50)->set('expires_at', '2025-01-01'))->save();
 
         $cart = $this->makeCart();
-        $cart->coupon($coupon)->saveWithoutRecalculating();
+        $cart->coupon($discount)->saveWithoutRecalculating();
 
         $this
             ->get('/!/cargo/payments/fake/checkout')
@@ -222,10 +222,10 @@ class CheckoutTest extends TestCase
     {
         Event::fake();
 
-        $coupon = tap(Coupon::make()->code('foobar')->type(CouponType::Percentage)->amount(50))->save();
+        $discount = tap(Discount::make()->code('foobar')->type(DiscountType::Percentage)->amount(50))->save();
 
         $cart = $this->makeCart();
-        $cart->coupon($coupon)->save();
+        $cart->coupon($discount)->save();
 
         $this
             ->get('/!/cargo/payments/fake/checkout')
@@ -233,9 +233,9 @@ class CheckoutTest extends TestCase
 
         $this->assertNotNull($order = Facades\Order::query()->where('cart', $cart->id())->first());
         $this->assertEquals(OrderStatus::PaymentReceived, $order->status());
-        $this->assertEquals($coupon->id(), $order->coupon()->id());
+        $this->assertEquals($discount->id(), $order->coupon()->id());
 
-        Event::assertDispatched(CouponRedeemed::class, fn ($event) => $event->coupon->id() === $coupon->id());
+        Event::assertDispatched(DiscountRedeemed::class, fn ($event) => $event->discount->id() === $discount->id());
     }
 
     private function makeCart()

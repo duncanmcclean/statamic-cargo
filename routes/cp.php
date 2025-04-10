@@ -1,8 +1,8 @@
 <?php
 
 use DuncanMcClean\Cargo\Cargo;
-use DuncanMcClean\Cargo\Http\Controllers\CP\Coupons\CouponActionController;
-use DuncanMcClean\Cargo\Http\Controllers\CP\Coupons\CouponController;
+use DuncanMcClean\Cargo\Http\Controllers\CP\Discounts\DiscountActionController;
+use DuncanMcClean\Cargo\Http\Controllers\CP\Discounts\DiscountController;
 use DuncanMcClean\Cargo\Http\Controllers\CP\Fieldtypes\ConvertGuestCustomerController;
 use DuncanMcClean\Cargo\Http\Controllers\CP\Fieldtypes\StateFieldtypeController;
 use DuncanMcClean\Cargo\Http\Controllers\CP\Orders\OrderActionController;
@@ -13,7 +13,7 @@ use DuncanMcClean\Cargo\Http\Controllers\CP\Taxes\TaxZoneController;
 use Illuminate\Support\Facades\Route;
 
 Route::name('cargo.')->group(function () {
-    Route::resource('coupons', CouponController::class)->except(['show', 'destroy']);
+    Route::resource('discounts', DiscountController::class)->except(['show', 'destroy']);
     Route::resource('orders', OrderController::class)->only(['index', 'edit', 'update']);
 
     if (Cargo::usingDefaultTaxDriver()) {
@@ -21,9 +21,9 @@ Route::name('cargo.')->group(function () {
         Route::resource('tax-zones', TaxZoneController::class)->except('show');
     }
 
-    Route::prefix('coupons')->name('coupons.')->group(function () {
-        Route::post('actions', [CouponActionController::class, 'run'])->name('actions.run');
-        Route::post('actions/list', [CouponActionController::class, 'bulkActions'])->name('actions.bulk');
+    Route::prefix('discounts')->name('discounts.')->group(function () {
+        Route::post('actions', [DiscountActionController::class, 'run'])->name('actions.run');
+        Route::post('actions/list', [DiscountActionController::class, 'bulkActions'])->name('actions.bulk');
     });
 
     Route::prefix('orders')->name('orders.')->group(function () {

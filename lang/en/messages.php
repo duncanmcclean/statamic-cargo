@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'coupon_configure_intro' => 'Coupons are a great way to offer discounts to your customers. You can create either a percentage or fixed amount discount.',
-    'coupon_discount_text' => ':amount off',
-    'coupons' => [
+    'discount_configure_intro' => 'Discounts are a great way to offer discounts to your customers. You can create either a percentage or fixed amount discount.',
+    'discount_discount_text' => ':amount off',
+    'discounts' => [
         'active_dates' => 'Configure when this coupon is active. Leave both dates blank to make the coupon active indefinitely.',
         'code' => 'Customers will enter this code to redeem the coupon.',
         'customers_by_domain' => 'Provide a list of domains that are eligible for this coupon. One per line.',

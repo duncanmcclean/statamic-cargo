@@ -33,7 +33,7 @@ trait HasTotals
             ->args(func_get_args());
     }
 
-    public function discountTotal($couponTotal = null)
+    public function discountTotal($discountTotal = null)
     {
         return $this->fluentlyGetOrSet('discountTotal')
             ->getter(fn ($discountTotal) => (int) $discountTotal ?? 0)

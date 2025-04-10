@@ -4,7 +4,7 @@ namespace DuncanMcClean\Cargo\Http\Controllers\Payments;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart as CartContract;
 use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
-use DuncanMcClean\Cargo\Events\CouponRedeemed;
+use DuncanMcClean\Cargo\Events\DiscountRedeemed;
 use DuncanMcClean\Cargo\Events\ProductNoStockRemaining;
 use DuncanMcClean\Cargo\Events\ProductStockLow;
 use DuncanMcClean\Cargo\Exceptions\PreventCheckout;
@@ -60,7 +60,7 @@ class CheckoutController
             $this->updateStock($order);
 
             if ($order->coupon()) {
-                CouponRedeemed::dispatch($order->coupon(), $order);
+                DiscountRedeemed::dispatch($order->coupon(), $order);
             }
         } catch (ValidationException|PreventCheckout $e) {
             $paymentGateway->cancel($cart);
@@ -92,7 +92,7 @@ class CheckoutController
         $isValid = $cart->lineItems()->every(fn (LineItem $lineItem) => $cart->coupon()->isValid($cart, $lineItem));
 
         if (! $isValid) {
-            throw new PreventCheckout(__('cargo::validation.coupon_no_longer_valid'));
+            throw new PreventCheckout(__('cargo::validation.discount_no_longer_valid'));
         }
     }
 

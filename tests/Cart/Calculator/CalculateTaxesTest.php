@@ -4,9 +4,9 @@ namespace Tests\Cart\Calculator;
 
 use DuncanMcClean\Cargo\Cart\Calculator\CalculateTaxes;
 use DuncanMcClean\Cargo\Contracts\Cart\Cart as CartContract;
-use DuncanMcClean\Cargo\Coupons\CouponType;
+use DuncanMcClean\Cargo\Discounts\DiscountType;
 use DuncanMcClean\Cargo\Facades\Cart;
-use DuncanMcClean\Cargo\Facades\Coupon;
+use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use DuncanMcClean\Cargo\Facades\TaxZone;
 use DuncanMcClean\Cargo\Shipping\ShippingMethod;
@@ -193,7 +193,7 @@ class CalculateTaxesTest extends TestCase
     #[Test]
     public function calculates_line_item_tax_when_discount_is_applied()
     {
-        $coupon = tap(Coupon::make()->code('foobar')->type(CouponType::Fixed)->amount(500))->save();
+        $coupon = tap(Discount::make()->code('foobar')->type(DiscountType::Fixed)->amount(500))->save();
 
         $product = Entry::make()->collection('products')->data(['price' => 2500, 'tax_class' => 'standard']);
         $product->save();

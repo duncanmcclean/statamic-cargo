@@ -5,7 +5,7 @@ namespace DuncanMcClean\Cargo\Cart;
 use ArrayAccess;
 use DuncanMcClean\Cargo\Cart\Calculator\Calculator;
 use DuncanMcClean\Cargo\Contracts\Cart\Cart as Contract;
-use DuncanMcClean\Cargo\Contracts\Coupons\Coupon;
+use DuncanMcClean\Cargo\Contracts\Discounts\Discount;
 use DuncanMcClean\Cargo\Customers\GuestCustomer;
 use DuncanMcClean\Cargo\Data\HasAddresses;
 use DuncanMcClean\Cargo\Events\CartCreated;
@@ -14,7 +14,7 @@ use DuncanMcClean\Cargo\Events\CartRecalculated;
 use DuncanMcClean\Cargo\Events\CartSaved;
 use DuncanMcClean\Cargo\Facades;
 use DuncanMcClean\Cargo\Facades\Cart as CartFacade;
-use DuncanMcClean\Cargo\Facades\Coupon as CouponFacade;
+use DuncanMcClean\Cargo\Facades\Discount as DiscountFacade;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Orders\HasTotals;
 use DuncanMcClean\Cargo\Orders\LineItems;
@@ -109,14 +109,14 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
                     return null;
                 }
 
-                return CouponFacade::find($coupon);
+                return DiscountFacade::find($coupon);
             })
             ->setter(function ($coupon) {
                 if (! $coupon) {
                     return null;
                 }
 
-                if ($coupon instanceof Coupon) {
+                if ($coupon instanceof Discount) {
                     return $coupon->id();
                 }
 

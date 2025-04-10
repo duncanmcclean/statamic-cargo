@@ -2,10 +2,10 @@
 
 namespace Tests\Cart;
 
-use DuncanMcClean\Cargo\Coupons\CouponType;
+use DuncanMcClean\Cargo\Discounts\DiscountType;
 use DuncanMcClean\Cargo\Customers\GuestCustomer;
 use DuncanMcClean\Cargo\Facades\Cart;
-use DuncanMcClean\Cargo\Facades\Coupon;
+use DuncanMcClean\Cargo\Facades\Discount;
 use Illuminate\Foundation\Http\FormRequest;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
@@ -62,9 +62,9 @@ class CartControllerTest extends TestCase
     {
         $cart = $this->makeCart();
 
-        $coupon = Coupon::make()
+        $coupon = Discount::make()
             ->code('FOOBAR')
-            ->type(CouponType::Percentage)
+            ->type(DiscountType::Percentage)
             ->amount(10);
 
         $coupon->save();
@@ -140,7 +140,7 @@ class CartControllerTest extends TestCase
     #[Test]
     public function it_can_remove_coupon_when_value_is_empty()
     {
-        $coupon = Coupon::make()->code('FOOBAR')->type(CouponType::Percentage)->amount(10);
+        $coupon = Discount::make()->code('FOOBAR')->type(DiscountType::Percentage)->amount(10);
         $coupon->save();
 
         $cart = $this->makeCart()->coupon($coupon);
@@ -161,7 +161,7 @@ class CartControllerTest extends TestCase
     #[Test]
     public function it_cant_add_coupon_when_coupon_is_invalid()
     {
-        $coupon = Coupon::make()->code('FOOBAR')->type(CouponType::Percentage)->amount(10)->set('expires_at', '2025-01-01');
+        $coupon = Discount::make()->code('FOOBAR')->type(DiscountType::Percentage)->amount(10)->set('expires_at', '2025-01-01');
         $coupon->save();
 
         $cart = tap($this->makeCart())->save();
@@ -179,9 +179,9 @@ class CartControllerTest extends TestCase
     }
 
     #[Test]
-    public function it_removes_invalid_coupon_when_recalculating_totals()
+    public function it_removes_invalid_coupon_code_when_recalculating_totals()
     {
-        $coupon = Coupon::make()->code('FOOBAR')->type(CouponType::Percentage)->amount(10)->set('expires_at', '2025-01-01');
+        $coupon = Discount::make()->code('FOOBAR')->type(DiscountType::Percentage)->amount(10)->set('expires_at', '2025-01-01');
         $coupon->save();
 
         $cart = $this->makeCart()->coupon($coupon);

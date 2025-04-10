@@ -93,7 +93,7 @@ TODO
 * The `{{ sc }}` tag has been removed, in favour of *actual* tags, like `{{ cart }}` or `{{ checkout }}`
 * Shipping Methods are now registered differently. 
 * The contract for shipping methods has changed (mostly just changes to method names)
-* Coupons are now calculated on a per-line item/per product basis. The "Products" field thingy will now only apply the coupon to that product, rather than the whole cart like it did previously. 
+* Discounts are now calculated on a per-line item/per product basis. The "Products" field thingy will now only apply the coupon to that product, rather than the whole cart like it did previously. 
 * Tax Totals/`tax_totals` is now `tax_breakdown`... see docs
 * Currency configuration now happens in individual site configs
 * The `PreCheckout` event has been removed.

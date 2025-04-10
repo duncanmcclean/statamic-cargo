@@ -2,16 +2,16 @@
 
 namespace DuncanMcClean\Cargo;
 
-use DuncanMcClean\Cargo\Facades\Coupon;
+use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Facades\PaymentGateway;
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use DuncanMcClean\Cargo\Facades\TaxZone;
 use DuncanMcClean\Cargo\Stache\Query\CartQueryBuilder;
-use DuncanMcClean\Cargo\Stache\Query\CouponQueryBuilder;
+use DuncanMcClean\Cargo\Stache\Query\DiscountQueryBuilder;
 use DuncanMcClean\Cargo\Stache\Query\OrderQueryBuilder;
 use DuncanMcClean\Cargo\Stache\Stores\CartsStore;
-use DuncanMcClean\Cargo\Stache\Stores\CouponsStore;
+use DuncanMcClean\Cargo\Stache\Stores\DiscountsStore;
 use DuncanMcClean\Cargo\Stache\Stores\OrdersStore;
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Support\Facades\Route;
@@ -34,7 +34,7 @@ class ServiceProvider extends AddonServiceProvider
     protected $viewNamespace = 'cargo';
 
     protected $policies = [
-        Contracts\Coupons\Coupon::class => Policies\CouponPolicy::class,
+        Contracts\Discounts\Discount::class => Policies\DiscountPolicy::class,
         Contracts\Orders\Order::class => Policies\OrderPolicy::class,
     ];
 
@@ -87,7 +87,7 @@ class ServiceProvider extends AddonServiceProvider
     {
         $this->app['stache']->registerStores([
             (new CartsStore)->directory(config('statamic.cargo.carts.directory')),
-            (new CouponsStore)->directory(config('statamic.cargo.coupons.directory')),
+            (new DiscountsStore)->directory(config('statamic.cargo.discounts.directory')),
             (new OrdersStore)->directory(config('statamic.cargo.orders.directory')),
         ]);
 
@@ -95,8 +95,8 @@ class ServiceProvider extends AddonServiceProvider
             return new CartQueryBuilder($this->app->make(Stache::class)->store('carts'));
         });
 
-        $this->app->bind(CouponQueryBuilder::class, function () {
-            return new CouponQueryBuilder($this->app->make(Stache::class)->store('coupons'));
+        $this->app->bind(DiscountQueryBuilder::class, function () {
+            return new DiscountQueryBuilder($this->app->make(Stache::class)->store('discounts'));
         });
 
         $this->app->bind(OrderQueryBuilder::class, function () {
@@ -110,7 +110,7 @@ class ServiceProvider extends AddonServiceProvider
     {
         collect([
             \DuncanMcClean\Cargo\Contracts\Cart\CartRepository::class => \DuncanMcClean\Cargo\Stache\Repositories\CartRepository::class,
-            \DuncanMcClean\Cargo\Contracts\Coupons\CouponRepository::class => \DuncanMcClean\Cargo\Stache\Repositories\CouponRepository::class,
+            \DuncanMcClean\Cargo\Contracts\Discounts\DiscountRepository::class => \DuncanMcClean\Cargo\Stache\Repositories\DiscountRepository::class,
             \DuncanMcClean\Cargo\Contracts\Orders\OrderRepository::class => \DuncanMcClean\Cargo\Stache\Repositories\OrderRepository::class,
             \DuncanMcClean\Cargo\Contracts\Products\ProductRepository::class => \DuncanMcClean\Cargo\Products\ProductRepository::class,
             \DuncanMcClean\Cargo\Contracts\Taxes\TaxClassRepository::class => \DuncanMcClean\Cargo\Taxes\TaxClassRepository::class,
@@ -163,11 +163,11 @@ class ServiceProvider extends AddonServiceProvider
                 ->icon(Cargo::svg('shop'))
                 ->can('view orders');
 
-            $nav->create(__('Coupons'))
+            $nav->create(__('Discounts'))
                 ->section('Store')
-                ->route('cargo.coupons.index')
+                ->route('cargo.discounts.index')
                 ->icon('tags')
-                ->can('view coupons');
+                ->can('view discounts');
 
             if (Cargo::usingDefaultTaxDriver()) {
                 $nav->create(__('Tax Classes'))
@@ -191,13 +191,13 @@ class ServiceProvider extends AddonServiceProvider
     {
         Permission::extend(function () {
             Permission::group('cargo', __('Cargo'), function () {
-                Permission::register('view coupons', function ($permission) {
-                    $permission->label(__('View Coupons'));
+                Permission::register('view discounts', function ($permission) {
+                    $permission->label(__('View Discounts'));
 
                     $permission->children([
-                        Permission::make('edit coupons')->label(__('Edit Coupons'))->children([
-                            Permission::make('create coupons')->label(__('Create Coupons')),
-                            Permission::make('delete coupons')->label(__('Delete Coupons')),
+                        Permission::make('edit discounts')->label(__('Edit Discounts'))->children([
+                            Permission::make('create discounts')->label(__('Create Discounts')),
+                            Permission::make('delete discounts')->label(__('Delete Discounts')),
                         ]),
                     ]);
                 });
@@ -222,16 +222,16 @@ class ServiceProvider extends AddonServiceProvider
 
     protected function bootRouteBindings(): self
     {
-        Route::bind('coupon', function ($id, $route = null) {
+        Route::bind('discount', function ($id, $route = null) {
             if (! $route || ! $this->isCpRoute($route)) {
                 return false;
             }
 
-            $field = $route->bindingFieldFor('coupon') ?? 'id';
+            $field = $route->bindingFieldFor('discount') ?? 'id';
 
             return $field == 'id'
-                ? Coupon::find($id)
-                : Coupon::query()->where($field, $id)->first();
+                ? Discount::find($id)
+                : Discount::query()->where($field, $id)->first();
         });
 
         Route::bind('order', function ($id, $route = null) {
@@ -282,8 +282,8 @@ class ServiceProvider extends AddonServiceProvider
             $gitEvents = [
                 Events\CartDeleted::class,
                 Events\CartSaved::class,
-                Events\CouponDeleted::class,
-                Events\CouponSaved::class,
+                Events\DiscountDeleted::class,
+                Events\DiscountSaved::class,
                 Events\OrderDeleted::class,
                 Events\OrderSaved::class,
                 Events\TaxClassDeleted::class,
