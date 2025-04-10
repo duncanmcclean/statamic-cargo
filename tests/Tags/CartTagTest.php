@@ -153,13 +153,13 @@ class CartTagTest extends TestCase
     }
 
     #[Test]
-    public function it_outputs_empty_form()
+    public function it_outputs_delete_form()
     {
-        $output = $this->tag('{{ cart:empty class="get-rid-of-everything" }}<button>Empty the cart!</button>{{ /cart:empty }}');
+        $output = $this->tag('{{ cart:delete class="get-rid-of-everything" }}<button>Delete the cart!</button>{{ /cart:delete }}');
 
         $this->assertStringContainsString('<form method="POST" action="http://localhost/!/cargo/cart" class="get-rid-of-everything">', $output);
         $this->assertStringContainsString('<input type="hidden" name="_method" value="DELETE">', $output);
-        $this->assertStringContainsString('<button>Empty the cart!</button>', $output);
+        $this->assertStringContainsString('<button>Delete the cart!</button>', $output);
     }
 
     private function tag($tag, $variables = [])
