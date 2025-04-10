@@ -2,6 +2,7 @@
 
 namespace Tests\Discounts;
 
+use DuncanMcClean\Cargo\Discounts\DiscountType;
 use DuncanMcClean\Cargo\Facades\Discount;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
@@ -24,7 +25,7 @@ class EditDiscountsTest extends TestCase
     #[Test]
     public function can_edit_discount()
     {
-        $discount = tap(Discount::make()->code('FOOBAR25'))->save();
+        $discount = tap(Discount::make()->code('FOOBAR25')->type(DiscountType::Percentage)->amount(50))->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
@@ -36,7 +37,7 @@ class EditDiscountsTest extends TestCase
     #[Test]
     public function cant_edit_discount_without_permissions()
     {
-        $discount = tap(Discount::make()->code('FOOBAR25'))->save();
+        $discount = tap(Discount::make()->code('FOOBAR25')->type(DiscountType::Percentage)->amount(50))->save();
 
         Role::make('test')->addPermission('access cp')->save();
 

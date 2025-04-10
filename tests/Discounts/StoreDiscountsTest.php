@@ -20,6 +20,9 @@ class StoreDiscountsTest extends TestCase
         parent::setUp();
 
         Collection::make('products')->save();
+
+        // Again, don't know why, but this fixes things.
+        Discount::all()->each->delete();
     }
 
     #[Test]
@@ -29,18 +32,16 @@ class StoreDiscountsTest extends TestCase
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
                 'name' => 'Bazqux',
-                'code' => 'BAZQUX50',
                 'type' => 'percentage',
                 'amount' => ['mode' => 'percentage', 'value' => 50],
                 'customer_eligibility' => 'all',
             ])
             ->assertOk()
-            ->assertSee('BAZQUX50');
+            ->assertSee('Bazqux');
 
-        $discount = Discount::findByCode('BAZQUX50');
+        $discount = Discount::query()->where('name', 'Bazqux')->first();
 
         $this->assertEquals($discount->name(), 'Bazqux');
-        $this->assertEquals($discount->code(), 'BAZQUX50');
         $this->assertEquals($discount->type(), DiscountType::Percentage);
         $this->assertEquals($discount->amount(), 50);
         $this->assertEquals($discount->get('customer_eligibility'), 'all');
@@ -54,14 +55,14 @@ class StoreDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->assignRole('test')->save())
             ->post(cp_route('cargo.discounts.store'), [
-                'code' => 'BAZQUX50',
+                'name' => 'Bazqux',
                 'type' => 'percentage',
                 'amount' => ['mode' => 'percentage', 'value' => 50],
                 'customer_eligibility' => 'all',
             ])
             ->assertRedirect('/cp');
 
-        $this->assertNull(Discount::findByCode('BAZQUX50'));
+        $this->assertNull(Discount::query()->where('name', 'Bazqux')->first());
     }
 
     #[Test]
@@ -70,6 +71,7 @@ class StoreDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
+                'name' => 'Foobar',
                 'code' => 'FOOB;//-\(R',
                 'type' => 'percentage',
                 'amount' => ['mode' => 'percentage', 'value' => 50],
@@ -86,6 +88,7 @@ class StoreDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
+                'name' => 'Foobar',
                 'code' => 'foobar',
                 'type' => 'percentage',
                 'amount' => ['mode' => 'percentage', 'value' => 50],
@@ -99,11 +102,12 @@ class StoreDiscountsTest extends TestCase
     #[Test]
     public function cant_store_discount_with_duplicate_code()
     {
-        Discount::make()->code('FOOBAR')->save();
+        Discount::make()->code('FOOBAR')->type(DiscountType::Percentage)->amount(50)->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
+                'name' => 'Foobar',
                 'code' => 'FOOBAR',
                 'type' => 'percentage',
                 'amount' => ['mode' => 'percentage', 'value' => 50],

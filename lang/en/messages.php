@@ -6,7 +6,7 @@ return [
     'discounts' => [
         'active_dates' => 'Configure when this discount is active. Leave both dates blank to make the discount active indefinitely.',
         'name' => 'Give your discount a name. This is for your reference only.',
-        'code' => 'Customers will enter this code to redeem the discount.',
+        'code' => 'When filled, this discount will only be redeemable with this code. Leave blank to make it automatically redeemable.',
         'customers_by_domain' => 'Provide a list of domains that are eligible for this discount. One per line.',
         'description' => 'Give yourself a reminder of what this discount is for.',
         'maximum_uses' => 'By default, discounts can be redeemed an unlimited amount of times. You can set a maximum here if you wish.',
