@@ -82,14 +82,14 @@ class CartTagTest extends TestCase
     {
         $this->makeProduct('123');
 
-        $this->assertEquals('no', $this->tag('{{ if {cart:already_exists product="123"} }}yes{{ else }}no{{ /if }}'));
+        $this->assertEquals('no', $this->tag('{{ if {cart:added product="123"} }}yes{{ else }}no{{ /if }}'));
 
         $cart = Cart::make();
         $cart->lineItems()->create(['product' => '123', 'quantity' => 1]);
 
         Cart::setCurrent($cart);
 
-        $this->assertEquals('yes', $this->tag('{{ if {cart:already_exists product="123"} }}yes{{ else }}no{{ /if }}'));
+        $this->assertEquals('yes', $this->tag('{{ if {cart:added product="123"} }}yes{{ else }}no{{ /if }}'));
     }
 
     #[Test]
@@ -97,14 +97,14 @@ class CartTagTest extends TestCase
     {
         $this->makeVariantProduct('123');
 
-        $this->assertEquals('no', $this->tag('{{ if {cart:already_exists product="123" variant="Red"} }}yes{{ else }}no{{ /if }}'));
+        $this->assertEquals('no', $this->tag('{{ if {cart:added product="123" variant="Red"} }}yes{{ else }}no{{ /if }}'));
 
         $cart = Cart::make();
         $cart->lineItems()->create(['product' => '123', 'variant' => 'Red', 'quantity' => 1]);
 
         Cart::setCurrent($cart);
 
-        $this->assertEquals('yes', $this->tag('{{ if {cart:already_exists product="123" variant="Red"} }}yes{{ else }}no{{ /if }}'));
+        $this->assertEquals('yes', $this->tag('{{ if {cart:added product="123" variant="Red"} }}yes{{ else }}no{{ /if }}'));
     }
 
     #[Test]
