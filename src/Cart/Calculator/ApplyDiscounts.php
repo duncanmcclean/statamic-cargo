@@ -27,12 +27,11 @@ class ApplyDiscounts
 
                 if ($discount->type() === DiscountType::Percentage) {
                     $amount = (int) ($amount * $lineItem->total()) / 100;
-                    $lineItem->set('discount_amount', $amount);
                 }
 
-                if ($discount->type() === DiscountType::Fixed) {
-                    $lineItem->set('discount_amount', $amount);
-                }
+//                if ($discount->type() === DiscountType::Fixed) {
+//                    $lineItem->set('discount_amount', $amount);
+//                }
 
                 return [
                     'discount' => $discount->id(),
@@ -42,7 +41,7 @@ class ApplyDiscounts
             });
 
             $lineItem->set('discounts', $discounts->all());
-            $lineItem->discountTotal($discounts->sum('amount'));
+            $lineItem->discountTotal($discounts->sum('amount')); // todo: ensure discount total can't be more than line item total
         });
 
         $cart->discountTotal($cart->lineItems()->map->discountTotal()->sum());
