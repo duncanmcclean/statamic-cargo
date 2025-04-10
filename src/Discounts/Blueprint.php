@@ -39,15 +39,6 @@ class Blueprint
                                         }],
                                     ],
                                 ],
-                                [
-                                    'handle' => 'description',
-                                    'field' => [
-                                        'type' => 'textarea',
-                                        'display' => __('Description'),
-                                        'instructions' => __('cargo::messages.discounts.description'),
-                                        'listable' => true,
-                                    ],
-                                ],
                             ],
                         ],
                         [

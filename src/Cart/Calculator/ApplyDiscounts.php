@@ -13,7 +13,7 @@ class ApplyDiscounts
 {
     public function handle(Cart $cart, Closure $next)
     {
-        // todo: remove coupon code when the actual discount has been deleted
+        // todo: remove discount_code when the actual discount does not exist
 
         $cart->lineItems()->each(function (LineItem $lineItem) use ($cart) {
             $eligibleDiscounts = Facades\Discount::query()
@@ -23,15 +23,12 @@ class ApplyDiscounts
                 ->filter->isValid($cart, $lineItem);
 
             $discounts = $eligibleDiscounts->map(function (Discount $discount) use ($cart, $lineItem) {
+                // TODO: Extract this discount calculation logic
                 $amount = (int) $discount->amount();
 
                 if ($discount->type() === DiscountType::Percentage) {
                     $amount = (int) ($amount * $lineItem->total()) / 100;
                 }
-
-//                if ($discount->type() === DiscountType::Fixed) {
-//                    $lineItem->set('discount_amount', $amount);
-//                }
 
                 return [
                     'discount' => $discount->id(),
@@ -42,6 +39,10 @@ class ApplyDiscounts
 
             $lineItem->set('discounts', $discounts->all());
             $lineItem->discountTotal($discounts->sum('amount')); // todo: ensure discount total can't be more than line item total
+
+            if ($discounts->isEmpty()) {
+                $lineItem->remove('discounts');
+            }
         });
 
         $cart->discountTotal($cart->lineItems()->map->discountTotal()->sum());
