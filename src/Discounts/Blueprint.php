@@ -25,6 +25,7 @@ class Blueprint
                                         'validate' => ['required', 'string', 'max:255'],
                                     ],
                                 ],
+                                // todo: method button group (applied automatically / discount code)
                                 [
                                     'handle' => 'code',
                                     'field' => [
@@ -42,7 +43,7 @@ class Blueprint
                             ],
                         ],
                         [
-                            'display' => __('Options'),
+                            'display' => __('Value'),
                             'fields' => [
                                 [
                                     'handle' => 'type',
@@ -90,7 +91,7 @@ class Blueprint
                             ],
                         ],
                         [
-                            'display' => __('Minimum Requirements'),
+                            'display' => __('Minimum purchase requirements'),
                             'fields' => [
                                 [
                                     'handle' => 'minimum_cart_value',
@@ -105,7 +106,7 @@ class Blueprint
                             ],
                         ],
                         [
-                            'display' => __('Customer Eligibility'),
+                            'display' => __('Customer eligibility'),
                             'fields' => [
                                 [
                                     'handle' => 'customer_eligibility',
@@ -151,7 +152,7 @@ class Blueprint
                             ],
                         ],
                         [
-                            'display' => __('Usage Limits'),
+                            'display' => __('Usage limits'),
                             'fields' => [
                                 [
                                     'handle' => 'maximum_uses',
@@ -179,7 +180,7 @@ class Blueprint
                             ],
                         ],
                         [
-                            'display' => __('Active Dates'),
+                            'display' => __('Active dates'),
                             'instructions' => __('cargo::messages.discounts.active_dates'),
                             'fields' => [
                                 [
