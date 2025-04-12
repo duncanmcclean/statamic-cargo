@@ -5,8 +5,6 @@ namespace DuncanMcClean\Cargo\Stache\Stores;
 use DuncanMcClean\Cargo\Contracts\Discounts\Discount as DiscountContract;
 use DuncanMcClean\Cargo\Facades\Discount;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Statamic\Entries\GetSlugFromPath;
 use Statamic\Facades\YAML;
 use Statamic\Stache\Stores\BasicStore;
 

@@ -2,9 +2,7 @@
 
 namespace Tests\Orders;
 
-use DuncanMcClean\Cargo\Discounts\DiscountType;
 use DuncanMcClean\Cargo\Facades\Cart;
-use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\Order;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;

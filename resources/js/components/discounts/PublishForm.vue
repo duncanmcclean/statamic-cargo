@@ -74,13 +74,13 @@
                                     </div>
                                 </header>
                                 <div class="@lg:px-6 px-4 pb-3 pt-4">
-	                                <h2>Type and Method</h2>
-	                                <ul>
-		                                <li>Applied automatically</li>
-		                                <li>Discount code</li>
-	                                </ul>
+                                    <h2>Type and Method</h2>
+                                    <ul>
+                                        <li>Applied automatically</li>
+                                        <li>Discount code</li>
+                                    </ul>
 
-									<h2>Details</h2>
+                                    <h2>Details</h2>
                                     <ul class="flex list-disc flex-col gap-y-1.5 text-sm ltr:pl-3">
                                         <li v-if="values.type === 'fixed' && values.value?.value">
                                             <span
@@ -128,7 +128,7 @@
                                         </li>
                                     </ul>
 
-	                                <h2>Stats</h2>
+                                    <h2>Stats</h2>
 
                                     <ul
                                         v-if="!isCreating"

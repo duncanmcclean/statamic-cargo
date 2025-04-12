@@ -4,7 +4,6 @@ namespace DuncanMcClean\Cargo\Orders;
 
 use ArrayAccess;
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
-use DuncanMcClean\Cargo\Contracts\Discounts\Discount;
 use DuncanMcClean\Cargo\Contracts\Orders\Order as Contract;
 use DuncanMcClean\Cargo\Customers\GuestCustomer;
 use DuncanMcClean\Cargo\Data\HasAddresses;
@@ -12,7 +11,6 @@ use DuncanMcClean\Cargo\Events\OrderCreated;
 use DuncanMcClean\Cargo\Events\OrderDeleted;
 use DuncanMcClean\Cargo\Events\OrderSaved;
 use DuncanMcClean\Cargo\Facades;
-use DuncanMcClean\Cargo\Facades\Discount as DiscountFacade;
 use DuncanMcClean\Cargo\Facades\Order as OrderFacade;
 use DuncanMcClean\Cargo\Payments\Gateways\PaymentGateway;
 use DuncanMcClean\Cargo\Shipping\ShippingMethod;

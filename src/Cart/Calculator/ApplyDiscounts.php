@@ -6,8 +6,8 @@ use Closure;
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Discounts\Discount;
 use DuncanMcClean\Cargo\Discounts\DiscountType;
-use DuncanMcClean\Cargo\Orders\LineItem;
 use DuncanMcClean\Cargo\Facades;
+use DuncanMcClean\Cargo\Orders\LineItem;
 
 class ApplyDiscounts
 {
@@ -22,7 +22,7 @@ class ApplyDiscounts
                 ->get()
                 ->filter->isValid($cart, $lineItem);
 
-            $discounts = $eligibleDiscounts->map(function (Discount $discount) use ($cart, $lineItem) {
+            $discounts = $eligibleDiscounts->map(function (Discount $discount) use ($lineItem) {
                 // TODO: Extract this discount calculation logic
                 $amount = (int) $discount->amount();
 

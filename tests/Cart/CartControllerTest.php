@@ -2,8 +2,8 @@
 
 namespace Tests\Cart;
 
-use DuncanMcClean\Cargo\Discounts\DiscountType;
 use DuncanMcClean\Cargo\Customers\GuestCustomer;
+use DuncanMcClean\Cargo\Discounts\DiscountType;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Discount;
 use Illuminate\Foundation\Http\FormRequest;

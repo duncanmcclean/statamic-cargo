@@ -92,14 +92,14 @@
                                         :href="discount.edit_url"
                                         @click.stop
                                     >
-	                                    {{ discount.name }}
+                                        {{ discount.name }}
                                     </a>
                                 </div>
                             </template>
 
                             <template #cell-value="{ row: discount, value }">
                                 <div>
-	                                {{ discount.discount_text }}
+                                    {{ discount.discount_text }}
                                 </div>
                             </template>
 

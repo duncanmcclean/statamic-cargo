@@ -3,7 +3,6 @@
 namespace DuncanMcClean\Cargo\Discounts;
 
 use Statamic\Fields\Blueprint as FieldsBlueprint;
-use Statamic\Rules\Handle;
 
 class Blueprint
 {

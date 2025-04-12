@@ -19,15 +19,15 @@
                 <div>{{ __('Subtotal') }}</div>
                 <div>{{ value.totals.sub_total }}</div>
             </div>
-	        <template v-for="discount in value.discounts">
-		        <div class="receipt-total">
-			        <div>
-				        <span>{{ __('Discount') }}</span>
-				        <span class="help-block mb-0">{{ discount.description }}</span>
-			        </div>
-			        <div>-{{ discount.amount }}</div>
-		        </div>
-	        </template>
+            <template v-for="discount in value.discounts">
+                <div class="receipt-total">
+                    <div>
+                        <span>{{ __('Discount') }}</span>
+                        <span class="help-block mb-0">{{ discount.description }}</span>
+                    </div>
+                    <div>-{{ discount.amount }}</div>
+                </div>
+            </template>
             <div v-if="value.shipping" class="receipt-total">
                 <div>
                     <span>{{ __('Shipping') }}</span>
