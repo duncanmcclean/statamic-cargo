@@ -202,16 +202,14 @@ class CheckoutTest extends TestCase
     }
 
     #[Test]
-    public function discount_redeemed_event_is_dispatched()
+    public function it_dispatches_discount_redeemed_event_and_updates_redemption_counts()
     {
         Event::fake();
 
         Discount::make()->handle('a')->type('percentage_off')->set('percentage_off', 50)->save();
-        Discount::make()->handle('b')->set('discount_code', 'B')->type('amount_off')->set('amount_off', 100)->save();
+        Discount::make()->handle('b')->set('discount_code', 'B')->type('amount_off')->set('amount_off', 100)->set('redemptions_count', 50)->save();
 
         $cart = $this->makeCart(['discount_code' => 'B']);
-
-        $this->withoutExceptionHandling();
 
         $this
             ->get('/!/cargo/payments/fake/checkout')
@@ -220,7 +218,10 @@ class CheckoutTest extends TestCase
         $this->assertNotNull($order = Facades\Order::query()->where('cart', $cart->id())->first());
         $this->assertEquals(OrderStatus::PaymentReceived, $order->status());
 
+        $this->assertEquals(Discount::find('a')->get('redemptions_count'), 1);
         Event::assertDispatched(DiscountRedeemed::class, fn ($event) => $event->discount->id() === 'a');
+
+        $this->assertEquals(Discount::find('b')->get('redemptions_count'), 51);
         Event::assertDispatched(DiscountRedeemed::class, fn ($event) => $event->discount->id() === 'b');
     }
 

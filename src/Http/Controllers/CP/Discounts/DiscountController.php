@@ -170,7 +170,6 @@ class DiscountController extends CpController
             ],
             'values' => array_merge($values, [
                 'id' => $discount->handle(),
-                'redeemed_count' => $discount->redeemedCount(),
             ]),
             'meta' => $meta,
             'blueprint' => $blueprint->toPublishArray(),

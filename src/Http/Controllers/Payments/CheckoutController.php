@@ -58,7 +58,7 @@ class CheckoutController
             }
 
             $this->updateStock($order);
-            $this->dispatchDiscountRedeemedEvents($order);
+            $this->updateDiscounts($order);
         } catch (ValidationException|PreventCheckout $e) {
             $paymentGateway->cancel($cart);
 
@@ -144,6 +144,16 @@ class CheckoutController
         });
     }
 
+    private function updateDiscounts(OrderContract $order)
+    {
+        collect($order->discounts())->each(function ($discount) use ($order) {
+            $discount = Discount::find($discount['discount']);
+            $discount->set('redemptions_count', $discount->get('redemptions_count', 0) + 1)->saveQuietly();
+
+            DiscountRedeemed::dispatch($discount, $order);
+        });
+    }
+
     private function getCheckoutRoute(Site $site): string
     {
         if ($route = config("statamic.cargo.routes.{$site->handle()}.checkout")) {
@@ -160,14 +170,5 @@ class CheckoutController
         }
 
         return config('statamic.cargo.routes.checkout_confirmation');
-    }
-
-    private function dispatchDiscountRedeemedEvents(OrderContract $order)
-    {
-        collect($order->discounts())->each(function ($discount) use ($order) {
-            $discount = Discount::find($discount['discount']);
-
-            DiscountRedeemed::dispatch($discount, $order);
-        });
     }
 }

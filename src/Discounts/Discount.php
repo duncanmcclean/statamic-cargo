@@ -74,14 +74,6 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
         return Facades\DiscountType::find($this->type())->setDiscount($this);
     }
 
-    // todo
-    public function redeemedCount(): int
-    {
-        return OrderFacade::query()
-            ->where('coupon', $this->handle())
-            ->count();
-    }
-
     public function saveQuietly(): bool
     {
         $this->withEvents = false;

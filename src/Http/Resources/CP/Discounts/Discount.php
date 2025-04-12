@@ -15,7 +15,6 @@ class Discount extends JsonResource
             'title' => $this->resource->name(),
             'type' => $this->resource->type(),
             'edit_url' => $this->resource->editUrl(),
-            'redeemed_count' => $this->resource->redeemedCount(),
         ];
 
         return ['data' => $data];

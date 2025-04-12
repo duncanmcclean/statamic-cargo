@@ -47,7 +47,7 @@ abstract class DiscountType
         }
 
         if ($this->discount->has('maximum_uses') && $this->discount->get('maximum_uses') !== null) {
-            if ($this->discount->redeemedCount() >= $this->discount->get('maximum_uses')) {
+            if ($this->discount->get('redemptions_count') >= $this->discount->get('maximum_uses')) {
                 return false;
             }
         }
