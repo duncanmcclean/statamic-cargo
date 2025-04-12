@@ -2,13 +2,12 @@
 
 namespace DuncanMcClean\Cargo\Tags\Concerns;
 
-use Statamic\Support\Str;
 use Statamic\Tags\Concerns\GetsRedirects;
 use Statamic\Tags\Concerns\RendersForms;
 
 trait FormBuilder
 {
-    use GetsRedirects, RendersForms, GetsFormRequests;
+    use GetsFormRequests, GetsRedirects, RendersForms;
 
     protected function createForm(
         string $action,

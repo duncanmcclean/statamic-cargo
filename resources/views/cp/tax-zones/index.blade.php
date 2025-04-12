@@ -25,8 +25,11 @@
         )
     @endunless
 
-    @include('statamic::partials.docs-callout', [
-        'topic' => __('Tax Zones'),
-        'url' => 'https://builtwithcargo.dev/docs/taxes#tax-zones',
-    ])
+    @include(
+        'statamic::partials.docs-callout',
+        [
+            'topic' => __('Tax Zones'),
+            'url' => 'https://builtwithcargo.dev/docs/taxes#tax-zones',
+        ]
+    )
 @endsection

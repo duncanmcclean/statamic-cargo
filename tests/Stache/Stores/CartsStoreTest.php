@@ -3,12 +3,12 @@
 namespace Tests\Stache\Stores;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
+use DuncanMcClean\Cargo\Facades;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Path;
 use Statamic\Facades\Stache;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
-use DuncanMcClean\Cargo\Facades;
 
 class CartsStoreTest extends TestCase
 {

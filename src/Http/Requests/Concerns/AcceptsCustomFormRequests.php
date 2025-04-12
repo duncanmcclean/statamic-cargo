@@ -53,7 +53,7 @@ trait AcceptsCustomFormRequests
             $this->cookies->all(),
             $this->files->all(),
             $this->server(),
-            $this->content
+            $this->content,
         ]);
     }
 }
