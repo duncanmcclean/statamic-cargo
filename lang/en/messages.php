@@ -4,7 +4,7 @@ return [
     'discount_configure_intro' => 'Discounts are a great way to offer discounts to your customers. You can create either a percentage or fixed amount discount.',
     'discounts' => [
         'name' => 'Give your discount a name. May be shown to customers.',
-        'type' => 'Select the type of discount\'s type.',
+        'type' => 'Select the type of discount you want to create.',
         'discount_code' => 'Enter a discount code, or leave blank to apply discount automatically.',
         'maximum_uses' => 'Leave empty to allow unlimited uses.',
         'minimum_order_value' => 'Specify the minimum order value  Leave empty to allow any order value.',
