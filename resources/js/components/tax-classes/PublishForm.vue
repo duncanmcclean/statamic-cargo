@@ -164,7 +164,7 @@ export default {
 
     watch: {
         saving(saving) {
-            this.$progress.loading(`${this.publishContainer}-coupon-publish-form`, saving);
+            this.$progress.loading(`${this.publishContainer}-tax-class-publish-form`, saving);
         },
     },
 
