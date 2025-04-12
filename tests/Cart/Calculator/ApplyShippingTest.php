@@ -3,11 +3,7 @@
 namespace Tests\Cart\Calculator;
 
 use DuncanMcClean\Cargo\Cart\Calculator\ApplyShipping;
-use DuncanMcClean\Cargo\Contracts\Cart\Cart as CartContract;
 use DuncanMcClean\Cargo\Facades\Cart;
-use DuncanMcClean\Cargo\Shipping\ShippingMethod;
-use DuncanMcClean\Cargo\Shipping\ShippingOption;
-use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Fixtures\ShippingMethods\PaidShipping;
 use Tests\TestCase;
