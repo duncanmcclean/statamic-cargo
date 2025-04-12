@@ -66,7 +66,7 @@ class CartControllerTest extends TestCase
         $cart = $this->makeCart();
 
         $discount = Discount::make()
-            ->code('FOOBAR')
+            ->set('discount_code', 'FOOBAR')
             ->type(DiscountType::Percentage)
             ->amount(10);
 

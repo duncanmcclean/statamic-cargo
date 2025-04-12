@@ -25,19 +25,19 @@ class EditDiscountsTest extends TestCase
     #[Test]
     public function can_edit_discount()
     {
-        $discount = tap(Discount::make()->code('FOOBAR25')->type(DiscountType::Percentage)->amount(50))->save();
+        $discount = tap(Discount::make()->name('Foo Bar 2025')->type(DiscountType::Percentage)->amount(50))->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->get(cp_route('cargo.discounts.edit', $discount->id()))
             ->assertOk()
-            ->assertSee('FOOBAR25');
+            ->assertSee('Foo Bar 2025');
     }
 
     #[Test]
     public function cant_edit_discount_without_permissions()
     {
-        $discount = tap(Discount::make()->code('FOOBAR25')->type(DiscountType::Percentage)->amount(50))->save();
+        $discount = tap(Discount::make()->name('Foo Bar 2025')->type(DiscountType::Percentage)->amount(50))->save();
 
         Role::make('test')->addPermission('access cp')->save();
 

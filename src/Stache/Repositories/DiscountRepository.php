@@ -47,9 +47,9 @@ class DiscountRepository implements RepositoryContract
         return $discount;
     }
 
-    public function findByCode(string $code): ?Discount
+    public function findByDiscountCode(string $code): ?Discount
     {
-        return $this->query()->where('code', strtoupper($code))->first();
+        return $this->query()->where('discount_code', strtoupper($code))->first();
     }
 
     public function make(): Discount

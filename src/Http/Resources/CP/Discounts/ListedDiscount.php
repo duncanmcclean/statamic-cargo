@@ -33,7 +33,6 @@ class ListedDiscount extends JsonResource
         return [
             'id' => $discount->id(),
             'name' => $discount->name(),
-            'code' => $discount->code(),
             'type' => $discount->type()->value,
             'amount' => $discount->amount(),
             'discount_text' => $discount->discountText(),

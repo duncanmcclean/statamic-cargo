@@ -31,7 +31,7 @@ class ApplyDiscountsTest extends TestCase
         $this->makeProduct('123')->set('price', 2500)->save();
         $this->makeProduct('456')->set('price', 5000)->save();
 
-        $discountA = Discount::make()->id('a')->name('Discount A')->code('A')->type(DiscountType::Percentage)->amount(10); // Shouldn't be applied, it has a coupon code.
+        $discountA = Discount::make()->id('a')->name('Discount A')->set('discount_code', 'A')->type(DiscountType::Percentage)->amount(10); // Shouldn't be applied, it has a coupon code.
         $discountB = Discount::make()->id('b')->name('Discount B')->type(DiscountType::Percentage)->amount(15); // Should be applied to both line items.
         $discountC = Discount::make()->id('c')->name('Discount C')->type(DiscountType::Fixed)->amount(100)->set('products', ['123']); // Should be applied to the first line item.
         $discountD = Discount::make()->id('d')->name('Discount D')->type(DiscountType::Fixed)->amount(200)->set('products', ['456'])->set('expires_at', '2025-01-01'); // Shouldn't be applied, it has expired.
@@ -68,7 +68,7 @@ class ApplyDiscountsTest extends TestCase
         $this->makeProduct('123')->set('price', 2500)->save();
         $this->makeProduct('456')->set('price', 5000)->save();
 
-        $discountA = Discount::make()->id('a')->name('Discount A')->code('A')->type(DiscountType::Percentage)->amount(10)->set('products', ['123']); // Should only be applied to the first line item.
+        $discountA = Discount::make()->id('a')->name('Discount A')->set('discount_code', 'A')->type(DiscountType::Percentage)->amount(10)->set('products', ['123']); // Should only be applied to the first line item.
         $discountB = Discount::make()->id('b')->name('Discount B')->type(DiscountType::Percentage)->amount(15); // Site-wide discount, should be applied to both line items.
 
         $discountA->save();
@@ -102,7 +102,7 @@ class ApplyDiscountsTest extends TestCase
 
         $this->makeProduct('123')->set('price', 2500)->save();
 
-        $coupon = tap(Discount::make()->code('foobar')->type(DiscountType::Percentage)->amount(50))->save();
+        $coupon = tap(Discount::make()->set('discount_code', 'foobar')->type(DiscountType::Percentage)->amount(50))->save();
 
         $cart = Cart::make()->coupon($coupon->id())->lineItems([
             ['id' => 'abc', 'product' => '123', 'quantity' => 1, 'total' => 2500],
@@ -121,7 +121,7 @@ class ApplyDiscountsTest extends TestCase
 
         $this->makeProduct('123')->set('price', 2500)->save();
 
-        $coupon = tap(Discount::make()->code('foobar')->type(DiscountType::Fixed)->amount(450))->save();
+        $coupon = tap(Discount::make()->set('discount_code', 'foobar')->type(DiscountType::Fixed)->amount(450))->save();
 
         $cart = Cart::make()->coupon($coupon->id())->lineItems([
             ['id' => 'abc', 'product' => '123', 'quantity' => 1, 'total' => 2500],
@@ -141,7 +141,7 @@ class ApplyDiscountsTest extends TestCase
         $this->makeProduct('123')->set('price', 2500)->save();
         $this->makeProduct('456')->set('price', 5000)->save();
 
-        $coupon = tap(Discount::make()->code('foobar')->type(DiscountType::Percentage)->amount(50)->set('products', ['123', '789']))->save();
+        $coupon = tap(Discount::make()->set('discount_code', 'foobar')->type(DiscountType::Percentage)->amount(50)->set('products', ['123', '789']))->save();
 
         $cart = Cart::make()->coupon($coupon->id())->lineItems([
             ['id' => 'abc', 'product' => '123', 'quantity' => 1, 'total' => 2500, 'discount_amount' => 1250],

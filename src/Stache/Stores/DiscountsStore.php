@@ -26,7 +26,6 @@ class DiscountsStore extends BasicStore
         return Discount::make()
             ->id(Arr::pull($data, 'id'))
             ->name(Arr::pull($data, 'name'))
-            ->code(Arr::pull($data, 'code'))
             ->type(Arr::pull($data, 'type'))
             ->amount(Arr::pull($data, 'amount'))
             ->data($data);

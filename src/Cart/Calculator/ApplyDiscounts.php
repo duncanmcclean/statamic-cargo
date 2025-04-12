@@ -17,8 +17,8 @@ class ApplyDiscounts
 
         $cart->lineItems()->each(function (LineItem $lineItem) use ($cart) {
             $eligibleDiscounts = Facades\Discount::query()
-                ->whereNull('code')
-                ->when($cart->get('discount_code'), fn ($query) => $query->orWhere('code', $cart->get('discount_code')))
+                ->whereNull('discount_code')
+                ->when($cart->get('discount_code'), fn ($query) => $query->orWhere('discount_code', $cart->get('discount_code')))
                 ->get()
                 ->filter->isValid($cart, $lineItem);
 
@@ -32,7 +32,7 @@ class ApplyDiscounts
 
                 return [
                     'discount' => $discount->id(),
-                    'description' => $discount->code() ?? $discount->name(),
+                    'description' => $discount->get('discount_code') ?? $discount->name(),
                     'amount' => $amount,
                 ];
             });

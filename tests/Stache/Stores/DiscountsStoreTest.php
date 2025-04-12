@@ -9,6 +9,7 @@ use Statamic\Facades\Path;
 use Statamic\Facades\Stache;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
+use DuncanMcClean\Cargo\Facades;
 
 class DiscountsStoreTest extends TestCase
 {

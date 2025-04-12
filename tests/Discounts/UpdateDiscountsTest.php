@@ -71,60 +71,60 @@ class UpdateDiscountsTest extends TestCase
     #[Test]
     public function cant_update_discount_with_invalid_characters_in_code()
     {
-        $discount = Discount::make()->name('Foobar')->code('FOOBAR25')->type(DiscountType::Percentage)->amount(25);
+        $discount = Discount::make()->name('Foobar')->set('discount_code', 'FOOBAR25')->type(DiscountType::Percentage)->amount(25);
         $discount->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->patch(cp_route('cargo.discounts.update', $discount->id()), [
                 'name' => 'Foobar',
-                'code' => 'FOOB;//-\(R',
+                'discount_code' => 'FOOB;//-\(R',
                 'type' => 'percentage',
                 'amount' => ['mode' => 'percentage', 'value' => 50],
                 'customer_eligibility' => 'all',
             ])
-            ->assertSessionHasErrors('code');
+            ->assertSessionHasErrors('discount_code');
 
-        $this->assertNotEquals($discount->fresh()->code(), 'FOOB;//-\(R');
+        $this->assertNotEquals($discount->fresh()->get('discount_code'), 'FOOB;//-\(R');
     }
 
     #[Test]
     public function cant_update_discount_with_lowercase_code()
     {
-        $discount = Discount::make()->name('Foobar')->code('FOOBAR25')->type(DiscountType::Percentage)->amount(25);
+        $discount = Discount::make()->name('Foobar')->set('discount_code', 'FOOBAR25')->type(DiscountType::Percentage)->amount(25);
         $discount->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->patch(cp_route('cargo.discounts.update', $discount->id()), [
                 'name' => 'Foobar',
-                'code' => 'foobar',
+                'discount_code' => 'foobar',
                 'type' => 'percentage',
                 'amount' => ['mode' => 'percentage', 'value' => 50],
                 'customer_eligibility' => 'all',
             ])
-            ->assertSessionHasErrors('code');
+            ->assertSessionHasErrors('discount_code');
 
-        $this->assertNotEquals($discount->fresh()->code(), 'foobar');
+        $this->assertNotEquals($discount->fresh()->get('discount_code'), 'foobar');
     }
 
     #[Test]
     public function cant_update_discount_with_duplicate_code()
     {
-        Discount::make()->code('FOOBAR')->type(DiscountType::Percentage)->amount(50)->save();
-        $discount = tap(Discount::make()->code('FOOBAR25')->type(DiscountType::Percentage)->amount(25))->save();
+        Discount::make()->set('discount_code', 'FOOBAR')->type(DiscountType::Percentage)->amount(50)->save();
+        $discount = tap(Discount::make()->set('discount_code', 'FOOBAR25')->type(DiscountType::Percentage)->amount(25))->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->patch(cp_route('cargo.discounts.update', $discount->id()), [
                 'name' => 'Foobar',
-                'code' => 'FOOBAR',
+                'discount_code' => 'FOOBAR',
                 'type' => 'percentage',
                 'amount' => ['mode' => 'percentage', 'value' => 50],
                 'customer_eligibility' => 'all',
             ])
-            ->assertSessionHasErrors('code');
+            ->assertSessionHasErrors('discount_code');
 
-        $this->assertNotEquals($discount->fresh()->code(), 'FOOBAR');
+        $this->assertNotEquals($discount->fresh()->get('discount_code'), 'FOOBAR');
     }
 }

@@ -76,8 +76,7 @@ class DiscountController extends CpController
         if ($search = request('search')) {
             $query
                 ->where('name', 'LIKE', '%'.$search.'%')
-                ->orWhere('code', 'LIKE', '%'.$search.'%')
-                ->orWhere('description', 'LIKE', '%'.$search.'%');
+                ->orWhere('discount_code', 'LIKE', '%'.$search.'%');
         }
 
         return $query;
@@ -129,17 +128,16 @@ class DiscountController extends CpController
         $fields = $blueprint->fields()->addValues($data);
 
         $fields->validator()->withRules([
-            'code' => [new UniqueDiscountValue],
+            'discount_code' => [new UniqueDiscountValue],
         ])->validate();
 
         $values = $fields->process()->values();
 
         $discount = Discount::make()
             ->name($values->get('name'))
-            ->code($values->get('code'))
             ->type($values->get('type'))
             ->amount($values->get('amount'))
-            ->data($values->except(['code', 'type', 'amount']));
+            ->data($values->except(['name', 'type', 'amount']));
 
         $saved = $discount->save();
 
@@ -206,7 +204,7 @@ class DiscountController extends CpController
         $fields
             ->validator()
             ->withRules([
-                'code' => [new UniqueDiscountValue(except: $discount->id())],
+                'discount_code' => [new UniqueDiscountValue(except: $discount->id())],
             ])
             ->withReplacements([
                 'id' => $discount->id(),
@@ -217,10 +215,9 @@ class DiscountController extends CpController
 
         $discount
             ->name($values->get('name'))
-            ->code($values->get('code'))
             ->type($values->get('type'))
             ->amount($values->get('amount'))
-            ->merge($values->except(['code', 'type', 'amount']));
+            ->merge($values->except(['name', 'type', 'amount']));
 
         $saved = $discount->save();
 

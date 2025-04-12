@@ -195,7 +195,7 @@ class CalculateTaxesTest extends TestCase
     #[Test]
     public function calculates_line_item_tax_when_discount_is_applied()
     {
-        Discount::make()->code('FOOBAR')->type(DiscountType::Fixed)->amount(500)->save();
+        Discount::make()->set('discount_code', 'FOOBAR')->type(DiscountType::Fixed)->amount(500)->save();
 
         $product = Entry::make()->collection('products')->data(['price' => 2500, 'tax_class' => 'standard']);
         $product->save();

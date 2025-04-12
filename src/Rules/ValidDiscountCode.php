@@ -14,7 +14,7 @@ class ValidDiscountCode implements ValidationRule
             return;
         }
 
-        if (! Discount::query()->where('code', $value)->first()) {
+        if (! Discount::findByDiscountCode($value)) {
             $fail('cargo::validation.invalid_discount_code')->translate();
         }
     }

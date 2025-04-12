@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \DuncanMcClean\Cargo\Contracts\Discounts\QueryBuilder query()
  * @method static \DuncanMcClean\Cargo\Contracts\Discounts\Discount find($id)
  * @method static \DuncanMcClean\Cargo\Contracts\Discounts\Discount findOrFail($id)
- * @method static \DuncanMcClean\Cargo\Contracts\Discounts\Discount findByCode(string $code)
+ * @method static \DuncanMcClean\Cargo\Contracts\Discounts\Discount findByDiscountCode(string $code)
  * @method static \DuncanMcClean\Cargo\Contracts\Discounts\Discount make()
  * @method static void save(\DuncanMcClean\Cargo\Contracts\Discounts\Discount $coupon)
  * @method static void delete(\DuncanMcClean\Cargo\Contracts\Discounts\Discount $coupon)

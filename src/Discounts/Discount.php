@@ -34,7 +34,6 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
 
     protected $id;
     protected $name;
-    protected $code;
     protected $amount;
     protected $type;
     protected $withEvents = true;
@@ -56,20 +55,6 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
     {
         return $this
             ->fluentlyGetOrSet('name')
-            ->args(func_get_args());
-    }
-
-    public function code($id = null)
-    {
-        return $this
-            ->fluentlyGetOrSet('code')
-            ->setter(function ($code) {
-                if (! $code) {
-                    return null;
-                }
-
-                return Str::upper($code);
-            })
             ->args(func_get_args());
     }
 
@@ -266,7 +251,6 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
         return array_merge([
             'id' => $this->id(),
             'name' => $this->name(),
-            'code' => $this->code(),
             'amount' => $this->amount(),
             'type' => $this->type()?->value,
         ], $this->data->all());
@@ -301,7 +285,6 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
     {
         return array_merge([
             'name' => $this->name(),
-            'code' => $this->code(),
             'amount' => $this->amount(),
             'type' => $this->type()?->value,
         ], $this->data()->toArray());

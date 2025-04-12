@@ -14,7 +14,7 @@ interface DiscountRepository
 
     public function findOrFail($id): Discount;
 
-    public function findByCode(string $code): ?Discount;
+    public function findByDiscountCode(string $code): ?Discount;
 
     public function make(): Discount;
 

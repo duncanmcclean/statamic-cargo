@@ -72,14 +72,14 @@ class StoreDiscountsTest extends TestCase
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
                 'name' => 'Foobar',
-                'code' => 'FOOB;//-\(R',
+                'discount_code' => 'FOOB;//-\(R',
                 'type' => 'percentage',
                 'amount' => ['mode' => 'percentage', 'value' => 50],
                 'customer_eligibility' => 'all',
             ])
-            ->assertSessionHasErrors('code');
+            ->assertSessionHasErrors('discount_code');
 
-        $this->assertNull(Discount::findByCode('FOOB;//-\(R'));
+        $this->assertNull(Discount::findByDiscountCode('FOOB;//-\(R'));
     }
 
     #[Test]
@@ -89,30 +89,30 @@ class StoreDiscountsTest extends TestCase
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
                 'name' => 'Foobar',
-                'code' => 'foobar',
+                'discount_code' => 'foobar',
                 'type' => 'percentage',
                 'amount' => ['mode' => 'percentage', 'value' => 50],
                 'customer_eligibility' => 'all',
             ])
-            ->assertSessionHasErrors('code');
+            ->assertSessionHasErrors('discount_code');
 
-        $this->assertNull(Discount::findByCode('foobar'));
+        $this->assertNull(Discount::findByDiscountCode('foobar'));
     }
 
     #[Test]
     public function cant_store_discount_with_duplicate_code()
     {
-        Discount::make()->code('FOOBAR')->type(DiscountType::Percentage)->amount(50)->save();
+        Discount::make()->set('discount_code', 'FOOBAR')->type(DiscountType::Percentage)->amount(50)->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
                 'name' => 'Foobar',
-                'code' => 'FOOBAR',
+                'discount_code' => 'FOOBAR',
                 'type' => 'percentage',
                 'amount' => ['mode' => 'percentage', 'value' => 50],
                 'customer_eligibility' => 'all',
             ])
-            ->assertSessionHasErrors('code');
+            ->assertSessionHasErrors('discount_code');
     }
 }

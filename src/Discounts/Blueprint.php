@@ -26,17 +26,20 @@ class Blueprint
                                 ],
                                 // todo: method button group (applied automatically / discount code)
                                 [
-                                    'handle' => 'code',
+                                    'handle' => 'discount_code',
                                     'field' => [
-                                        'type' => 'coupon_code',
+                                        'type' => 'coupon_code', // todo: rename the fieldtype
                                         'display' => __('Discount Code'),
                                         'instructions' => __('cargo::messages.discounts.code'),
                                         'listable' => true,
-                                        'validate' => ['uppercase', function ($attribute, $value, $fail) {
-                                            if (! preg_match('/^[a-zA-Z][a-zA-Z0-9]*(?:_{0,1}[a-zA-Z0-9])*$/', $value)) {
-                                                $fail('statamic::validation.handle')->translate();
+                                        'validate' => [
+                                            'uppercase',
+                                            function ($attribute, $value, $fail) {
+                                                if (! preg_match('/^[a-zA-Z][a-zA-Z0-9]*(?:_{0,1}[a-zA-Z0-9])*$/', $value)) {
+                                                    $fail('statamic::validation.handle')->translate();
+                                                }
                                             }
-                                        }],
+                                        ],
                                     ],
                                 ],
                             ],
