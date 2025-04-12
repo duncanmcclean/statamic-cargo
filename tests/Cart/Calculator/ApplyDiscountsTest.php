@@ -15,15 +15,6 @@ class ApplyDiscountsTest extends TestCase
 {
     use PreventsSavingStacheItemsToDisk;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // We shouldn't really need to do this. It's come up in another test too.
-        // Need to investigate.
-        Discount::all()->each->delete();
-    }
-
     #[Test]
     public function automatically_applies_discounts_without_codes()
     {

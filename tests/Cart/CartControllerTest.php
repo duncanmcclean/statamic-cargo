@@ -21,9 +21,6 @@ class CartControllerTest extends TestCase
         parent::setUp();
 
         Cart::forgetCurrentCart();
-
-        // Shouldn't need to do this, but oh well.
-        Discount::all()->each->delete();
     }
 
     #[Test]

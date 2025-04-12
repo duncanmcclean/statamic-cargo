@@ -19,9 +19,6 @@ class StoreDiscountsTest extends TestCase
         parent::setUp();
 
         Collection::make('products')->save();
-
-        // Again, don't know why, but this fixes things.
-        Discount::all()->each->delete();
     }
 
     #[Test]
