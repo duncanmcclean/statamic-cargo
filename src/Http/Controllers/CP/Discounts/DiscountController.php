@@ -136,8 +136,7 @@ class DiscountController extends CpController
         $discount = Discount::make()
             ->name($values->get('name'))
             ->type($values->get('type'))
-            ->amount($values->get('amount'))
-            ->data($values->except(['name', 'type', 'amount']));
+            ->data($values->except(['name', 'type']));
 
         $saved = $discount->save();
 
@@ -216,8 +215,7 @@ class DiscountController extends CpController
         $discount
             ->name($values->get('name'))
             ->type($values->get('type'))
-            ->amount($values->get('amount'))
-            ->merge($values->except(['name', 'type', 'amount']));
+            ->merge($values->except(['name', 'type']));
 
         $saved = $discount->save();
 

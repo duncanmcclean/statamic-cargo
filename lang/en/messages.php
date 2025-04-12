@@ -2,16 +2,14 @@
 
 return [
     'discount_configure_intro' => 'Discounts are a great way to offer discounts to your customers. You can create either a percentage or fixed amount discount.',
-    'discount_discount_text' => ':amount off',
     'discounts' => [
-        'active_dates' => 'Configure when this discount is active. Leave both dates blank to make the discount active indefinitely.',
-        'name' => 'Give your discount a name. This is for your reference only.',
-        'code' => ' By default, discounts are applied automatically when the criteria is met. If you want customers to enter a code, you can set one here.',
-        'customers_by_domain' => 'Provide a list of domains that are eligible for this discount. One per line.',
-        'description' => 'Give yourself a reminder of what this discount is for.',
-        'maximum_uses' => 'By default, discounts can be redeemed an unlimited amount of times. You can set a maximum here if you wish.',
-        'minimum_cart_value' => "The minimum value the customer's cart should have before this discount can be redeemed.",
-        'products' => 'This discount will only be redeemable when *any* of these products are present in the order.',
+        'name' => 'Give your discount a name. May be shown to customers.',
+        'type' => 'Select the type of discount\'s type.',
+        'discount_code' => 'Enter a discount code, or leave blank to apply discount automatically.',
+        'maximum_uses' => 'Leave empty to allow unlimited uses.',
+        'minimum_order_value' => 'Specify the minimum order value  Leave empty to allow any order value.',
+        'customers' => 'Select which customers this discount should be limited to.',
+        'products' => 'Select which products this discount should be limited to.',
     ],
     'products' => [
         'price.exclusive_of_tax' => 'Enter the price of the product, exclusive of tax.',

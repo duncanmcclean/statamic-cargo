@@ -2,7 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Query\Scopes\Filters;
 
-use DuncanMcClean\Cargo\Discounts\DiscountType as DiscountTypeEnum;
+use DuncanMcClean\Cargo\Facades;
 use Statamic\Query\Scopes\Filter;
 
 class DiscountType extends Filter
@@ -19,8 +19,8 @@ class DiscountType extends Filter
         return [
             'type' => [
                 'type' => 'radio',
-                'options' => collect(DiscountTypeEnum::cases())
-                    ->mapWithKeys(fn ($enum) => [$enum->value => DiscountTypeEnum::label($enum)])
+                'options' => Facades\DiscountType::all()
+                    ->mapWithKeys(fn ($discountType) => [$discountType->handle() => $discountType->title()])
                     ->all(),
             ],
         ];
@@ -33,7 +33,7 @@ class DiscountType extends Filter
 
     public function badge($values)
     {
-        return DiscountTypeEnum::label(DiscountTypeEnum::from($values['type']));
+        return Facades\DiscountType::find($values['type'])->title();
     }
 
     public function visibleTo($key)

@@ -61,85 +61,12 @@
                     <publish-tabs
                         v-show="tabsVisible"
                         :read-only="readOnly"
+                        :enable-sidebar="false"
                         @updated="setFieldValue"
                         @meta-updated="setFieldMeta"
                         @focus="container.$emit('focus', $event)"
                         @blur="container.$emit('blur', $event)"
-                    >
-                        <template #actions="{ shouldShowSidebar }">
-                            <div class="card mb-5 p-0">
-                                <header class="publish-section-header @container">
-                                    <div class="publish-section-header-inner">
-                                        <label class="text-base font-semibold">Summary</label>
-                                    </div>
-                                </header>
-                                <div class="@lg:px-6 px-4 pb-3 pt-4">
-                                    <h2>Type and Method</h2>
-                                    <ul>
-                                        <li>Applied automatically</li>
-                                        <li>Discount code</li>
-                                    </ul>
-
-                                    <h2>Details</h2>
-                                    <ul class="flex list-disc flex-col gap-y-1.5 text-sm ltr:pl-3">
-                                        <li v-if="values.type === 'fixed' && values.value?.value">
-                                            <span
-                                                class="font-semibold"
-                                                v-text="formatCurrency(values.value.value)"
-                                            ></span>
-                                            {{ __('off entire order') }}
-                                        </li>
-
-                                        <li v-if="values.type === 'percentage' && values.value?.value">
-                                            <span class="font-semibold" v-text="`${values.value.value}%`"></span>
-                                            {{ __('off entire order') }}
-                                        </li>
-
-                                        <li v-if="values.minimum_cart_value">
-                                            {{
-                                                __('Redeemable when items total is above :amount', {
-                                                    amount: formatCurrency(this.values.minimum_cart_value),
-                                                })
-                                            }}
-                                        </li>
-
-                                        <li v-if="values.customer_eligibility === 'all'">
-                                            {{ __(`Redeemable by all customers`) }}
-                                        </li>
-
-                                        <li v-if="values.customer_eligibility === 'specific_customers'">
-                                            {{ __('Only redeemable by specific customers') }}
-                                        </li>
-
-                                        <li v-if="values.maximum_uses">
-                                            {{ __('Can only be used :count times', { count: values.maximum_uses }) }}
-                                        </li>
-
-                                        <li v-if="values.products.length > 0">
-                                            {{ __('Can only be used when certain products are part of the order') }}
-                                        </li>
-
-                                        <li v-if="values.valid_from?.date">
-                                            {{ __('Can be redeemed after :date', { date: values.valid_from.date }) }}
-                                        </li>
-
-                                        <li v-if="values.expires_at?.date">
-                                            {{ __('Can be redeemed until :date', { date: value.expires_at.date }) }}
-                                        </li>
-                                    </ul>
-
-                                    <h2>Stats</h2>
-
-                                    <ul
-                                        v-if="!isCreating"
-                                        class="mt-3 flex list-disc flex-col gap-y-1.5 border-t pt-3 text-sm dark:border-dark-900 ltr:pl-3"
-                                    >
-                                        <li>{{ __('Redeemed :count times', { count: values.redeemed_count }) }}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </template>
-                    </publish-tabs>
+                    ></publish-tabs>
                 </transition>
             </div>
         </publish-container>
@@ -381,13 +308,6 @@ export default {
                 this.values = this.resetValuesFromResponse(response.data.values);
                 this.itemActions = response.data.itemActions;
             }
-        },
-
-        formatCurrency(amount) {
-            return new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'GBP',
-            }).format(amount);
         },
     },
 

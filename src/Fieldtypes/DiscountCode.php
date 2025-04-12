@@ -4,7 +4,7 @@ namespace DuncanMcClean\Cargo\Fieldtypes;
 
 use Statamic\Fields\Fieldtype;
 
-class CouponCode extends Fieldtype
+class DiscountCode extends Fieldtype
 {
     protected $selectable = false;
 }

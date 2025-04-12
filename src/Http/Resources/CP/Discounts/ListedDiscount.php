@@ -33,11 +33,8 @@ class ListedDiscount extends JsonResource
         return [
             'id' => $discount->id(),
             'name' => $discount->name(),
-            'type' => $discount->type()->value,
-            'amount' => $discount->amount(),
-            'discount_text' => $discount->discountText(),
 
-            $this->merge($this->values()),
+            $this->merge($this->values(['type' => $discount->type()])),
 
             'edit_url' => $discount->editUrl(),
             'viewable' => User::current()->can('view', $discount),

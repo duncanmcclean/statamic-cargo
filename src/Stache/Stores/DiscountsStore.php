@@ -27,7 +27,6 @@ class DiscountsStore extends BasicStore
             ->id(Arr::pull($data, 'id'))
             ->name(Arr::pull($data, 'name'))
             ->type(Arr::pull($data, 'type'))
-            ->amount(Arr::pull($data, 'amount'))
             ->data($data);
     }
 }

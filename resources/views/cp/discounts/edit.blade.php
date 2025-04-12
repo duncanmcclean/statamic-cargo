@@ -1,6 +1,5 @@
 @extends('statamic::layout')
 @section('title', $breadcrumbs->title($title))
-@section('wrapper_class', 'max-w-3xl')
 
 @section('content')
     <discount-publish-form

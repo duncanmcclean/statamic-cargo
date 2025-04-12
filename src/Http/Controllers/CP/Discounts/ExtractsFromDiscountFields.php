@@ -10,7 +10,6 @@ trait ExtractsFromDiscountFields
             ->merge([
                 'name' => $discount->name(),
                 'type' => $discount->type(),
-                'amount' => $discount->amount(),
             ]);
 
         $fields = $blueprint

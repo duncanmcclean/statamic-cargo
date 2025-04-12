@@ -2,6 +2,8 @@
 
 namespace DuncanMcClean\Cargo\Discounts;
 
+use DuncanMcClean\Cargo\Discounts\Types\DiscountType;
+use DuncanMcClean\Cargo\Facades;
 use Statamic\Fields\Blueprint as FieldsBlueprint;
 
 class Blueprint
@@ -11,6 +13,7 @@ class Blueprint
         return \Statamic\Facades\Blueprint::make()->setContents([
             'tabs' => [
                 'main' => [
+                    'display' => __('General'),
                     'sections' => [
                         [
                             'fields' => [
@@ -21,186 +24,137 @@ class Blueprint
                                         'display' => __('Name'),
                                         'instructions' => __('cargo::messages.discounts.name'),
                                         'listable' => true,
+                                        'width' => 50,
                                         'validate' => ['required', 'string', 'max:255'],
                                     ],
                                 ],
-                                // todo: method button group (applied automatically / discount code)
+                                [
+                                    'handle' => 'type',
+                                    'field' => [
+                                        'type' => 'select',
+                                        'display' => __('Type'),
+                                        'instructions' => __('cargo::messages.discounts.type'),
+                                        'options' => Facades\DiscountType::all()
+                                            ->mapWithKeys(fn ($discountType) => [$discountType->handle() => $discountType->title()])
+                                            ->all(),
+                                        'clearable' => false,
+                                        'multiple' => false,
+                                        'push_tags' => false,
+                                        'width' => 50,
+                                        'validate' => ['required'],
+                                        'listable' => true,
+                                        'max_items' => 1,
+                                    ],
+                                ],
+                                [
+                                    'handle' => 'start_date',
+                                    'field' => ['type' => 'date', 'display' => __('Start Date'), 'width' => 50, 'listable' => 'hidden'],
+                                ],
+                                [
+                                    'handle' => 'end_date',
+                                    'field' => ['type' => 'date', 'display' => __('End Date'), 'width' => 50, 'listable' => 'hidden'],
+                                ],
+                            ],
+                        ],
+                        [
+                            'display' => __('Conditions'),
+                            'fields' => [
                                 [
                                     'handle' => 'discount_code',
                                     'field' => [
-                                        'type' => 'coupon_code', // todo: rename the fieldtype
-                                        'display' => __('Discount Code'),
-                                        'instructions' => __('cargo::messages.discounts.code'),
+                                        'type' => 'discount_code',
+                                        'display' => __('Discount code'),
+                                        'instructions' => __('cargo::messages.discounts.discount_code'),
                                         'listable' => true,
+                                        'width' => 33,
                                         'validate' => [
                                             'uppercase',
                                             function ($attribute, $value, $fail) {
                                                 if (! preg_match('/^[a-zA-Z][a-zA-Z0-9]*(?:_{0,1}[a-zA-Z0-9])*$/', $value)) {
                                                     $fail('statamic::validation.handle')->translate();
                                                 }
-                                            }
+                                            },
                                         ],
                                     ],
                                 ],
-                            ],
-                        ],
-                        [
-                            'display' => __('Value'),
-                            'fields' => [
-                                [
-                                    'handle' => 'type',
-                                    'field' => [
-                                        'type' => 'select',
-                                        'options' => collect(DiscountType::cases())
-                                            ->mapWithKeys(fn ($enum) => [$enum->value => DiscountType::label($enum)])
-                                            ->all(),
-                                        'clearable' => false,
-                                        'multiple' => false,
-                                        'searchable' => false,
-                                        'taggable' => false,
-                                        'push_tags' => false,
-                                        'cast_booleans' => false,
-                                        'display' => 'Type',
-                                        'width' => 50,
-                                        'validate' => ['required'],
-                                        'listable' => false,
-                                        'max_items' => 1,
-                                    ],
-                                ],
-                                [
-                                    'handle' => 'amount',
-                                    'field' => [
-                                        'type' => 'coupon_amount',
-                                        'display' => __('Amount'),
-                                        'width' => 50,
-                                        'validate' => ['required'],
-                                        'listable' => false,
-                                        'if' => [
-                                            // We only want the Amount field to show when a Type has been selected.
-                                            'type' => 'contains e',
-                                        ],
-                                    ],
-                                ],
-                                [
-                                    'handle' => 'discount_text',
-                                    'field' => [
-                                        'type' => 'text',
-                                        'display' => __('Discount'),
-                                        'listable' => true,
-                                        'visibility' => 'hidden',
-                                    ],
-                                ],
-                            ],
-                        ],
-                        [
-                            'display' => __('Minimum purchase requirements'),
-                            'fields' => [
-                                [
-                                    'handle' => 'minimum_cart_value',
-                                    'field' => [
-                                        'type' => 'money',
-                                        'display' => __('Minimum Order Value'),
-                                        'instructions' => __('cargo::messages.discounts.minimum_cart_value'),
-                                        'width' => 50,
-                                        'listable' => 'hidden',
-                                    ],
-                                ],
-                            ],
-                        ],
-                        [
-                            'display' => __('Customer eligibility'),
-                            'fields' => [
-                                [
-                                    'handle' => 'customer_eligibility',
-                                    'field' => [
-                                        'type' => 'radio',
-                                        'display' => __('Which customers are eligible for this coupon?'),
-                                        'options' => [
-                                            'all' => __('All'),
-                                            'specific_customers' => __('Specific customers'),
-                                            'customers_by_domain' => __('Specific customers (by domain)'),
-                                        ],
-                                        'inline' => false,
-                                        'validate' => ['required'],
-                                        'default' => 'all',
-                                        'listable' => false,
-                                    ],
-                                ],
-                                [
-                                    'handle' => 'customers',
-                                    'field' => [
-                                        'mode' => 'default',
-                                        'display' => __('Specific Customers'),
-                                        'type' => 'users',
-                                        'icon' => 'users',
-                                        'if' => [
-                                            'customer_eligibility' => 'specific_customers',
-                                        ],
-                                    ],
-                                ],
-                                [
-                                    'handle' => 'customers_by_domain',
-                                    'field' => [
-                                        'type' => 'list',
-                                        'display' => __('Domains'),
-                                        'instructions' => __('cargo::messages.discounts.customers_by_domain'),
-                                        'add_button' => __('Add Domain'),
-                                        'listable' => false,
-                                        'if' => [
-                                            'customer_eligibility' => 'customers_by_domain',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        [
-                            'display' => __('Usage limits'),
-                            'fields' => [
                                 [
                                     'handle' => 'maximum_uses',
                                     'field' => [
                                         'type' => 'integer',
-                                        'display' => __('Maximum times coupon can be redeemed'),
+                                        'display' => __('Maximum uses'),
                                         'instructions' => __('cargo::messages.discounts.maximum_uses'),
-                                        'width' => 50,
+                                        'width' => 33,
                                         'listable' => 'hidden',
+                                    ],
+                                ],
+                                [
+                                    'handle' => 'minimum_order_value',
+                                    'field' => [
+                                        'type' => 'money',
+                                        'display' => __('Minimum order value'),
+                                        'instructions' => __('cargo::messages.discounts.minimum_order_value'),
+                                        'width' => 33,
+                                        'listable' => 'hidden',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        ...Facades\DiscountType::all()
+                            ->filter(fn (DiscountType $discountType) => $discountType->fields()->items()->isNotEmpty())
+                            ->map(function (DiscountType $discountType) {
+                                return [
+                                    'display' => __($discountType->title()),
+                                    'fields' => collect($discountType->fieldItems())
+                                        ->map(fn ($field, $handle) => [
+                                            'handle' => $handle,
+                                            'field' => [
+                                                ...$field,
+                                                'listable' => false,
+                                                'if' => [
+                                                    ...$field['if'] ?? [],
+                                                    'type' => "equals {$discountType->handle()}",
+                                                ],
+                                                'validate' => collect($field['validate'] ?? [])
+                                                    ->map(function ($rule) use ($discountType) {
+                                                        if ($rule === 'required') {
+                                                            return "required_if:type,{$discountType->handle()}";
+                                                        }
+
+                                                        return $rule;
+                                                    })
+                                                    ->values()
+                                                    ->all(),
+                                            ],
+                                        ])->all(),
+                                ];
+                            })
+                            ->values()->all(),
+                    ],
+                ],
+                'limitations' => [
+                    'display' => __('Limitations'),
+                    'sections' => [
+                        [
+                            'fields' => [
+                                [
+                                    'handle' => 'customers',
+                                    'field' => [
+                                        'display' => __('Customers'),
+                                        'instructions' => __('cargo::messages.discounts.customers'),
+                                        'type' => 'users',
+                                        'listable' => 'hidden',
+                                        'mode' => 'stack',
                                     ],
                                 ],
                                 [
                                     'handle' => 'products',
                                     'field' => [
-                                        'mode' => 'default',
-                                        'collections' => config('statamic.cargo.products.collections'),
-                                        'display' => __('Limit to certain products'),
+                                        'display' => __('Products'),
                                         'instructions' => __('cargo::messages.discounts.products'),
+                                        'collections' => config('statamic.cargo.products.collections'),
                                         'type' => 'entries',
-                                        'icon' => 'entries',
-                                        'width' => 50,
                                         'listable' => 'hidden',
-                                    ],
-                                ],
-                            ],
-                        ],
-                        [
-                            'display' => __('Active dates'),
-                            'instructions' => __('cargo::messages.discounts.active_dates'),
-                            'fields' => [
-                                [
-                                    'handle' => 'valid_from',
-                                    'field' => [
-                                        'type' => 'date',
-                                        'display' => __('Start Date'),
-                                        'width' => 50,
-                                        'listable' => 'hidden',
-                                    ],
-                                ],
-                                [
-                                    'handle' => 'expires_at',
-                                    'field' => [
-                                        'type' => 'date',
-                                        'display' => __('End Date'),
-                                        'width' => 50,
-                                        'listable' => 'hidden',
+                                        'create' => false,
                                     ],
                                 ],
                             ],
