@@ -69,12 +69,6 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
         return Facades\DiscountType::find($this->type())->setDiscount($this);
     }
 
-    // todo: consider removing this method
-    public function isValid(Cart $cart, LineItem $lineItem): bool
-    {
-        return $this->discountType()->isValidForLineItem($cart, $lineItem);
-    }
-
     // todo
     public function redeemedCount(): int
     {
