@@ -29,11 +29,11 @@ class DiscountsStoreTest extends TestCase
     {
         $item = $this->store->makeItemFromFile(
             $this->directory.'/black-friday.yaml',
-            "id: foo\nname: Black Friday\ntype: percentage_off\npercentage_off: 25\nbar: baz",
+            "name: Black Friday\ntype: percentage_off\npercentage_off: 25\nbar: baz",
         );
 
         $this->assertInstanceOf(Discount::class, $item);
-        $this->assertEquals('foo', $item->id());
+        $this->assertEquals('black-friday', $item->handle());
         $this->assertEquals('Black Friday', $item->name());
         $this->assertEquals('percentage_off', $item->type());
         $this->assertEquals(25, $item->get('percentage_off'));
@@ -44,7 +44,7 @@ class DiscountsStoreTest extends TestCase
     public function it_saves_to_disk()
     {
         $discount = Facades\Discount::make()
-            ->id('123')
+            ->handle('black-friday')
             ->name('Black Friday')
             ->type('percentage_off');
 
@@ -54,29 +54,6 @@ class DiscountsStoreTest extends TestCase
         @unlink($path);
         $this->assertFileDoesNotExist($path);
 
-        $this->assertEquals($path, $this->store->paths()->get('123'));
-    }
-
-    #[Test]
-    public function it_saves_to_disk_with_modified_path()
-    {
-        $discount = Facades\Discount::make()
-            ->id('123')
-            ->name('Black Friday')
-            ->type('percentage_off');
-
-        $this->store->save($discount);
-
-        $this->assertStringEqualsFile($initialPath = $this->directory.'/black-friday.yaml', $discount->fileContents());
-        $this->assertEquals($initialPath, $this->store->paths()->get('123'));
-
-        $discount->name('Cyber Weekend');
-        $discount->save();
-
-        $this->assertStringEqualsFile($path = $this->directory.'/cyber-weekend.yaml', $discount->fileContents());
-        $this->assertEquals($path, $this->store->paths()->get('123'));
-
-        @unlink($initialPath);
-        @unlink($path);
+        $this->assertEquals($path, $this->store->paths()->get('black-friday'));
     }
 }

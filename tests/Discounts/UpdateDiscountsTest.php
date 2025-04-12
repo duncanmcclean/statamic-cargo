@@ -29,7 +29,7 @@ class UpdateDiscountsTest extends TestCase
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
-            ->patch(cp_route('cargo.discounts.update', $discount->id()), [
+            ->patch(cp_route('cargo.discounts.update', $discount->handle()), [
                 'name' => 'Bazqux 50%',
                 'type' => 'percentage_off',
                 'percentage_off' => 50,
@@ -54,7 +54,7 @@ class UpdateDiscountsTest extends TestCase
 
         $this
             ->actingAs(User::make()->assignRole('test')->save())
-            ->patch(cp_route('cargo.discounts.update', $discount->id()), [
+            ->patch(cp_route('cargo.discounts.update', $discount->handle()), [
                 'name' => 'Bazqux 50%',
                 'type' => 'percentage_off',
                 'percentage_off' => 50,
@@ -73,7 +73,7 @@ class UpdateDiscountsTest extends TestCase
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
-            ->patch(cp_route('cargo.discounts.update', $discount->id()), [
+            ->patch(cp_route('cargo.discounts.update', $discount->handle()), [
                 'name' => 'Foobar',
                 'discount_code' => 'FOOB;//-\(R',
                 'type' => 'percentage_off',
@@ -93,7 +93,7 @@ class UpdateDiscountsTest extends TestCase
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
-            ->patch(cp_route('cargo.discounts.update', $discount->id()), [
+            ->patch(cp_route('cargo.discounts.update', $discount->handle()), [
                 'name' => 'Foobar',
                 'discount_code' => 'foobar',
                 'type' => 'percentage_off',
@@ -108,12 +108,12 @@ class UpdateDiscountsTest extends TestCase
     #[Test]
     public function cant_update_discount_with_duplicate_code()
     {
-        Discount::make()->set('discount_code', 'FOOBAR')->type('percentage_off')->set('percentage_off', 50)->save();
-        $discount = tap(Discount::make()->set('discount_code', 'FOOBAR25')->type('percentage_off')->set('percentage_off', 25))->save();
+        Discount::make()->name('Foobar')->set('discount_code', 'FOOBAR')->type('percentage_off')->set('percentage_off', 50)->save();
+        $discount = tap(Discount::make()->name('Foobar 25')->set('discount_code', 'FOOBAR25')->type('percentage_off')->set('percentage_off', 25))->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
-            ->patch(cp_route('cargo.discounts.update', $discount->id()), [
+            ->patch(cp_route('cargo.discounts.update', $discount->handle()), [
                 'name' => 'Foobar',
                 'discount_code' => 'FOOBAR',
                 'type' => 'percentage_off',

@@ -28,7 +28,7 @@ class EditDiscountsTest extends TestCase
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
-            ->get(cp_route('cargo.discounts.edit', $discount->id()))
+            ->get(cp_route('cargo.discounts.edit', $discount->handle()))
             ->assertOk()
             ->assertSee('Foo Bar 2025');
     }
@@ -42,7 +42,7 @@ class EditDiscountsTest extends TestCase
 
         $this
             ->actingAs(User::make()->assignRole('test')->save())
-            ->get(cp_route('cargo.discounts.edit', $discount->id()))
+            ->get(cp_route('cargo.discounts.edit', $discount->handle()))
             ->assertRedirect('/cp');
     }
 }

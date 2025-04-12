@@ -26,7 +26,7 @@ class ApplyDiscounts
 
             $discounts = $eligibleDiscounts->map(function (Discount $discount) use ($cart, $lineItem) {
                 return (array) DiscountCalculation::make(
-                    discount: $discount->id(),
+                    discount: $discount->handle(),
                     description: $discount->get('discount_code') ?? $discount->name(),
                     amount: $discount->discountType()->calculate($cart, $lineItem),
                 );

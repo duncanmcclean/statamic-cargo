@@ -9,6 +9,7 @@ use DuncanMcClean\Cargo\Discounts\Blueprint;
 use DuncanMcClean\Cargo\Exceptions\DiscountNotFound;
 use Statamic\Fields\Blueprint as StatamicBlueprint;
 use Statamic\Stache\Stache;
+use Statamic\Support\Str;
 
 class DiscountRepository implements RepositoryContract
 {
@@ -31,17 +32,17 @@ class DiscountRepository implements RepositoryContract
         return app(QueryBuilder::class);
     }
 
-    public function find($id): ?Discount
+    public function find($handle): ?Discount
     {
-        return $this->query()->where('id', $id)->first();
+        return $this->query()->where('handle', $handle)->first();
     }
 
-    public function findOrFail($id): Discount
+    public function findOrFail($handle): Discount
     {
-        $discount = $this->find($id);
+        $discount = $this->find($handle);
 
         if (! $discount) {
-            throw new DiscountNotFound("Discount [{$id}] could not be found.");
+            throw new DiscountNotFound("Discount [{$handle}] could not be found.");
         }
 
         return $discount;
@@ -59,8 +60,8 @@ class DiscountRepository implements RepositoryContract
 
     public function save(Discount $discount): void
     {
-        if (! $discount->id()) {
-            $discount->id($this->stache->generateId());
+        if (! $discount->handle()) {
+            $discount->handle(Str::slug($discount->name));
         }
 
         $this->store->save($discount);

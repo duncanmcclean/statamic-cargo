@@ -206,8 +206,8 @@ class CheckoutTest extends TestCase
     {
         Event::fake();
 
-        Discount::make()->id('a')->type('percentage_off')->set('percentage_off', 50)->save();
-        Discount::make()->id('b')->set('discount_code', 'B')->type('amount_off')->set('amount_off', 100)->save();
+        Discount::make()->handle('a')->type('percentage_off')->set('percentage_off', 50)->save();
+        Discount::make()->handle('b')->set('discount_code', 'B')->type('amount_off')->set('amount_off', 100)->save();
 
         $cart = $this->makeCart(['discount_code' => 'B']);
 

@@ -96,7 +96,7 @@ class StoreDiscountsTest extends TestCase
     #[Test]
     public function cant_store_discount_with_duplicate_code()
     {
-        Discount::make()->set('discount_code', 'FOOBAR')->type('percentage_off')->set('percentage_off', 50)->save();
+        Discount::make()->name('Foobar')->set('discount_code', 'FOOBAR')->type('percentage_off')->set('percentage_off', 50)->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
@@ -105,7 +105,6 @@ class StoreDiscountsTest extends TestCase
                 'discount_code' => 'FOOBAR',
                 'type' => 'percentage_off',
                 'percentage_off' => 50,
-                'customer_eligibility' => 'all',
             ])
             ->assertSessionHasErrors('discount_code');
     }

@@ -5,13 +5,14 @@ namespace DuncanMcClean\Cargo\Stache\Stores;
 use DuncanMcClean\Cargo\Contracts\Discounts\Discount as DiscountContract;
 use DuncanMcClean\Cargo\Facades\Discount;
 use Illuminate\Support\Arr;
+use Statamic\Entries\GetSlugFromPath;
 use Statamic\Facades\YAML;
 use Statamic\Stache\Stores\BasicStore;
 
 class DiscountsStore extends BasicStore
 {
     protected $storeIndexes = [
-        'name', 'code',
+        'handle', 'type', 'discount_code',
     ];
 
     public function key()
@@ -24,7 +25,7 @@ class DiscountsStore extends BasicStore
         $data = YAML::file($path)->parse($contents);
 
         return Discount::make()
-            ->id(Arr::pull($data, 'id'))
+            ->handle((new GetSlugFromPath)($path))
             ->name(Arr::pull($data, 'name'))
             ->type(Arr::pull($data, 'type'))
             ->data($data);

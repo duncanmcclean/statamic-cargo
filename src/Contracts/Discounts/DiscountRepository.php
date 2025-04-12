@@ -10,9 +10,9 @@ interface DiscountRepository
 
     public function query();
 
-    public function find($id): ?Discount;
+    public function find($handle): ?Discount;
 
-    public function findOrFail($id): Discount;
+    public function findOrFail($handle): Discount;
 
     public function findByDiscountCode(string $code): ?Discount;
 

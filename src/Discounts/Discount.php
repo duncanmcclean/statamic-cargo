@@ -31,7 +31,7 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
 {
     use ContainsData, ExistsAsFile, FluentlyGetsAndSets, HasAugmentedInstance, HasDirtyState, TracksQueriedColumns, TracksQueriedRelations;
 
-    protected $id;
+    protected $handle;
     protected $name;
     protected $amount;
     protected $type;
@@ -43,10 +43,15 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
         $this->supplements = collect();
     }
 
-    public function id($id = null)
+    public function id()
+    {
+        return $this->handle();
+    }
+
+    public function handle($handle = null)
     {
         return $this
-            ->fluentlyGetOrSet('id')
+            ->fluentlyGetOrSet('handle')
             ->args(func_get_args());
     }
 
@@ -73,7 +78,7 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
     public function redeemedCount(): int
     {
         return OrderFacade::query()
-            ->where('coupon', $this->id())
+            ->where('coupon', $this->handle())
             ->count();
     }
 
@@ -86,7 +91,7 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
 
     public function save(): bool
     {
-        $isNew = is_null(DiscountFacade::find($this->id()));
+        $isNew = is_null(DiscountFacade::find($this->handle()));
 
         $withEvents = $this->withEvents;
         $this->withEvents = true;
@@ -136,14 +141,13 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
     {
         return vsprintf('%s/%s.yaml', [
             rtrim(Stache::store('discounts')->directory(), '/'),
-            Str::slug($this->name()),
+            $this->handle(),
         ]);
     }
 
     public function fileData(): array
     {
         return array_merge([
-            'id' => $this->id(),
             'name' => $this->name(),
             'type' => $this->type(),
         ], $this->data->all());
@@ -151,7 +155,7 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
 
     public function fresh(): ?Discount
     {
-        return DiscountFacade::find($this->id());
+        return DiscountFacade::find($this->handle());
     }
 
     public function blueprint()
@@ -166,7 +170,7 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
 
     public function shallowAugmentedArrayKeys()
     {
-        return ['id', 'name', 'type', 'discount_code'];
+        return ['handle', 'name', 'type', 'discount_code'];
     }
 
     public function newAugmentedInstance(): Augmented
@@ -184,17 +188,17 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
 
     public function editUrl()
     {
-        return cp_route('cargo.discounts.edit', $this->id());
+        return cp_route('cargo.discounts.edit', $this->handle());
     }
 
     public function updateUrl()
     {
-        return cp_route('cargo.discounts.update', $this->id());
+        return cp_route('cargo.discounts.update', $this->handle());
     }
 
     public function reference(): string
     {
-        return "discount::{$this->id()}";
+        return "discount::{$this->handle()}";
     }
 
     public function getQueryableValue(string $field)

@@ -31,7 +31,7 @@ class UniqueDiscountValue implements ValidationRule
             return;
         }
 
-        if ($this->except == $existing->id()) {
+        if ($this->except == $existing->handle()) {
             return;
         }
 

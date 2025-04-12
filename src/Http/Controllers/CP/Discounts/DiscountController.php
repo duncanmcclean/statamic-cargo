@@ -162,7 +162,7 @@ class DiscountController extends CpController
                 'save' => $discount->updateUrl(),
             ],
             'values' => array_merge($values, [
-                'id' => $discount->id(),
+                'id' => $discount->handle(),
                 'redeemed_count' => $discount->redeemedCount(),
             ]),
             'meta' => $meta,
@@ -203,10 +203,10 @@ class DiscountController extends CpController
         $fields
             ->validator()
             ->withRules([
-                'discount_code' => [new UniqueDiscountValue(except: $discount->id())],
+                'discount_code' => [new UniqueDiscountValue(except: $discount->handle())],
             ])
             ->withReplacements([
-                'id' => $discount->id(),
+                'id' => $discount->handle(),
             ])
             ->validate();
 

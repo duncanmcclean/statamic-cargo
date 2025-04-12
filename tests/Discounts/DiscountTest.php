@@ -174,20 +174,19 @@ class DiscountTest extends TestCase
         $this->assertNull(Discount::find('abc'));
 
         $discount = Discount::make()
-            ->id('abc')
+            ->handle('foo-bar')
             ->name('Foo Bar')
             ->type('percentage_off')
             ->set('percentage_off', 10);
 
         $discount->save();
 
-        $this->assertInstanceOf(DiscountContract::class, $discount = Discount::find($discount->id()));
-        $this->assertEquals('abc', $discount->id());
+        $this->assertInstanceOf(DiscountContract::class, $discount = Discount::find($discount->handle()));
+        $this->assertEquals('foo-bar', $discount->handle());
         $this->assertFileExists($discount->path());
         $this->assertStringContainsString('content/cargo/discounts/foo-bar.yaml', $discount->path());
 
         $this->assertEquals(<<<'YAML'
-id: abc
 name: 'Foo Bar'
 type: percentage_off
 percentage_off: 10
@@ -196,11 +195,11 @@ YAML
             , file_get_contents($discount->path()));
 
         Event::assertDispatched(DiscountCreated::class, function ($event) use ($discount) {
-            return $event->discount->id() === $discount->id();
+            return $event->discount->id() === $discount->handle();
         });
 
         Event::assertDispatched(DiscountSaved::class, function ($event) use ($discount) {
-            return $event->discount->id() === $discount->id();
+            return $event->discount->id() === $discount->handle();
         });
     }
 
@@ -212,20 +211,19 @@ YAML
         $this->assertNull(Discount::find('abc'));
 
         $discount = Discount::make()
-            ->id('abc')
+            ->handle('foo-bar')
             ->name('Foo Bar')
             ->type('percentage_off')
             ->set('percentage_off', 10);
 
         $discount->saveQuietly();
 
-        $this->assertInstanceOf(DiscountContract::class, $discount = Discount::find($discount->id()));
-        $this->assertEquals('abc', $discount->id());
+        $this->assertInstanceOf(DiscountContract::class, $discount = Discount::find($discount->handle()));
+        $this->assertEquals('foo-bar', $discount->handle());
         $this->assertFileExists($discount->path());
         $this->assertStringContainsString('content/cargo/discounts/foo-bar.yaml', $discount->path());
 
         $this->assertEquals(<<<'YAML'
-id: abc
 name: 'Foo Bar'
 type: percentage_off
 percentage_off: 10
@@ -234,11 +232,11 @@ YAML
             , file_get_contents($discount->path()));
 
         Event::assertNotDispatched(DiscountCreated::class, function ($event) use ($discount) {
-            return $event->discount->id() === $discount->id();
+            return $event->discount->id() === $discount->handle();
         });
 
         Event::assertNotDispatched(DiscountSaved::class, function ($event) use ($discount) {
-            return $event->discount->id() === $discount->id();
+            return $event->discount->id() === $discount->handle();
         });
     }
 
@@ -248,7 +246,7 @@ YAML
         Event::fake();
 
         $discount = Discount::make()
-            ->id('abc')
+            ->handle('abc')
             ->name('Foo Bar')
             ->type('percentage_off')
             ->set('percentage_off', 10);
@@ -262,7 +260,7 @@ YAML
         $this->assertNull(Discount::find('abc'));
 
         Event::assertDispatched(DiscountDeleted::class, function ($event) use ($discount) {
-            return $event->discount->id() === $discount->id();
+            return $event->discount->id() === $discount->handle();
         });
     }
 
@@ -272,7 +270,7 @@ YAML
         Event::fake();
 
         $discount = Discount::make()
-            ->id('abc')
+            ->handle('abc')
             ->name('Foo Bar')
             ->type('percentage_off')
             ->set('percentage_off', 10);
@@ -286,7 +284,7 @@ YAML
         $this->assertNull(Discount::find('abc'));
 
         Event::assertNotDispatched(DiscountDeleted::class, function ($event) use ($discount) {
-            return $event->discount->id() === $discount->id();
+            return $event->discount->id() === $discount->handle();
         });
     }
 }
