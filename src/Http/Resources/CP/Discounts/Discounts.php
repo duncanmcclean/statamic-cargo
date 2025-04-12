@@ -3,6 +3,7 @@
 namespace DuncanMcClean\Cargo\Http\Resources\CP\Discounts;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Statamic\CP\Column;
 use Statamic\Http\Resources\CP\Concerns\HasRequestedColumns;
 
 class Discounts extends ResourceCollection
@@ -10,7 +11,6 @@ class Discounts extends ResourceCollection
     use HasRequestedColumns;
 
     public $collects = ListedDiscount::class;
-
     protected $blueprint;
     protected $columns;
     protected $columnPreferenceKey;
@@ -32,6 +32,15 @@ class Discounts extends ResourceCollection
     private function setColumns()
     {
         $columns = $this->blueprint->columns();
+
+        $status = Column::make('status')
+            ->listable(true)
+            ->visible(true)
+            ->defaultVisibility(true)
+            ->defaultOrder($columns->count() + 1)
+            ->sortable(false);
+
+        $columns->put('status', $status);
 
         if ($key = $this->columnPreferenceKey) {
             $columns->setPreferred($key);

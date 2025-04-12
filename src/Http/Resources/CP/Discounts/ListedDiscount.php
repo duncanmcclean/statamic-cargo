@@ -3,6 +3,7 @@
 namespace DuncanMcClean\Cargo\Http\Resources\CP\Discounts;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
 use Statamic\Facades\Action;
 use Statamic\Facades\User;
 
@@ -33,6 +34,7 @@ class ListedDiscount extends JsonResource
         return [
             'id' => $discount->handle(),
             'name' => $discount->name(),
+            'status' => $this->status(),
 
             $this->merge($this->values(['type' => $discount->type()])),
 
@@ -41,6 +43,23 @@ class ListedDiscount extends JsonResource
             'editable' => User::current()->can('edit', $discount),
             'actions' => Action::for($discount),
         ];
+    }
+
+    protected function status()
+    {
+        if ($this->resource->get('start_date') !== null) {
+            if (Carbon::parse($this->resource->get('start_date'))->isFuture()) {
+                return 'scheduled';
+            }
+        }
+
+        if ($this->resource->has('end_date') && $this->resource->get('end_date') !== null) {
+            if (Carbon::parse($this->resource->get('end_date'))->isPast()) {
+                return 'expired';
+            }
+        }
+
+        return 'active';
     }
 
     protected function values($extra = [])

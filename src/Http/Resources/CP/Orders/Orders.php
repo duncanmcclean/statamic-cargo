@@ -10,11 +10,8 @@ class Orders extends ResourceCollection
     use HasRequestedColumns;
 
     public $collects = ListedOrder::class;
-
     protected $blueprint;
-
     protected $columns;
-
     protected $columnPreferenceKey;
 
     public function blueprint($blueprint)

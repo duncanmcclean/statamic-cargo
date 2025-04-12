@@ -9,6 +9,7 @@ use DuncanMcClean\Cargo\Http\Resources\CP\Discounts\Discounts;
 use DuncanMcClean\Cargo\Rules\UniqueDiscountValue;
 use Illuminate\Http\Request;
 use Statamic\CP\Breadcrumbs;
+use Statamic\CP\Column;
 use Statamic\Facades\Action;
 use Statamic\Facades\Scope;
 use Statamic\Facades\User;
@@ -53,7 +54,13 @@ class DiscountController extends CpController
 
         $blueprint = Discount::blueprint();
 
-        $columns = $blueprint->columns()
+        $columns = $blueprint
+            ->columns()
+            ->put('status', Column::make('status')
+                ->listable(true)
+                ->visible(true)
+                ->defaultVisibility(true)
+                ->sortable(false))
             ->setPreferred('cargo.discounts.columns')
             ->rejectUnlisted()
             ->values();
