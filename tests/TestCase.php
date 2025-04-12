@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use DuncanMcClean\Cargo\Discounts\DiscountServiceProvider;
 use DuncanMcClean\Cargo\Payments\PaymentServiceProvider;
 use DuncanMcClean\Cargo\ServiceProvider;
 use DuncanMcClean\Cargo\Shipping\ShippingServiceProvider;
@@ -50,6 +51,7 @@ abstract class TestCase extends AddonTestCase
     protected function getPackageProviders($app)
     {
         return array_merge(parent::getPackageProviders($app), [
+            DiscountServiceProvider::class,
             PaymentServiceProvider::class,
             ShippingServiceProvider::class,
         ]);

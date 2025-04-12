@@ -3,7 +3,6 @@
 namespace Tests;
 
 use DuncanMcClean\Cargo\Contracts\Orders\Order;
-use DuncanMcClean\Cargo\Discounts\DiscountType;
 use DuncanMcClean\Cargo\Events\DiscountRedeemed;
 use DuncanMcClean\Cargo\Events\ProductNoStockRemaining;
 use DuncanMcClean\Cargo\Events\ProductStockLow;
@@ -207,8 +206,8 @@ class CheckoutTest extends TestCase
     {
         Event::fake();
 
-        Discount::make()->id('a')->type(DiscountType::Percentage)->amount(50)->save();
-        Discount::make()->id('b')->set('discount_code', 'B')->type(DiscountType::Fixed)->amount(100)->save();
+        Discount::make()->id('a')->type('percentage_off')->set('percentage_off', 50)->save();
+        Discount::make()->id('b')->set('discount_code', 'B')->type('amount_off')->set('amount_off', 100)->save();
 
         $cart = $this->makeCart(['discount_code' => 'B']);
 

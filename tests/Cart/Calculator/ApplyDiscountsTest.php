@@ -3,7 +3,6 @@
 namespace Tests\Cart\Calculator;
 
 use DuncanMcClean\Cargo\Cart\Calculator\ApplyDiscounts;
-use DuncanMcClean\Cargo\Discounts\DiscountType;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Discount;
 use PHPUnit\Framework\Attributes\Test;
@@ -31,10 +30,10 @@ class ApplyDiscountsTest extends TestCase
         $this->makeProduct('123')->set('price', 2500)->save();
         $this->makeProduct('456')->set('price', 5000)->save();
 
-        $discountA = Discount::make()->id('a')->name('Discount A')->set('discount_code', 'A')->type(DiscountType::Percentage)->amount(10); // Shouldn't be applied, it has a coupon code.
-        $discountB = Discount::make()->id('b')->name('Discount B')->type(DiscountType::Percentage)->amount(15); // Should be applied to both line items.
-        $discountC = Discount::make()->id('c')->name('Discount C')->type(DiscountType::Fixed)->amount(100)->set('products', ['123']); // Should be applied to the first line item.
-        $discountD = Discount::make()->id('d')->name('Discount D')->type(DiscountType::Fixed)->amount(200)->set('products', ['456'])->set('expires_at', '2025-01-01'); // Shouldn't be applied, it has expired.
+        $discountA = Discount::make()->id('a')->name('Discount A')->set('discount_code', 'A')->type('percentage_off')->set('percentage_off', 10); // Shouldn't be applied, it has a coupon code.
+        $discountB = Discount::make()->id('b')->name('Discount B')->type('percentage_off')->set('percentage_off', 15); // Should be applied to both line items.
+        $discountC = Discount::make()->id('c')->name('Discount C')->type('amount_off')->set('amount_off', 100)->set('products', ['123']); // Should be applied to the first line item.
+        $discountD = Discount::make()->id('d')->name('Discount D')->type('amount_off')->set('amount_off', 200)->set('products', ['456'])->set('end_date', '2025-01-01'); // Shouldn't be applied, it has expired.
 
         $discountA->save();
         $discountB->save();
@@ -68,8 +67,8 @@ class ApplyDiscountsTest extends TestCase
         $this->makeProduct('123')->set('price', 2500)->save();
         $this->makeProduct('456')->set('price', 5000)->save();
 
-        $discountA = Discount::make()->id('a')->name('Discount A')->set('discount_code', 'A')->type(DiscountType::Percentage)->amount(10)->set('products', ['123']); // Should only be applied to the first line item.
-        $discountB = Discount::make()->id('b')->name('Discount B')->type(DiscountType::Percentage)->amount(15); // Site-wide discount, should be applied to both line items.
+        $discountA = Discount::make()->id('a')->name('Discount A')->set('discount_code', 'A')->type('percentage_off')->set('percentage_off', 10)->set('products', ['123']); // Should only be applied to the first line item.
+        $discountB = Discount::make()->id('b')->name('Discount B')->type('percentage_off')->set('percentage_off', 15); // Site-wide discount, should be applied to both line items.
 
         $discountA->save();
         $discountB->save();
@@ -96,63 +95,49 @@ class ApplyDiscountsTest extends TestCase
     }
 
     #[Test]
-    public function applies_percentage_discount()
+    public function discount_code_is_removed_from_cart_if_it_does_not_exist()
     {
-        $this->markTestIncomplete('Extract out once we make discount types flexible.');
-
         $this->makeProduct('123')->set('price', 2500)->save();
 
-        $coupon = tap(Discount::make()->set('discount_code', 'foobar')->type(DiscountType::Percentage)->amount(50))->save();
-
-        $cart = Cart::make()->coupon($coupon->id())->lineItems([
+        $cart = Cart::make()->set('discount_code', 'NON_EXISTENT')->lineItems([
             ['id' => 'abc', 'product' => '123', 'quantity' => 1, 'total' => 2500],
         ]);
 
         $cart = app(ApplyDiscounts::class)->handle($cart, fn ($cart) => $cart);
 
-        $this->assertEquals($cart->discountTotal(), 1250);
-        $this->assertEquals($cart->lineItems()->find('abc')->get('discount_amount'), 1250);
+        $this->assertNull($cart->lineItems()->find('abc')->get('discounts'));
+        $this->assertEquals(0, $cart->lineItems()->find('abc')->discountTotal());
+
+        $this->assertFalse($cart->has('discount_code'));
+        $this->assertEquals(0, $cart->discountTotal());
     }
 
     #[Test]
-    public function applies_fixed_discount()
+    public function ensures_discount_total_does_not_exceed_line_item_total()
     {
-        $this->markTestIncomplete('Extract out once we make discount types flexible.');
-
         $this->makeProduct('123')->set('price', 2500)->save();
 
-        $coupon = tap(Discount::make()->set('discount_code', 'foobar')->type(DiscountType::Fixed)->amount(450))->save();
+        $discountA = Discount::make()->id('a')->name('Discount A')->type('percentage_off')->set('percentage_off', 50);
+        $discountB = Discount::make()->id('b')->name('Discount B')->type('amount_off')->set('amount_off', 1300)->set('products', ['123']);
 
-        $cart = Cart::make()->coupon($coupon->id())->lineItems([
+        $discountA->save();
+        $discountB->save();
+
+        $cart = Cart::make()->lineItems([
             ['id' => 'abc', 'product' => '123', 'quantity' => 1, 'total' => 2500],
         ]);
 
         $cart = app(ApplyDiscounts::class)->handle($cart, fn ($cart) => $cart);
 
-        $this->assertEquals($cart->discountTotal(), 450);
-        $this->assertEquals($cart->lineItems()->find('abc')->get('discount_amount'), 450);
-    }
+        $this->assertEquals([
+            ['discount' => 'a', 'description' => 'Discount A', 'amount' => 1250],
+            ['discount' => 'b', 'description' => 'Discount B', 'amount' => 1300],
+        ], $cart->lineItems()->find('abc')->get('discounts'));
 
-    #[Test]
-    public function discount_is_removed_from_line_items_when_no_longer_eligible()
-    {
-        $this->markTestSkipped('Skipping, needs re-doing after discount codes refactor.');
+        // Should be capped at the line item total.
+        $this->assertEquals(2500, $cart->lineItems()->find('abc')->discountTotal());
 
-        $this->makeProduct('123')->set('price', 2500)->save();
-        $this->makeProduct('456')->set('price', 5000)->save();
-
-        $coupon = tap(Discount::make()->set('discount_code', 'foobar')->type(DiscountType::Percentage)->amount(50)->set('products', ['123', '789']))->save();
-
-        $cart = Cart::make()->coupon($coupon->id())->lineItems([
-            ['id' => 'abc', 'product' => '123', 'quantity' => 1, 'total' => 2500, 'discount_amount' => 1250],
-            ['id' => 'def', 'product' => '456', 'quantity' => 1, 'total' => 5000, 'discount_amount' => 2500], // This product is no longer eligible.
-        ]);
-
-        $cart = app(ApplyDiscounts::class)->handle($cart, fn ($cart) => $cart);
-
-        $this->assertEquals($cart->discountTotal(), 1250);
-        $this->assertEquals($cart->lineItems()->find('abc')->get('discount_amount'), 1250);
-        $this->assertNull($cart->lineItems()->find('def')->get('discount_amount'));
+        $this->assertEquals(2500, $cart->discountTotal());
     }
 
     protected function makeProduct($id = null)

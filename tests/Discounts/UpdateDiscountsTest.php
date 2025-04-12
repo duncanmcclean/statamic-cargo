@@ -2,7 +2,6 @@
 
 namespace Tests\Discounts;
 
-use DuncanMcClean\Cargo\Discounts\DiscountType;
 use DuncanMcClean\Cargo\Facades\Discount;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
@@ -25,16 +24,15 @@ class UpdateDiscountsTest extends TestCase
     #[Test]
     public function can_update_discounts()
     {
-        $discount = Discount::make()->name('Bazqux 25%')->type(DiscountType::Percentage)->amount(25);
+        $discount = Discount::make()->name('Bazqux 25%')->type('percentage_off')->set('percentage_off', 25);
         $discount->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->patch(cp_route('cargo.discounts.update', $discount->id()), [
                 'name' => 'Bazqux 50%',
-                'type' => 'percentage',
-                'amount' => ['mode' => 'percentage', 'value' => 50],
-                'customer_eligibility' => 'all',
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
             ])
             ->assertOk()
             ->assertSee('Bazqux 50%');
@@ -42,15 +40,14 @@ class UpdateDiscountsTest extends TestCase
         $discount = $discount->fresh();
 
         $this->assertEquals($discount->name(), 'Bazqux 50%');
-        $this->assertEquals($discount->type(), DiscountType::Percentage);
-        $this->assertEquals($discount->amount(), 50);
-        $this->assertEquals($discount->get('customer_eligibility'), 'all');
+        $this->assertEquals($discount->type(), 'percentage_off');
+        $this->assertEquals($discount->get('percentage_off'), 50);
     }
 
     #[Test]
     public function cant_update_discount_without_permissions()
     {
-        $discount = Discount::make()->name('Bazqux 25%')->type(DiscountType::Percentage)->amount(25);
+        $discount = Discount::make()->name('Bazqux 25%')->type('percentage_off')->set('percentage_off', 25);
         $discount->save();
 
         Role::make('test')->addPermission('access cp')->save();
@@ -59,8 +56,8 @@ class UpdateDiscountsTest extends TestCase
             ->actingAs(User::make()->assignRole('test')->save())
             ->patch(cp_route('cargo.discounts.update', $discount->id()), [
                 'name' => 'Bazqux 50%',
-                'type' => 'percentage',
-                'amount' => ['mode' => 'percentage', 'value' => 50],
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
                 'customer_eligibility' => 'all',
             ])
             ->assertRedirect('/cp');
@@ -71,7 +68,7 @@ class UpdateDiscountsTest extends TestCase
     #[Test]
     public function cant_update_discount_with_invalid_characters_in_code()
     {
-        $discount = Discount::make()->name('Foobar')->set('discount_code', 'FOOBAR25')->type(DiscountType::Percentage)->amount(25);
+        $discount = Discount::make()->name('Foobar')->set('discount_code', 'FOOBAR25')->type('percentage_off')->set('percentage_off', 25);
         $discount->save();
 
         $this
@@ -79,8 +76,8 @@ class UpdateDiscountsTest extends TestCase
             ->patch(cp_route('cargo.discounts.update', $discount->id()), [
                 'name' => 'Foobar',
                 'discount_code' => 'FOOB;//-\(R',
-                'type' => 'percentage',
-                'amount' => ['mode' => 'percentage', 'value' => 50],
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
                 'customer_eligibility' => 'all',
             ])
             ->assertSessionHasErrors('discount_code');
@@ -91,7 +88,7 @@ class UpdateDiscountsTest extends TestCase
     #[Test]
     public function cant_update_discount_with_lowercase_code()
     {
-        $discount = Discount::make()->name('Foobar')->set('discount_code', 'FOOBAR25')->type(DiscountType::Percentage)->amount(25);
+        $discount = Discount::make()->name('Foobar')->set('discount_code', 'FOOBAR25')->type('percentage_off')->set('percentage_off', 25);
         $discount->save();
 
         $this
@@ -99,8 +96,8 @@ class UpdateDiscountsTest extends TestCase
             ->patch(cp_route('cargo.discounts.update', $discount->id()), [
                 'name' => 'Foobar',
                 'discount_code' => 'foobar',
-                'type' => 'percentage',
-                'amount' => ['mode' => 'percentage', 'value' => 50],
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
                 'customer_eligibility' => 'all',
             ])
             ->assertSessionHasErrors('discount_code');
@@ -111,16 +108,16 @@ class UpdateDiscountsTest extends TestCase
     #[Test]
     public function cant_update_discount_with_duplicate_code()
     {
-        Discount::make()->set('discount_code', 'FOOBAR')->type(DiscountType::Percentage)->amount(50)->save();
-        $discount = tap(Discount::make()->set('discount_code', 'FOOBAR25')->type(DiscountType::Percentage)->amount(25))->save();
+        Discount::make()->set('discount_code', 'FOOBAR')->type('percentage_off')->set('percentage_off', 50)->save();
+        $discount = tap(Discount::make()->set('discount_code', 'FOOBAR25')->type('percentage_off')->set('percentage_off', 25))->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->patch(cp_route('cargo.discounts.update', $discount->id()), [
                 'name' => 'Foobar',
                 'discount_code' => 'FOOBAR',
-                'type' => 'percentage',
-                'amount' => ['mode' => 'percentage', 'value' => 50],
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
                 'customer_eligibility' => 'all',
             ])
             ->assertSessionHasErrors('discount_code');

@@ -3,7 +3,6 @@
 namespace Tests\Cart;
 
 use DuncanMcClean\Cargo\Customers\GuestCustomer;
-use DuncanMcClean\Cargo\Discounts\DiscountType;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Discount;
 use Illuminate\Foundation\Http\FormRequest;
@@ -67,8 +66,8 @@ class CartControllerTest extends TestCase
 
         $discount = Discount::make()
             ->set('discount_code', 'FOOBAR')
-            ->type(DiscountType::Percentage)
-            ->amount(10);
+            ->type('percentage_off')
+            ->set('percentage_off', 10);
 
         $discount->save();
 

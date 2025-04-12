@@ -3,7 +3,6 @@
 namespace Tests\Discounts;
 
 use DuncanMcClean\Cargo\Contracts\Discounts\Discount as DiscountContract;
-use DuncanMcClean\Cargo\Discounts\DiscountType;
 use DuncanMcClean\Cargo\Events\DiscountCreated;
 use DuncanMcClean\Cargo\Events\DiscountDeleted;
 use DuncanMcClean\Cargo\Events\DiscountSaved;
@@ -31,11 +30,11 @@ class DiscountTest extends TestCase
 
         $discount = Discount::make()
             ->name('Foo Bar')
-            ->type(DiscountType::Percentage)
-            ->amount(10)
+            ->type('percentage_off')
+            ->set('percentage_off', 10)
             ->set('products', ['product-1']);
 
-        $this->assertTrue($discount->isValid($cart, $cart->lineItems()->first()));
+        $this->assertTrue($discount->discountType()->isValidForLineItem($cart, $cart->lineItems()->first()));
     }
 
     #[Test]
@@ -48,11 +47,11 @@ class DiscountTest extends TestCase
 
         $discount = Discount::make()
             ->name('Foo Bar')
-            ->type(DiscountType::Percentage)
-            ->amount(10)
+            ->type('percentage_off')
+            ->set('percentage_off', 10)
             ->set('products', ['product-2']);
 
-        $this->assertFalse($discount->isValid($cart, $cart->lineItems()->first()));
+        $this->assertFalse($discount->discountType()->isValidForLineItem($cart, $cart->lineItems()->first()));
     }
 
     #[Test]
@@ -67,12 +66,11 @@ class DiscountTest extends TestCase
 
         $discount = Discount::make()
             ->name('Foo Bar')
-            ->type(DiscountType::Percentage)
-            ->amount(10)
-            ->set('customer_eligibility', 'specific_customers')
+            ->type('percentage_off')
+            ->set('percentage_off', 10)
             ->set('customers', [$user->id()]);
 
-        $this->assertTrue($discount->isValid($cart, $cart->lineItems()->first()));
+        $this->assertTrue($discount->discountType()->isValidForLineItem($cart, $cart->lineItems()->first()));
     }
 
     #[Test]
@@ -87,12 +85,11 @@ class DiscountTest extends TestCase
 
         $discount = Discount::make()
             ->name('Foo Bar')
-            ->type(DiscountType::Percentage)
-            ->amount(10)
-            ->set('customer_eligibility', 'specific_customers')
+            ->type('percentage_off')
+            ->set('percentage_off', 10)
             ->set('customers', ['abc']);
 
-        $this->assertFalse($discount->isValid($cart, $cart->lineItems()->first()));
+        $this->assertFalse($discount->discountType()->isValidForLineItem($cart, $cart->lineItems()->first()));
     }
 
     #[Test]
@@ -110,56 +107,15 @@ class DiscountTest extends TestCase
 
         $discount = Discount::make()
             ->name('Foo Bar')
-            ->type(DiscountType::Percentage)
-            ->amount(10)
-            ->set('customer_eligibility', 'specific_customers')
+            ->type('percentage_off')
+            ->set('percentage_off', 10)
             ->set('customers', ['abc']);
 
-        $this->assertFalse($discount->isValid($cart, $cart->lineItems()->first()));
+        $this->assertFalse($discount->discountType()->isValidForLineItem($cart, $cart->lineItems()->first()));
     }
 
     #[Test]
-    public function is_valid_when_customer_email_matches_domain()
-    {
-        Collection::make('products')->save();
-        Entry::make()->collection('products')->id('product-1')->data(['title' => 'Product 1'])->save();
-
-        $user = tap(User::make()->email('cj.cregg@example.com'))->save();
-
-        $cart = Cart::make()->customer($user)->lineItems([['product' => 'product-1', 'quantity' => 1]]);
-
-        $discount = Discount::make()
-            ->name('Foo Bar')
-            ->type(DiscountType::Percentage)
-            ->amount(10)
-            ->set('customer_eligibility', 'customers_by_domain')
-            ->set('customers_by_domain', ['example.com']);
-
-        $this->assertTrue($discount->isValid($cart, $cart->lineItems()->first()));
-    }
-
-    #[Test]
-    public function is_not_valid_when_customer_email_does_not_match_domain()
-    {
-        Collection::make('products')->save();
-        Entry::make()->collection('products')->id('product-1')->data(['title' => 'Product 1'])->save();
-
-        $user = tap(User::make()->email('cj.cregg@example.com'))->save();
-
-        $cart = Cart::make()->customer($user)->lineItems([['product' => 'product-1', 'quantity' => 1]]);
-
-        $discount = Discount::make()
-            ->name('Foo Bar')
-            ->type(DiscountType::Percentage)
-            ->amount(10)
-            ->set('customer_eligibility', 'customers_by_domain')
-            ->set('customers_by_domain', ['statamic.com']);
-
-        $this->assertFalse($discount->isValid($cart, $cart->lineItems()->first()));
-    }
-
-    #[Test]
-    public function is_not_valid_before_valid_from_timestamp()
+    public function is_not_valid_before_start_date()
     {
         Collection::make('products')->save();
         Entry::make()->collection('products')->id('product-1')->data(['title' => 'Product 1'])->save();
@@ -168,15 +124,15 @@ class DiscountTest extends TestCase
 
         $discount = Discount::make()
             ->name('Foo Bar')
-            ->type(DiscountType::Percentage)
-            ->amount(10)
-            ->set('valid_from', '2030-01-01');
+            ->type('percentage_off')
+            ->set('percentage_off', 10)
+            ->set('start_date', '2030-01-01');
 
-        $this->assertFalse($discount->isValid($cart, $cart->lineItems()->first()));
+        $this->assertFalse($discount->discountType()->isValidForLineItem($cart, $cart->lineItems()->first()));
     }
 
     #[Test]
-    public function is_valid_between_timestamps()
+    public function is_valid_between_dates()
     {
         Collection::make('products')->save();
         Entry::make()->collection('products')->id('product-1')->data(['title' => 'Product 1'])->save();
@@ -185,16 +141,16 @@ class DiscountTest extends TestCase
 
         $discount = Discount::make()
             ->name('Foo Bar')
-            ->type(DiscountType::Percentage)
-            ->amount(10)
-            ->set('valid_from', '2024-01-01')
-            ->set('expires_at', '2030-01-01');
+            ->type('percentage_off')
+            ->set('percentage_off', 10)
+            ->set('start_date', '2024-01-01')
+            ->set('end_date', '2030-01-01');
 
-        $this->assertTrue($discount->isValid($cart, $cart->lineItems()->first()));
+        $this->assertTrue($discount->discountType()->isValidForLineItem($cart, $cart->lineItems()->first()));
     }
 
     #[Test]
-    public function is_not_valid_after_discount_has_expired()
+    public function is_not_valid_after_end_date()
     {
         Collection::make('products')->save();
         Entry::make()->collection('products')->id('product-1')->data(['title' => 'Product 1'])->save();
@@ -203,11 +159,11 @@ class DiscountTest extends TestCase
 
         $discount = Discount::make()
             ->name('Foo Bar')
-            ->type(DiscountType::Percentage)
-            ->amount(10)
-            ->set('expires_at', '2024-01-01');
+            ->type('percentage_off')
+            ->set('percentage_off', 10)
+            ->set('end_date', '2024-01-01');
 
-        $this->assertFalse($discount->isValid($cart, $cart->lineItems()->first()));
+        $this->assertFalse($discount->discountType()->isValidForLineItem($cart, $cart->lineItems()->first()));
     }
 
     #[Test]
@@ -220,8 +176,8 @@ class DiscountTest extends TestCase
         $discount = Discount::make()
             ->id('abc')
             ->name('Foo Bar')
-            ->type(DiscountType::Percentage)
-            ->amount(10);
+            ->type('percentage_off')
+            ->set('percentage_off', 10);
 
         $discount->save();
 
@@ -233,8 +189,8 @@ class DiscountTest extends TestCase
         $this->assertEquals(<<<'YAML'
 id: abc
 name: 'Foo Bar'
-amount: 10
-type: percentage
+type: percentage_off
+percentage_off: 10
 
 YAML
             , file_get_contents($discount->path()));
@@ -258,8 +214,8 @@ YAML
         $discount = Discount::make()
             ->id('abc')
             ->name('Foo Bar')
-            ->type(DiscountType::Percentage)
-            ->amount(10);
+            ->type('percentage_off')
+            ->set('percentage_off', 10);
 
         $discount->saveQuietly();
 
@@ -271,8 +227,8 @@ YAML
         $this->assertEquals(<<<'YAML'
 id: abc
 name: 'Foo Bar'
-amount: 10
-type: percentage
+type: percentage_off
+percentage_off: 10
 
 YAML
             , file_get_contents($discount->path()));
@@ -294,8 +250,8 @@ YAML
         $discount = Discount::make()
             ->id('abc')
             ->name('Foo Bar')
-            ->type(DiscountType::Percentage)
-            ->amount(10);
+            ->type('percentage_off')
+            ->set('percentage_off', 10);
 
         $discount->save();
 
@@ -318,8 +274,8 @@ YAML
         $discount = Discount::make()
             ->id('abc')
             ->name('Foo Bar')
-            ->type(DiscountType::Percentage)
-            ->amount(10);
+            ->type('percentage_off')
+            ->set('percentage_off', 10);
 
         $discount->save();
 

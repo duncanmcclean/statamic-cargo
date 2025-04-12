@@ -3,13 +3,12 @@
 namespace Tests\Stache\Stores;
 
 use DuncanMcClean\Cargo\Contracts\Discounts\Discount;
-use DuncanMcClean\Cargo\Discounts\DiscountType;
+use DuncanMcClean\Cargo\Facades;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Path;
 use Statamic\Facades\Stache;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
-use DuncanMcClean\Cargo\Facades;
 
 class DiscountsStoreTest extends TestCase
 {
@@ -30,14 +29,14 @@ class DiscountsStoreTest extends TestCase
     {
         $item = $this->store->makeItemFromFile(
             $this->directory.'/black-friday.yaml',
-            "id: foo\nname: Black Friday\namount: 25\ntype: percentage\nbar: baz",
+            "id: foo\nname: Black Friday\ntype: percentage_off\npercentage_off: 25\nbar: baz",
         );
 
         $this->assertInstanceOf(Discount::class, $item);
         $this->assertEquals('foo', $item->id());
         $this->assertEquals('Black Friday', $item->name());
-        $this->assertEquals(25, $item->amount());
-        $this->assertEquals(DiscountType::Percentage, $item->type());
+        $this->assertEquals('percentage_off', $item->type());
+        $this->assertEquals(25, $item->get('percentage_off'));
         $this->assertEquals('baz', $item->get('bar'));
     }
 
@@ -47,7 +46,7 @@ class DiscountsStoreTest extends TestCase
         $discount = Facades\Discount::make()
             ->id('123')
             ->name('Black Friday')
-            ->type(DiscountType::Percentage);
+            ->type('percentage_off');
 
         $this->store->save($discount);
 
@@ -64,7 +63,7 @@ class DiscountsStoreTest extends TestCase
         $discount = Facades\Discount::make()
             ->id('123')
             ->name('Black Friday')
-            ->type(DiscountType::Percentage);
+            ->type('percentage_off');
 
         $this->store->save($discount);
 

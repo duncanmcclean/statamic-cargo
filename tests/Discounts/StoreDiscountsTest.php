@@ -2,7 +2,6 @@
 
 namespace Tests\Discounts;
 
-use DuncanMcClean\Cargo\Discounts\DiscountType;
 use DuncanMcClean\Cargo\Facades\Discount;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
@@ -32,9 +31,8 @@ class StoreDiscountsTest extends TestCase
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
                 'name' => 'Bazqux',
-                'type' => 'percentage',
-                'amount' => ['mode' => 'percentage', 'value' => 50],
-                'customer_eligibility' => 'all',
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
             ])
             ->assertOk()
             ->assertSee('Bazqux');
@@ -42,9 +40,8 @@ class StoreDiscountsTest extends TestCase
         $discount = Discount::query()->where('name', 'Bazqux')->first();
 
         $this->assertEquals($discount->name(), 'Bazqux');
-        $this->assertEquals($discount->type(), DiscountType::Percentage);
-        $this->assertEquals($discount->amount(), 50);
-        $this->assertEquals($discount->get('customer_eligibility'), 'all');
+        $this->assertEquals($discount->type(), 'percentage_off');
+        $this->assertEquals($discount->get('percentage_off'), 50);
     }
 
     #[Test]
@@ -56,8 +53,8 @@ class StoreDiscountsTest extends TestCase
             ->actingAs(User::make()->assignRole('test')->save())
             ->post(cp_route('cargo.discounts.store'), [
                 'name' => 'Bazqux',
-                'type' => 'percentage',
-                'amount' => ['mode' => 'percentage', 'value' => 50],
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
                 'customer_eligibility' => 'all',
             ])
             ->assertRedirect('/cp');
@@ -73,8 +70,8 @@ class StoreDiscountsTest extends TestCase
             ->post(cp_route('cargo.discounts.store'), [
                 'name' => 'Foobar',
                 'discount_code' => 'FOOB;//-\(R',
-                'type' => 'percentage',
-                'amount' => ['mode' => 'percentage', 'value' => 50],
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
                 'customer_eligibility' => 'all',
             ])
             ->assertSessionHasErrors('discount_code');
@@ -90,8 +87,8 @@ class StoreDiscountsTest extends TestCase
             ->post(cp_route('cargo.discounts.store'), [
                 'name' => 'Foobar',
                 'discount_code' => 'foobar',
-                'type' => 'percentage',
-                'amount' => ['mode' => 'percentage', 'value' => 50],
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
                 'customer_eligibility' => 'all',
             ])
             ->assertSessionHasErrors('discount_code');
@@ -102,15 +99,15 @@ class StoreDiscountsTest extends TestCase
     #[Test]
     public function cant_store_discount_with_duplicate_code()
     {
-        Discount::make()->set('discount_code', 'FOOBAR')->type(DiscountType::Percentage)->amount(50)->save();
+        Discount::make()->set('discount_code', 'FOOBAR')->type('percentage_off')->set('percentage_off', 50)->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
                 'name' => 'Foobar',
                 'discount_code' => 'FOOBAR',
-                'type' => 'percentage',
-                'amount' => ['mode' => 'percentage', 'value' => 50],
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
                 'customer_eligibility' => 'all',
             ])
             ->assertSessionHasErrors('discount_code');
