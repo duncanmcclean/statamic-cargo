@@ -38,7 +38,6 @@ class ListedOrder extends JsonResource
                 'date' => $order->date(),
                 'status' => $order->status(),
                 'customer' => $order->customer(),
-                'coupon' => $order->coupon()?->id(),
                 'shipping_method' => $order->shippingMethod()?->handle(),
                 'line_items' => $order->lineItems(),
                 'grand_total' => $order->grandTotal(),

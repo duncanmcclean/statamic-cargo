@@ -2,6 +2,8 @@
 
 namespace DuncanMcClean\Cargo\Cart;
 
+use DuncanMcClean\Cargo\Facades\Discount;
+use DuncanMcClean\Cargo\Fieldtypes\Money;
 use DuncanMcClean\Cargo\Orders\LineItem;
 use Statamic\Data\AbstractAugmented;
 
@@ -36,7 +38,7 @@ class AugmentedCart extends AbstractAugmented
             'id',
             'is_free',
             'customer',
-            'coupon',
+            'discounts',
             'shipping_method',
             'shipping_option',
             'payment_gateway',
@@ -46,13 +48,19 @@ class AugmentedCart extends AbstractAugmented
         ];
     }
 
-    public function coupon()
+    public function discounts()
     {
-        if (! $this->data->coupon()) {
-            return null;
-        }
+        return collect($this->data->discounts())
+            ->map(function (array $item) {
+                $discount = Discount::find($item['discount']);
 
-        return $this->data->coupon()->toShallowAugmentedArray();
+                return [
+                    ...$discount->toAugmentedArray(),
+                    'amount' => (new Money)->augment($item['amount']),
+                ];
+            })
+            ->values()
+            ->all();
     }
 
     public function shippingMethod()

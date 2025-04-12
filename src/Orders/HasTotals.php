@@ -40,6 +40,19 @@ trait HasTotals
             ->args(func_get_args());
     }
 
+    public function discounts(): array
+    {
+        return $this->lineItems()->flatMap->get('discounts')
+            ->groupBy(fn ($discount) => $discount['discount'])
+            ->map(fn ($group) => [
+                'discount' => $group->first()['discount'],
+                'description' => $group->first()['description'],
+                'amount' => $group->sum('amount'),
+            ])
+            ->values()
+            ->all();
+    }
+
     public function taxTotal($taxTotal = null)
     {
         return $this->fluentlyGetOrSet('taxTotal')

@@ -9,6 +9,7 @@ use DuncanMcClean\Cargo\Events\ProductNoStockRemaining;
 use DuncanMcClean\Cargo\Events\ProductStockLow;
 use DuncanMcClean\Cargo\Exceptions\PreventCheckout;
 use DuncanMcClean\Cargo\Facades\Cart;
+use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Facades\PaymentGateway;
 use DuncanMcClean\Cargo\Facades\Product;
@@ -38,7 +39,6 @@ class CheckoutController
         }
 
         try {
-            $this->ensureCouponIsValid($cart, $request);
             $this->ensureProductsAreAvailable($cart, $request);
 
             throw_if(! $cart->taxableAddress(), new PreventCheckout(__('Order cannot be created without an address.')));
@@ -58,10 +58,7 @@ class CheckoutController
             }
 
             $this->updateStock($order);
-
-            if ($order->coupon()) {
-                DiscountRedeemed::dispatch($order->coupon(), $order);
-            }
+            $this->dispatchDiscountRedeemedEvents($order);
         } catch (ValidationException|PreventCheckout $e) {
             $paymentGateway->cancel($cart);
 
@@ -81,19 +78,6 @@ class CheckoutController
             expiration: now()->addHour(),
             parameters: ['order_id' => $order->id()]
         );
-    }
-
-    private function ensureCouponIsValid(CartContract $cart, Request $request): void
-    {
-        if (! $cart->coupon()) {
-            return;
-        }
-
-        $isValid = $cart->lineItems()->every(fn (LineItem $lineItem) => $cart->coupon()->isValid($cart, $lineItem));
-
-        if (! $isValid) {
-            throw new PreventCheckout(__('cargo::validation.discount_no_longer_valid'));
-        }
     }
 
     private function ensureProductsAreAvailable(CartContract $cart, Request $request): void
@@ -176,5 +160,14 @@ class CheckoutController
         }
 
         return config('statamic.cargo.routes.checkout_confirmation');
+    }
+
+    private function dispatchDiscountRedeemedEvents(OrderContract $order)
+    {
+        collect($order->discounts())->each(function ($discount) use ($order) {
+            $discount = Discount::find($discount['discount']);
+
+            DiscountRedeemed::dispatch($discount, $order);
+        });
     }
 }

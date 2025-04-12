@@ -203,29 +203,16 @@ class CheckoutTest extends TestCase
     }
 
     #[Test]
-    public function cant_checkout_with_invalid_coupon_code()
-    {
-        $discount = tap(Discount::make()->code('foobar')->type(DiscountType::Percentage)->amount(50)->set('expires_at', '2025-01-01'))->save();
-
-        $cart = $this->makeCart();
-        $cart->coupon($discount)->saveWithoutRecalculating();
-
-        $this
-            ->get('/!/cargo/payments/fake/checkout')
-            ->assertSessionHasErrors(['checkout' => 'The coupon code is no longer valid for the items in your cart. Please remove it to continue.']);
-
-        $this->assertNull(Facades\Order::query()->where('cart', $cart->id())->first());
-    }
-
-    #[Test]
-    public function coupon_redeemed_event_is_dispatched()
+    public function discount_redeemed_event_is_dispatched()
     {
         Event::fake();
 
-        $discount = tap(Discount::make()->code('foobar')->type(DiscountType::Percentage)->amount(50))->save();
+        Discount::make()->id('a')->type(DiscountType::Percentage)->amount(50)->save();
+        Discount::make()->id('b')->code('B')->type(DiscountType::Fixed)->amount(100)->save();
 
-        $cart = $this->makeCart();
-        $cart->coupon($discount)->save();
+        $cart = $this->makeCart(['discount_code' => 'B']);
+
+        $this->withoutExceptionHandling();
 
         $this
             ->get('/!/cargo/payments/fake/checkout')
@@ -233,12 +220,12 @@ class CheckoutTest extends TestCase
 
         $this->assertNotNull($order = Facades\Order::query()->where('cart', $cart->id())->first());
         $this->assertEquals(OrderStatus::PaymentReceived, $order->status());
-        $this->assertEquals($discount->id(), $order->coupon()->id());
 
-        Event::assertDispatched(DiscountRedeemed::class, fn ($event) => $event->discount->id() === $discount->id());
+        Event::assertDispatched(DiscountRedeemed::class, fn ($event) => $event->discount->id() === 'a');
+        Event::assertDispatched(DiscountRedeemed::class, fn ($event) => $event->discount->id() === 'b');
     }
 
-    private function makeCart()
+    private function makeCart(array $data = [])
     {
         $collection = tap(Collection::make('products'))->save();
         Entry::make()->collection('products')->id('product-1')->data(['price' => 5000])->save();
@@ -256,6 +243,7 @@ class CheckoutTest extends TestCase
                 'shipping_postcode' => 'FA 1234',
                 'shipping_country' => 'GBR',
                 'shipping_state' => 'GLG',
+                ...$data,
             ]);
 
         $cart->save();

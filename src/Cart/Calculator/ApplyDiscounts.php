@@ -32,7 +32,7 @@ class ApplyDiscounts
 
                 return [
                     'discount' => $discount->id(),
-                    'type' => $discount->type()->value,
+                    'description' => $discount->code() ?? $discount->name(),
                     'amount' => $amount,
                 ];
             });

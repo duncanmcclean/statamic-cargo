@@ -47,7 +47,6 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
     protected $cart;
     protected $status;
     protected $customer;
-    protected $coupon;
     protected $lineItems;
     protected $site;
     protected $withEvents = true;
@@ -183,31 +182,6 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
                 }
 
                 return $customer;
-            })
-            ->args(func_get_args());
-    }
-
-    public function coupon($coupon = null)
-    {
-        return $this
-            ->fluentlyGetOrSet('coupon')
-            ->getter(function ($coupon) {
-                if (! $coupon) {
-                    return null;
-                }
-
-                return DiscountFacade::find($coupon);
-            })
-            ->setter(function ($coupon) {
-                if (! $coupon) {
-                    return null;
-                }
-
-                if ($coupon instanceof Discount) {
-                    return $coupon->id();
-                }
-
-                return $coupon;
             })
             ->args(func_get_args());
     }
@@ -378,7 +352,6 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
             'cart' => $this->cart(),
             'status' => $this->status()->value,
             'customer' => $this->customer,
-            'coupon' => $this->coupon,
             'line_items' => $this->lineItems()->map->fileData()->all(),
             'grand_total' => $this->grandTotal(),
             'sub_total' => $this->subTotal(),
@@ -421,7 +394,6 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
             'cart' => $this->cart(),
             'status' => $this->status()?->value,
             'customer' => $this->customer(),
-            'coupon' => $this->coupon(),
             'line_items' => $this->lineItems(),
             'grand_total' => $this->grandTotal(),
             'sub_total' => $this->subTotal(),
@@ -458,10 +430,6 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
             }
 
             return $this->customer;
-        }
-
-        if ($field === 'coupon') {
-            return $this->coupon;
         }
 
         if (method_exists($this, $method = Str::camel($field))) {

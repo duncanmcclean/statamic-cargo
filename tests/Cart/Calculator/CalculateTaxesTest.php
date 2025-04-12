@@ -193,13 +193,12 @@ class CalculateTaxesTest extends TestCase
     #[Test]
     public function calculates_line_item_tax_when_discount_is_applied()
     {
-        $coupon = tap(Discount::make()->code('foobar')->type(DiscountType::Fixed)->amount(500))->save();
+        Discount::make()->code('FOOBAR')->type(DiscountType::Fixed)->amount(500)->save();
 
         $product = Entry::make()->collection('products')->data(['price' => 2500, 'tax_class' => 'standard']);
         $product->save();
 
         $cart = Cart::make()
-            ->coupon($coupon->id())
             ->lineItems([
                 ['id' => 'one', 'product' => $product->id(), 'quantity' => 1, 'total' => 2500, 'discount_amount' => 500],
             ])
@@ -209,6 +208,7 @@ class CalculateTaxesTest extends TestCase
                 'shipping_postcode' => 'FA 1234',
                 'shipping_country' => 'USA',
                 'shipping_state' => 'CA',
+                'discount_code' => 'FOOBAR',
             ]);
 
         TaxZone::make()->handle('usa')->data([

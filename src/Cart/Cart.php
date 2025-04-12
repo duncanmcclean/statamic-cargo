@@ -47,7 +47,6 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
 
     protected $id;
     protected $customer;
-    protected $coupon;
     protected $lineItems;
     protected $site;
     protected $withEvents = true;
@@ -96,31 +95,6 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
                 }
 
                 return $customer;
-            })
-            ->args(func_get_args());
-    }
-
-    public function coupon($coupon = null)
-    {
-        return $this
-            ->fluentlyGetOrSet('coupon')
-            ->getter(function ($coupon) {
-                if (! $coupon) {
-                    return null;
-                }
-
-                return DiscountFacade::find($coupon);
-            })
-            ->setter(function ($coupon) {
-                if (! $coupon) {
-                    return null;
-                }
-
-                if ($coupon instanceof Discount) {
-                    return $coupon->id();
-                }
-
-                return $coupon;
             })
             ->args(func_get_args());
     }
@@ -289,7 +263,6 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
         return $this->data()->merge([
             'id' => $this->id(),
             'customer' => $this->customer,
-            'coupon' => $this->coupon,
             'line_items' => $this->lineItems()->map->fileData()->all(),
             'grand_total' => $this->grandTotal(),
             'sub_total' => $this->subTotal(),
@@ -330,7 +303,7 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
         $payload = [
             'date' => Carbon::now()->timestamp,
             'customer' => $this->customer(),
-            'coupon' => $this->coupon(),
+            'discount_code' => $this->get('discount_code'),
             'line_items' => $this->lineItems()->map->toArray()->all(),
             'shipping_method' => $this->get('shipping_method'),
             'shipping_option' => $this->get('shipping_option'),
@@ -362,7 +335,6 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
     {
         return array_merge([
             'customer' => $this->customer(),
-            'coupon' => $this->coupon(),
             'line_items' => $this->lineItems(),
             'grand_total' => $this->grandTotal(),
             'sub_total' => $this->subTotal(),
@@ -395,10 +367,6 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
             }
 
             return $this->customer;
-        }
-
-        if ($field === 'coupon') {
-            return $this->coupon;
         }
 
         if (method_exists($this, $method = Str::camel($field))) {

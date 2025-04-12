@@ -3,10 +3,12 @@
 namespace Tests\Cart;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart as CartContract;
+use DuncanMcClean\Cargo\Discounts\DiscountType;
 use DuncanMcClean\Cargo\Events\CartCreated;
 use DuncanMcClean\Cargo\Events\CartDeleted;
 use DuncanMcClean\Cargo\Events\CartSaved;
 use DuncanMcClean\Cargo\Facades\Cart;
+use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use DuncanMcClean\Cargo\Facades\TaxZone;
 use DuncanMcClean\Cargo\Shipping\ShippingOption;
@@ -181,6 +183,35 @@ class CartTest extends TestCase
     }
 
     #[Test]
+    public function it_returns_discounts()
+    {
+        $this->makeProduct('123')->set('price', 2500)->save();
+        $this->makeProduct('456')->set('price', 5000)->save();
+
+        $discountA = Discount::make()->id('a')->name('Discount A')->code('A')->type(DiscountType::Percentage)->amount(10); // Shouldn't be applied, it has a discount code.
+        $discountB = Discount::make()->id('b')->name('Discount B')->type(DiscountType::Percentage)->amount(15); // Should be applied to both line items.
+        $discountC = Discount::make()->id('c')->name('Discount C')->type(DiscountType::Fixed)->amount(100)->set('products', ['123']); // Should be applied to the first line item.
+        $discountD = Discount::make()->id('d')->name('Discount D')->type(DiscountType::Fixed)->amount(200)->set('products', ['456'])->set('expires_at', '2025-01-01'); // Shouldn't be applied, it has expired.
+
+        $discountA->save();
+        $discountB->save();
+        $discountC->save();
+        $discountD->save();
+
+        $cart = Cart::make()->lineItems([
+            ['id' => 'abc', 'product' => '123', 'quantity' => 1, 'total' => 2500],
+            ['id' => 'def', 'product' => '456', 'quantity' => 1, 'total' => 5000],
+        ]);
+
+        $cart->save();
+
+        $this->assertEquals([
+            ['discount' => 'b', 'description' => 'Discount B', 'amount' => 1125],
+            ['discount' => 'c', 'description' => 'Discount C', 'amount' => 100],
+        ], $cart->discounts());
+    }
+
+    #[Test]
     public function it_returns_the_shipping_method()
     {
         FakeShippingMethod::register();
@@ -296,5 +327,12 @@ class CartTest extends TestCase
         Event::assertNotDispatched(CartDeleted::class, function ($event) use ($cart) {
             return $event->cart->id() === $cart->id();
         });
+    }
+
+    protected function makeProduct($id = null)
+    {
+        Collection::make('products')->save();
+
+        return tap(Entry::make()->collection('products')->id($id))->save();
     }
 }

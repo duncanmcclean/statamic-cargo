@@ -15,8 +15,8 @@ Your order has been confirmed and is now being processed. We will notify you whe
 |                    |               |
 | -----------------: | ------------: |
 | **Subtotal** | {{ $order->sub_total }} |
-@if($order->coupon)
-| **Coupon Discount** | -{{ $order->discount_total }} |
+@if($order->discounts)
+| **Discounts** | -{{ $order->discount_total }}|
 @endif
 @if($order->shippingOption)
 | **Shipping** ({{ $order->shippingOption()->name }}) | {{ $order->shipping_total }} |

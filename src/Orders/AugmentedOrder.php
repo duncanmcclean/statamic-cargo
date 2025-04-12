@@ -35,6 +35,7 @@ class AugmentedOrder extends AugmentedCart
             'status',
             'is_free',
             'customer',
+            'discounts',
             'shipping_method',
             'shipping_option',
             'payment_gateway',

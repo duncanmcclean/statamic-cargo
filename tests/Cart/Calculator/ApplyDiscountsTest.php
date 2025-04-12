@@ -49,13 +49,13 @@ class ApplyDiscountsTest extends TestCase
         $cart = app(ApplyDiscounts::class)->handle($cart, fn ($cart) => $cart);
 
         $this->assertEquals([
-            ['discount' => 'b', 'type' => 'percentage', 'amount' => 375],
-            ['discount' => 'c', 'type' => 'fixed', 'amount' => 100],
+            ['discount' => 'b', 'description' => 'Discount B', 'amount' => 375],
+            ['discount' => 'c', 'description' => 'Discount C', 'amount' => 100],
         ], $cart->lineItems()->find('abc')->get('discounts'));
         $this->assertEquals(475, $cart->lineItems()->find('abc')->discountTotal());
 
         $this->assertEquals([
-            ['discount' => 'b', 'type' => 'percentage', 'amount' => 750],
+            ['discount' => 'b', 'description' => 'Discount B', 'amount' => 750],
         ], $cart->lineItems()->find('def')->get('discounts'));
         $this->assertEquals(750, $cart->lineItems()->find('def')->discountTotal());
 
@@ -82,20 +82,18 @@ class ApplyDiscountsTest extends TestCase
         $cart = app(ApplyDiscounts::class)->handle($cart, fn ($cart) => $cart);
 
         $this->assertEquals([
-            ['discount' => 'b', 'type' => 'percentage', 'amount' => 375],
-            ['discount' => 'a', 'type' => 'percentage', 'amount' => 250],
+            ['discount' => 'b', 'description' => 'Discount B', 'amount' => 375],
+            ['discount' => 'a', 'description' => 'A', 'amount' => 250],
         ], $cart->lineItems()->find('abc')->get('discounts'));
         $this->assertEquals(625, $cart->lineItems()->find('abc')->discountTotal());
 
         $this->assertEquals([
-            ['discount' => 'b', 'type' => 'percentage', 'amount' => 750],
+            ['discount' => 'b', 'description' => 'Discount B', 'amount' => 750],
         ], $cart->lineItems()->find('def')->get('discounts'));
         $this->assertEquals(750, $cart->lineItems()->find('def')->discountTotal());
 
         $this->assertEquals(1375, $cart->discountTotal());
     }
-
-
 
     #[Test]
     public function applies_percentage_discount()

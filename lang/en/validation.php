@@ -1,8 +1,7 @@
 <?php
 
 return [
-    'discount_no_longer_valid' => 'The coupon code is no longer valid for the items in your cart. Please remove it to continue.',
-    'invalid_coupon_code' => 'Invalid coupon code.',
+    'invalid_discount_code' => 'Invalid discount code.',
     'no_physical_products' => 'This cart does not contain any physical products.',
     'prerequisite_product' => 'Before purchasing this product, you must purchase :product first.',
     'prerequisite_product_logged_out' => 'This product requires another product to be purchased first. Please login or register to continue.',

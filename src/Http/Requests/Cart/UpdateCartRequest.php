@@ -3,18 +3,21 @@
 namespace DuncanMcClean\Cargo\Http\Requests\Cart;
 
 use DuncanMcClean\Cargo\Facades\Cart;
+use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Http\Requests\Concerns\AcceptsCustomFormRequests;
+use DuncanMcClean\Cargo\Rules\ValidDiscountCode;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Traits\Localizable;
 use Illuminate\Validation\ValidationException;
 use Statamic\Exceptions\NotFoundHttpException;
+use Statamic\Facades\Site;
 
 class UpdateCartRequest extends FormRequest
 {
-    use AcceptsCustomFormRequests;
+    use AcceptsCustomFormRequests, Localizable;
 
-    public $blueprintFields;
-    public $submittedValues;
+    private $cachedFields;
 
     public function authorize()
     {
@@ -27,12 +30,33 @@ class UpdateCartRequest extends FormRequest
         return true;
     }
 
-    protected function failedValidation(Validator $validator)
+    /**
+     * Optionally override the redirect url based on the presence of _error_redirect
+     */
+    protected function getRedirectUrl()
     {
-        if ($this->isPrecognitive() || $this->wantsJson()) {
-            return parent::failedValidation($validator);
+        $url = $this->redirector->getUrlGenerator();
+
+        if ($redirect = $this->input('_error_redirect')) {
+            return $url->to($redirect);
         }
 
+        return $url->previous();
+    }
+
+    public function rules()
+    {
+        $fields = $this->getFormFields();
+
+        return $fields
+            ->validator()
+            ->withRules($this->extraRules())
+            ->validator()
+            ->getRules();
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
         if ($this->ajax()) {
             $errors = $validator->errors();
 
@@ -46,42 +70,53 @@ class UpdateCartRequest extends FormRequest
             throw (new ValidationException($validator, $response));
         }
 
-        $errorResponse = $this->has('_error_redirect') ? redirect($this->input('_error_redirect')) : back();
-
-        throw (new ValidationException($validator, $errorResponse->withInput()->withErrors($validator->errors(), 'cart.update')));
+        return parent::failedValidation($validator);
     }
 
-    public function processedValues()
+    private function extraRules()
     {
-        return $this->blueprintFields->process()->values()
-            ->only(Cart::current()->updatableFields())
-            ->only(array_keys($this->submittedValues));
+        return [
+            'customer' => ['nullable', 'array'],
+            'customer.name' => ['nullable', 'string'],
+            'customer.first_name' => ['nullable', 'string'],
+            'customer.last_name' => ['nullable', 'string'],
+            'customer.email' => ['nullable', 'email'],
+            'name' => ['nullable', 'string'],
+            'first_name' => ['nullable', 'string'],
+            'last_name' => ['nullable', 'string'],
+            'email' => ['nullable', 'email'],
+            'discount_code' => ['nullable', 'string', new ValidDiscountCode],
+            'shipping_method' => ['nullable', 'string'],
+            'shipping_option' => ['nullable', 'string'],
+        ];
     }
 
-    public function validator()
+    private function getFormFields()
     {
-        $cart = Cart::current();
-        $fields = $cart->blueprint()->fields()->except(['customer', 'coupon']);
+        if ($this->cachedFields) {
+            return $this->cachedFields;
+        }
 
-        $this->submittedValues = $this->only($cart->updatableFields());
-        $this->blueprintFields = $fields->addValues($this->submittedValues);
+        $fields = Order::blueprint()->fields();
+        $fields->only(Cart::current()->updatableFields());
 
-        return $this->blueprintFields
-            ->validator()
-            ->withRules([
-                'customer' => ['nullable', 'array'],
-                'customer.name' => ['nullable', 'string'],
-                'customer.first_name' => ['nullable', 'string'],
-                'customer.last_name' => ['nullable', 'string'],
-                'customer.email' => ['nullable', 'email'],
-                'name' => ['nullable', 'string'],
-                'first_name' => ['nullable', 'string'],
-                'last_name' => ['nullable', 'string'],
-                'email' => ['nullable', 'email'],
-                'coupon' => ['nullable', 'string'],
-                'shipping_method' => ['nullable', 'string'],
-                'shipping_option' => ['nullable', 'string'],
-            ])
-            ->validator();
+        return $this->cachedFields = $fields->addValues($this->all());
+    }
+
+    public function validateResolved()
+    {
+        // If this was submitted from a front-end form, we want to use the appropriate language
+        // for the translation messages. If there's no previous url, it was likely submitted
+        // directly in a headless format. In that case, we'll just use the default lang.
+        $site = ($previousUrl = $this->previousUrl()) ? Site::findByUrl($previousUrl) : null;
+
+        return $this->withLocale($site?->lang(), fn () => parent::validateResolved());
+    }
+
+    private function previousUrl()
+    {
+        return ($referrer = request()->header('referer'))
+            ? url()->to($referrer)
+            : session()->previousUrl();
     }
 }

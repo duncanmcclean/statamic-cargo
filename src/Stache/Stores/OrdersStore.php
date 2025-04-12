@@ -42,7 +42,6 @@ class OrdersStore extends BasicStore
             ->cart(Arr::pull($data, 'cart'))
             ->status(Arr::pull($data, 'status'))
             ->customer(Arr::pull($data, 'customer'))
-            ->coupon(Arr::pull($data, 'coupon'))
             ->lineItems(Arr::pull($data, 'line_items'))
             ->grandTotal(Arr::pull($data, 'grand_total'))
             ->subTotal(Arr::pull($data, 'sub_total'))

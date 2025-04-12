@@ -42,7 +42,7 @@ class Cart extends Tags
             return $this->{$method}();
         }
 
-        // When doing something like `{{ cart:coupon:code }}`, we need to get coupon first,
+        // When doing something like `{{ cart:customer:email }}`, we need to get customer first,
         // then we can use Laravel's Arr helper to get the value from the array.
         if (Str::contains($tag, ':')) {
             $field = Str::before($tag, ':');
