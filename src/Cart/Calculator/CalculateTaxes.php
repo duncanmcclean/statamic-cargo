@@ -32,6 +32,10 @@ class CalculateTaxes
 
             $taxBreakdowns = $taxBreakdowns->merge($taxBreakdown);
 
+            if ($taxBreakdown->isEmpty()) {
+                return;
+            }
+
             $lineItem->set('tax_breakdown', $taxBreakdown->toArray());
             $lineItem->taxTotal((int) $taxBreakdown->sum('amount'));
 
