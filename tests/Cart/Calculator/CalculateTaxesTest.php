@@ -70,7 +70,8 @@ class CalculateTaxesTest extends TestCase
 
         $lineItem = $cart->lineItems()->find('one');
 
-        $this->assertEquals([], $lineItem->get('tax_breakdown'));
+        // We don't save the tax_breakdown array when there are no tax zones available.
+        $this->assertNull($lineItem->get('tax_breakdown'));
 
         $this->assertEquals(0, $lineItem->taxTotal());
         $this->assertEquals(10000, $lineItem->total());
@@ -105,7 +106,8 @@ class CalculateTaxesTest extends TestCase
 
         $lineItem = $cart->lineItems()->find('one');
 
-        $this->assertEquals([], $lineItem->get('tax_breakdown'));
+        // We don't save the tax_breakdown array when there are no tax zones available.
+        $this->assertNull($lineItem->get('tax_breakdown'));
 
         $this->assertEquals(0, $lineItem->taxTotal());
         $this->assertEquals(10000, $lineItem->total());
