@@ -97,12 +97,6 @@
                                 </div>
                             </template>
 
-                            <template #cell-value="{ row: discount, value }">
-                                <div>
-                                    {{ discount.discount_text }}
-                                </div>
-                            </template>
-
                             <template #actions="{ row: discount, index }">
                                 <dropdown-list placement="left-start">
                                     <dropdown-item

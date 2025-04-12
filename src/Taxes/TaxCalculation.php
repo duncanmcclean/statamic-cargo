@@ -3,12 +3,9 @@
 namespace DuncanMcClean\Cargo\Taxes;
 
 use Illuminate\Contracts\Support\Arrayable;
-use Statamic\Support\Traits\FluentlyGetsAndSets;
 
 class TaxCalculation implements Arrayable
 {
-    use FluentlyGetsAndSets;
-
     public $rate;
     public $description;
     public $zone;
