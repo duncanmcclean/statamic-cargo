@@ -24,7 +24,7 @@ trait GetsFormRequests
      */
     protected function parseFormRequest($formRequest)
     {
-        if (! Str::contains($formRequest, "App\\")) {
+        if (! Str::contains($formRequest, 'App\\')) {
             $formRequest = 'App\\Http\\Requests\\'.$formRequest;
         }
 
