@@ -31,13 +31,13 @@
 }
 
 .discount-status-index-field {
-    @apply inline-block text-xs bg-gray-300 dark:bg-dark-200 text-gray-800 dark:text-dark-150 shrink rounded-full px-2 py-0.5 text-center justify-center;
+    @apply inline-block shrink justify-center rounded-full bg-gray-300 px-2 py-0.5 text-center text-xs text-gray-800 dark:bg-dark-200 dark:text-dark-150;
 
     &.status-active {
-        @apply text-green-900 dark:text-green-950 bg-green-200 dark:bg-green-300;
+        @apply bg-green-200 text-green-900 dark:bg-green-300 dark:text-green-950;
     }
 
     &.status-scheduled {
-        @apply text-amber-900 dark:text-amber-950 bg-amber-200 dark:bg-amber-300;
+        @apply bg-amber-200 text-amber-900 dark:bg-amber-300 dark:text-amber-950;
     }
 }

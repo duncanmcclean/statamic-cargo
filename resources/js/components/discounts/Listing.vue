@@ -92,24 +92,24 @@
                                         :href="discount.edit_url"
                                         @click.stop
                                     >
-	                                    <span
-		                                    class="little-dot ltr:mr-2 rtl:ml-2"
-		                                    v-tooltip="getStatusLabel(discount)"
-		                                    :class="getStatusClass(discount)"
-		                                    v-if="!columnShowing('status')"
-	                                    />
-	                                    <span v-text="discount.name" />
+                                        <span
+                                            class="little-dot ltr:mr-2 rtl:ml-2"
+                                            v-tooltip="getStatusLabel(discount)"
+                                            :class="getStatusClass(discount)"
+                                            v-if="!columnShowing('status')"
+                                        />
+                                        <span v-text="discount.name" />
                                     </a>
                                 </div>
                             </template>
-	                        <template #cell-status="{ row: discount }">
-		                        <div
-			                        class="discount-status-index-field select-none"
-			                        v-tooltip="getStatusTooltip(discount)"
-			                        :class="`status-${discount.status}`"
-			                        v-text="getStatusLabel(discount)"
-		                        />
-	                        </template>
+                            <template #cell-status="{ row: discount }">
+                                <div
+                                    class="discount-status-index-field select-none"
+                                    v-tooltip="getStatusTooltip(discount)"
+                                    :class="`status-${discount.status}`"
+                                    v-text="getStatusLabel(discount)"
+                                />
+                            </template>
                             <template #actions="{ row: discount, index }">
                                 <dropdown-list placement="left-start">
                                     <dropdown-item
@@ -158,40 +158,40 @@ export default {
         };
     },
 
-	methods: {
-		getStatusClass(discount) {
-			if (discount.status === 'active') {
-				return 'bg-green-600';
-			} else if (discount.status === 'scheduled') {
-				return 'bg-amber-200 dark:bg-amber-300';
-			} else if (discount.status === 'expired') {
-				return 'bg-gray-400 dark:bg-dark-200';
-			}
-		},
+    methods: {
+        getStatusClass(discount) {
+            if (discount.status === 'active') {
+                return 'bg-green-600';
+            } else if (discount.status === 'scheduled') {
+                return 'bg-amber-200 dark:bg-amber-300';
+            } else if (discount.status === 'expired') {
+                return 'bg-gray-400 dark:bg-dark-200';
+            }
+        },
 
-		getStatusLabel(discount) {
-			if (discount.status === 'active') {
-				return __('Active');
-			} else if (discount.status === 'scheduled') {
-				return __('Scheduled');
-			} else if (discount.status === 'expired') {
-				return __('Expired');
-			}
-		},
+        getStatusLabel(discount) {
+            if (discount.status === 'active') {
+                return __('Active');
+            } else if (discount.status === 'scheduled') {
+                return __('Scheduled');
+            } else if (discount.status === 'expired') {
+                return __('Expired');
+            }
+        },
 
-		getStatusTooltip(discount) {
-			if (discount.status === 'active') {
-				return __('Active');
-			} else if (discount.status === 'scheduled') {
-				return __('Scheduled');
-			} else if (discount.status === 'expired') {
-				return __('Expired');
-			}
-		},
+        getStatusTooltip(discount) {
+            if (discount.status === 'active') {
+                return __('Active');
+            } else if (discount.status === 'scheduled') {
+                return __('Scheduled');
+            } else if (discount.status === 'expired') {
+                return __('Expired');
+            }
+        },
 
-		columnShowing(column) {
-			return this.visibleColumns.find((c) => c.field === column);
-		},
-	},
+        columnShowing(column) {
+            return this.visibleColumns.find((c) => c.field === column);
+        },
+    },
 };
 </script>
