@@ -3,7 +3,6 @@
 namespace DuncanMcClean\Cargo\Discounts;
 
 use ArrayAccess;
-use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Discounts\Discount as Contract;
 use DuncanMcClean\Cargo\Discounts\Types\DiscountType;
 use DuncanMcClean\Cargo\Events\DiscountCreated;
@@ -11,8 +10,6 @@ use DuncanMcClean\Cargo\Events\DiscountDeleted;
 use DuncanMcClean\Cargo\Events\DiscountSaved;
 use DuncanMcClean\Cargo\Facades;
 use DuncanMcClean\Cargo\Facades\Discount as DiscountFacade;
-use DuncanMcClean\Cargo\Facades\Order as OrderFacade;
-use DuncanMcClean\Cargo\Orders\LineItem;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Str;
 use Statamic\Contracts\Data\Augmentable;
