@@ -57,7 +57,7 @@ jobs:
 
       - name: Execute tests (Payments)
         run: vendor/bin/phpunit --group=payments
-        if: steps.should-run-payment-tests.outputs.result == 'true'
+        if: steps.should-run-payment-tests.outputs.result == 'true' && matrix.php == 8.4 && matrix.laravel == '12.*' && matrix.stability == 'prefer-stable'
         env:
           STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
           STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
