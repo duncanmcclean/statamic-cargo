@@ -26,10 +26,7 @@ class AugmentedDiscount extends AbstractAugmented
         return [
             'id',
             'name',
-            'code',
             'type',
-            'amount',
-            'discount_text',
         ];
     }
 }
