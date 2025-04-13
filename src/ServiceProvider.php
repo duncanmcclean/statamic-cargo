@@ -222,16 +222,16 @@ class ServiceProvider extends AddonServiceProvider
 
     protected function bootRouteBindings(): self
     {
-        Route::bind('discount', function ($id, $route = null) {
+        Route::bind('discount', function ($handle, $route = null) {
             if (! $route || ! $this->isCpRoute($route)) {
                 return false;
             }
 
-            $field = $route->bindingFieldFor('discount') ?? 'id';
+            $field = $route->bindingFieldFor('discount') ?? 'handle';
 
             return $field == 'id'
-                ? Discount::find($id)
-                : Discount::query()->where($field, $id)->first();
+                ? Discount::find($handle)
+                : Discount::query()->where($field, $handle)->first();
         });
 
         Route::bind('order', function ($id, $route = null) {
