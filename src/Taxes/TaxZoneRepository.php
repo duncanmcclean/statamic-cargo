@@ -85,10 +85,12 @@ class TaxZoneRepository implements Contract
                                         'display' => __('Type'),
                                         'instructions' => __('cargo::messages.tax_zones_type_instructions'),
                                         'options' => [
+                                            'everywhere' => __('Everywhere'),
                                             'countries' => __('Limit to countries'),
                                             'states' => __('Limit to states'),
                                             'postcodes' => __('Limit to postcodes'),
                                         ],
+                                        'default' => 'everywhere',
                                         'validate' => ['required', new UniqueTaxZone],
                                     ],
                                 ],
@@ -98,7 +100,8 @@ class TaxZoneRepository implements Contract
                                         'type' => 'dictionary',
                                         'display' => __('Countries'),
                                         'dictionary' => 'countries',
-                                        'validate' => ['required', 'min:1'],
+                                        'validate' => ['required_unless:type,everywhere', 'min:1'],
+                                        'unless' => ['type' => 'everywhere'],
                                     ],
                                 ],
                                 [

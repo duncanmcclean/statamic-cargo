@@ -24,6 +24,31 @@ class GetTaxRatesTest extends TestCase
     }
 
     #[Test]
+    public function can_get_tax_rates_by_everywhere()
+    {
+        $cart = Cart::make()->data([
+            'shipping_line_1' => '123 Fake St',
+            'shipping_city' => 'Fakeville',
+            'shipping_postcode' => 'FA 1234',
+            'shipping_country' => 'USA',
+            'shipping_state' => 'CA',
+        ]);
+
+        $taxClass = tap(TaxClass::make()->handle('standard'))->save();
+
+        TaxZone::make()->handle('international')->data([
+            'type' => 'everywhere',
+            'rates' => ['standard' => 12],
+        ])->save();
+
+        $taxRates = (new GetTaxRates)($cart->shippingAddress(), $taxClass);
+
+        $this->assertEquals([
+            'international' => 12,
+        ], $taxRates->all());
+    }
+
+    #[Test]
     public function can_get_tax_rates_by_country()
     {
         $cart = Cart::make()->data([

@@ -14,6 +14,10 @@ class GetTaxRates
     {
         return TaxZone::all()
             ->filter(function (TaxZoneContract $taxZone) use ($address) {
+                if ($taxZone->get('type') === 'everywhere') {
+                    return true;
+                }
+
                 if ($taxZone->get('type') === 'countries') {
                     return in_array($address->country, $taxZone->get('countries'));
                 }
