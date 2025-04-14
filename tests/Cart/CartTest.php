@@ -7,7 +7,6 @@ use DuncanMcClean\Cargo\Events\CartCreated;
 use DuncanMcClean\Cargo\Events\CartDeleted;
 use DuncanMcClean\Cargo\Events\CartSaved;
 use DuncanMcClean\Cargo\Facades\Cart;
-use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use DuncanMcClean\Cargo\Facades\TaxZone;
 use DuncanMcClean\Cargo\Shipping\ShippingOption;
