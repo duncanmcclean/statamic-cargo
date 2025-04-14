@@ -33,6 +33,11 @@ class ServiceProvider extends AddonServiceProvider
     protected $config = false;
     protected $viewNamespace = 'cargo';
 
+    protected $commands = [
+        Console\Commands\Migration\Migrate::class,
+        Console\Commands\Migration\MigrateConfigs::class,
+    ];
+
     protected $policies = [
         Contracts\Discounts\Discount::class => Policies\DiscountPolicy::class,
         Contracts\Orders\Order::class => Policies\OrderPolicy::class,
