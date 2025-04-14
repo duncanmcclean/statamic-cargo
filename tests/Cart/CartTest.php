@@ -297,4 +297,11 @@ class CartTest extends TestCase
             return $event->cart->id() === $cart->id();
         });
     }
+
+    protected function makeProduct($id = null)
+    {
+        Collection::make('products')->save();
+
+        return tap(Entry::make()->collection('products')->id($id))->save();
+    }
 }

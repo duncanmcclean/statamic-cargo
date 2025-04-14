@@ -18,6 +18,7 @@ class LineItems extends Collection
             ->unitPrice(Arr::pull($data, 'unit_price'))
             ->subTotal(Arr::pull($data, 'sub_total', 0))
             ->taxTotal(Arr::pull($data, 'tax_total', 0))
+            ->discountTotal(Arr::pull($data, 'discount_total', 0))
             ->total(Arr::pull($data, 'total', 0))
             ->data(collect($data));
 
@@ -41,6 +42,7 @@ class LineItems extends Collection
             ->unitPrice(Arr::pull($data, 'unit_price', $lineItem->unitPrice()))
             ->total(Arr::pull($data, 'total', $lineItem->total()))
             ->taxTotal(Arr::pull($data, 'tax_total', $lineItem->taxTotal()))
+            ->discountTotal(Arr::pull($data, 'discount_total', $lineItem->discountTotal()))
             ->variant(Arr::pull($data, 'variant', $lineItem->variant))
             ->data(collect($data));
 

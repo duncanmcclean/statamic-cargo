@@ -4,11 +4,12 @@ namespace DuncanMcClean\Cargo\Http\Controllers\Payments;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart as CartContract;
 use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
-use DuncanMcClean\Cargo\Events\CouponRedeemed;
+use DuncanMcClean\Cargo\Events\DiscountRedeemed;
 use DuncanMcClean\Cargo\Events\ProductNoStockRemaining;
 use DuncanMcClean\Cargo\Events\ProductStockLow;
 use DuncanMcClean\Cargo\Exceptions\PreventCheckout;
 use DuncanMcClean\Cargo\Facades\Cart;
+use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Facades\PaymentGateway;
 use DuncanMcClean\Cargo\Facades\Product;
@@ -38,7 +39,6 @@ class CheckoutController
         }
 
         try {
-            $this->ensureCouponIsValid($cart, $request);
             $this->ensureProductsAreAvailable($cart, $request);
 
             throw_if(! $cart->taxableAddress(), new PreventCheckout(__('Order cannot be created without an address.')));
@@ -58,10 +58,7 @@ class CheckoutController
             }
 
             $this->updateStock($order);
-
-            if ($order->coupon()) {
-                CouponRedeemed::dispatch($order->coupon(), $order);
-            }
+            $this->updateDiscounts($order);
         } catch (ValidationException|PreventCheckout $e) {
             $paymentGateway->cancel($cart);
 
@@ -81,19 +78,6 @@ class CheckoutController
             expiration: now()->addHour(),
             parameters: ['order_id' => $order->id()]
         );
-    }
-
-    private function ensureCouponIsValid(CartContract $cart, Request $request): void
-    {
-        if (! $cart->coupon()) {
-            return;
-        }
-
-        $isValid = $cart->lineItems()->every(fn (LineItem $lineItem) => $cart->coupon()->isValid($cart, $lineItem));
-
-        if (! $isValid) {
-            throw new PreventCheckout(__('cargo::validation.coupon_no_longer_valid'));
-        }
     }
 
     private function ensureProductsAreAvailable(CartContract $cart, Request $request): void
@@ -157,6 +141,16 @@ class CheckoutController
                     ProductNoStockRemaining::dispatch($product->variant($lineItem->variant()->key()));
                 }
             }
+        });
+    }
+
+    private function updateDiscounts(OrderContract $order)
+    {
+        collect($order->get('discount_breakdown'))->each(function ($discount) use ($order) {
+            $discount = Discount::find($discount['discount']);
+            $discount->set('redemptions_count', $discount->get('redemptions_count', 0) + 1)->saveQuietly();
+
+            DiscountRedeemed::dispatch($discount, $order);
         });
     }
 

@@ -22,7 +22,6 @@ class Cart extends StacheCart
                     ? json_decode($model->customer, true)
                     : $model->customer
             )
-            ->coupon($model->coupon)
             ->lineItems($model->lineItems->map(function (LineItemModel $model) {
                 return collect($model->getAttributes())
                     ->except(['order_id', 'data'])
@@ -49,7 +48,6 @@ class Cart extends StacheCart
             'customer' => is_array($source->customer)
                 ? json_encode($source->customer)
                 : $source->customer()?->getKey(),
-            'coupon' => $source->coupon,
             'grand_total' => $source->grandTotal(),
             'sub_total' => $source->subTotal(),
             'discount_total' => $source->discountTotal(),

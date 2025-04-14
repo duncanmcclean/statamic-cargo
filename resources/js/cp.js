@@ -1,10 +1,9 @@
-import BaseCouponCreateForm from './components/coupons/BaseCreateForm.vue';
-import CouponsListing from './components/coupons/Listing.vue';
-import CouponPublishForm from './components/coupons/PublishForm.vue';
-import CouponAmountFieldtype from './components/fieldtypes/CouponAmountFieldtype.vue';
-import CouponCodeFieldtype from './components/fieldtypes/CouponCodeFieldtype.vue';
+import BaseDiscountCreateForm from './components/discounts/BaseCreateForm.vue';
+import DiscountsListing from './components/discounts/Listing.vue';
+import DiscountPublishForm from './components/discounts/PublishForm.vue';
 import CustomersFieldtype from './components/fieldtypes/CustomersFieldtype.vue';
 import CustomersFieldtypeIndex from './components/fieldtypes/CustomersFieldtypeIndex.vue';
+import DiscountCodeFieldtype from './components/fieldtypes/DiscountCodeFieldtype.vue';
 import MoneyFieldtype from './components/fieldtypes/MoneyFieldtype.vue';
 import OrderReceiptFieldtype from './components/fieldtypes/OrderReceiptFieldtype.vue';
 import ProductVariantsFieldtype from './components/fieldtypes/ProductVariants/ProductVariantsFieldtype.vue';
@@ -22,16 +21,15 @@ import TaxZoneListing from './components/tax-zones/Listing.vue';
 import TaxZonePublishForm from './components/tax-zones/PublishForm.vue';
 
 Statamic.booting(() => {
-    // Coupons
-    Statamic.$components.register('base-coupon-create-form', BaseCouponCreateForm);
-    Statamic.$components.register('coupons-listing', CouponsListing);
-    Statamic.$components.register('coupon-publish-form', CouponPublishForm);
+    // Discounts
+    Statamic.$components.register('base-discount-create-form', BaseDiscountCreateForm);
+    Statamic.$components.register('discounts-listing', DiscountsListing);
+    Statamic.$components.register('discount-publish-form', DiscountPublishForm);
 
     // Fieldtypes
-    Statamic.$components.register('coupon_amount-fieldtype', CouponAmountFieldtype);
-    Statamic.$components.register('coupon_code-fieldtype', CouponCodeFieldtype);
     Statamic.$components.register('customers-fieldtype', CustomersFieldtype);
     Statamic.$components.register('customers-fieldtype-index', CustomersFieldtypeIndex);
+    Statamic.$components.register('discount_code-fieldtype', DiscountCodeFieldtype);
     Statamic.$components.register('money-fieldtype', MoneyFieldtype);
     Statamic.$components.register('order_receipt-fieldtype', OrderReceiptFieldtype);
     Statamic.$components.register('product-variants-fieldtype', ProductVariantsFieldtype);

@@ -70,51 +70,51 @@ public function handle(CartSaved $event)
 }
 ```
 
-### CouponCreated
-`DuncanMcClean\Cargo\Events\CouponCreated`
+### DiscountCreated
+`DuncanMcClean\Cargo\Events\DiscountCreated`
 
-Dispatched after a coupon has been created.
+Dispatched after a discount has been created.
 
 ```php
-public function handle(CouponCreated $event)
+public function handle(DiscountCreated $event)
 {
-	$event->coupon;
+	$event->discount;
 }
 ```
 
-### CouponDeleted
-`DuncanMcClean\Cargo\Events\CouponDeleted`
+### DiscountDeleted
+`DuncanMcClean\Cargo\Events\DiscountDeleted`
 
-Dispatched after a coupon has been deleted.
+Dispatched after a discount has been deleted.
 
 ```php
-public function handle(CouponDeleted $event)
+public function handle(DiscountDeleted $event)
 {
-	$event->coupon;
+	$event->discount;
 }
 ```
 
-### CouponRedeemed
-`DuncanMcClean\Cargo\Events\CouponRedeemed`
+### DiscountRedeemed
+`DuncanMcClean\Cargo\Events\DiscountRedeemed`
 
-Dispatched when a coupon is redeemed during the checkout process.
+Dispatched when a discount is redeemed during the checkout process.
 
 ```php
-public function handle(CouponRedeemed $event)
+public function handle(DiscountRedeemed $event)
 {
-	$event->coupon;
+	$event->discount;
 }
 ```
 
-### CouponSaved
-`DuncanMcClean\Cargo\Events\CouponSaved`
+### DiscountSaved
+`DuncanMcClean\Cargo\Events\DiscountSaved`
 
-Dispatched after a coupon has been saved.
+Dispatched after a discount has been saved.
 
 ```php
-public function handle(CouponSaved $event)
+public function handle(DiscountSaved $event)
 {
-	$event->coupon;
+	$event->discount;
 }
 ```
 

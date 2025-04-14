@@ -19,7 +19,7 @@ class Delete extends Action
     public function visibleTo($item)
     {
         switch (true) {
-            case $item instanceof Contracts\Coupons\Coupon:
+            case $item instanceof Contracts\Discounts\Discount:
                 return true;
             default:
                 return false;
@@ -62,8 +62,8 @@ class Delete extends Action
         $item = $items->first();
 
         switch (true) {
-            case $item instanceof Contracts\Coupons\Coupon:
-                return cp_route('cargo.coupons.index');
+            case $item instanceof Contracts\Discounts\Discount:
+                return cp_route('cargo.discounts.index');
         }
     }
 }

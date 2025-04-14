@@ -42,19 +42,20 @@ return [
 
     ],
 
-    'coupons' => [
+    'discounts' => [
 
         /*
         |--------------------------------------------------------------------------
         | Storage
         |--------------------------------------------------------------------------
         |
-        | Coupons are stored in flat files. If you need to change the location of
+        | Discounts are stored in flat files. If you need to change the location of
         | them, you can do that here.
         |
         */
 
-        'directory' => base_path('content/cargo/coupons'),
+        'directory' => base_path('content/cargo/discounts'),
+
     ],
 
     'carts' => [

@@ -17,7 +17,6 @@ return new class extends Migration
             $table->uuid('id');
             $table->string('site');
             $table->string('customer')->nullable();
-            $table->string('coupon')->nullable();
             $table->bigInteger('grand_total');
             $table->bigInteger('sub_total');
             $table->bigInteger('discount_total');

@@ -61,7 +61,6 @@ class OrderRepository implements RepositoryContract
             ->cart($cart->id())
             ->site($cart->site())
             ->customer($cart->customer())
-            ->coupon($cart->coupon())
             ->lineItems($cart->lineItems())
             ->grandTotal($cart->grandTotal())
             ->subTotal($cart->subTotal())

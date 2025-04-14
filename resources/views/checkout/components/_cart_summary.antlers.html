@@ -1,6 +1,6 @@
 {{#
     @name Cart Summary
-    @desc Renders the cart summary on the Checkout page.
+    @desc Renders the cart summary on the checkout page.
 #}}
 
 <template x-if="cart">
@@ -31,21 +31,21 @@
             {{ /cart:line_items }}
         </ul>
 
-        <template x-if="!cart.coupon && !cart.is_free">
-            {{ cart:update x-data="ApplyCouponForm" @submit.prevent="applyCoupon" }}
+        <template x-if="!cart.discount_code && !cart.is_free">
+            {{ cart:update x-data="ApplyDiscountCodeForm" @submit.prevent="applyDiscountCode" }}
                 <div class="flex items-center">
                     <input
                         type="text"
-                        name="coupon"
-                        placeholder="Coupon code"
-                        x-model="coupon"
+                        name="discount_code"
+                        placeholder="Discount code"
+                        x-model="discountCode"
                         class="block w-full rounded-md border-gray-300 shadow-sm focus:border-secondary focus:ring-secondary sm:text-sm"
                         autocomplete="off"
                     >
                     <button
                         type="submit"
                         class="ml-4 h-full rounded-md border border-transparent bg-secondary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500"
-                        :disabled="!coupon || busy"
+                        :disabled="!discountCode || busy"
                     >
                         {{ 'Apply' | trans }}
                     </button>
@@ -62,23 +62,27 @@
             <span x-text="cart.sub_total"></span>
         </div>
 
-        <template x-if="cart.coupon">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-1">
-                    <span>{{ 'Coupon Discount' | trans }}</span>
-                    <span class="text-xs text-gray-500" x-text="`(${cart.coupon.code})`"></span>
-                    {{ cart:update class="flex items-center" x-data="RemoveCouponForm" @submit.prevent="removeCoupon" }}
-                        <input type="hidden" name="coupon" value="">
+        <template x-if="cart.discounts.length">
+            <template x-for="discount in cart.discounts" :key="discount.id">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-1">
+                        <span>{{ 'Discount' | trans }}</span>
+                        <span class="text-xs text-gray-500" x-text="`(${discount.code ?? discount.name})`"></span>
+                        <template x-if="discount.code !== null">
+                            {{ cart:update class="flex items-center" x-data="RemoveDiscountCodeForm" @submit.prevent="removeDiscountCode" }}
+                                <input type="hidden" name="discount_code" value="">
 
-                        <button class="text-xs text-gray-500 hover:text-black" title="Remove coupon">
-                            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    {{ /cart:update }}
+                                <button class="text-xs text-gray-500 hover:text-black" title="Remove discount code">
+                                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            {{ /cart:update }}
+                        </template>
+                    </div>
+                    <span x-text="`-${discount.amount}`"></span>
                 </div>
-                <span x-text="`-${cart.discount_total}`"></span>
-            </div>
+            </template>
         </template>
 
         {{ if {cart:has_physical_products} }}
@@ -112,19 +116,19 @@
 {{ push:footer_scripts }}
 <script>
     document.addEventListener('alpine:init', () => {
-        Alpine.data('ApplyCouponForm', () => ({
-            coupon: null,
+        Alpine.data('ApplyDiscountCodeForm', () => ({
+            discountCode: null,
             busy: false,
             error: null,
 
-            async applyCoupon(e) {
+            async applyDiscountCode(e) {
                 e.preventDefault();
 
                 this.busy = true;
                 this.error = null;
 
                 await this.submit(this.$root)
-                    .then(data => this.coupon = null)
+                    .then(data => this.discountCode = null)
                     .catch(error => {
                         if (error.status === 422) {
                             error.json().then(data => {
@@ -134,19 +138,19 @@
                             return;
                         }
 
-                        alert(`Something went wrong while redeeming the coupon. Please try again later.`);
+                        alert(`Something went wrong while redeeming the discount code. Please try again later.`);
                     })
                     .finally(() => this.busy = false);
             },
         }));
 
-        Alpine.data('RemoveCouponForm', () => ({
-            async removeCoupon(e) {
+        Alpine.data('RemoveDiscountCodeForm', () => ({
+            async removeDiscountCode(e) {
                 e.preventDefault();
 
                 await this.submit(this.$root)
                     .catch(error => {
-                        alert(`Something went wrong while removing the coupon. Please try again later.`);
+                        alert(`Something went wrong while removing the discount code. Please try again later.`);
                     });
             },
         }));

@@ -4,9 +4,9 @@ namespace Tests\Cart\Calculator;
 
 use DuncanMcClean\Cargo\Cart\Calculator\CalculateTaxes;
 use DuncanMcClean\Cargo\Contracts\Cart\Cart as CartContract;
-use DuncanMcClean\Cargo\Coupons\CouponType;
+use DuncanMcClean\Cargo\Discounts\DiscountType;
 use DuncanMcClean\Cargo\Facades\Cart;
-use DuncanMcClean\Cargo\Facades\Coupon;
+use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use DuncanMcClean\Cargo\Facades\TaxZone;
 use DuncanMcClean\Cargo\Shipping\ShippingMethod;
@@ -195,13 +195,12 @@ class CalculateTaxesTest extends TestCase
     #[Test]
     public function calculates_line_item_tax_when_discount_is_applied()
     {
-        $coupon = tap(Coupon::make()->code('foobar')->type(CouponType::Fixed)->amount(500))->save();
+        Discount::make()->set('discount_code', 'FOOBAR')->type('amount_off')->set('amount_off', 500)->save();
 
         $product = Entry::make()->collection('products')->data(['price' => 2500, 'tax_class' => 'standard']);
         $product->save();
 
         $cart = Cart::make()
-            ->coupon($coupon->id())
             ->lineItems([
                 ['id' => 'one', 'product' => $product->id(), 'quantity' => 1, 'total' => 2500, 'discount_amount' => 500],
             ])
@@ -211,6 +210,7 @@ class CalculateTaxesTest extends TestCase
                 'shipping_postcode' => 'FA 1234',
                 'shipping_country' => 'USA',
                 'shipping_state' => 'CA',
+                'discount_code' => 'FOOBAR',
             ]);
 
         TaxZone::make()->handle('usa')->data([

@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('cart');
             $table->string('status');
             $table->string('customer');
-            $table->string('coupon')->nullable();
             $table->bigInteger('grand_total');
             $table->bigInteger('sub_total');
             $table->bigInteger('discount_total');

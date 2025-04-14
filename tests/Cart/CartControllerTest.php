@@ -2,10 +2,9 @@
 
 namespace Tests\Cart;
 
-use DuncanMcClean\Cargo\Coupons\CouponType;
 use DuncanMcClean\Cargo\Customers\GuestCustomer;
 use DuncanMcClean\Cargo\Facades\Cart;
-use DuncanMcClean\Cargo\Facades\Coupon;
+use DuncanMcClean\Cargo\Facades\Discount;
 use Illuminate\Foundation\Http\FormRequest;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
@@ -62,12 +61,12 @@ class CartControllerTest extends TestCase
     {
         $cart = $this->makeCart();
 
-        $coupon = Coupon::make()
-            ->code('FOOBAR')
-            ->type(CouponType::Percentage)
-            ->amount(10);
+        $discount = Discount::make()
+            ->set('discount_code', 'FOOBAR')
+            ->type('percentage_off')
+            ->set('percentage_off', 10);
 
-        $coupon->save();
+        $discount->save();
 
         $this
             ->from('/cart')
@@ -76,7 +75,7 @@ class CartControllerTest extends TestCase
                     'name' => 'Jane Doe',
                     'email' => 'jane.doe@example.com',
                 ],
-                'coupon' => 'FOOBAR',
+                'discount_code' => 'FOOBAR',
                 'shipping_line_1' => '123 ShippingMethod St',
                 'shipping_line_2' => 'Apt 1',
                 'shipping_city' => 'Shippingville',
@@ -94,7 +93,7 @@ class CartControllerTest extends TestCase
         $this->assertEquals('Jane Doe', $cart->customer()->name());
         $this->assertEquals('jane.doe@example.com', $cart->customer()->email());
 
-        $this->assertEquals($coupon->id(), $cart->coupon()->id());
+        $this->assertEquals('FOOBAR', $cart->get('discount_code'));
 
         $this->assertEquals('123 ShippingMethod St', $cart->get('shipping_line_1'));
         $this->assertEquals('Apt 1', $cart->get('shipping_line_2'));
@@ -138,69 +137,20 @@ class CartControllerTest extends TestCase
     }
 
     #[Test]
-    public function it_can_remove_coupon_when_value_is_empty()
+    public function it_cant_add_invalid_discount_code()
     {
-        $coupon = Coupon::make()->code('FOOBAR')->type(CouponType::Percentage)->amount(10);
-        $coupon->save();
-
-        $cart = $this->makeCart()->coupon($coupon);
-        $cart->save();
-
-        $this->assertEquals($coupon->id(), $cart->coupon()->id());
-
-        $this
-            ->from('/cart')
-            ->patch('/!/cargo/cart', [
-                'coupon' => null,
-            ])
-            ->assertRedirect('/cart');
-
-        $this->assertNull($cart->fresh()->coupon());
-    }
-
-    #[Test]
-    public function it_cant_add_coupon_when_coupon_is_invalid()
-    {
-        $coupon = Coupon::make()->code('FOOBAR')->type(CouponType::Percentage)->amount(10)->set('expires_at', '2025-01-01');
-        $coupon->save();
-
         $cart = tap($this->makeCart())->save();
 
-        $this->assertNull($cart->coupon());
+        $this->assertNull($cart->get('discount_code'));
 
         $this
             ->from('/cart')
             ->patch('/!/cargo/cart', [
-                'coupon' => 'FOOBAR',
+                'discount_code' => 'FOOBARZ',
             ])
-            ->assertSessionHasErrors('coupon');
+            ->assertSessionHasErrors('discount_code');
 
-        $this->assertNull($cart->fresh()->coupon());
-    }
-
-    #[Test]
-    public function it_removes_invalid_coupon_when_recalculating_totals()
-    {
-        $coupon = Coupon::make()->code('FOOBAR')->type(CouponType::Percentage)->amount(10)->set('expires_at', '2025-01-01');
-        $coupon->save();
-
-        $cart = $this->makeCart()->coupon($coupon);
-        $cart->saveWithoutRecalculating();
-
-        $this->assertEquals($coupon->id(), $cart->coupon()->id());
-
-        $this
-            ->from('/cart')
-            ->patch('/!/cargo/cart', [
-                // This will trigger the cart to recalculate totals.
-                'customer' => [
-                    'name' => 'Jane Doe',
-                    'email' => 'jane.doe@example.com',
-                ],
-            ])
-            ->assertRedirect('/cart');
-
-        $this->assertNull($cart->fresh()->coupon());
+        $this->assertNull($cart->fresh()->get('discount_code'));
     }
 
     #[Test]

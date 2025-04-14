@@ -1,16 +1,15 @@
 <?php
 
 return [
-    'coupon_configure_intro' => 'Coupons are a great way to offer discounts to your customers. You can create either a percentage or fixed amount discount.',
-    'coupon_discount_text' => ':amount off',
-    'coupons' => [
-        'active_dates' => 'Configure when this coupon is active. Leave both dates blank to make the coupon active indefinitely.',
-        'code' => 'Customers will enter this code to redeem the coupon.',
-        'customers_by_domain' => 'Provide a list of domains that are eligible for this coupon. One per line.',
-        'description' => 'Give yourself a reminder of what this coupon is for.',
-        'maximum_uses' => 'By default, coupons can be redeemed an unlimited amount of times. You can set a maximum here if you wish.',
-        'minimum_cart_value' => "The minimum value the customer's cart should have before this coupon can be redeemed.",
-        'products' => 'This coupon will only be redeemable when *any* of these products are present in the order.',
+    'discount_configure_intro' => 'Discounts are a great way to offer discounts to your customers. You can create either a percentage or fixed amount discount.',
+    'discounts' => [
+        'name' => 'Give your discount a name. May be shown to customers.',
+        'type' => 'Select the type of discount you want to create.',
+        'discount_code' => 'Enter a discount code, or leave blank to apply discount automatically.',
+        'maximum_uses' => 'Leave empty to allow unlimited uses.',
+        'minimum_order_value' => 'Specify the minimum order value  Leave empty to allow any order value.',
+        'customers' => 'Select which customers this discount should be limited to.',
+        'products' => 'Select which products this discount should be limited to.',
     ],
     'products' => [
         'price.exclusive_of_tax' => 'Enter the price of the product, exclusive of tax.',

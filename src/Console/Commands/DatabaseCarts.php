@@ -102,7 +102,6 @@ class DatabaseCarts extends Command
                         'customer' => $cart->customer() instanceof GuestCustomer
                             ? json_encode($cart->customer()->toArray())
                             : $cart->customer()?->getKey(),
-                        'coupon' => $cart->coupon()?->id(),
                         'grand_total' => $cart->grandTotal(),
                         'sub_total' => $cart->subTotal(),
                         'discount_total' => $cart->discountTotal(),

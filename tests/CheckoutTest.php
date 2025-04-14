@@ -3,13 +3,12 @@
 namespace Tests;
 
 use DuncanMcClean\Cargo\Contracts\Orders\Order;
-use DuncanMcClean\Cargo\Coupons\CouponType;
-use DuncanMcClean\Cargo\Events\CouponRedeemed;
+use DuncanMcClean\Cargo\Events\DiscountRedeemed;
 use DuncanMcClean\Cargo\Events\ProductNoStockRemaining;
 use DuncanMcClean\Cargo\Events\ProductStockLow;
 use DuncanMcClean\Cargo\Facades;
 use DuncanMcClean\Cargo\Facades\Cart;
-use DuncanMcClean\Cargo\Facades\Coupon;
+use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Payments\Gateways\PaymentGateway;
 use Illuminate\Http\Request;
@@ -203,29 +202,14 @@ class CheckoutTest extends TestCase
     }
 
     #[Test]
-    public function cant_checkout_with_invalid_coupon()
-    {
-        $coupon = tap(Coupon::make()->code('foobar')->type(CouponType::Percentage)->amount(50)->set('expires_at', '2025-01-01'))->save();
-
-        $cart = $this->makeCart();
-        $cart->coupon($coupon)->saveWithoutRecalculating();
-
-        $this
-            ->get('/!/cargo/payments/fake/checkout')
-            ->assertSessionHasErrors(['checkout' => 'The coupon code is no longer valid for the items in your cart. Please remove it to continue.']);
-
-        $this->assertNull(Facades\Order::query()->where('cart', $cart->id())->first());
-    }
-
-    #[Test]
-    public function coupon_redeemed_event_is_dispatched()
+    public function it_dispatches_discount_redeemed_event_and_updates_redemption_counts()
     {
         Event::fake();
 
-        $coupon = tap(Coupon::make()->code('foobar')->type(CouponType::Percentage)->amount(50))->save();
+        Discount::make()->handle('a')->type('percentage_off')->set('percentage_off', 50)->save();
+        Discount::make()->handle('b')->set('discount_code', 'B')->type('amount_off')->set('amount_off', 100)->set('redemptions_count', 50)->save();
 
-        $cart = $this->makeCart();
-        $cart->coupon($coupon)->save();
+        $cart = $this->makeCart(['discount_code' => 'B']);
 
         $this
             ->get('/!/cargo/payments/fake/checkout')
@@ -233,12 +217,15 @@ class CheckoutTest extends TestCase
 
         $this->assertNotNull($order = Facades\Order::query()->where('cart', $cart->id())->first());
         $this->assertEquals(OrderStatus::PaymentReceived, $order->status());
-        $this->assertEquals($coupon->id(), $order->coupon()->id());
 
-        Event::assertDispatched(CouponRedeemed::class, fn ($event) => $event->coupon->id() === $coupon->id());
+        $this->assertEquals(Discount::find('a')->get('redemptions_count'), 1);
+        Event::assertDispatched(DiscountRedeemed::class, fn ($event) => $event->discount->id() === 'a');
+
+        $this->assertEquals(Discount::find('b')->get('redemptions_count'), 51);
+        Event::assertDispatched(DiscountRedeemed::class, fn ($event) => $event->discount->id() === 'b');
     }
 
-    private function makeCart()
+    private function makeCart(array $data = [])
     {
         $collection = tap(Collection::make('products'))->save();
         Entry::make()->collection('products')->id('product-1')->data(['price' => 5000])->save();
@@ -256,6 +243,7 @@ class CheckoutTest extends TestCase
                 'shipping_postcode' => 'FA 1234',
                 'shipping_country' => 'GBR',
                 'shipping_state' => 'GLG',
+                ...$data,
             ]);
 
         $cart->save();

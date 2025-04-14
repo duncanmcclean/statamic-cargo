@@ -1,6 +1,6 @@
 {{#
     @name Order Summary
-    @desc Renders the order summary on the confirmation page.
+    @desc Renders the order summary on the order confirmation page.
 #}}
 
 <div class="p-8 flex flex-col space-y-6 text-sm">
@@ -35,14 +35,16 @@
         <span>{{ sub_total }}</span>
     </div>
 
-    {{ if coupon }}
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-1">
-                <span>{{ 'Coupon Discount' | trans }}</span>
-                <span class="text-xs text-gray-500">{{ coupon:code }}</span>
+    {{ if discounts }}
+        {{ discounts }}
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-1">
+                    <span>{{ 'Discount' | trans }}</span>
+                    <span class="text-xs text-gray-500">{{ code ?? name }}</span>
+                </div>
+                <span>-{{ amount }}</span>
             </div>
-            <span>-{{ discount_total }}</span>
-        </div>
+        {{ /discounts }}
     {{ /if }}
 
     {{ if shipping_option }}

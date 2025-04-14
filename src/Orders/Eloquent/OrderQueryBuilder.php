@@ -14,7 +14,7 @@ class OrderQueryBuilder extends EloquentQueryBuilder implements QueryBuilder
     use QueriesCustomers;
 
     protected $columns = [
-        'id', 'order_number', 'date', 'site', 'cart', 'status', 'customer', 'coupon', 'grand_total',
+        'id', 'order_number', 'date', 'site', 'cart', 'status', 'customer', 'grand_total',
         'sub_total', 'discount_total', 'tax_total', 'shipping_total', 'line_items', 'data',
     ];
 

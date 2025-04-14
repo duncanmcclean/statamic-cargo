@@ -106,7 +106,6 @@ class DatabaseOrders extends Command
                         'customer' => $order->customer() instanceof GuestCustomer
                             ? json_encode($order->customer()->toArray())
                             : $order->customer()->getKey(),
-                        'coupon' => $order->coupon()?->id(),
                         'grand_total' => $order->grandTotal(),
                         'sub_total' => $order->subTotal(),
                         'discount_total' => $order->discountTotal(),

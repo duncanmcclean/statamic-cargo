@@ -4,7 +4,6 @@ namespace DuncanMcClean\Cargo\Orders;
 
 use ArrayAccess;
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
-use DuncanMcClean\Cargo\Contracts\Coupons\Coupon;
 use DuncanMcClean\Cargo\Contracts\Orders\Order as Contract;
 use DuncanMcClean\Cargo\Customers\GuestCustomer;
 use DuncanMcClean\Cargo\Data\HasAddresses;
@@ -12,7 +11,6 @@ use DuncanMcClean\Cargo\Events\OrderCreated;
 use DuncanMcClean\Cargo\Events\OrderDeleted;
 use DuncanMcClean\Cargo\Events\OrderSaved;
 use DuncanMcClean\Cargo\Facades;
-use DuncanMcClean\Cargo\Facades\Coupon as CouponFacade;
 use DuncanMcClean\Cargo\Facades\Order as OrderFacade;
 use DuncanMcClean\Cargo\Payments\Gateways\PaymentGateway;
 use DuncanMcClean\Cargo\Shipping\ShippingMethod;
@@ -47,7 +45,6 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
     protected $cart;
     protected $status;
     protected $customer;
-    protected $coupon;
     protected $lineItems;
     protected $site;
     protected $withEvents = true;
@@ -183,31 +180,6 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
                 }
 
                 return $customer;
-            })
-            ->args(func_get_args());
-    }
-
-    public function coupon($coupon = null)
-    {
-        return $this
-            ->fluentlyGetOrSet('coupon')
-            ->getter(function ($coupon) {
-                if (! $coupon) {
-                    return null;
-                }
-
-                return CouponFacade::find($coupon);
-            })
-            ->setter(function ($coupon) {
-                if (! $coupon) {
-                    return null;
-                }
-
-                if ($coupon instanceof Coupon) {
-                    return $coupon->id();
-                }
-
-                return $coupon;
             })
             ->args(func_get_args());
     }
@@ -378,7 +350,6 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
             'cart' => $this->cart(),
             'status' => $this->status()->value,
             'customer' => $this->customer,
-            'coupon' => $this->coupon,
             'line_items' => $this->lineItems()->map->fileData()->all(),
             'grand_total' => $this->grandTotal(),
             'sub_total' => $this->subTotal(),
@@ -421,7 +392,6 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
             'cart' => $this->cart(),
             'status' => $this->status()?->value,
             'customer' => $this->customer(),
-            'coupon' => $this->coupon(),
             'line_items' => $this->lineItems(),
             'grand_total' => $this->grandTotal(),
             'sub_total' => $this->subTotal(),
@@ -458,10 +428,6 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
             }
 
             return $this->customer;
-        }
-
-        if ($field === 'coupon') {
-            return $this->coupon;
         }
 
         if (method_exists($this, $method = Str::camel($field))) {
