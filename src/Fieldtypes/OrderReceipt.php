@@ -37,7 +37,7 @@ class OrderReceipt extends Fieldtype
                 'sub_total' => Money::format($lineItem->subTotal(), $order->site()),
                 'total' => Money::format($lineItem->total(), $order->site()),
             ])->all(),
-            'discounts' => collect($order->discounts())->map(fn ($discount) => [
+            'discounts' => collect($order->get('discount_breakdown'))->map(fn ($discount) => [
                 'discount' => $discount['discount'],
                 'description' => $discount['description'],
                 'amount' => Money::format($discount['amount'], $order->site()),

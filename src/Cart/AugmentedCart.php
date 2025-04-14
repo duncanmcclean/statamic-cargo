@@ -50,7 +50,7 @@ class AugmentedCart extends AbstractAugmented
 
     public function discounts()
     {
-        return collect($this->data->discounts())
+        return collect($this->data->get('discount_breakdown'))
             ->map(function (array $item) {
                 $discount = Discount::find($item['discount']);
 

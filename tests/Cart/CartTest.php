@@ -182,35 +182,6 @@ class CartTest extends TestCase
     }
 
     #[Test]
-    public function it_returns_discounts()
-    {
-        $this->makeProduct('123')->set('price', 2500)->save();
-        $this->makeProduct('456')->set('price', 5000)->save();
-
-        $discountA = Discount::make()->handle('a')->name('Discount A')->set('discount_code', 'A')->type('percentage_off')->set('percentage_off', 10); // Shouldn't be applied, it has a discount code.
-        $discountB = Discount::make()->handle('b')->name('Discount B')->type('percentage_off')->set('percentage_off', 15); // Should be applied to both line items.
-        $discountC = Discount::make()->handle('c')->name('Discount C')->type('amount_off')->set('amount_off', 100)->set('products', ['123']); // Should be applied to the first line item.
-        $discountD = Discount::make()->handle('d')->name('Discount D')->type('amount_off')->set('amount_off', 200)->set('products', ['456'])->set('end_date', '2025-01-01'); // Shouldn't be applied, it has expired.
-
-        $discountA->save();
-        $discountB->save();
-        $discountC->save();
-        $discountD->save();
-
-        $cart = Cart::make()->lineItems([
-            ['id' => 'abc', 'product' => '123', 'quantity' => 1, 'total' => 2500],
-            ['id' => 'def', 'product' => '456', 'quantity' => 1, 'total' => 5000],
-        ]);
-
-        $cart->save();
-
-        $this->assertEquals([
-            ['discount' => 'b', 'description' => 'Discount B', 'amount' => 1125],
-            ['discount' => 'c', 'description' => 'Discount C', 'amount' => 100],
-        ], $cart->discounts());
-    }
-
-    #[Test]
     public function it_returns_the_shipping_method()
     {
         FakeShippingMethod::register();

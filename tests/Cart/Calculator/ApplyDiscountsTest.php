@@ -39,17 +39,13 @@ class ApplyDiscountsTest extends TestCase
         $cart = app(ApplyDiscounts::class)->handle($cart, fn ($cart) => $cart);
 
         $this->assertEquals([
-            ['discount' => 'b', 'description' => 'Discount B', 'amount' => 375],
+            ['discount' => 'b', 'description' => 'Discount B', 'amount' => 1125],
             ['discount' => 'c', 'description' => 'Discount C', 'amount' => 100],
-        ], $cart->lineItems()->find('abc')->get('discounts'));
-        $this->assertEquals(475, $cart->lineItems()->find('abc')->discountTotal());
-
-        $this->assertEquals([
-            ['discount' => 'b', 'description' => 'Discount B', 'amount' => 750],
-        ], $cart->lineItems()->find('def')->get('discounts'));
-        $this->assertEquals(750, $cart->lineItems()->find('def')->discountTotal());
+        ], $cart->get('discount_breakdown'));
 
         $this->assertEquals(1225, $cart->discountTotal());
+        $this->assertEquals(475, $cart->lineItems()->find('abc')->discountTotal());
+        $this->assertEquals(750, $cart->lineItems()->find('def')->discountTotal());
     }
 
     #[Test]
@@ -72,17 +68,13 @@ class ApplyDiscountsTest extends TestCase
         $cart = app(ApplyDiscounts::class)->handle($cart, fn ($cart) => $cart);
 
         $this->assertEquals([
-            ['discount' => 'b', 'description' => 'Discount B', 'amount' => 375],
+            ['discount' => 'b', 'description' => 'Discount B', 'amount' => 1125],
             ['discount' => 'a', 'description' => 'A', 'amount' => 250],
-        ], $cart->lineItems()->find('abc')->get('discounts'));
-        $this->assertEquals(625, $cart->lineItems()->find('abc')->discountTotal());
-
-        $this->assertEquals([
-            ['discount' => 'b', 'description' => 'Discount B', 'amount' => 750],
-        ], $cart->lineItems()->find('def')->get('discounts'));
-        $this->assertEquals(750, $cart->lineItems()->find('def')->discountTotal());
+        ], $cart->get('discount_breakdown'));
 
         $this->assertEquals(1375, $cart->discountTotal());
+        $this->assertEquals(625, $cart->lineItems()->find('abc')->discountTotal());
+        $this->assertEquals(750, $cart->lineItems()->find('def')->discountTotal());
     }
 
     #[Test]
@@ -96,11 +88,11 @@ class ApplyDiscountsTest extends TestCase
 
         $cart = app(ApplyDiscounts::class)->handle($cart, fn ($cart) => $cart);
 
-        $this->assertNull($cart->lineItems()->find('abc')->get('discounts'));
-        $this->assertEquals(0, $cart->lineItems()->find('abc')->discountTotal());
-
         $this->assertFalse($cart->has('discount_code'));
+        $this->assertNull($cart->get('discount_breakdown'));
+
         $this->assertEquals(0, $cart->discountTotal());
+        $this->assertEquals(0, $cart->lineItems()->find('abc')->discountTotal());
     }
 
     #[Test]
@@ -122,13 +114,11 @@ class ApplyDiscountsTest extends TestCase
 
         $this->assertEquals([
             ['discount' => 'a', 'description' => 'Discount A', 'amount' => 1250],
-            ['discount' => 'b', 'description' => 'Discount B', 'amount' => 1300],
-        ], $cart->lineItems()->find('abc')->get('discounts'));
-
-        // Should be capped at the line item total.
-        $this->assertEquals(2500, $cart->lineItems()->find('abc')->discountTotal());
+            ['discount' => 'b', 'description' => 'Discount B', 'amount' => 1250], // The amount will be capped at the remaining total.
+        ], $cart->get('discount_breakdown'));
 
         $this->assertEquals(2500, $cart->discountTotal());
+        $this->assertEquals(2500, $cart->lineItems()->find('abc')->discountTotal());
     }
 
     protected function makeProduct($id = null)

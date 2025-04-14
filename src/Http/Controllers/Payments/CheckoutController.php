@@ -146,7 +146,7 @@ class CheckoutController
 
     private function updateDiscounts(OrderContract $order)
     {
-        collect($order->discounts())->each(function ($discount) use ($order) {
+        collect($order->get('discount_breakdown'))->each(function ($discount) use ($order) {
             $discount = Discount::find($discount['discount']);
             $discount->set('redemptions_count', $discount->get('redemptions_count', 0) + 1)->saveQuietly();
 

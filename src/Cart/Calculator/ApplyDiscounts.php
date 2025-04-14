@@ -17,37 +17,45 @@ class ApplyDiscounts
             $cart->remove('discount_code');
         }
 
-        $cart->lineItems()->each(function (LineItem $lineItem) use ($cart) {
-            $eligibleDiscounts = Facades\Discount::query()
-                ->whereNull('discount_code')
-                ->when($cart->get('discount_code'), fn ($query) => $query->orWhere('discount_code', $cart->get('discount_code')))
-                ->get()
-                ->filter(fn (Discount $discount) => $discount->discountType()->isValidForLineItem($cart, $lineItem));
+        $discounts = Facades\Discount::query()
+            ->whereNull('discount_code')
+            ->when($cart->get('discount_code'), fn ($query) => $query->orWhere('discount_code', $cart->get('discount_code')))
+            ->get()
+            ->map(function (Discount $discount) use ($cart) {
+                $lineItems = $cart->lineItems()
+                    ->filter(fn (LineItem $lineItem) => $discount->discountType()->isValidForLineItem($cart, $lineItem))
+                    ->map(function (LineItem $lineItem) use ($cart, $discount) {
+                        $amount = $discount->discountType()->calculate($cart, $lineItem);
+                        $originalDiscountTotal = $lineItem->discountTotal();
 
-            $discounts = $eligibleDiscounts->map(function (Discount $discount) use ($cart, $lineItem) {
+                        $lineItem->discountTotal($originalDiscountTotal + $amount);
+
+                        if ($lineItem->discountTotal() > $lineItem->total()) {
+                            $lineItem->discountTotal($lineItem->total());
+                            $amount = $lineItem->total() - $originalDiscountTotal;
+                        }
+
+                        return $amount;
+                    });
+
+                if ($lineItems->isEmpty()) {
+                    return;
+                }
+
                 return (array) DiscountCalculation::make(
                     discount: $discount->handle(),
                     description: $discount->get('discount_code') ?? $discount->name(),
-                    amount: $discount->discountType()->calculate($cart, $lineItem),
+                    amount: $lineItems->sum(),
                 );
-            });
+            })
+            ->filter();
 
-            if ($discounts->isEmpty()) {
-                return;
-            }
+        if ($discounts->isEmpty()) {
+            return $next($cart);
+        }
 
-            $lineItem->set('discounts', $discounts->all());
-
-            $discountTotal = $discounts->sum('amount');
-
-            if ($discountTotal > $lineItem->total()) {
-                $discountTotal = $lineItem->total();
-            }
-
-            $lineItem->discountTotal($discountTotal);
-        });
-
-        $cart->discountTotal($cart->lineItems()->map->discountTotal()->sum());
+        $cart->set('discount_breakdown', $discounts->all());
+        $cart->discountTotal($discounts->sum('amount'));
 
         return $next($cart);
     }
