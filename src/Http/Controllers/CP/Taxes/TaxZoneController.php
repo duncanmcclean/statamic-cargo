@@ -22,6 +22,7 @@ class TaxZoneController extends CpController
                 'handle' => $taxZone->handle(),
                 'name' => $taxZone->get('name'),
                 'type' => match ($taxZone->get('type')) {
+                    'everywhere' => __('Everywhere'),
                     'countries' => __('Countries (:count)', ['count' => count($taxZone->get('countries', []))]),
                     'states' => __('States (:count)', ['count' => count($taxZone->get('states', []))]),
                     'postcodes' => __('Postcodes (:count)', ['count' => count($taxZone->get('postcodes', []))]),
