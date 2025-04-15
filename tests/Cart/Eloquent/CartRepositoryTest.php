@@ -105,13 +105,13 @@ class CartRepositoryTest extends TestCase
 
         $this->repo->save($cart);
 
-        $this->assertDatabaseHas('carts', [
+        $this->assertDatabaseHas('cargo_carts', [
             'site' => 'default',
             'grand_total' => 2500,
             'data->foo' => 'bar',
         ]);
 
-        $this->assertDatabaseHas('cart_line_items', [
+        $this->assertDatabaseHas('cargo_cart_line_items', [
             'cart_id' => $cart->id(),
             'product' => 'abc',
             'quantity' => 1,
@@ -139,7 +139,7 @@ class CartRepositoryTest extends TestCase
 
         $this->repo->delete($cart);
 
-        $this->assertDatabaseMissing('orders', [
+        $this->assertDatabaseMissing('cargo_orders', [
             'id' => '123',
             'site' => 'default',
         ]);

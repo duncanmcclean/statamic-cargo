@@ -112,13 +112,13 @@ class OrderRepositoryTest extends TestCase
 
         $this->repo->save($order);
 
-        $this->assertDatabaseHas('orders', [
+        $this->assertDatabaseHas('cargo_orders', [
             'site' => 'default',
             'grand_total' => 2500,
             'data->foo' => 'bar',
         ]);
 
-        $this->assertDatabaseHas('order_line_items', [
+        $this->assertDatabaseHas('cargo_order_line_items', [
             'order_id' => $order->id(),
             'product' => 'abc',
             'quantity' => 1,
@@ -143,7 +143,7 @@ class OrderRepositoryTest extends TestCase
 
         $this->repo->delete($order);
 
-        $this->assertDatabaseMissing('orders', [
+        $this->assertDatabaseMissing('cargo_orders', [
             'id' => '123',
             'site' => 'default',
             'cart' => 'abc',

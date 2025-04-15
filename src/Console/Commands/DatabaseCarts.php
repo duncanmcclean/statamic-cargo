@@ -57,7 +57,7 @@ class DatabaseCarts extends Command
             stubPath: __DIR__.'/stubs/create_carts_table.php.stub',
             name: 'create_cargo_carts_table.php',
             replacements: [
-                'CARTS_TABLE' => config('statamic.cargo.carts.table', 'carts'),
+                'CARTS_TABLE' => config('statamic.cargo.carts.table', 'cargo_carts'),
             ]
         );
 
@@ -65,7 +65,7 @@ class DatabaseCarts extends Command
             stubPath: __DIR__.'/stubs/create_cart_line_items_table.php.stub',
             name: 'create_cargo_cart_line_items_table.php',
             replacements: [
-                'CART_LINE_ITEMS_TABLE' => config('statamic.cargo.carts.line_items_table', 'cart_line_items'),
+                'CART_LINE_ITEMS_TABLE' => config('statamic.cargo.carts.line_items_table', 'cargo_cart_line_items'),
             ]
         );
 
