@@ -83,7 +83,10 @@ class DatabaseCarts extends Command
 
     private function importCarts(): self
     {
-        if (! $this->option('import') && ! confirm('Would you like to import existing carts?')) {
+        if (
+            ! $this->input->isInteractive()
+            || (! $this->option('import') && ! confirm('Would you like to import existing carts?'))
+        ) {
             return $this;
         }
 
