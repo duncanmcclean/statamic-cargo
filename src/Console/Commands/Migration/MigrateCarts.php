@@ -3,8 +3,8 @@
 namespace DuncanMcClean\Cargo\Console\Commands\Migration;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart as CartContract;
-use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\Cart;
+use DuncanMcClean\Cargo\Facades\Discount;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Support\Collection;
@@ -16,11 +16,12 @@ use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
 use Statamic\Statamic;
 use stdClass;
+
 use function Laravel\Prompts\progress;
 
 class MigrateCarts extends Command
 {
-    use RunsInPlease, Concerns\MapsAddresses, Concerns\MapsLineItems, Concerns\MapsCustomData, Concerns\MapsOrderDates;
+    use Concerns\MapsAddresses, Concerns\MapsCustomData, Concerns\MapsLineItems, Concerns\MapsOrderDates, RunsInPlease;
 
     protected $signature = 'statamic:cargo:migrate:carts';
 
@@ -28,7 +29,7 @@ class MigrateCarts extends Command
 
     public function handle(): void
     {
-        $repository = Str::afterLast(config('simple-commerce.content.orders.repository'), "\\");
+        $repository = Str::afterLast(config('simple-commerce.content.orders.repository'), '\\');
 
         if ($repository === 'EntryOrderRepository') {
             $this->migrateCartsFromEntries();
@@ -56,7 +57,7 @@ class MigrateCarts extends Command
             ->lazy();
 
         if ($entries->isEmpty()) {
-            $this->components->warn("No carts found to migrate.");
+            $this->components->warn('No carts found to migrate.');
 
             return $this;
         }
@@ -130,7 +131,7 @@ class MigrateCarts extends Command
             ->get();
 
         if ($rows->isEmpty()) {
-            $this->components->warn("No carts found to migrate.");
+            $this->components->warn('No carts found to migrate.');
 
             return $this;
         }
@@ -206,14 +207,14 @@ class MigrateCarts extends Command
                         'description' => 'Unknown',
                         'name' => 'Unknown',
                         'amount' => $data->get('shipping_tax')['amount'],
-                    ]
+                    ],
                 ] : null,
                 'discounts' => $discount ? [
                     [
                         'discount' => $discount->handle(),
                         'description' => $discount->get('discount_code'),
                         'amount' => $data->get('coupon_total', 0),
-                    ]
+                    ],
                 ] : null,
                 'discount_code' => $discount?->code(),
             ]));

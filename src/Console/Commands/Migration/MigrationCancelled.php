@@ -2,7 +2,4 @@
 
 namespace DuncanMcClean\Cargo\Console\Commands\Migration;
 
-class MigrationCancelled extends \Exception
-{
-
-}
+class MigrationCancelled extends \Exception {}

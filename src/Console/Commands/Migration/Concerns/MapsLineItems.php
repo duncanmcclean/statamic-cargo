@@ -22,7 +22,7 @@ trait MapsLineItems
                         'rate' => $lineItem['tax']['rate'],
                         'description' => 'Unknown',
                         'name' => 'Unknown',
-                        'amount' => $lineItem['tax']['amount']
+                        'amount' => $lineItem['tax']['amount'],
                     ],
                 ] : null,
                 ...$lineItem['metadata'] ?? [],

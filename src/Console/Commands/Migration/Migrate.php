@@ -3,7 +3,6 @@
 namespace DuncanMcClean\Cargo\Console\Commands\Migration;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
 use Statamic\Console\RunsInPlease;
 
 class Migrate extends Command

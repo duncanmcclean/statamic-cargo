@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 use SplFileInfo;
 use Statamic\Console\RunsInPlease;
 use Statamic\Facades\YAML;
+
 use function Laravel\Prompts\progress;
 
 class MigrateDiscounts extends Command
@@ -24,7 +25,7 @@ class MigrateDiscounts extends Command
             ->filter(fn (SplFileInfo $file) => $file->getExtension() === 'yaml');
 
         if ($couponFiles->isEmpty()) {
-            $this->components->warn("No discounts found to migrate.");
+            $this->components->warn('No discounts found to migrate.');
 
             return;
         }

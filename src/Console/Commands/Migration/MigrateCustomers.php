@@ -2,9 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Console\Commands\Migration;
 
-use DuncanMcClean\Cargo\Contracts\Cart\Cart as CartContract;
-use DuncanMcClean\Cargo\Facades\Discount;
-use DuncanMcClean\Cargo\Facades\Cart;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Support\Collection as IlluminateCollection;
@@ -16,10 +13,9 @@ use Statamic\Contracts\Entries\Entry as EntryContract;
 use Statamic\Facades\Blueprint;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
-use Statamic\Facades\Site;
 use Statamic\Facades\User;
-use Statamic\Statamic;
 use stdClass;
+
 use function Laravel\Prompts\progress;
 
 class MigrateCustomers extends Command
@@ -32,7 +28,7 @@ class MigrateCustomers extends Command
 
     public function handle(): void
     {
-        $repository = Str::afterLast(config('simple-commerce.content.customers.repository'), "\\");
+        $repository = Str::afterLast(config('simple-commerce.content.customers.repository'), '\\');
 
         if ($repository === 'EntryCustomerRepository') {
             $this->migrateCustomerBlueprint();
@@ -59,7 +55,7 @@ class MigrateCustomers extends Command
 
     private function migrateCustomerBlueprint(): self
     {
-        $blueprint = match(Str::afterLast(config('simple-commerce.content.customers.repository'), "\\")) {
+        $blueprint = match (Str::afterLast(config('simple-commerce.content.customers.repository'), '\\')) {
             'EntryCustomerRepository' => Collection::find(config('simple-commerce.content.customers.collection'))?->entryBlueprint(),
             'EloquentCustomerRepository' => Blueprint::find('runway::customers'),
         };
@@ -103,7 +99,7 @@ class MigrateCustomers extends Command
             ->lazy();
 
         if ($entries->isEmpty()) {
-            $this->components->warn("No customers found to migrate.");
+            $this->components->warn('No customers found to migrate.');
 
             return $this;
         }
@@ -129,7 +125,7 @@ class MigrateCustomers extends Command
         $rows = DB::table('customers')->orderBy('id')->lazy();
 
         if ($rows->isEmpty()) {
-            $this->components->warn("No customers found to migrate.");
+            $this->components->warn('No customers found to migrate.');
 
             return $this;
         }
@@ -157,7 +153,7 @@ class MigrateCustomers extends Command
         $users = User::query()->whereNotNull('orders')->lazy();
 
         if ($users->isEmpty()) {
-            $this->components->warn("No users found to update.");
+            $this->components->warn('No users found to update.');
 
             return $this;
         }
@@ -171,7 +167,7 @@ class MigrateCustomers extends Command
             hint: 'This may take some time.'
         );
 
-        $this->components->info("Updated existing users. Removed the [orders] array from user data.");
+        $this->components->info('Updated existing users. Removed the [orders] array from user data.');
 
         return $this;
     }

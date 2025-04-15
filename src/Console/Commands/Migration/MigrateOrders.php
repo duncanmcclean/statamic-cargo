@@ -18,11 +18,12 @@ use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
 use Statamic\Statamic;
 use stdClass;
+
 use function Laravel\Prompts\progress;
 
 class MigrateOrders extends Command
 {
-    use RunsInPlease, Concerns\MapsAddresses, Concerns\MapsLineItems, Concerns\MapsCustomData, Concerns\MapsOrderDates;
+    use Concerns\MapsAddresses, Concerns\MapsCustomData, Concerns\MapsLineItems, Concerns\MapsOrderDates, RunsInPlease;
 
     protected $signature = 'statamic:cargo:migrate:orders';
 
@@ -32,7 +33,7 @@ class MigrateOrders extends Command
     {
         $this->migrateOrderBlueprint();
 
-        $repository = Str::afterLast(config('simple-commerce.content.orders.repository'), "\\");
+        $repository = Str::afterLast(config('simple-commerce.content.orders.repository'), '\\');
 
         if ($repository === 'EntryOrderRepository') {
             $this->migrateOrdersFromEntries();
@@ -54,7 +55,7 @@ class MigrateOrders extends Command
 
     private function migrateOrderBlueprint(): self
     {
-        $blueprint = match(Str::afterLast(config('simple-commerce.content.orders.repository'), "\\")) {
+        $blueprint = match (Str::afterLast(config('simple-commerce.content.orders.repository'), '\\')) {
             'EntryOrderRepository' => Collection::find(config('simple-commerce.content.orders.collection'))?->entryBlueprint(),
             'EloquentOrderRepository' => Blueprint::find('runway::orders'),
         };
@@ -87,7 +88,7 @@ class MigrateOrders extends Command
             ->lazy();
 
         if ($entries->isEmpty()) {
-            $this->components->warn("No orders found to migrate.");
+            $this->components->warn('No orders found to migrate.');
 
             return $this;
         }
@@ -160,7 +161,7 @@ class MigrateOrders extends Command
             ->get();
 
         if ($rows->isEmpty()) {
-            $this->components->warn("No orders found to migrate.");
+            $this->components->warn('No orders found to migrate.');
 
             return $this;
         }
@@ -246,14 +247,14 @@ class MigrateOrders extends Command
                         'description' => 'Unknown',
                         'name' => 'Unknown',
                         'amount' => $data->get('shipping_tax')['amount'],
-                    ]
+                    ],
                 ] : null,
                 'discounts' => $discount ? [
                     [
                         'discount' => $discount->handle(),
                         'description' => $discount->get('discount_code'),
                         'amount' => $data->get('coupon_total', 0),
-                    ]
+                    ],
                 ] : null,
                 'discount_code' => $discount?->code(),
             ]));

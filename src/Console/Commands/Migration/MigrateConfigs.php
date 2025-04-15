@@ -2,17 +2,14 @@
 
 namespace DuncanMcClean\Cargo\Console\Commands\Migration;
 
-use DuncanMcClean\Cargo\Facades\TaxClass;
-use DuncanMcClean\Cargo\Facades\TaxZone;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use SplFileInfo;
 use Statamic\Console\RunsInPlease;
 use Statamic\Facades\Entry;
 use Statamic\Facades\Role;
 use Statamic\Facades\Site;
-use Statamic\Facades\YAML;
 use Stillat\Proteus\Support\Facades\ConfigWriter;
+
 use function Laravel\Prompts\confirm;
 
 class MigrateConfigs extends Command
@@ -48,7 +45,7 @@ class MigrateConfigs extends Command
 
         // Site currencies
         $sites = Site::all()->map(function ($site) {
-            $currency = config('simple-commerce.sites.' . $site->handle() . '.currency') ?? $site->attribute('currency') ?? 'USD';
+            $currency = config('simple-commerce.sites.'.$site->handle().'.currency') ?? $site->attribute('currency') ?? 'USD';
 
             return array_merge($site->rawConfig(), [
                 'attributes' => array_merge($site->attributes(), ['currency' => $currency]),
