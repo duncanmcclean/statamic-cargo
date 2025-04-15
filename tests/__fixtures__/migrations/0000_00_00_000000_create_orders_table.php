@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('order_number')->autoIncrement();
             $table->timestamp('date');
             $table->string('site');
-            $table->string('cart');
+            $table->string('cart')->nullable();
             $table->string('status');
             $table->string('customer');
             $table->bigInteger('grand_total');
