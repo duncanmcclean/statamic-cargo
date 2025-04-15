@@ -297,6 +297,22 @@ class CartLineItemsControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_doesnt_add_a_product_to_the_cart_when_quantity_is_less_than_zero()
+    {
+        $cart = $this->makeCart();
+        $product = $this->makeProduct();
+
+        $this
+            ->post('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'quantity' => -1,
+            ])
+            ->assertSessionHasErrors('quantity');
+
+        $this->assertCount(0, $cart->fresh()->lineItems());
+    }
+
+    #[Test]
     public function it_doesnt_add_a_product_to_the_cart_when_the_customer_is_missing_the_prerequisite_product()
     {
         $user = User::make()->save();
@@ -570,6 +586,23 @@ class CartLineItemsControllerTest extends TestCase
         $this->assertEquals(1, $cart->lineItems()->first()->quantity());
         $this->assertEquals('baz', $cart->lineItems()->first()->data()->get('foo'));
         $this->assertEquals('qux', $cart->lineItems()->first()->data()->get('baz'));
+    }
+
+    #[Test]
+    public function it_doesnt_update_a_line_item_when_quantity_is_less_than_zero()
+    {
+        $cart = $this->makeCartWithLineItems();
+
+        $this
+            ->patch('/!/cargo/cart/line-items/line-item-1', [
+                'quantity' => -1,
+            ])
+            ->assertSessionHasErrors('quantity');
+
+        $cart = $cart->fresh();
+
+        $this->assertCount(1, $cart->lineItems());
+        $this->assertEquals(1, $cart->lineItems()->first()->quantity()); // It should still be 1.
     }
 
     #[Test]

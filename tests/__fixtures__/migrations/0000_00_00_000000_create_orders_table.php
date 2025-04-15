@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('cargo_orders', function (Blueprint $table) {
             $table->uuid('id');
             $table->integer('order_number')->autoIncrement();
             $table->timestamp('date');
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('cargo_orders');
     }
 };

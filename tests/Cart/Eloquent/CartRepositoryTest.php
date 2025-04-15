@@ -26,7 +26,7 @@ class CartRepositoryTest extends TestCase
             ...config('statamic.cargo.carts'),
             'repository' => 'eloquent',
             'model' => \DuncanMcClean\Cargo\Cart\Eloquent\CartModel::class,
-            'table' => 'carts',
+            'table' => 'cargo_carts',
         ]);
 
         $this->app->bind('cargo.carts.eloquent.model', function () {
