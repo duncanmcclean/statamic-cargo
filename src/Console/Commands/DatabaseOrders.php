@@ -83,7 +83,10 @@ class DatabaseOrders extends Command
 
     private function importOrders(): self
     {
-        if (! $this->option('import') && ! confirm('Would you like to import existing orders?')) {
+        if (
+            ! $this->input->isInteractive()
+            || (! $this->option('import') && ! confirm('Would you like to import existing orders?'))
+        ) {
             return $this;
         }
 
