@@ -7,6 +7,7 @@ use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\Order;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Casts\Json;
+use Illuminate\Support\Collection as IlluminateCollection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Statamic\Console\RunsInPlease;
@@ -73,6 +74,8 @@ class MigrateOrders extends Command
             ])
             ->save();
 
+        $this->components->info("Copied custom fields from the [{$blueprint->handle()}] blueprint to the [cargo::order] blueprint.");
+
         return $this;
     }
 
@@ -82,6 +85,12 @@ class MigrateOrders extends Command
             ->where('collection', config('simple-commerce.content.orders.collection'))
             ->where('order_status', '!=', 'cart')
             ->lazy();
+
+        if ($entries->isEmpty()) {
+            $this->components->warn("No orders found to migrate.");
+
+            return $this;
+        }
 
         progress(
             label: 'Migrating orders',
@@ -150,6 +159,12 @@ class MigrateOrders extends Command
             ->orderBy('order_id')
             ->get();
 
+        if ($rows->isEmpty()) {
+            $this->components->warn("No orders found to migrate.");
+
+            return $this;
+        }
+
         progress(
             label: 'Migrating orders',
             steps: $rows,
@@ -175,7 +190,7 @@ class MigrateOrders extends Command
         return $this;
     }
 
-    private function createOrderFromData(\Illuminate\Support\Collection $data): OrderContract
+    private function createOrderFromData(IlluminateCollection $data): OrderContract
     {
         $status = match ($data->get('order_status')) {
             'placed' && $data->get('payment_status') === 'paid' => 'payment_received',

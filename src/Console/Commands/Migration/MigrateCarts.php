@@ -7,6 +7,7 @@ use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\Cart;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Casts\Json;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Statamic\Console\RunsInPlease;
@@ -53,6 +54,12 @@ class MigrateCarts extends Command
             ->where('collection', config('simple-commerce.content.orders.collection'))
             ->where('order_status', 'cart')
             ->lazy();
+
+        if ($entries->isEmpty()) {
+            $this->components->warn("No carts found to migrate.");
+
+            return $this;
+        }
 
         progress(
             label: 'Migrating carts',
@@ -122,6 +129,12 @@ class MigrateCarts extends Command
             ->orderBy('order_id')
             ->get();
 
+        if ($rows->isEmpty()) {
+            $this->components->warn("No carts found to migrate.");
+
+            return $this;
+        }
+
         progress(
             label: 'Migrating carts',
             steps: $rows,
@@ -147,7 +160,7 @@ class MigrateCarts extends Command
         return $this;
     }
 
-    private function createCartFromData(\Illuminate\Support\Collection $data): CartContract
+    private function createCartFromData(Collection $data): CartContract
     {
         $paymentGateway = isset($data->get('gateway')['use'])
             ? $data->get('gateway')['use']

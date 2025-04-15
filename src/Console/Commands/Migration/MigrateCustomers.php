@@ -7,6 +7,7 @@ use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\Cart;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Casts\Json;
+use Illuminate\Support\Collection as IlluminateCollection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Statamic\Console\RunsInPlease;
@@ -101,6 +102,12 @@ class MigrateCustomers extends Command
             ->where('collection', config('simple-commerce.content.customers.collection'))
             ->lazy();
 
+        if ($entries->isEmpty()) {
+            $this->components->warn("No customers found to migrate.");
+
+            return $this;
+        }
+
         progress(
             label: 'Migrating customers',
             steps: $entries,
@@ -120,6 +127,12 @@ class MigrateCustomers extends Command
     private function migrateCustomersFromEloquent(): self
     {
         $rows = DB::table('customers')->orderBy('id')->lazy();
+
+        if ($rows->isEmpty()) {
+            $this->components->warn("No customers found to migrate.");
+
+            return $this;
+        }
 
         progress(
             label: 'Migrating customers',
@@ -141,20 +154,29 @@ class MigrateCustomers extends Command
 
     private function removeOrdersArrayFromUsers(): self
     {
-        User::query()
-            ->whereNotNull('orders')
-            ->chunk(100, function ($users) {
-                $users->each(function ($user) {
-                    $user->remove('orders')->save();
-                });
-            });
+        $users = User::query()->whereNotNull('orders')->lazy();
 
-        $this->components->info("Removed the [orders] array from user data. It is now a computed field.");
+        if ($users->isEmpty()) {
+            $this->components->warn("No users found to update.");
+
+            return $this;
+        }
+
+        progress(
+            label: 'Migrating customers',
+            steps: $users,
+            callback: function ($user) {
+                $user->remove('orders')->save();
+            },
+            hint: 'This may take some time.'
+        );
+
+        $this->components->info("Updated existing users. Removed the [orders] array from user data.");
 
         return $this;
     }
 
-    private function createUserFromData(\Illuminate\Support\Collection $data): UserContract
+    private function createUserFromData(IlluminateCollection $data): UserContract
     {
         $blueprint = Blueprint::find('user');
 
