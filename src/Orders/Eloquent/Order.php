@@ -47,14 +47,18 @@ class Order extends StacheOrder
     {
         $class = app('cargo.orders.eloquent.model');
 
+        $customer = match ($source->customer) {
+            is_array($source->customer) => json_encode($source->customer),
+            is_object($source->customer()) => $source->customer()->getKey(),
+            default => $source->customer,
+        };
+
         $attributes = [
             'site' => $source->site()->handle(),
             'date' => $source->date(),
             'cart' => $source->cart(),
             'status' => $source->status()->value,
-            'customer' => is_array($source->customer)
-                ? json_encode($source->customer)
-                : $source->customer()?->getKey(),
+            'customer' => $customer,
             'grand_total' => $source->grandTotal(),
             'sub_total' => $source->subTotal(),
             'discount_total' => $source->discountTotal(),
