@@ -39,6 +39,7 @@ class ServiceProvider extends AddonServiceProvider
         Console\Commands\Migration\MigrateConfigs::class,
         Console\Commands\Migration\MigrateDiscounts::class,
         Console\Commands\Migration\MigrateOrders::class,
+        Console\Commands\Migration\MigrateTaxes::class,
     ];
 
     protected $policies = [

@@ -37,6 +37,9 @@ class Migrate extends Command
         $this->call('statamic:cargo:migrate:discounts');
         $this->newLine();
 
+        $this->call('statamic:cargo:migrate:taxes');
+        $this->newLine();
+
         $this->call('statamic:cargo:migrate:orders');
         $this->newLine();
 

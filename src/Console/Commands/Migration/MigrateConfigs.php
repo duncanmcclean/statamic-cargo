@@ -28,7 +28,6 @@ class MigrateConfigs extends Command
         try {
             $this
                 ->migrateConfigOptions()
-                ->migrateTaxes()
                 ->migratePermissions();
         } catch (MigrationCancelled $e) {
             return;
@@ -75,99 +74,6 @@ class MigrateConfigs extends Command
         ConfigWriter::writeMany('statamic.cargo', $config);
 
         $this->components->info('Updated the [statamic/cargo.php] config file.');
-
-        return $this;
-    }
-
-    private function migrateTaxes(): self
-    {
-        $taxEngine = config('simple-commerce.tax_engine');
-
-        if ($taxEngine === 'DuncanMcClean\SimpleCommerce\Tax\BasicTaxEngine') {
-            if (! TaxClass::find('general')) {
-                TaxClass::make()->handle('general')->set('name', 'General')->save();
-            }
-
-            if (! TaxZone::find('international')) {
-                TaxZone::make()
-                    ->handle('international')
-                    ->set('name', 'International')
-                    ->set('type', 'everywhere')
-                    ->set('rates', [
-                        'general' => config('simple-commerce.tax_engine_config.rate', 20),
-                    ])
-                    ->save();
-            }
-
-            ConfigWriter::write(
-                'statamic.cargo.taxes.price_includes_tax',
-                config('simple-commerce.tax_engine_config.included_in_prices', true)
-            );
-
-            $this->components->info('Migrated tax configuration.');
-        }
-
-        if ($taxEngine === 'DuncanMcClean\SimpleCommerce\Tax\Standard\TaxEngine') {
-            collect(File::allFiles(base_path('content/simple-commerce/tax-categories')))
-                ->filter(fn (SplFileInfo $file) => $file->getExtension() === 'yaml')
-                ->each(function (SplFileInfo $file) {
-                    $data = YAML::parse(File::get($file->getPathname()));
-
-                    if (TaxClass::find($data['id'])) {
-                        return;
-                    }
-
-                    TaxClass::make()
-                        ->handle($data['id'])
-                        ->set('name', $data['name'])
-                        ->set('description', $data['description'] ?? '')
-                        ->save();
-                });
-
-            collect(File::allFiles(base_path('content/simple-commerce/tax-zones')))
-                ->filter(fn (SplFileInfo $file) => $file->getExtension() === 'yaml')
-                ->each(function (SplFileInfo $file) {
-                    $data = YAML::parse(File::get($file->getPathname()));
-
-                    if (TaxZone::find($data['id'])) {
-                        return;
-                    }
-
-                    $type = match (true) {
-                        isset($data['region']) => 'states',
-                        isset($data['country']) => 'countries',
-                        default => 'everywhere',
-                    };
-
-                    TaxZone::make()
-                        ->handle($data['id'])
-                        ->set('name', $data['name'])
-                        ->set('type', $type)
-                        ->set('countries', isset($data['country']) ? [$data['country']] : null)
-                        ->set('states', isset($data['region']) ? [$data['region']] : null)
-                        ->save();
-                });
-
-            collect(File::allFiles(base_path('content/simple-commerce/tax-rates')))
-                ->filter(fn (SplFileInfo $file) => $file->getExtension() === 'yaml')
-                ->each(function (SplFileInfo $file) {
-                    $data = YAML::parse(File::get($file->getPathname()));
-
-                    $taxZone = TaxZone::find($data['zone']);
-
-                    if (! $taxZone) {
-                        return;
-                    }
-
-                    $taxZone->set('rates', [
-                        ...$taxZone->get('rates', []),
-                        $data['category'] => (int) $data['rate'],
-                    ])->save();
-                });
-
-            $this->components->info('Migrated tax configuration.');
-            $this->components->warn('Cargo includes tax in prices by default. If you want to change this, please update the [statamic/cargo.php] config file.');
-        }
 
         return $this;
     }
