@@ -17,7 +17,7 @@ class OrderQueryBuilderTest extends StacheOrderQueryBuilderTest
         config()->set('statamic.cargo.orders', [
             'repository' => 'eloquent',
             'model' => \DuncanMcClean\Cargo\Orders\Eloquent\OrderModel::class,
-            'table' => 'orders',
+            'table' => 'cargo_orders',
         ]);
 
         $this->app->bind('cargo.orders.eloquent.model', function () {
