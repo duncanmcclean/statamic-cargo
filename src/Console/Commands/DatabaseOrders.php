@@ -55,7 +55,7 @@ class DatabaseOrders extends Command
     {
         $this->publishMigration(
             stubPath: __DIR__.'/stubs/create_orders_table.php.stub',
-            name: 'create_orders_table.php',
+            name: 'create_cargo_orders_table.php',
             replacements: [
                 'ORDERS_TABLE' => config('statamic.cargo.orders.table', 'orders'),
             ]
@@ -63,7 +63,7 @@ class DatabaseOrders extends Command
 
         $this->publishMigration(
             stubPath: __DIR__.'/stubs/create_order_line_items_table.php.stub',
-            name: 'create_order_line_items_table.php',
+            name: 'create_cargo_order_line_items_table.php',
             replacements: [
                 'ORDER_LINE_ITEMS_TABLE' => config('statamic.cargo.orders.line_items_table', 'order_line_items'),
             ]
@@ -105,7 +105,7 @@ class DatabaseOrders extends Command
                         'status' => $order->status(),
                         'customer' => $order->customer() instanceof GuestCustomer
                             ? json_encode($order->customer()->toArray())
-                            : $order->customer()->getKey(),
+                            : $order->customer()?->getKey(),
                         'grand_total' => $order->grandTotal(),
                         'sub_total' => $order->subTotal(),
                         'discount_total' => $order->discountTotal(),

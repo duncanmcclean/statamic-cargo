@@ -28,7 +28,7 @@ class LineItemModel extends Model
     {
         parent::__construct($attributes);
 
-        $this->setTable(config('statamic.cargo.orders.line_items_table', 'order_line_items'));
+        $this->setTable(config('statamic.cargo.orders.line_items_table', 'cargo_order_line_items'));
     }
 
     public function order(): BelongsTo

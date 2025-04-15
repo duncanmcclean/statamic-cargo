@@ -32,7 +32,7 @@ class OrderModel extends Model
     {
         parent::__construct($attributes);
 
-        $this->setTable(config('statamic.cargo.orders.table', 'orders'));
+        $this->setTable(config('statamic.cargo.orders.table', 'cargo_orders'));
     }
 
     public function lineItems(): HasMany
