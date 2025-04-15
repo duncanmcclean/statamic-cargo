@@ -35,6 +35,7 @@ class ServiceProvider extends AddonServiceProvider
 
     protected $commands = [
         Console\Commands\Migration\Migrate::class,
+        Console\Commands\Migration\MigrateCarts::class,
         Console\Commands\Migration\MigrateConfigs::class,
         Console\Commands\Migration\MigrateDiscounts::class,
         Console\Commands\Migration\MigrateOrders::class,

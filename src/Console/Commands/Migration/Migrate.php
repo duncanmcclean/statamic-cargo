@@ -33,8 +33,14 @@ class Migrate extends Command
 
         $this->call('statamic:cargo:migrate:configs');
         $this->newLine();
+
         $this->call('statamic:cargo:migrate:discounts');
         $this->newLine();
+
         $this->call('statamic:cargo:migrate:orders');
+        $this->newLine();
+
+        $this->call('statamic:cargo:migrate:carts');
+        $this->newLine();
     }
 }
