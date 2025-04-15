@@ -55,7 +55,7 @@ class DatabaseCarts extends Command
     {
         $this->publishMigration(
             stubPath: __DIR__.'/stubs/create_carts_table.php.stub',
-            name: 'create_carts_table.php',
+            name: 'create_cargo_carts_table.php',
             replacements: [
                 'CARTS_TABLE' => config('statamic.cargo.carts.table', 'carts'),
             ]
@@ -63,7 +63,7 @@ class DatabaseCarts extends Command
 
         $this->publishMigration(
             stubPath: __DIR__.'/stubs/create_cart_line_items_table.php.stub',
-            name: 'create_cart_line_items_table.php',
+            name: 'create_cargo_cart_line_items_table.php',
             replacements: [
                 'CART_LINE_ITEMS_TABLE' => config('statamic.cargo.carts.line_items_table', 'cart_line_items'),
             ]

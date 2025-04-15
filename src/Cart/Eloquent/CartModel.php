@@ -28,7 +28,7 @@ class CartModel extends Model
     {
         parent::__construct($attributes);
 
-        $this->setTable(config('statamic.cargo.carts.table', 'carts'));
+        $this->setTable(config('statamic.cargo.carts.table', 'cargo_carts'));
     }
 
     public function lineItems(): HasMany

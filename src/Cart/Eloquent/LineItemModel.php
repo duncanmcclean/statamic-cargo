@@ -28,7 +28,7 @@ class LineItemModel extends Model
     {
         parent::__construct($attributes);
 
-        $this->setTable(config('statamic.cargo.carts.line_items_table', 'cart_line_items'));
+        $this->setTable(config('statamic.cargo.carts.line_items_table', 'cargo_cart_line_items'));
     }
 
     public function cart(): BelongsTo
