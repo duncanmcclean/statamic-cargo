@@ -57,7 +57,7 @@ class DatabaseOrders extends Command
             stubPath: __DIR__.'/stubs/create_orders_table.php.stub',
             name: 'create_cargo_orders_table.php',
             replacements: [
-                'ORDERS_TABLE' => config('statamic.cargo.orders.table', 'orders'),
+                'ORDERS_TABLE' => config('statamic.cargo.orders.table', 'cargo_orders'),
             ]
         );
 
@@ -65,7 +65,7 @@ class DatabaseOrders extends Command
             stubPath: __DIR__.'/stubs/create_order_line_items_table.php.stub',
             name: 'create_cargo_order_line_items_table.php',
             replacements: [
-                'ORDER_LINE_ITEMS_TABLE' => config('statamic.cargo.orders.line_items_table', 'order_line_items'),
+                'ORDER_LINE_ITEMS_TABLE' => config('statamic.cargo.orders.line_items_table', 'cargo_order_line_items'),
             ]
         );
 
