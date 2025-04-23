@@ -1,6 +1,6 @@
 {
     "name": "duncanmcclean/statamic-cargo",
-    "description": "",
+    "description": "Comprehensive e-commerce addon for Statamic. Build bespoke e-commerce sites without the complexity.",
     "license": "proprietary",
     "autoload": {
         "psr-4": {
@@ -21,7 +21,7 @@
         "statamic": {
             "name": "Cargo",
             "slug": "cargo",
-            "description": ""
+            "description": "Comprehensive e-commerce addon for Statamic. Build bespoke e-commerce sites without the complexity."
         },
         "laravel": {
             "providers": [
