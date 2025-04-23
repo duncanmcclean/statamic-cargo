@@ -1,0 +1,26 @@
+<?php
+
+namespace DummyNamespace;
+
+use DuncanMcClean\Cargo\Contracts\Cart\Cart;
+use DuncanMcClean\Cargo\Discounts\Types\DiscountType;
+use DuncanMcClean\Cargo\Orders\LineItem;
+
+class DummyClass extends DiscountType
+{
+    public function calculate(Cart $cart, LineItem $lineItem): int
+    {
+        return (int) $this->discount->get('amount_off');
+    }
+
+    public function fieldItems(): array
+    {
+        return [
+            'amount_off' => [
+                'display' => __('Amount'),
+                'type' => 'money',
+                'validate' => ['required', 'min:0'],
+            ],
+        ];
+    }
+}

@@ -38,6 +38,7 @@ abstract class GeneratorCommand extends StatamicGeneratorCommand
             'name' => [
                 'What should the '.$this->prepareTypeForDisplay().' be named?',
                 match ($this->type) {
+                    'DiscountType' => 'E.g. AmountOff',
                     'PaymentGateway' => 'E.g. Stripe',
                     'ShippingMethod' => 'E.g. FreeShipping',
                     default => '',
