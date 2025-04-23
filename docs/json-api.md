@@ -29,7 +29,7 @@ When the customer doesn't have a cart, this endpoint will report a 404 status co
 ### Update the cart
 `POST` `/!/cargo/cart`
 
-Updates the customer's cart. You can post customer information, redeem a coupon, or pass any other order fields here.
+Updates the customer's cart. You can post customer information, redeem a discount code, or pass any other order fields here.
 
 **Parameters:**
 * `customer` (array)
@@ -38,7 +38,7 @@ Updates the customer's cart. You can post customer information, redeem a coupon,
 	* `last_name`
 	* `email`
 	* Any additional data you want to persist on the customer.
-* `coupon`
+* `discount_code`
 * `shipping_method` (requires `shipping_option`)
 * `shipping_option` (required `shipping_method`)
 * Addresses
@@ -123,7 +123,7 @@ When the customer doesn't have a cart, this endpoint will report a 404 status co
 When the cart total is equals to £0, you may use this endpoint to create an order without payment.
 
 **Parameters:**
-* `coupon`
+* `discount_code`
 
 When successful, this endpoint will return a redirect response to the checkout confirmation page.
 
@@ -135,7 +135,7 @@ When the order requires payment, this endpoint will report a 404 status code.
 When the order requires payment, you may use this endpoint to create the order. The `{gateway}` should be the handle of the payment gateway you wish to checkout using.
 
 **Parameters:**
-* `coupon`
+* `discount_code`
 
 When successful, this endpoint will return a redirect response to the checkout confirmation page.
 
