@@ -7,6 +7,7 @@ use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Discount;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Casts\Json;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -171,6 +172,10 @@ class MigrateCarts extends Command
             ? $data->get('gateway')['data']
             : null;
 
+        $shippingMethod = is_array($data->get('shipping_method'))
+            ? Arr::first($data->get('shipping_method'))
+            : $data->get('shipping_method');
+
         $discount = $data->has('coupon')
             ? Discount::find($data->get('coupon'))
             : null;
@@ -195,17 +200,17 @@ class MigrateCarts extends Command
                 'mollie_payment_id' => $paymentGateway === 'mollie' && isset($gatewayData['id'])
                     ? $gatewayData['id']
                     : null,
-                'shipping_method' => $data->get('shipping_method'),
+                'shipping_method' => $shippingMethod,
                 'shipping_option' => $data->has('shipping_method') ? [
-                    'name' => $data->get('shipping_method'),
-                    'handle' => $data->get('shipping_method'),
+                    'name' => $shippingMethod,
+                    'handle' => $shippingMethod,
                     'price' => $data->get('shipping_total', 0),
                 ] : null,
                 'shipping_tax_breakdown' => $data->has('shipping_tax') ? [
                     [
                         'rate' => $data->get('shipping_tax')['rate'],
                         'description' => 'Unknown',
-                        'name' => 'Unknown',
+                        'zone' => 'Unknown',
                         'amount' => $data->get('shipping_tax')['amount'],
                     ],
                 ] : null,
