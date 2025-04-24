@@ -63,7 +63,7 @@ class MigrateCustomers extends Command
         $fieldHandles = $blueprint->fields()->all()->map->handle();
 
         $additionalFieldHandles = $fieldHandles->except([
-            'name', 'first_name', 'last_name', 'email', 'orders', 'roles', 'groups', 'super',
+            'title', 'slug', 'name', 'first_name', 'last_name', 'email', 'orders', 'roles', 'groups', 'super',
         ])->all();
 
         $userBlueprint = Blueprint::find('user');
