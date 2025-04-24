@@ -38,23 +38,25 @@
         autocomplete="{type} address-line2"
     }}
 
-    {{ partial:checkout/components/input
-        name="{type}_city"
-        label="Town/City"
-        type="text"
-        xBindValue="cart.{type}_city"
-        autocomplete="{type} address-level1"
-        required="true"
-    }}
+    <div class="grid sm:grid-cols-2 gap-6">
+        {{ partial:checkout/components/input
+            name="{type}_city"
+            label="Town/City"
+            type="text"
+            xBindValue="cart.{type}_city"
+            autocomplete="{type} address-level1"
+            required="true"
+        }}
 
-    {{ partial:checkout/components/input
-        name="{type}_postcode"
-        label="Postcode"
-        type="text"
-        xBindValue="cart.{type}_postcode"
-        autocomplete="{type} postal-code"
-        required="true"
-    }}
+        {{ partial:checkout/components/input
+            name="{type}_postcode"
+            label="Postcode"
+            type="text"
+            xBindValue="cart.{type}_postcode"
+            autocomplete="{type} postal-code"
+            required="true"
+        }}
+    </div>
 
     <template x-if="states.length">
         {{ partial:checkout/components/select name="{type}_state" label="State/County" autocomplete="{type} address-level1" required="true" }}
