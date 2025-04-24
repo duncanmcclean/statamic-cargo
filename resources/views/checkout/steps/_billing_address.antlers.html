@@ -13,6 +13,7 @@
     <!-- We'll use hidden inputs to fall back to the shipping address if the user chooses to use it for billing. -->
     <template x-if="useShippingAddressForBilling">
         <div>
+            <input type="hidden" name="billing_name" :value="cart.shipping_name">
             <input type="hidden" name="billing_line_1" :value="cart.shipping_line_1">
             <input type="hidden" name="billing_line_2" :value="cart.shipping_line_2">
             <input type="hidden" name="billing_city" :value="cart.shipping_city">
@@ -50,6 +51,7 @@
                         && this.cart.billing_line_1
                     ) {
                         let shippingAddress = {
+                            name: this.cart.shipping_name,
                             line_1: this.cart.shipping_line_1,
                             line_2: this.cart.shipping_line_2,
                             city: this.cart.shipping_city,
@@ -59,6 +61,7 @@
                         };
 
                         let billingAddress = {
+                            name: this.cart.billing_name,
                             line_1: this.cart.billing_line_1,
                             line_2: this.cart.billing_line_2,
                             city: this.cart.billing_city,
