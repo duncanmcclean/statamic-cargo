@@ -15,8 +15,8 @@ return [
     'unique_discount_value' => 'This value has already been taken.',
     'unique_tax_zone' => [
         'countries' => 'One or more countries have already been assigned to another tax zone.',
-        'states' => 'One or more states have already been assigned to another tax zone.',
         'postcodes' => 'One or more postcodes have already been assigned to another tax zone.',
+        'states' => 'One or more states have already been assigned to another tax zone.',
     ],
     'variant_not_found' => 'The variant is invalid.',
     'variant_out_of_stock' => 'This variant is currently out of stock. Please try again later.',
