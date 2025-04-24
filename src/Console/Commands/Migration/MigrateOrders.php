@@ -245,7 +245,7 @@ class MigrateOrders extends Command
                     [
                         'rate' => $data->get('shipping_tax')['rate'],
                         'description' => 'Unknown',
-                        'name' => 'Unknown',
+                        'zone' => 'Unknown',
                         'amount' => $data->get('shipping_tax')['amount'],
                     ],
                 ] : null,

@@ -21,7 +21,7 @@ trait MapsLineItems
                     [
                         'rate' => $lineItem['tax']['rate'],
                         'description' => 'Unknown',
-                        'name' => 'Unknown',
+                        'zone' => 'Unknown',
                         'amount' => $lineItem['tax']['amount'],
                     ],
                 ] : null,
