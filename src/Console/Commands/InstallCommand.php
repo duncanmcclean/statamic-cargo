@@ -190,14 +190,11 @@ PHP);
 
     private function publishPrebuiltCheckout(): self
     {
-        if (File::exists(resource_path('views/checkout'))) {
-            return $this;
-        }
-
         $this->line('  Cargo includes a <fg=green;options=bold>pre-built checkout flow</> - featuring a minimal design and flexible Antlers templates.');
 
         if (! confirm(
             label: 'Would you like to publish the pre-built checkout flow?',
+            default: ! File::exists(resource_path('views/checkout')),
             yes: 'Yes, please.',
             no: 'No, I will build my own checkout page.',
             hint: 'You can always change your mind later.'
