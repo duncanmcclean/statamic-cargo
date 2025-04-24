@@ -12,7 +12,7 @@ trait MapsLineItems
             return array_filter([
                 'id' => $lineItem['id'],
                 'product' => $lineItem['product'],
-                'variant' => $lineItem['variant'] ?? null,
+                'variant' => $lineItem['variant']['variant'] ?? $lineItem['variant'] ?? null,
                 'quantity' => $lineItem['quantity'] ?? 1,
                 'unit_price' => $lineItem['total'] ?? 0,
                 'sub_total' => $lineItem['total'] ?? 0,
