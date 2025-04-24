@@ -2,7 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Console\Commands\Migration\Concerns;
 
-use DuncanMcClean\Cargo\Fieldtypes\States;
+use DuncanMcClean\Cargo\Data\States;
 use Illuminate\Support\Collection;
 use Statamic\Facades\Dictionary;
 use Statamic\Support\Str;
@@ -58,13 +58,13 @@ trait MapsAddresses
             return $country->extra()['iso2'] === $countryIso2;
         });
 
-        $states = (new States)->getStates($country['iso3']);
+        $states = States::byCountry($country['iso3']);
 
-        $state = array_find($states, function ($state) use ($stateCode) {
+        $state = $states->filter(function (array $state) use ($stateCode) {
             $code = Str::after($stateCode, '-');
 
             return strtolower($state['code']) === strtolower($code);
-        });
+        })->first();
 
         return [$country['iso3'] ?? $countryIso2, $state['code'] ?? $stateCode];
     }
