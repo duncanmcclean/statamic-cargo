@@ -261,7 +261,7 @@ class MigrateOrders extends Command
                         'amount' => $data->get('coupon_total', 0),
                     ],
                 ] : null,
-                'discount_code' => $discount?->code(),
+                'discount_code' => $discount?->get('discount_code'),
             ]));
     }
 }
