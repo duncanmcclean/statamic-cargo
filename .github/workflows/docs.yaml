@@ -1,0 +1,19 @@
+name: Docs
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+
+jobs:
+  update-docs:
+    name: 'Update docs'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy
+        uses: jbrooksuk/laravel-forge-action@v1.0.2
+        with:
+          trigger_url: ${{ secrets.DOCS_TRIGGER_URL }}
