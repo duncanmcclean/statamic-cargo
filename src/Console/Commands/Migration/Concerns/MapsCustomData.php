@@ -60,6 +60,7 @@ trait MapsCustomData
             'updated_at',
             'customer_id',
             'site',
+            'seo',
         ])->all();
     }
 }
