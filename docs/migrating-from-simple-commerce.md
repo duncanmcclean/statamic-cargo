@@ -313,7 +313,7 @@ It handles everything on one page, without the need for full-page refreshes, in 
 To publish the pre-built checkout flow into your project, run this command:
 
 ```
-php artisan vendor:publish --tag=cargo-checkout-stubs
+php artisan vendor:publish --tag=cargo-prebuilt-checkout
 ```
 
 Then, add the following to your `routes/web.php` file:
