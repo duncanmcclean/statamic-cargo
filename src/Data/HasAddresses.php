@@ -20,6 +20,7 @@ trait HasAddresses
     public function shippingAddress(): Address
     {
         return new Address(
+            name: $this->get('shipping_name'),
             line1: $this->get('shipping_line_1'),
             line2: $this->get('shipping_line_2'),
             city: $this->get('shipping_city'),
@@ -32,6 +33,7 @@ trait HasAddresses
     public function billingAddress(): Address
     {
         return new Address(
+            name: $this->get('billing_name'),
             line1: $this->get('billing_line_1'),
             line2: $this->get('billing_line_2'),
             city: $this->get('billing_city'),

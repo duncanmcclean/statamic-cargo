@@ -13,6 +13,15 @@
     {{ /partial:checkout/components/select }}
 
     {{ partial:checkout/components/input
+        name="{type}_name"
+        label="{type | ucfirst} Name"
+        type="text"
+        xBindValue="cart.{type}_name"
+        autocomplete="{type} name"
+        required="true"
+    }}
+
+    {{ partial:checkout/components/input
         name="{type}_line_1"
         label="{type | ucfirst} Line 1"
         type="text"

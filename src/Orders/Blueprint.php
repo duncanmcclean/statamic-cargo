@@ -58,6 +58,10 @@ class Blueprint
                             'display' => __('Shipping Address'),
                             'fields' => [
                                 [
+                                    'handle' => 'shipping_name',
+                                    'field' => ['type' => 'text', 'display' => __('Name'), 'listable' => false, 'width' => 50],
+                                ],
+                                [
                                     'handle' => 'shipping_line_1',
                                     'field' => ['type' => 'text', 'display' => __('Address Line 1'), 'listable' => false, 'width' => 50],
                                 ],
@@ -100,6 +104,10 @@ class Blueprint
                         [
                             'display' => __('Billing Address'),
                             'fields' => [
+                                [
+                                    'handle' => 'billing_name',
+                                    'field' => ['type' => 'text', 'display' => __('Name'), 'listable' => false, 'width' => 50],
+                                ],
                                 [
                                     'handle' => 'billing_line_1',
                                     'field' => ['type' => 'text', 'display' => __('Address Line 1'), 'listable' => false, 'width' => 50],

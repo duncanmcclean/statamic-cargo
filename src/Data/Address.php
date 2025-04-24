@@ -9,6 +9,7 @@ use Statamic\Facades\Dictionary;
 class Address
 {
     public function __construct(
+        public ?string $name = null,
         public ?string $line1 = null,
         public ?string $line2 = null,
         public ?string $city = null,
@@ -44,6 +45,7 @@ class Address
     public function __toString(): string
     {
         return collect([
+            $this->name,
             $this->line1,
             $this->line2,
             $this->city,
