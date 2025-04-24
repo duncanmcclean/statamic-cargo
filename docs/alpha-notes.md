@@ -32,7 +32,18 @@ There's a couple of things you should be aware of going into the alpha:
 
 ## Install Process
 ### New Site
-First, install Cargo using Composer:
+First, add a composer repository to your `composer.json` file:
+
+```json
+"repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:duncanmcclean/statamic-cargo.git"
+    }
+]
+```
+
+Next, install Cargo using Composer:
 
 ```
 composer require duncanmcclean/statamic-cargo
@@ -45,15 +56,21 @@ php please cargo:install
 ```
 
 ### Existing Simple Commerce site
-First, uninstall Simple Commerce via Composer:
+First, add a composer repository to your `composer.json` file:
+
+```json
+"repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:duncanmcclean/statamic-cargo.git"
+    }
+]
+```
+
+Next, uninstall Simple Commerce and install Cargo using Composer:
 
 ```
 composer remove duncanmcclean/simple-commerce
-```
-
-Then, install Cargo using Composer:
-
-```
 composer require duncanmcclean/statamic-cargo
 ```
 
