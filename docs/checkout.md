@@ -366,7 +366,7 @@ When you submit the form, Cargo will also expect you to pass a `shipping_method`
                 type="radio" 
                 name="shipping_option" 
                 value="{{ handle }}" 
-                onchange="document.getElementsByName('shipping_method')[0].value = '{{ shipping_method }}'"
+{{#                 onchange="document.getElementsByName('shipping_method')[0].value = '{{ shipping_method }}'" #}}
                 required>
 
             <label for="{{ handle }}">{{ name }} ({{ price }})</label>
