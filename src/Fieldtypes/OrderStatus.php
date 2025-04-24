@@ -29,7 +29,7 @@ class OrderStatus extends Fieldtype
     {
         return [
             'options' => collect(OrderStatusEnum::cases())
-                ->when(! $this->field()->parent()?->shippingMethod(), function ($collection) {
+                ->when(! $this->field()->parent()?->get('shipping_method'), function ($collection) {
                     return $collection->reject(OrderStatusEnum::Shipped);
                 })
                 ->map(fn ($status) => [
