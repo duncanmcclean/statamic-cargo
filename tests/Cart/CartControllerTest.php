@@ -82,7 +82,8 @@ class CartControllerTest extends TestCase
                 'shipping_postcode' => '12345',
                 'shipping_country' => 'US',
 
-                // This field shouldn't get updated.
+                // These fields shouldn't get updated.
+                'random_field' => 'foo',
                 'grand_total' => 500,
             ])
             ->assertRedirect('/cart');
@@ -101,7 +102,10 @@ class CartControllerTest extends TestCase
         $this->assertEquals('12345', $cart->get('shipping_postcode'));
         $this->assertEquals('US', $cart->get('shipping_country'));
 
-        // Ensuring the grand total passed in the request didn't update the cart.
+        // Ensure that keys NOT in the order blueprint aren't saved.
+        $this->assertNull($cart->get('random_field'));
+
+        // Ensure that the grand total passed in the request didn't update the cart.
         $this->assertEquals(900, $cart->grandTotal());
     }
 
