@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Statamic\Fields\Fieldtype;
 use DuncanMcClean\Cargo\Data\States as StatesData;
@@ -13,6 +14,10 @@ class States extends Fieldtype
     public function preload()
     {
         $country = $this->field()->parent()?->get($this->config('from'));
+
+        if (is_array($country)) {
+            $country = Arr::first($country);
+        }
 
         return [
             'url' => cp_route('cargo.fieldtypes.states'),
