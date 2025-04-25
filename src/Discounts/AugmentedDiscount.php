@@ -27,6 +27,7 @@ class AugmentedDiscount extends AbstractAugmented
             'id',
             'name',
             'type',
+            'discount_code',
         ];
     }
 }
