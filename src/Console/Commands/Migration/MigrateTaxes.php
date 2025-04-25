@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use SplFileInfo;
 use Statamic\Console\RunsInPlease;
+use Statamic\Facades\Entry;
 use Statamic\Facades\YAML;
 use Stillat\Proteus\Support\Facades\ConfigWriter;
 
@@ -62,6 +63,18 @@ class MigrateTaxes extends Command
                         ->set('name', $data['name'])
                         ->set('description', $data['description'] ?? '')
                         ->save();
+
+                    Entry::query()
+                        ->whereIn('collection', config('statamic.cargo.products.collections'))
+                        ->where('tax_category', $data['id'])
+                        ->chunk(100, function ($entries) {
+                            $entries->each(function ($entry) {
+                                $entry
+                                    ->set('tax_class', $entry->get('tax_category'))
+                                    ->remove('tax_category')
+                                    ->save();
+                            });
+                        });
                 });
 
             collect(File::allFiles(base_path('content/simple-commerce/tax-zones')))
