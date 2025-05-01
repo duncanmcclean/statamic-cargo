@@ -19,11 +19,8 @@
         :action-url="{{ json_encode(cp_route('cargo.discounts.actions.run')) }}"
     ></discounts-listing>
 
-    @include(
-        'statamic::partials.docs-callout',
-        [
-            'topic' => __('Discounts'),
-            'url' => 'https://builtwithcargo.dev/docs/discounts',
-        ]
-    )
+    <x-statamic::docs-callout
+        :topic="__('Discounts')"
+        url="https://builtwithcargo.dev/docs/discounts"
+    />
 @endsection

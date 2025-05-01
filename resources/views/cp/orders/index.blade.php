@@ -24,11 +24,8 @@
         :action-url="{{ json_encode(cp_route('cargo.orders.actions.run')) }}"
     ></orders-listing>
 
-    @include(
-        'statamic::partials.docs-callout',
-        [
-            'topic' => __('Orders'),
-            'url' => 'https://builtwithcargo.dev/docs/carts-and-orders',
-        ]
-    )
+    <x-statamic::docs-callout
+        :topic="__('Orders')"
+        url="https://builtwithcargo.dev/docs/carts-and-orders"
+    />
 @endsection
