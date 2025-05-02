@@ -4,7 +4,7 @@
 
 <script>
 import { IndexFieldtype } from 'statamic';
-import { Badge } from '@statamic/ui';
+import { Badge } from 'statamic';
 
 export default {
     mixins: [IndexFieldtype],
