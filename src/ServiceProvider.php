@@ -57,7 +57,7 @@ class ServiceProvider extends AddonServiceProvider
         'publicDirectory' => 'resources/dist',
         'input' => [
             'resources/js/cp.js',
-            'resources/css/cp.css',
+//            'resources/css/cp.css',
         ],
     ];
 
