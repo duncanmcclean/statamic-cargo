@@ -13,7 +13,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v1
 
-      - name: Install dependencies
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: fileinfo, exif, gd, pdo, sqlite, pdo_sqlite, intl
+
+      - name: Install composer dependencies
+        run: |
+          composer install --prefer-dist --no-interaction --no-suggest
+
+      - name: Install npm dependencies
         run: npm ci
 
       - name: Compile assets
