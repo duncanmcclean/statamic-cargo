@@ -16,13 +16,14 @@ There's a couple of things you should be aware of going into the alpha:
     * Please don't use Cargo in production just yet. However, you're welcome to migrate existing sites to Cargo, but just don't deploy them.
 2. Cargo requires Statamic 6.
    * As of the time of writing, Statamic 6 isn't even in alpha yet. So, to use Cargo, you'll need to require `dev-master` and manually build the Control Panel's CSS and JS:
-
+     
 	```
 	composer config minimum-stability dev
 	composer require statamic/cms:dev-master -W
 	cd vendor/statamic/cms
 	npm ci
 	npm run build
+    cd ../../..
 	```
 
 	* You can find the [draft v5 -> v6 upgrade guide here](https://github.com/statamic/docs/blob/6.0/content/collections/docs/5-to-6.md).
@@ -49,11 +50,22 @@ Next, install Cargo using Composer:
 composer require duncanmcclean/statamic-cargo
 ```
 
-Then, once Composer has finished doing its thing, run Cargo's install command. It'll publish various stubs, set up your products collection, and more.
+Once Composer has finished doing its thing, run Cargo's install command. It'll publish various stubs, set up your products collection, and more.
 
 ```
 php please cargo:install
 ```
+
+Next, because the Cargo repository isn't public yet, you'll need to build the Control Panel CSS and JS manually:
+
+```
+cd vendor/duncanmcclean/statamic-cargo
+npm ci
+npm run build
+cd ../../..
+```
+
+Finally, review the [migration guide](/docs/migrating-from-simple-commerce) to see what's changed, and how to migrate your configuration and data into Cargo.
 
 ### Existing Simple Commerce site
 First, add a composer repository to your `composer.json` file:
@@ -78,6 +90,15 @@ Once Composer has finished doing its thing, run Cargo's install command. It'll p
 
 ```
 php please cargo:install
+```
+
+Next, because the Cargo repository isn't public yet, you'll need to build the Control Panel CSS and JS manually:
+
+```
+cd vendor/duncanmcclean/statamic-cargo
+npm ci
+npm run build
+cd ../../..
 ```
 
 Finally, review the [migration guide](/docs/migrating-from-simple-commerce) to see what's changed, and how to migrate your configuration and data into Cargo.
