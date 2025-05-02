@@ -60,6 +60,7 @@ Next, because the Cargo repository isn't public yet, you'll need to build the Co
 
 ```
 cd vendor/duncanmcclean/statamic-cargo
+composer install
 npm ci
 npm run build
 cd ../../..
@@ -96,6 +97,7 @@ Next, because the Cargo repository isn't public yet, you'll need to build the Co
 
 ```
 cd vendor/duncanmcclean/statamic-cargo
+composer install
 npm ci
 npm run build
 cd ../../..
