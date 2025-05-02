@@ -30,7 +30,7 @@ jobs:
         run: npm run build
 
       - name: Create zip
-        run: tar -czvf dist.tar.gz dist
+        run: tar -czvf dist.tar.gz resources/dist
 
       - name: Get Changelog
         id: changelog

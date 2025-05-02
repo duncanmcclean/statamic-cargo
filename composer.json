@@ -16,7 +16,7 @@
     "extra": {
         "download-dist": {
             "url": "https://github.com/duncanmcclean/statamic-cargo/releases/download/{$version}/dist.tar.gz",
-            "path": "dist"
+            "path": "resources/dist"
         },
         "statamic": {
             "name": "Cargo",
