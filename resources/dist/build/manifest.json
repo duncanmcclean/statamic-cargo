@@ -1,0 +1,82 @@
+{
+  "_vue.runtime.esm-bundler-DQM3OGQG.js": {
+    "file": "assets/vue.runtime.esm-bundler-DQM3OGQG.js",
+    "name": "vue.runtime.esm-bundler"
+  },
+  "resources/css/cp.css": {
+    "file": "assets/cp-Y5FXgi1u.css",
+    "src": "resources/css/cp.css",
+    "isEntry": true
+  },
+  "resources/js/cp.js": {
+    "file": "assets/cp-MpsWbiOY.js",
+    "name": "cp",
+    "src": "resources/js/cp.js",
+    "isEntry": true,
+    "dynamicImports": [
+      "resources/svg/money-cash-file-dollar.svg",
+      "resources/svg/money.svg",
+      "resources/svg/printer.svg",
+      "resources/svg/shop.svg",
+      "resources/svg/stripe.svg",
+      "resources/svg/travel-map.svg"
+    ],
+    "css": [
+      "assets/cp-CIJP5ALk.css"
+    ]
+  },
+  "resources/svg/money-cash-file-dollar.svg": {
+    "file": "assets/money-cash-file-dollar-DEEQuvod.js",
+    "name": "money-cash-file-dollar",
+    "src": "resources/svg/money-cash-file-dollar.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-DQM3OGQG.js"
+    ]
+  },
+  "resources/svg/money.svg": {
+    "file": "assets/money-8vlXok74.js",
+    "name": "money",
+    "src": "resources/svg/money.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-DQM3OGQG.js"
+    ]
+  },
+  "resources/svg/printer.svg": {
+    "file": "assets/printer-ClSZeoQr.js",
+    "name": "printer",
+    "src": "resources/svg/printer.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-DQM3OGQG.js"
+    ]
+  },
+  "resources/svg/shop.svg": {
+    "file": "assets/shop-CAOGpr81.js",
+    "name": "shop",
+    "src": "resources/svg/shop.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-DQM3OGQG.js"
+    ]
+  },
+  "resources/svg/stripe.svg": {
+    "file": "assets/stripe-By2w7HvL.js",
+    "name": "stripe",
+    "src": "resources/svg/stripe.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-DQM3OGQG.js"
+    ]
+  },
+  "resources/svg/travel-map.svg": {
+    "file": "assets/travel-map-BG-uiPHA.js",
+    "name": "travel-map",
+    "src": "resources/svg/travel-map.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-DQM3OGQG.js"
+    ]
+  }
+}
