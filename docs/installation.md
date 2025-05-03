@@ -27,4 +27,4 @@ php please cargo:install
 ```
 
 ## Next steps
-We suggest you follow along with the docs, starting with [Carts & Orders](/docs/the-basics/carts-orders) to better understand the core concepts of Cargo.
+We suggest you follow along with the docs, starting with [Carts & Orders](/docs/carts-orders) to better understand the core concepts of Cargo.
