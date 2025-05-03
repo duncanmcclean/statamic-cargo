@@ -61,8 +61,6 @@ php please cargo:install
 
 Now that you're all setup, I recommend you follow along with the docs, starting with [Carts & Orders](/docs/carts-orders) to better understand the core concepts of Cargo.
 
-Finally, review the [migration guide](/docs/migrating-from-simple-commerce) to see what's changed, and how to migrate your configuration and data into Cargo.
-
 ### Existing Simple Commerce site
 First, add a composer repository to your `composer.json` file:
 
