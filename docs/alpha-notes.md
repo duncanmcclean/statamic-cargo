@@ -11,26 +11,31 @@ Needless to say, I'm excited to finally be able to share it with you!
 ## It's an alpha!
 There's a couple of things you should be aware of going into the alpha:
 
-1. Stuff will be broken.
-	* It's probably obvious, but I just thought I'd say it anyway.
-    * Please don't use Cargo in production just yet. However, you're welcome to migrate existing sites to Cargo, but just don't deploy them.
-2. Cargo requires Statamic 6.
-   * As of the time of writing, Statamic 6 isn't even in alpha yet. So, to use Cargo, you'll need to require `dev-master` instead of `^6.0`, as well as manually building Statamic's CSS & JS:
-     
-	```
-	composer config minimum-stability dev
-	composer require statamic/cms:dev-master -W
-	cd vendor/statamic/cms
-	npm ci
-	npm run build
-    cd ../../..
-	```
+### Stuff will be broken.
+I know it's probably obvious, but I just thought I'd mention it anyway.
 
-    * You can safely ignore any `Failed to download` or `Can't locate path` errors thrown by Composer, they are due to us installing a dev version of Statamic. 
-	* You can find the [draft v5 -> v6 upgrade guide here](https://github.com/statamic/docs/blob/6.0/content/collections/docs/5-to-6.md). You can skip the "Upgrade using Composer" section.
-    * Statamic 6 will include a complete UI redesign of the Control Panel. It hasn't been merged in just yet, but when it is, expect to see a bunch of broken stuff. 🫠
-3. There's still room for breaking changes.
-    * I'm not planning on any huge breaking changes, but there's bound to be a few small ones here and there. I'll add notes about any breaking changes to the changelogs.
+Please don't use Cargo in production just yet. You're welcome to migrate existing sites to Cargo, just please don't deploy them.
+
+### Cargo requires Statamic 6
+As of the time of writing, Statamic 6 isn't even in alpha yet. This means that in order to use Cargo, you'll need to require the `dev-master` branch, as well as manually building Statamic's CSS & JS.
+     
+```
+composer config minimum-stability dev
+composer require statamic/cms:dev-master -W
+cd vendor/statamic/cms
+npm ci
+npm run build
+cd ../../..
+```
+
+You can safely ignore any `Failed to download` or `Can't locate path` errors thrown by Composer, they are happening because we're installing a dev version of Statamic rather than a proper release.
+
+If you're upgrading an existing site from Statamic 5, you can find the [draft v5 -> v6 upgrade guide here](https://github.com/statamic/docs/blob/6.0/content/collections/docs/5-to-6.md). You can skip the "Upgrade using Composer" section.
+
+Statamic 6 will include a complete UI overhaul of the Control Panel. However, right now, it's still a work-in-progress and hasn't been merged into the `master` branch yet. When it is, expect to see a bunch of broken stuff in the Control Panel until I get a chance to make everything look nice.
+
+### Breaking changes
+Cargo is still in development, and while I'm not planning any _huge_ breaking changes, I wouldn't be surprised if a few small ones slip in before `1.0`. I'll be sure to document any breaking changes in the changelogs as they happen.
 
 ## Install Process
 ### New Site
@@ -59,7 +64,7 @@ Once Composer has finished doing its thing, run Cargo's install command. It'll p
 php please cargo:install
 ```
 
-Now that you're all setup, I recommend you follow along with the docs, starting with [Carts & Orders](/docs/carts-orders) to better understand the core concepts of Cargo.
+Now that you're all setup, I recommend you follow along with the docs, starting with [Carts & Orders](/docs/carts-and-orders) to better understand the core concepts of Cargo.
 
 ### Existing Simple Commerce site
 First, add a composer repository to your `composer.json` file:
