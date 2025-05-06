@@ -57,8 +57,7 @@ From those options, it'll create a matrix of all the various combinations and al
 
 This is what it looks like in the Control Panel:
 
-
-![[product-variants.png]]
+![Screenshot of the product variants fieldtype in the Control Panel](/images/product-variants.png)
 
 To use product variants...
 1. Remove the "Price" field from the collection blueprint

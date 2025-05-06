@@ -26,7 +26,7 @@ If you've purchased Simple Commerce **within the last 12 months**, you can migra
 
 Otherwise, if you purchased Simple Commerce **more than a year ago**, you can migrate to Cargo for $85.
 
-Either way, just email support@builtwithcargo.dev with your order number and I'll send you a coupon code to use at checkout.
+Either way, just email [support@builtwithcargo.dev](support@builtwithcargo.dev) with your order number, and I'll send you a coupon code to use at checkout.
 
 ## Updating
 To upgrade, uninstall Simple Commerce and install Cargo using composer:
@@ -143,7 +143,7 @@ Upon reflecting, this setup didn't really make sense and kinda became a pain if 
 In Cargo, there are two types of customers:
 * Users
 	* These are plain old [Statamic users](https://statamic.dev/users).
-	* When a customer is logged in, the logged in user will be automatically associated with the cart. 
+	* When a customer is logged in, the logged-in user will be automatically associated with the cart. 
 	* This makes it easy to manage your customers in the Control Panel and built user account functionality, if needed.
 * Guest customers
 	* Guest customers are saved on individual orders, useful for stores without user accounts.

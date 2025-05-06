@@ -181,7 +181,7 @@ When you setup your site on production, you can should create a webhook in the S
 
 It should point to `https://your-store.com/!/cargo/payments/stripe/webhook`, and listen for any charge or payment intent events:
 
-![[stripe-setup-webhook.png]]
+![Screenshot of setting up a webhook in the Stripe dashboard](/images/stripe-setup-webhook.png)
 
 For additional security, we recommend copying the "Webhook Secret" into your `.env` file:
 
