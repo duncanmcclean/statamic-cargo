@@ -4,6 +4,7 @@ namespace DuncanMcClean\Cargo\Console\Commands\Migration;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Statamic\Console\RunsInPlease;
 use Statamic\Facades\Entry;
 use Statamic\Facades\Role;
@@ -25,6 +26,7 @@ class MigrateConfigs extends Command
         try {
             $this
                 ->migrateConfigOptions()
+                ->migratePaymentGatewaysConfig()
                 ->migratePermissions();
         } catch (MigrationCancelled $e) {
             return;
@@ -71,6 +73,79 @@ class MigrateConfigs extends Command
         ConfigWriter::writeMany('statamic.cargo', $config);
 
         $this->components->info('Updated the [statamic/cargo.php] config file.');
+
+        return $this;
+    }
+
+    private function migratePaymentGatewaysConfig(): self
+    {
+        $paymentGateways = collect(config('simple-commerce.gateways'))
+            ->map(function ($value, $key): string {
+                if (str_contains($key, 'DummyGateway')) {
+                    return <<<PHP
+            'dummy' => [],
+PHP;
+                }
+
+                if (str_contains($key, 'StripeGateway')) {
+                    return <<<PHP
+            'stripe' => [
+                 'key' => env('STRIPE_KEY'),
+                 'secret' => env('STRIPE_SECRET'),
+                 'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+            ],
+PHP;
+                }
+
+                if (str_contains($key, 'MollieGateway')) {
+                    return <<<PHP
+            'mollie' => [
+                 'api_key' => env('MOLLIE_KEY'),
+                 'profile_id' => env('MOLLIE_PROFILE_ID'),
+            ],
+PHP;
+                }
+
+                if (str_contains($key, 'PayPalGateway')) {
+                    return <<<PHP
+            // IMPORTANT: The PayPal gateway has been removed. Please visit the documentation for more information.
+            // https://builtwithcargo.dev/docs/migrating-from-simple-commerce#paypal
+PHP;
+                }
+
+                $handle = Str::of($key)
+                    ->afterLast('\\')
+                    ->replace('Gateway', '')
+                    ->snake()
+                    ->__toString();
+
+                return <<<PHP
+            '{$handle}' => [
+                // TODO: Add your {$handle} configuration here.
+            ],
+PHP;
+            })
+            ->values()
+            ->map(function ($stub, $index): string {
+                // Trim the padding on the first line, of the first stub to prevent awkward indentation.
+                if ($index === 0) {
+                    return ltrim($stub);
+                }
+
+                return $stub;
+            });
+
+        if ($paymentGateways->isEmpty()) {
+            return $this;
+        }
+
+        ConfigWriter::write('statamic.cargo.payments.gateways', ['{{PaymentGateways}}']);
+
+        $contents = Str::of(File::get(config_path('statamic/cargo.php')))
+            ->replace("'{{PaymentGateways}}',", $paymentGateways->implode(PHP_EOL.PHP_EOL))
+            ->__toString();
+
+        File::put(config_path('statamic/cargo.php'), $contents);
 
         return $this;
     }

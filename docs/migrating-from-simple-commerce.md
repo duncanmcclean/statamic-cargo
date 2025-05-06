@@ -378,7 +378,7 @@ After migrating to Cargo, you'll need to re-configure your site's payment gatewa
 
 ### Dummy
 #### Configuration
-You will need to add the following lines to the `payments.gateways` config option in order to use the dummy payment gateway.
+Cargo will have attempted to automatically migrate the `payment.gateways` array in the `cargo.php` config file. However, if it wasn't able to, you can update it yourself:
 
 ```php
 // config/statamic/cargo.php
@@ -399,7 +399,7 @@ You will need to update the payment form for the Dummy payment gateway in your t
 
 ### Stripe
 #### Configuration
-You will need to add the following lines to the `payments.gateways` config option in order to use the stripe payment gateway.
+Cargo will have attempted to automatically migrate the `payment.gateways` array in the `cargo.php` config file. However, if it wasn't able to, you can update it yourself:
 
 ```php
 // config/statamic/cargo.php
@@ -448,7 +448,7 @@ The *authorization* and *capture* steps have been separated to account for incom
 
 ### Mollie
 #### Configuration
-You will need to add the following lines to the `payments.gateways` config option in order to use the mollie payment gateway.
+Cargo will have attempted to automatically migrate the `payment.gateways` array in the `cargo.php` config file. However, if it wasn't able to, you can update it yourself:
 
 ```php
 // config/statamic/cargo.php
