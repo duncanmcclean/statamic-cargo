@@ -30,16 +30,8 @@ class Mollie extends PaymentGateway
     {
         $this->mollie = new MollieApiClient;
         $this->mollie->setApiKey($this->config()->get('api_key'));
-
         $this->mollie->addVersionString('Statamic/'.Statamic::version());
         $this->mollie->addVersionString('Cargo/'.Cargo::version());
-
-        Cache::rememberForever('Mollie_Organisation_Id', function () {
-            $currentProfile = $this->mollie->profiles->getCurrent();
-            $profileDashboardUrl = $currentProfile->_links->dashboard->href;
-
-            return explode('/', parse_url($profileDashboardUrl, PHP_URL_PATH))[2];
-        });
     }
 
     public function setup(Cart $cart): array
