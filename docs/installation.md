@@ -7,6 +7,7 @@ title: Installation
 	* We recommend using Statamic Pro.
 * PHP 8.3 and above
 * [PHP's `intl` extension](https://www.php.net/manual/en/book.intl.php)
+* [PHP's `zip` extension](https://www.php.net/manual/en/book.zip.php)
 
 ## Install
 
