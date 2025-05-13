@@ -21,14 +21,17 @@ class ProductDownloadController
         throw_unless($order = Order::find($orderId), NotFoundHttpException::class);
         throw_unless($lineItem = $order->lineItems()->find($lineItem), NotFoundHttpException::class);
 
-        $product = $lineItem->product();
+        $product = $lineItem->variant()
+            ? $lineItem->variant()
+            : $lineItem->product();
 
         if (! $product->get('downloads')) {
             throw new NotFoundHttpException;
         }
 
         if (
-            $product->has('download_limit')
+            $product->get('download_limit')
+            && $lineItem->get('download_count')
             && $lineItem->download_count >= $product->get('download_limit')
         ) {
             throw new ForbiddenHttpException;
@@ -47,7 +50,7 @@ class ProductDownloadController
 
             $zip->close();
 
-            return response()->download($path, "{$product->slug()}.zip")->deleteFileAfterSend();
+            return response()->download($path, "{$lineItem->product()->slug()}.zip")->deleteFileAfterSend();
         }
 
         $asset = $product->downloads->first();

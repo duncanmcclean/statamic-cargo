@@ -69,6 +69,25 @@ class ProductDownloadTest extends TestCase
     }
 
     #[Test]
+    public function can_download_a_variant_product()
+    {
+        File::put(storage_path('app/private/one.png'), '');
+        Asset::make()->container('assets')->path('one.png')->save();
+
+        $product = $this->makeVariantProductWithDownloads(['one.png']);
+        $order = $this->makeOrderWithLineItem($product, ['variant' => 'Standard']);
+
+        $this->assertEquals(0, $order->lineItems()->first()->download_count);
+
+        $this
+            ->get($this->generateDownloadUrl('order-id', 'line-item-id'))
+            ->assertOk()
+            ->assertDownload('one.png');
+
+        $this->assertEquals(1, $order->fresh()->lineItems()->first()->download_count);
+    }
+
+    #[Test]
     public function cant_download_a_product_with_no_downloads()
     {
         $product = $this->makeProductWithDownloads([]);
@@ -129,8 +148,6 @@ class ProductDownloadTest extends TestCase
             ->assertNotFound();
     }
 
-    // can download product with variants
-
     private function makeProductWithDownloads(array $downloads = [])
     {
         $collection = tap(Collection::make('products'))->save();
@@ -143,6 +160,38 @@ class ProductDownloadTest extends TestCase
             ->data([
                 'type' => 'digital',
                 'downloads' => $downloads,
+            ]);
+
+        $product->save();
+
+        return $product;
+    }
+
+    private function makeVariantProductWithDownloads(array $downloads = [])
+    {
+        $collection = tap(Collection::make('products'))->save();
+
+        $collection->entryBlueprint()->ensureField('product_variants', [
+            'type' => 'product_variants',
+            'option_fields' => [
+                ['handle' => 'downloads', 'field' => ['type' => 'assets']],
+            ],
+        ])->save();
+
+        $product = Entry::make()
+            ->id('digital-product')
+            ->slug('digital-product')
+            ->collection('products')
+            ->data([
+                'type' => 'digital',
+                'product_variants' => [
+                    'variants' => [
+                        ['name' => 'Edition', 'values' => ['Standard']],
+                    ],
+                    'options' => [
+                        ['key' => 'Standard', 'variant' => 'Standard', 'price' => 1000, 'downloads' => $downloads],
+                    ],
+                ],
             ]);
 
         $product->save();
