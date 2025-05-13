@@ -21,6 +21,13 @@ class TaxZone implements Augmentable, Contract
     public function __construct()
     {
         $this->data = collect();
+        $this->supplements = collect();
+    }
+
+    public function __clone()
+    {
+        $this->data = clone $this->data;
+        $this->supplements = clone $this->supplements;
     }
 
     public function handle($handle = null)

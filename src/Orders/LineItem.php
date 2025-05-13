@@ -28,6 +28,13 @@ class LineItem
     public function __construct()
     {
         $this->data = collect();
+        $this->supplements = collect();
+    }
+
+    public function __clone()
+    {
+        $this->data = clone $this->data;
+        $this->supplements = clone $this->supplements;
     }
 
     public function id($id = null)

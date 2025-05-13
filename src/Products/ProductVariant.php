@@ -25,6 +25,18 @@ class ProductVariant implements Augmentable, Purchasable
     public $price;
     public $stock;
 
+    public function __construct()
+    {
+        $this->data = collect();
+        $this->supplements = collect();
+    }
+
+    public function __clone()
+    {
+        $this->data = clone $this->data;
+        $this->supplements = clone $this->supplements;
+    }
+
     public function key($key = null)
     {
         return $this
