@@ -214,7 +214,7 @@ class ProductDownloadTest extends TestCase
 
     private function generateDownloadUrl(string $orderId, string $lineItemId): string
     {
-        return URL::temporarySignedRoute('statamic.cargo.download', now()->addMinutes(5), [
+        return URL::signedRoute('statamic.cargo.download', [
             'orderId' => $orderId,
             'lineItem' => $lineItemId,
         ]);
