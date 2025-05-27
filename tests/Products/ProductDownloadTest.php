@@ -41,6 +41,8 @@ class ProductDownloadTest extends TestCase
 
         $this->assertEquals(0, $order->lineItems()->first()->download_count);
 
+        $this->withoutExceptionHandling();
+
         $this
             ->get($this->generateDownloadUrl('order-id', 'line-item-id'))
             ->assertOk()
