@@ -6,7 +6,7 @@ use DuncanMcClean\Cargo\Http\Controllers\CartPaymentGatewaysController;
 use DuncanMcClean\Cargo\Http\Controllers\CartShippingController;
 use DuncanMcClean\Cargo\Http\Controllers\Payments\CheckoutController;
 use DuncanMcClean\Cargo\Http\Controllers\Payments\WebhookController;
-use DuncanMcClean\Cargo\Http\Controllers\ProductDownloadController;
+use DuncanMcClean\Cargo\Http\Controllers\DownloadController;
 use DuncanMcClean\Cargo\Http\Controllers\StateController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,5 +36,5 @@ Route::name('cargo.')->group(function () {
         });
 
     Route::get('states', StateController::class)->name('states');
-    Route::get('download/{orderId}/{lineItem}', ProductDownloadController::class)->name('download');
+    Route::get('download/{orderId}/{lineItem}', DownloadController::class)->name('download');
 });

@@ -9,10 +9,8 @@ use Statamic\Exceptions\ForbiddenHttpException;
 use Statamic\Exceptions\NotFoundHttpException;
 use ZipArchive;
 
-class ProductDownloadController
+class DownloadController
 {
-    // todo: confirm controller name / url
-
     public function __invoke(Request $request, $orderId, $lineItem)
     {
         if (! $request->hasValidSignature()) {
