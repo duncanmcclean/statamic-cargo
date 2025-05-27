@@ -68,7 +68,7 @@ Consider making small, regular commits during the migration process. This makes 
 Products haven't changed much - they're still entries in Statamic, like you're used to.
 
 ### Migrating orders
-Cargo will have attempted to automatically update your existing products when you ran the `cargo:migrate` command.
+Cargo will have attempted to automatically update your product entries when you ran the `cargo:migrate` command.
 
 If you need to, you can update *just* products using `php please cargo:migrate:products`.
 
