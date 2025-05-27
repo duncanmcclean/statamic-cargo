@@ -2,7 +2,9 @@
 
 namespace Products;
 
+use DuncanMcClean\Cargo\Events\ProductDownloaded;
 use DuncanMcClean\Cargo\Facades\Order;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
 use PHPUnit\Framework\Attributes\Test;
@@ -27,6 +29,8 @@ class ProductDownloadTest extends TestCase
     #[Test]
     public function can_download_a_product()
     {
+        Event::fake();
+
         File::put(storage_path('app/private/one.png'), '');
         Asset::make()->container('assets')->path('one.png')->save();
 
@@ -41,11 +45,18 @@ class ProductDownloadTest extends TestCase
             ->assertDownload('one.png');
 
         $this->assertEquals(1, $order->fresh()->lineItems()->first()->download_count);
+
+        Event::assertDispatched(
+            ProductDownloaded::class,
+            fn ($event) => $event->order->id() === 'order-id' && $event->lineItem->id() === 'line-item-id'
+        );
     }
 
     #[Test]
     public function can_download_a_product_with_multiple_files()
     {
+        Event::fake();
+
         File::put(storage_path('app/private/one.png'), '');
         Asset::make()->container('assets')->path('one.png')->save();
 
@@ -66,11 +77,18 @@ class ProductDownloadTest extends TestCase
             ->assertDownload('digital-product.zip');
 
         $this->assertEquals(1, $order->fresh()->lineItems()->first()->download_count);
+
+        Event::assertDispatched(
+            ProductDownloaded::class,
+            fn ($event) => $event->order->id() === 'order-id' && $event->lineItem->id() === 'line-item-id'
+        );
     }
 
     #[Test]
     public function can_download_a_variant_product()
     {
+        Event::fake();
+
         File::put(storage_path('app/private/one.png'), '');
         Asset::make()->container('assets')->path('one.png')->save();
 
@@ -85,11 +103,18 @@ class ProductDownloadTest extends TestCase
             ->assertDownload('one.png');
 
         $this->assertEquals(1, $order->fresh()->lineItems()->first()->download_count);
+
+        Event::assertDispatched(
+            ProductDownloaded::class,
+            fn ($event) => $event->order->id() === 'order-id' && $event->lineItem->id() === 'line-item-id'
+        );
     }
 
     #[Test]
     public function cant_download_a_product_with_no_downloads()
     {
+        Event::fake();
+
         $product = $this->makeProductWithDownloads([]);
         $order = $this->makeOrderWithLineItem($product);
 
@@ -100,11 +125,18 @@ class ProductDownloadTest extends TestCase
             ->assertNotFound();
 
         $this->assertEquals(0, $order->fresh()->lineItems()->first()->download_count);
+
+        Event::assertNotDispatched(
+            ProductDownloaded::class,
+            fn ($event) => $event->order->id() === 'order-id' && $event->lineItem->id() === 'line-item-id'
+        );
     }
 
     #[Test]
     public function cant_download_when_download_limit_has_been_reached()
     {
+        Event::fake();
+
         File::put(storage_path('app/private/one.png'), '');
         Asset::make()->container('assets')->path('one.png')->save();
 
@@ -120,6 +152,11 @@ class ProductDownloadTest extends TestCase
             ->assertForbidden();
 
         $this->assertEquals(5, $order->fresh()->lineItems()->first()->download_count);
+
+        Event::assertNotDispatched(
+            ProductDownloaded::class,
+            fn ($event) => $event->order->id() === 'order-id' && $event->lineItem->id() === 'line-item-id'
+        );
     }
 
     #[Test]

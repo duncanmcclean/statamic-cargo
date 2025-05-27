@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Http\Controllers;
 
+use DuncanMcClean\Cargo\Events\ProductDownloaded;
 use DuncanMcClean\Cargo\Facades\Order;
 use Illuminate\Http\Request;
 use Statamic\Exceptions\ForbiddenHttpException;
@@ -39,6 +40,8 @@ class ProductDownloadController
 
         $lineItem->download_count++;
         $order->save();
+
+        event(new ProductDownloaded($order, $lineItem));
 
         if ($product->downloads?->count() > 1) {
             $zip = new ZipArchive;
