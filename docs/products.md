@@ -25,11 +25,15 @@ By default, Cargo assumes that all products are physical products. However, if y
 ],
 ```
 
-Once enabled, a toggle will appear on product entries allowing you to determine if a product is "Physical" or "Digital". 
+Once enabled, Cargo will add a "Type" toggle to your product entries, allowing you to determine if a product is "Physical" or "Digital". Shipping costs aren't calculated for digital products.
 
-:::tip Note
-Right now, Cargo doesn't support digital downloads, like Simple Commerce did. However, it's coming soon.
-:::
+### Downloads
+
+When you mark a product as digital, a "Downloads" field will appear on the product publish form, allowing you to specify which assets should be downloadable when an order is completed. 
+
+You can also specify a limit on how many times a customer can download the files.
+
+![Download fields on the product publish form](/images/product-downloads.png)
 
 ## Inventory / Stock Tracking
 If you want to keep track of inventory, add a "Stock" field to your collection blueprint and specify a stock count on each product.
