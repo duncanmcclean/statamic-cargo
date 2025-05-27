@@ -53,9 +53,10 @@ If you need to, you can safely re-run the `cargo:migrate` command multiple times
 * `php please cargo:migrate:configs` 
 * `php please cargo:migrate:customers` 
 * `php please cargo:migrate:discounts` 
-* `php please cargo:migrate:taxes` 
+* `php please cargo:migrate:taxes`
 * `php please cargo:migrate:orders` 
-* `php please cargo:migrate:carts` 
+* `php please cargo:migrate:carts`
+* `php please cargo:migrate:products`
 
 Finally, please review this migration guide thoroughly. You **will** need to make code changes as part of this upgrade.
 
@@ -65,6 +66,12 @@ Consider making small, regular commits during the migration process. This makes 
 
 ## Products
 Products haven't changed much - they're still entries in Statamic, like you're used to.
+
+### Migrating orders
+Cargo will have attempted to automatically update your existing products when you ran the `cargo:migrate` command.
+
+If you need to, you can update *just* products using `php please cargo:migrate:products`.
+
 
 ### Product collections
 It's now possible to configure multiple product collections. This may be handy if you want to split our digital products, like courses, from physical products, like merchandise.
