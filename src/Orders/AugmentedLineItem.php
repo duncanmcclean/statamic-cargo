@@ -27,6 +27,7 @@ class AugmentedLineItem extends AbstractAugmented
     {
         return [
             'id',
+            'has_downloads',
         ];
     }
 
