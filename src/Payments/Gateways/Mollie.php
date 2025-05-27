@@ -13,7 +13,6 @@ use DuncanMcClean\Cargo\Shipping\ShippingOption;
 use DuncanMcClean\Cargo\Support\Money;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Mollie\Api\MollieApiClient;
 use Mollie\Api\Types\PaymentStatus;

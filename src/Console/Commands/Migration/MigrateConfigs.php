@@ -82,13 +82,13 @@ class MigrateConfigs extends Command
         $paymentGateways = collect(config('simple-commerce.gateways'))
             ->map(function ($value, $key): string {
                 if (str_contains($key, 'DummyGateway')) {
-                    return <<<PHP
+                    return <<<'PHP'
             'dummy' => [],
 PHP;
                 }
 
                 if (str_contains($key, 'StripeGateway')) {
-                    return <<<PHP
+                    return <<<'PHP'
             'stripe' => [
                  'key' => env('STRIPE_KEY'),
                  'secret' => env('STRIPE_SECRET'),
@@ -98,7 +98,7 @@ PHP;
                 }
 
                 if (str_contains($key, 'MollieGateway')) {
-                    return <<<PHP
+                    return <<<'PHP'
             'mollie' => [
                  'api_key' => env('MOLLIE_KEY'),
                  'profile_id' => env('MOLLIE_PROFILE_ID'),
@@ -107,7 +107,7 @@ PHP;
                 }
 
                 if (str_contains($key, 'PayPalGateway')) {
-                    return <<<PHP
+                    return <<<'PHP'
             // IMPORTANT: The PayPal gateway has been removed. Please visit the documentation for more information.
             // https://builtwithcargo.dev/docs/migrating-from-simple-commerce#paypal
 PHP;

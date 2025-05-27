@@ -4,9 +4,9 @@ use DuncanMcClean\Cargo\Http\Controllers\CartController;
 use DuncanMcClean\Cargo\Http\Controllers\CartLineItemsController;
 use DuncanMcClean\Cargo\Http\Controllers\CartPaymentGatewaysController;
 use DuncanMcClean\Cargo\Http\Controllers\CartShippingController;
+use DuncanMcClean\Cargo\Http\Controllers\DownloadController;
 use DuncanMcClean\Cargo\Http\Controllers\Payments\CheckoutController;
 use DuncanMcClean\Cargo\Http\Controllers\Payments\WebhookController;
-use DuncanMcClean\Cargo\Http\Controllers\DownloadController;
 use DuncanMcClean\Cargo\Http\Controllers\StateController;
 use Illuminate\Support\Facades\Route;
 

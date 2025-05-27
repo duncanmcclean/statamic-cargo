@@ -2,7 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Tags;
 
-use Statamic\Dictionaries\Countries;
 use Statamic\Facades\Dictionary;
 use Statamic\Tags\Tags;
 
