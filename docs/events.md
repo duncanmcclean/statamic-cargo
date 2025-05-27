@@ -227,6 +227,22 @@ public function handle(OrderShipped $event)
 }
 ```
 
+### ProductDownloaded
+`DuncanMcClean\Cargo\Events\ProductDownloaded`
+
+Dispatched when a product or variant is downloaded.
+
+```php
+public function handle(ProductDownloaded $event)
+{
+	$event->order;
+	$event->lineItem; 
+	
+	$event->lineItem->product();
+	$event->lineItem->variant();
+}
+```
+
 ### ProductNoStockRemaining
 `DuncanMcClean\Cargo\Events\ProductNoStockRemaining`
 
