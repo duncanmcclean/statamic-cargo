@@ -1,6 +1,6 @@
 <?php
 
-namespace Products;
+namespace Tests\Products;
 
 use DuncanMcClean\Cargo\Events\ProductDownloaded;
 use DuncanMcClean\Cargo\Facades\Order;
