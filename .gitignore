@@ -7,3 +7,4 @@ node_modules
 .phpunit.cache
 composer.lock
 .env
+resources/dist/hot

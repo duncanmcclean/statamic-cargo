@@ -57,6 +57,13 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
         $this->status = OrderStatus::PaymentPending->value;
     }
 
+    public function __clone()
+    {
+        $this->data = clone $this->data;
+        $this->supplements = clone $this->supplements;
+        $this->lineItems = clone $this->lineItems;
+    }
+
     public function id($id = null)
     {
         return $this
