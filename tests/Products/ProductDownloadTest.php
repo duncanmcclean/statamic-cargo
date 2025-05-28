@@ -26,8 +26,6 @@ class ProductDownloadTest extends TestCase
         AssetContainer::make()->handle('assets')->disk('local')->save();
 
         File::ensureDirectoryExists(storage_path('app/private'));
-
-        $this->withoutExceptionHandling();
     }
 
     #[Test]
@@ -212,7 +210,7 @@ class ProductDownloadTest extends TestCase
     {
         $collection = tap(Collection::make('products'))->save();
 
-        $collection->entryBlueprint()->ensureField('product_variants', [
+        $collection->entryBlueprint()->ensureFieldHasConfig('product_variants', [
             'type' => 'product_variants',
             'option_fields' => [
                 ['handle' => 'downloads', 'field' => ['type' => 'assets']],
