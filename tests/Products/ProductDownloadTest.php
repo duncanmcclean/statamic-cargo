@@ -6,6 +6,7 @@ use DuncanMcClean\Cargo\Events\ProductDownloaded;
 use DuncanMcClean\Cargo\Facades\Order;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Asset;
@@ -24,10 +25,6 @@ class ProductDownloadTest extends TestCase
         parent::setUp();
 
         AssetContainer::make()->handle('assets')->disk('local')->save();
-
-        File::ensureDirectoryExists(storage_path('app/private'));
-
-        $this->withoutExceptionHandling();
     }
 
     #[Test]
@@ -35,7 +32,7 @@ class ProductDownloadTest extends TestCase
     {
         Event::fake();
 
-        File::put(storage_path('app/private/one.png'), '');
+        File::put(Storage::path('one.png'), '');
         Asset::make()->container('assets')->path('one.png')->save();
 
         $product = $this->makeProductWithDownloads(['one.png']);
@@ -61,13 +58,13 @@ class ProductDownloadTest extends TestCase
     {
         Event::fake();
 
-        File::put(storage_path('app/private/one.png'), '');
+        File::put(Storage::path('one.png'), '');
         Asset::make()->container('assets')->path('one.png')->save();
 
-        File::put(storage_path('app/private/two.jpeg'), '');
+        File::put(Storage::path('two.jpeg'), '');
         Asset::make()->container('assets')->path('two.jpeg')->save();
 
-        File::put(storage_path('app/private/three.pdf'), '');
+        File::put(Storage::path('three.pdf'), '');
         Asset::make()->container('assets')->path('three.pdf')->save();
 
         $product = $this->makeProductWithDownloads(['one.png', 'two.jpeg', 'three.pdf']);
@@ -93,7 +90,7 @@ class ProductDownloadTest extends TestCase
     {
         Event::fake();
 
-        File::put(storage_path('app/private/one.png'), '');
+        File::put(Storage::path('one.png'), '');
         Asset::make()->container('assets')->path('one.png')->save();
 
         $product = $this->makeVariantProductWithDownloads(['one.png']);
@@ -141,7 +138,7 @@ class ProductDownloadTest extends TestCase
     {
         Event::fake();
 
-        File::put(storage_path('app/private/one.png'), '');
+        File::put(Storage::path('one.png'), '');
         Asset::make()->container('assets')->path('one.png')->save();
 
         $product = $this->makeProductWithDownloads(['one.png']);
