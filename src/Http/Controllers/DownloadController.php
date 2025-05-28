@@ -41,11 +41,11 @@ class DownloadController
 
         event(new ProductDownloaded($order, $lineItem));
 
-        if ($product->downloads?->count() > 1) {
+        if (($downloads = collect($product->downloads)) && $downloads?->count() > 1) {
             $zip = new ZipArchive;
             $zip->open($path = storage_path("cargo_download_{$order->id()}_{$lineItem->id()}.zip"), ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
-            foreach ($product->downloads as $asset) {
+            foreach ($downloads as $asset) {
                 $zip->addFile($asset->resolvedPath(), $asset->basename());
             }
 
@@ -54,7 +54,7 @@ class DownloadController
             return response()->download($path, "{$lineItem->product()->slug()}.zip")->deleteFileAfterSend();
         }
 
-        $asset = $product->downloads->first();
+        $asset = $downloads->first();
 
         return response()->download($asset->resolvedPath(), $asset->basename());
     }

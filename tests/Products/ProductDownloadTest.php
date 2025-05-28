@@ -26,6 +26,8 @@ class ProductDownloadTest extends TestCase
         AssetContainer::make()->handle('assets')->disk('local')->save();
 
         File::ensureDirectoryExists(storage_path('app/private'));
+
+        $this->withoutExceptionHandling();
     }
 
     #[Test]
@@ -40,8 +42,6 @@ class ProductDownloadTest extends TestCase
         $order = $this->makeOrderWithLineItem($product);
 
         $this->assertEquals(0, $order->lineItems()->first()->download_count);
-
-        $this->withoutExceptionHandling();
 
         $this
             ->get($this->generateDownloadUrl('order-id', 'line-item-id'))
@@ -100,8 +100,6 @@ class ProductDownloadTest extends TestCase
         $order = $this->makeOrderWithLineItem($product, ['variant' => 'Standard']);
 
         $this->assertEquals(0, $order->lineItems()->first()->download_count);
-
-        $this->withoutExceptionHandling();
 
         $this
             ->get($this->generateDownloadUrl('order-id', 'line-item-id'))
