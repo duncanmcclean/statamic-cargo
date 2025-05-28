@@ -2,10 +2,9 @@
 
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\File;
-use Statamic\Fields\Fieldtype;
 use DuncanMcClean\Cargo\Data\States as StatesData;
+use Illuminate\Support\Arr;
+use Statamic\Fields\Fieldtype;
 
 class States extends Fieldtype
 {

@@ -53,9 +53,10 @@ If you need to, you can safely re-run the `cargo:migrate` command multiple times
 * `php please cargo:migrate:configs` 
 * `php please cargo:migrate:customers` 
 * `php please cargo:migrate:discounts` 
-* `php please cargo:migrate:taxes` 
+* `php please cargo:migrate:taxes`
 * `php please cargo:migrate:orders` 
-* `php please cargo:migrate:carts` 
+* `php please cargo:migrate:carts`
+* `php please cargo:migrate:products`
 
 Finally, please review this migration guide thoroughly. You **will** need to make code changes as part of this upgrade.
 
@@ -65,6 +66,12 @@ Consider making small, regular commits during the migration process. This makes 
 
 ## Products
 Products haven't changed much - they're still entries in Statamic, like you're used to.
+
+### Migrating orders
+Cargo will have attempted to automatically update your product entries when you ran the `cargo:migrate` command.
+
+If you need to, you can update *just* products using `php please cargo:migrate:products`.
+
 
 ### Product collections
 It's now possible to configure multiple product collections. This may be handy if you want to split our digital products, like courses, from physical products, like merchandise.
@@ -88,11 +95,31 @@ To avoid cluttering the product publish form for stores selling *only* physical 
 'digital_products' => true,
 ```
 
-:::tip Note
-Cargo doesn't *currently* include support for digital downloads, like Simple Commerce did. However, this should be supported before launch. 
-:::
+Like Simple Commerce, Cargo allows you to specify downloads for digital products, which will be available after an order is completed.
 
-Cargo doesn't include the "license keys" functionality which was part of Simple Commerce. If you need this, we recommend building it yourself.
+![Download fields on the product publish form](/images/product-downloads.png)
+
+Cargo doesn't include the "license keys" feature included in Simple Commerce. If you need this, we recommend building it yourself.
+
+Cargo also doesn't track IP addresses & timestamps of downloads. If you need this, you can listen to the `ProductDownloaded` event and update the line item accordingly:
+
+```php
+// app/Providers/AppServiceProvider.php
+
+Event::listen(ProductDownloaded::class, function ($event) {
+	$event->order->lineItems()->update($event->lineItem->id(), [
+		'download_history' => [
+			...$event->lineItem->get('download_history', []),
+			[
+				'timestamp' => now()->toIso8601String(),
+				'ip_address' => request()->ip(),
+			],
+		],
+	]);
+
+	$event->order->save();
+});
+```
 
 ## Carts
 In Simple Commerce, carts were basically just unpaid orders. 
@@ -577,9 +604,9 @@ It's a pretty easy find & replace:
 If you're listening to any of Simple Commerce's events, you will need to listen for Cargo's equivalent events.
 
 | Old                                                          | New                                                                                                                                                                                                                                                                                                                                                                     |
-| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|--------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `DuncanMcClean\SimpleCommerce\Events\CouponRedeemed`         | `DuncanMcClean\Cargo\Events\DiscountRedeemed`                                                                                                                                                                                                                                                                                                                           |
-| `DuncanMcClean\SimpleCommerce\Events\DigitalDownloadReady`   | Removed.                                                                                                                                                                                                                                                                                                                                                                |
+| `DuncanMcClean\SimpleCommerce\Events\DigitalDownloadReady`   | Removed. You can link to product downloads from the order confirmation email instead.                                                                                                                                                                                                                                                                                   |
 | `DuncanMcClean\SimpleCommerce\Events\GatewayWebhookReceived` | Removed.                                                                                                                                                                                                                                                                                                                                                                |
 | `DuncanMcClean\SimpleCommerce\Events\OrderPaymentFailed`     | Removed.                                                                                                                                                                                                                                                                                                                                                                |
 | `DuncanMcClean\SimpleCommerce\Events\OrderSaved`             | `DuncanMcClean\Cargo\Events\OrderSaved`                                                                                                                                                                                                                                                                                                                                 |

@@ -128,6 +128,11 @@ class LineItem
             ->args(func_get_args());
     }
 
+    public function hasDownloads(): bool
+    {
+        return $this->variant()?->has('downloads') ?? $this->product()->has('downloads');
+    }
+
     public function defaultAugmentedArrayKeys()
     {
         return [];

@@ -4,6 +4,7 @@ namespace DuncanMcClean\Cargo\Listeners;
 
 use DuncanMcClean\Cargo\Cargo;
 use Statamic\Events\EntryBlueprintFound;
+use Statamic\Facades\AssetContainer;
 use Statamic\Fields\Blueprint;
 
 class EnsureProductFields
@@ -12,20 +13,6 @@ class EnsureProductFields
     {
         if (! $this->isProductBlueprint($event->blueprint)) {
             return;
-        }
-
-        if (config('statamic.cargo.products.digital_products') && ! $event->blueprint->hasField('type')) {
-            $event->blueprint->ensureField('type', [
-                'type' => 'button_group',
-                'display' => __('Product Type'),
-                'instructions' => __('cargo::messages.products.type'),
-                'options' => [
-                    'physical' => __('Physical'),
-                    'digital' => __('Digital'),
-                ],
-                'default' => 'physical',
-                'validate' => 'required',
-            ], 'sidebar');
         }
 
         if (! $event->blueprint->hasField('price') && ! $event->blueprint->hasField('product_variants')) {
@@ -51,6 +38,10 @@ class EnsureProductFields
                 'validate' => 'required',
             ], 'sidebar');
         }
+
+        if (config('statamic.cargo.products.digital_products')) {
+            $this->ensureDigitalProductFields($event);
+        }
     }
 
     private function isProductBlueprint(Blueprint $blueprint): bool
@@ -58,5 +49,73 @@ class EnsureProductFields
         $collections = config('statamic.cargo.products.collections');
 
         return in_array($blueprint->namespace(), collect($collections)->map(fn ($collection) => "collections.{$collection}")->all());
+    }
+
+    private function ensureDigitalProductFields(EntryBlueprintFound $event): void
+    {
+        if (! $event->blueprint->hasField('type')) {
+            $event->blueprint->ensureField('type', [
+                'type' => 'button_group',
+                'display' => __('Product Type'),
+                'instructions' => __('cargo::messages.products.type'),
+                'options' => [
+                    'physical' => __('Physical'),
+                    'digital' => __('Digital'),
+                ],
+                'default' => 'physical',
+                'validate' => 'required',
+            ], 'sidebar');
+        }
+
+        $fields = collect([
+            'downloads' => [
+                'type' => 'assets',
+                'display' => __('Downloads'),
+                'instructions' => __('cargo::messages.products.downloads'),
+                'container' => AssetContainer::all()->first()->handle(),
+                'listable' => 'hidden',
+                'if' => [
+                    'root.type' => 'equals digital',
+                ],
+            ],
+            'download_limit' => [
+                'type' => 'integer',
+                'display' => __('Download Limit'),
+                'instructions' => __('cargo::messages.products.download_limit'),
+                'listable' => 'hidden',
+                'if' => [
+                    'root.type' => 'equals digital',
+                ],
+            ],
+        ]);
+
+        if (
+            AssetContainer::all()->isNotEmpty()
+            && $event->blueprint->hasField('product_variants')
+        ) {
+            $productVariantsField = $event->blueprint->field('product_variants');
+            $existingOptionFields = collect($productVariantsField->get('option_fields'));
+
+            $event->blueprint->ensureFieldHasConfig('product_variants', [
+                ...$productVariantsField->toArray(),
+                'option_fields' => [
+                    ...$productVariantsField->get('option_fields', []),
+                    ...$fields
+                        ->reject(fn ($field, $handle) => $existingOptionFields->keyBy('handle')->has($handle))
+                        ->map(fn ($field, $handle) => [
+                            'handle' => $handle,
+                            'field' => $field,
+                        ])
+                        ->values()
+                        ->toArray(),
+                ],
+            ]);
+        } elseif (
+            AssetContainer::all()->isNotEmpty()
+        ) {
+            $fields
+                ->reject(fn ($field, $handle) => $event->blueprint->hasField($handle))
+                ->each(fn ($field, $handle) => $event->blueprint->ensureField($handle, $field, 'sidebar'));
+        }
     }
 }

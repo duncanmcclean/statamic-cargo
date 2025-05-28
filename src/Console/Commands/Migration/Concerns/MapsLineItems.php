@@ -25,6 +25,9 @@ trait MapsLineItems
                         'amount' => $lineItem['tax']['amount'],
                     ],
                 ] : null,
+                'download_count' => isset($lineItem['metadata']['download_history'])
+                    ? count($lineItem['metadata']['download_history'])
+                    : null,
                 ...$lineItem['metadata'] ?? [],
             ]);
         })->values()->all();
