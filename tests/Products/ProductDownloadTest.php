@@ -26,6 +26,8 @@ class ProductDownloadTest extends TestCase
         AssetContainer::make()->handle('assets')->disk('local')->save();
 
         File::ensureDirectoryExists(storage_path('app/private'));
+
+        $this->withoutExceptionHandling();
     }
 
     #[Test]
