@@ -20,8 +20,8 @@ class EnsureProductFields
                 'type' => 'money',
                 'display' => __('Price'),
                 'instructions' => config('statamic.cargo.taxes.price_includes_tax')
-                    ? __('cargo::messages.products.price.inclusive_of_tax')
-                    : __('cargo::messages.products.price.exclusive_of_tax'),
+                    ? __('cargo::messages.products.price_inclusive_of_tax')
+                    : __('cargo::messages.products.price_exclusive_of_tax'),
                 'listable' => 'hidden',
                 'validate' => 'required',
             ], 'sidebar');

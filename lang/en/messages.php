@@ -14,8 +14,8 @@ return [
     'products' => [
         'downloads' => 'Select the files available for download with this product.',
         'download_limit' => 'Specify the maximum number of times a customer can download this product. Leave empty to allow unlimited downloads.',
-        'price.exclusive_of_tax' => 'Enter the price of the product, exclusive of tax.',
-        'price.inclusive_of_tax' => 'Enter the price of the product, inclusive of tax.',
+        'price_exclusive_of_tax' => 'Enter the price of the product, exclusive of tax.',
+        'price_inclusive_of_tax' => 'Enter the price of the product, inclusive of tax.',
         'tax_class' => 'Determines how this product is taxed.',
         'type' => 'Used to determine how the product is delivered.',
     ],
