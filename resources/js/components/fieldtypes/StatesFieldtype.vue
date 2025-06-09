@@ -86,7 +86,7 @@
 <script>
 import PositionsSelectOptions from '@statamic/mixins/PositionsSelectOptions.js';
 import HasInputOptions from '@statamic/components/fieldtypes/HasInputOptions.js';
-import SortableList from '@statamic/components/Sortable/SortableList.vue';
+import SortableList from '@statamic/components/sortable/SortableList.vue';
 import { Fieldtype } from 'statamic';
 
 export default {

@@ -14,6 +14,18 @@ class GuestCustomer implements Arrayable, ArrayAccess, Augmentable
 {
     use ContainsData, FluentlyGetsAndSets, HasAugmentedInstance;
 
+    public function __construct()
+    {
+        $this->data = collect();
+        $this->supplements = collect();
+    }
+
+    public function __clone()
+    {
+        $this->data = clone $this->data;
+        $this->supplements = clone $this->supplements;
+    }
+
     public function id(): ?string
     {
         if (! $email = $this->email()) {

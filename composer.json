@@ -16,7 +16,7 @@
     "extra": {
         "download-dist": {
             "url": "https://github.com/duncanmcclean/statamic-cargo/releases/download/{$version}/dist.tar.gz",
-            "path": "dist"
+            "path": "resources/dist"
         },
         "statamic": {
             "name": "Cargo",
@@ -41,7 +41,8 @@
         "pixelfear/composer-dist-plugin": "^0.1.0",
         "statamic/cms": "dev-master",
         "stillat/proteus": "^4.0",
-        "stripe/stripe-php": "^16.4"
+        "stripe/stripe-php": "^16.4",
+        "ext-zip": "*"
     },
     "require-dev": {
         "laravel/pint": "^1.18",

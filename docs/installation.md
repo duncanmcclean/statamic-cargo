@@ -7,13 +7,18 @@ title: Installation
 	* We recommend using Statamic Pro.
 * PHP 8.3 and above
 * [PHP's `intl` extension](https://www.php.net/manual/en/book.intl.php)
+* [PHP's `zip` extension](https://www.php.net/manual/en/book.zip.php)
 
 ## Install
+
+:::tip
+For now, please follow the installation steps in [Alpha Notes](/docs/alpha-notes). These steps are intended for when Cargo is publicly available.
+:::
 
 First, install Cargo using Composer:
 
 ```
-composer require duncanmcclean/simple-commerce
+composer require duncanmcclean/statamic-cargo
 ```
 
 Then, once Composer has finished doing its thing, run Cargo's install command. It'll publish various stubs, setup your products collection, and more.
@@ -23,4 +28,4 @@ php please cargo:install
 ```
 
 ## Next steps
-We suggest you follow along with the docs, starting with [Carts & Orders](/docs/the-basics/carts-orders) to better understand the core concepts of Cargo.
+We suggest you follow along with the docs, starting with [Carts & Orders](/docs/carts-and-orders) to better understand the core concepts of Cargo.

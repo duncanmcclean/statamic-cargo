@@ -40,6 +40,12 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
         $this->supplements = collect();
     }
 
+    public function __clone()
+    {
+        $this->data = clone $this->data;
+        $this->supplements = clone $this->supplements;
+    }
+
     public function id()
     {
         return $this->handle();

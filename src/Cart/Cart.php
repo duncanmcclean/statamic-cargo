@@ -57,6 +57,13 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
         $this->lineItems = new LineItems;
     }
 
+    public function __clone()
+    {
+        $this->data = clone $this->data;
+        $this->supplements = clone $this->supplements;
+        $this->lineItems = clone $this->lineItems;
+    }
+
     public function id($id = null)
     {
         return $this

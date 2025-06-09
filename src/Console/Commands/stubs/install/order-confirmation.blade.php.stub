@@ -7,7 +7,14 @@ Your order has been confirmed and is now being processed. We will notify you whe
 | Item Description   |               |
 | :----------------- | ------------: |
 @foreach($order->lineItems() as $lineItem)
-| {{ $lineItem->quantity }}x {{ $lineItem->product()->title }} | {{ $lineItem->sub_total }} |
+@php
+$hasDownloads = $lineItem->hasDownloads();
+$downloadUrl = URL::signedRoute('statamic.cargo.download', [
+    'orderId' => $order->id(),
+    'lineItem' => $lineItem->id(),
+]);
+@endphp
+| {{ $lineItem->quantity }}x {{ $lineItem->product()->title }} @if($hasDownloads) <br><br> [Download]({{ $downloadUrl }}) @endif | {{ $lineItem->sub_total }} |
 @endforeach
 </x-mail::table>
 

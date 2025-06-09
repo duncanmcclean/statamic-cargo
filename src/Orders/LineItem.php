@@ -28,6 +28,13 @@ class LineItem
     public function __construct()
     {
         $this->data = collect();
+        $this->supplements = collect();
+    }
+
+    public function __clone()
+    {
+        $this->data = clone $this->data;
+        $this->supplements = clone $this->supplements;
     }
 
     public function id($id = null)
@@ -119,6 +126,11 @@ class LineItem
         return $this
             ->fluentlyGetOrSet('total')
             ->args(func_get_args());
+    }
+
+    public function hasDownloads(): bool
+    {
+        return $this->variant()?->has('downloads') ?? $this->product()->has('downloads');
     }
 
     public function defaultAugmentedArrayKeys()

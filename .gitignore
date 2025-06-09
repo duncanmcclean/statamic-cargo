@@ -5,6 +5,6 @@ node_modules
 .DS_Store
 .phpunit.result.cache
 .phpunit.cache
-dist
 composer.lock
 .env
+resources/dist/hot

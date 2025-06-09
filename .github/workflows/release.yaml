@@ -16,21 +16,21 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
-          tools: composer:v2
+          php-version: ${{ matrix.php }}
+          extensions: fileinfo, exif, gd, pdo, sqlite, pdo_sqlite, intl
 
-      - name: Install NPM Dependencies
-        run: npm install
+      - name: Install composer dependencies
+        run: |
+          composer install --prefer-dist --no-interaction --no-suggest
 
-      - name: Install Composer Dependencies
-        run: composer install
+      - name: Install npm dependencies
+        run: npm ci
 
       - name: Compile assets
         run: npm run build
 
       - name: Create zip
-        run: tar -czvf dist.tar.gz dist
+        run: cd resources && tar -czvf dist.tar.gz dist
 
       - name: Get Changelog
         id: changelog
@@ -47,7 +47,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
           body: ${{ steps.changelog.outputs.text }}
-          prerelease: ${{ contains(github.ref, '-beta') }}
+          prerelease: ${{ contains(github.ref, '-alpha') || contains(github.ref, '-beta') }}
 
       - name: Upload zip to release
         uses: actions/upload-release-asset@v1.0.1
@@ -55,7 +55,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist.tar.gz
+          asset_path: ./resources/dist.tar.gz
           asset_name: dist.tar.gz
           asset_content_type: application/tar+gz
 

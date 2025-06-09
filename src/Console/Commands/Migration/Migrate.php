@@ -47,5 +47,8 @@ class Migrate extends Command
 
         $this->call('statamic:cargo:migrate:carts');
         $this->newLine();
+
+        $this->call('statamic:cargo:migrate:products');
+        $this->newLine();
     }
 }

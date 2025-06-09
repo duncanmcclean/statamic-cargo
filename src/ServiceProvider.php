@@ -40,6 +40,7 @@ class ServiceProvider extends AddonServiceProvider
         Console\Commands\Migration\MigrateCustomers::class,
         Console\Commands\Migration\MigrateDiscounts::class,
         Console\Commands\Migration\MigrateOrders::class,
+        Console\Commands\Migration\MigrateProducts::class,
         Console\Commands\Migration\MigrateTaxes::class,
     ];
 

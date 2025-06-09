@@ -3,6 +3,7 @@
 namespace DuncanMcClean\Cargo\Orders;
 
 use DuncanMcClean\Cargo\Cart\AugmentedCart;
+use Illuminate\Support\Facades\URL;
 
 class AugmentedOrder extends AugmentedCart
 {
@@ -42,6 +43,7 @@ class AugmentedOrder extends AugmentedCart
             'tax_breakdown',
             'has_physical_products',
             'has_digital_products',
+            'downloads',
         ];
     }
 
@@ -52,5 +54,19 @@ class AugmentedOrder extends AugmentedCart
         }
 
         return $this->data->status()->value;
+    }
+
+    public function downloads(): LineItems
+    {
+        return $this->data->lineItems()
+            ->filter(fn (LineItem $lineItem) => $lineItem->variant()?->has('downloads') ?? $lineItem->product()->has('downloads'))
+            ->map(fn (LineItem $lineItem) => [
+                'product' => $lineItem->product(),
+                'variant' => $lineItem->variant(),
+                'download_url' => URL::temporarySignedRoute('statamic.cargo.download', now()->addHour(), [
+                    'orderId' => $this->id(),
+                    'lineItem' => $lineItem->id(),
+                ]),
+            ]);
     }
 }
