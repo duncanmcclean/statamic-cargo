@@ -1,5 +1,6 @@
+@use(Statamic\CP\Breadcrumbs\Breadcrumbs)
 @extends('statamic::layout')
-@section('title', $breadcrumbs->title($title))
+@section('title', Breadcrumbs::title($title))
 
 @section('content')
     <discount-publish-form
@@ -12,7 +13,6 @@
         :initial-values="{{ json_encode($values) }}"
         :initial-meta="{{ json_encode($meta) }}"
         :initial-read-only="{{ json_encode($readOnly) }}"
-        :breadcrumbs="{{ $breadcrumbs->toJson() }}"
         initial-listing-url="{{ cp_route('cargo.discounts.index') }}"
         :initial-item-actions="{{ json_encode($itemActions) }}"
         item-action-url="{{ cp_route('cargo.discounts.actions.run') }}"

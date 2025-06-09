@@ -55,9 +55,6 @@ class TaxClassController extends CpController
             'values' => $values->all(),
             'meta' => $fields->meta(),
             'blueprint' => $blueprint->toPublishArray(),
-            'breadcrumbs' => [
-                ['text' => __('Tax Classes'), 'url' => cp_route('cargo.tax-classes.index')],
-            ],
         ];
 
         if ($request->wantsJson()) {

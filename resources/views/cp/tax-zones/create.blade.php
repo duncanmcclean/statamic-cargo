@@ -8,7 +8,6 @@
         :fieldset="{{ json_encode($blueprint) }}"
         :values="{{ json_encode($values) }}"
         :meta="{{ json_encode($meta) }}"
-        :breadcrumbs="{{ $breadcrumbs->toJson() }}"
         create-another-url="{{ cp_route('cargo.tax-zones.create') }}"
         listing-url="{{ cp_route('cargo.tax-zones.index') }}"
     ></base-tax-zone-create-form>

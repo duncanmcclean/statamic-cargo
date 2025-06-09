@@ -8,7 +8,6 @@
         :initial-fieldset="fieldset"
         :initial-values="values"
         :initial-meta="meta"
-        :breadcrumbs="breadcrumbs"
         :create-another-url="createAnotherUrl"
         :initial-listing-url="listingUrl"
         @saved="saved"
@@ -17,7 +16,7 @@
 
 <script>
 export default {
-    props: ['title', 'actions', 'fieldset', 'values', 'meta', 'breadcrumbs', 'createAnotherUrl', 'listingUrl'],
+    props: ['title', 'actions', 'fieldset', 'values', 'meta', 'createAnotherUrl', 'listingUrl'],
 
     methods: {
         saved(response) {

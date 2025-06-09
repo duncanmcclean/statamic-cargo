@@ -1,5 +1,6 @@
+@use(Statamic\CP\Breadcrumbs\Breadcrumbs)
 @extends('statamic::layout')
-@section('title', $breadcrumbs->title($title))
+@section('title', Breadcrumbs::title($title))
 
 @section('content')
     <tax-zone-publish-form
@@ -10,7 +11,6 @@
         :initial-fieldset="{{ json_encode($blueprint) }}"
         :initial-values="{{ json_encode($values) }}"
         :initial-meta="{{ json_encode($meta) }}"
-        :breadcrumbs="{{ $breadcrumbs->toJson() }}"
         initial-listing-url="{{ cp_route('cargo.tax-zones.index') }}"
     ></tax-zone-publish-form>
 @endsection

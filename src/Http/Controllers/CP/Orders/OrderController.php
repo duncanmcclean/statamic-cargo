@@ -8,7 +8,6 @@ use DuncanMcClean\Cargo\Http\Resources\CP\Orders\Order as OrderResource;
 use DuncanMcClean\Cargo\Http\Resources\CP\Orders\Orders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Statamic\CP\Breadcrumbs;
 use Statamic\Facades\Action;
 use Statamic\Facades\Scope;
 use Statamic\Facades\User;
@@ -110,9 +109,6 @@ class OrderController extends CpController
             'meta' => $meta,
             'blueprint' => $blueprint->toPublishArray(),
             'readOnly' => User::current()->cant('update', $order),
-            'breadcrumbs' => new Breadcrumbs([
-                ['text' => __('Orders'), 'url' => cp_route('cargo.orders.index')],
-            ]),
             'itemActions' => Action::for($order, ['view' => 'form']),
         ];
 

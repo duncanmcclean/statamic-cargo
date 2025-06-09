@@ -27,7 +27,6 @@ class Orders extends Relationship
         'initialValues' => 'values',
         'initialMeta' => 'meta',
         'initialReadOnly' => 'readOnly',
-        'breadcrumbs' => 'breadcrumbs',
     ];
     protected $activeFilterBadges;
 

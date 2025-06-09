@@ -1,7 +1,5 @@
 <template>
     <div>
-        <breadcrumb v-if="breadcrumbs" :url="breadcrumbs[0].url" :title="breadcrumbs[0].text" />
-
         <div class="mb-6 flex items-center">
             <h1 class="flex-1">
                 <div class="flex items-center">
@@ -102,7 +100,6 @@ export default {
         initialMeta: Object,
         initialTitle: String,
         initialReadOnly: Boolean,
-        breadcrumbs: Array,
         initialActions: Object,
         method: String,
         isCreating: Boolean,
@@ -183,7 +180,9 @@ export default {
         title(title) {
             if (this.isBase) {
                 const arrow = this.direction === 'ltr' ? '‹' : '›';
-                document.title = `${title} ${arrow} ${this.breadcrumbs[1].text} ${arrow} ${this.breadcrumbs[0].text} ${arrow} ${__('Statamic')}`;
+                const parts = document.title.split(arrow);
+
+                document.title = `${title} ${arrow} ${parts[1]?.trim()}`;
             }
         },
     },

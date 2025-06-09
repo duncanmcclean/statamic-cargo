@@ -5,7 +5,6 @@ namespace DuncanMcClean\Cargo\Http\Controllers\CP\Taxes;
 use DuncanMcClean\Cargo\Facades\TaxZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Statamic\CP\Breadcrumbs;
 use Statamic\CP\Column;
 use Statamic\Facades\User;
 use Statamic\Http\Controllers\CP\CpController;
@@ -62,9 +61,6 @@ class TaxZoneController extends CpController
             'values' => $values->all(),
             'meta' => $fields->meta(),
             'blueprint' => $blueprint->toPublishArray(),
-            'breadcrumbs' => new Breadcrumbs([
-                ['text' => __('Tax Zones'), 'url' => cp_route('cargo.tax-zones.index')],
-            ]),
         ];
 
         if ($request->wantsJson()) {
@@ -132,9 +128,6 @@ class TaxZoneController extends CpController
             'meta' => $fields->meta()->all(),
             'blueprint' => $blueprint->toPublishArray(),
             'readOnly' => User::current()->cant('update', $taxZone),
-            'breadcrumbs' => new Breadcrumbs([
-                ['text' => __('Tax Zones'), 'url' => cp_route('cargo.tax-zones.index')],
-            ]),
         ];
 
         if ($request->wantsJson()) {

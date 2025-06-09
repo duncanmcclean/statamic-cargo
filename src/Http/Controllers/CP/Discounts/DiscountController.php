@@ -8,7 +8,6 @@ use DuncanMcClean\Cargo\Http\Resources\CP\Discounts\Discount as DiscountResource
 use DuncanMcClean\Cargo\Http\Resources\CP\Discounts\Discounts;
 use DuncanMcClean\Cargo\Rules\UniqueDiscountValue;
 use Illuminate\Http\Request;
-use Statamic\CP\Breadcrumbs;
 use Statamic\CP\Column;
 use Statamic\Facades\Action;
 use Statamic\Facades\Scope;
@@ -112,9 +111,6 @@ class DiscountController extends CpController
             'values' => $values->all(),
             'meta' => $fields->meta(),
             'blueprint' => $blueprint->toPublishArray(),
-            'breadcrumbs' => new Breadcrumbs([
-                ['text' => __('Discounts'), 'url' => cp_route('cargo.discounts.index')],
-            ]),
         ];
 
         if ($request->wantsJson()) {
@@ -174,9 +170,6 @@ class DiscountController extends CpController
             'meta' => $meta,
             'blueprint' => $blueprint->toPublishArray(),
             'readOnly' => User::current()->cant('update', $discount),
-            'breadcrumbs' => new Breadcrumbs([
-                ['text' => __('Discounts'), 'url' => cp_route('cargo.discounts.index')],
-            ]),
             'itemActions' => Action::for($discount, ['view' => 'form']),
         ];
 

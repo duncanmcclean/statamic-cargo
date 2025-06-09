@@ -1,5 +1,4 @@
-@use(\DuncanMcClean\Cargo\Cargo)
-
+@use(DuncanMcClean\Cargo\Cargo)
 @extends('statamic::layout')
 @section('title', __('Tax Classes'))
 
