@@ -18,51 +18,15 @@ class ProductVariantsFieldtypeTest extends TestCase
 
         $this->assertIsArray($preload);
 
-        $this->assertCount(2, $preload['variant_fields']);
-        $this->assertCount(3, $preload['option_fields']);
+        $this->assertCount(2, $preload['variants']['fields']);
+        $this->assertCount(2, $preload['variants']['new']);
+        $this->assertCount(0, $preload['variants']['existing']);
 
-        $this->assertEquals('key', $preload['option_fields'][0]['handle']);
-        $this->assertEquals('variant', $preload['option_fields'][1]['handle']);
-        $this->assertEquals('price', $preload['option_fields'][2]['handle']);
-
-        $this->assertEquals($preload['option_field_defaults'], []);
-        $this->assertNull($preload['variant']);
-        $this->assertIsArray($preload['price']);
-    }
-
-    #[Test]
-    public function can_preload_with_configured_option_fields()
-    {
-        $preload = (new ProductVariants)
-            ->setField(new Field('product_variants', [
-                'option_fields' => [
-                    [
-                        'handle' => 'special_message',
-                        'field' => [
-                            'type' => 'text',
-                            'validate' => 'required',
-                        ],
-                    ],
-                ],
-            ]))
-            ->preload();
-
-        $this->assertIsArray($preload);
-
-        $this->assertCount(2, $preload['variant_fields']);
-        $this->assertCount(4, $preload['option_fields']);
-
-        $this->assertEquals('key', $preload['option_fields'][0]['handle']);
-        $this->assertEquals('variant', $preload['option_fields'][1]['handle']);
-        $this->assertEquals('price', $preload['option_fields'][2]['handle']);
-
-        $this->assertEquals($preload['option_field_defaults'], [
-            'special_message' => null, // Only null because it's a `text` fieldtype.
-        ]);
-
-        $this->assertNull($preload['variant']);
-        $this->assertIsArray($preload['price']);
-        $this->assertNull($preload['special_message']); // Only null because it's a `text` fieldtype.
+        $this->assertCount(3, $preload['options']['fields']);
+        $this->assertEquals(array_column($preload['options']['fields'], 'handle'), ['key', 'variant', 'price']);
+        $this->assertCount(3, $preload['options']['defaults']);
+        $this->assertCount(3, $preload['options']['new']);
+        $this->assertCount(0, $preload['options']['existing']);
     }
 
     #[Test]
@@ -226,7 +190,7 @@ class ProductVariantsFieldtypeTest extends TestCase
                         'handle' => 'size',
                         'field' => [
                             'type' => 'text',
-                            'validate' => 'required,min:10,max:20',
+                            'validate' => 'required|min:10|max:20',
                         ],
                     ],
                 ],
@@ -236,14 +200,14 @@ class ProductVariantsFieldtypeTest extends TestCase
         $this->assertIsArray($extraRules);
 
         $this->assertEquals([
-            'variants' => ['array'],
-            'options' => ['array'],
-            'variants.*.name' => ['required'],
-            'variants.*.values' => ['required'],
-            'options.*.key' => ['required'],
-            'options.*.variant' => ['required'],
-            'options.*.price' => ['required'],
-            'options.*.size' => ['required,min:10,max:20'],
+            'product_variants.variants' => ['array'],
+            'product_variants.options' => ['array'],
+            'product_variants.variants.*.name' => ['required'],
+            'product_variants.variants.*.values' => ['required'],
+            'product_variants.options.*.key' => ['required'],
+            'product_variants.options.*.variant' => ['required'],
+            'product_variants.options.*.price' => ['required'],
+            'product_variants.options.*.size' => ['required', 'min:10', 'max:20'],
         ], $extraRules);
     }
 }
