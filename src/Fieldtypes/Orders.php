@@ -33,7 +33,7 @@ class Orders extends Relationship
 
     public function icon()
     {
-        return Cargo::svg('shop');
+        return Cargo::svg('orders');
     }
 
     protected function toItemArray($id)
