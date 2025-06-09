@@ -1,8 +1,18 @@
-@import 'tailwindcss/utilities';
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+/*@import "tailwindcss/preflight.css" layer(base);*/
+/*@import "tailwindcss/utilities.css" layer(utilities);*/
+
+@source "../js";
+@source "../views";
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 .receipt-table {
     .receipt-table-header {
-        @apply grid grid-cols-6 border-b py-2 font-medium dark:border-dark-500;
+        @apply grid grid-cols-6 border-b py-2 font-medium;
+        /*dark:border-dark-500;*/
     }
 
     .receipt-line-item {
@@ -31,13 +41,16 @@
 }
 
 .discount-status-index-field {
-    @apply inline-block shrink justify-center rounded-full bg-gray-300 px-2 py-0.5 text-center text-xs text-gray-800 dark:bg-dark-200 dark:text-dark-150;
+    @apply inline-block shrink justify-center rounded-full bg-gray-300 px-2 py-0.5 text-center text-xs text-gray-800;
+    /*dark:bg-dark-200 dark:text-dark-150;*/
 
     &.status-active {
-        @apply bg-green-200 text-green-900 dark:bg-green-300 dark:text-green-950;
+        @apply bg-green-200 text-green-900;
+        /*dark:bg-green-300 dark:text-green-950;*/
     }
 
     &.status-scheduled {
-        @apply bg-amber-200 text-amber-900 dark:bg-amber-300 dark:text-amber-950;
+        @apply bg-amber-200 text-amber-900;
+        /*dark:bg-amber-300 dark:text-amber-950;*/
     }
 }
