@@ -1,12 +1,17 @@
+@use(\DuncanMcClean\Cargo\Cargo)
+
 @extends('statamic::layout')
 @section('title', __('Tax Classes'))
 
 @section('content')
     @unless ($taxClasses->isEmpty())
-        <div class="mb-6 flex">
-            <h1 class="flex-1">{{ __('Tax Classes') }}</h1>
-            <a href="{{ cp_route('cargo.tax-classes.create') }}" class="btn-primary">{{ __('Create Tax Class') }}</a>
-        </div>
+        <ui-header title="{{ __('Tax Classes') }}" icon="{{ Cargo::svg('tax-classes') }}">
+            <ui-button
+                href="{{ cp_route('cargo.tax-classes.create') }}"
+                text="{{ __('Create Tax Class') }}"
+                variant="primary"
+            ></ui-button>
+        </ui-header>
 
         <tax-class-listing
             :initial-rows="{{ json_encode($taxClasses) }}"
