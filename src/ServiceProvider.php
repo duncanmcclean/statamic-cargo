@@ -71,6 +71,7 @@ class ServiceProvider extends AddonServiceProvider
         ], 'cargo-config');
 
         $this->publishes([
+            __DIR__.'/../resources/dist-checkout/build' => public_path('checkout'),
             __DIR__.'/../resources/views/checkout' => resource_path('views/checkout'),
         ], 'cargo-prebuilt-checkout');
 

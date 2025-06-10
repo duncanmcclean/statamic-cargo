@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@source "../views/checkout";
+
+@plugin '@tailwindcss/forms';
+
+@theme {
+    --color-primary: #041B34;
+    --color-secondary: #02747E;
+}
