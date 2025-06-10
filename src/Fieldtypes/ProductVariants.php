@@ -15,6 +15,16 @@ class ProductVariants extends Fieldtype
     public function configFieldItems(): array
     {
         return [
+            'columns' => [
+                'type' => 'radio',
+                'display' => __('Columns'),
+                'instructions' => __('cargo::fieldtypes.product_variants.config.columns'),
+                'default' => 2,
+                'options' => [
+                    1 => __('One Column'),
+                    2 => __('Two Columns'),
+                ],
+            ],
             'option_fields' => [
                 'display' => __('Option Fields'),
                 'type' => 'fields',
@@ -168,6 +178,8 @@ class ProductVariants extends Fieldtype
                     'type' => 'hidden',
                     'listable' => 'hidden',
                     'display' => 'Key',
+                    'visibility' => 'hidden',
+                    'always_save' => true,
                     'read_only' => true,
                     'validate' => ['required'],
                 ],
@@ -179,8 +191,9 @@ class ProductVariants extends Fieldtype
                     'listable' => 'hidden',
                     'display' => 'Variant',
                     'read_only' => true,
+                    'visibility' => 'hidden',
+                    'always_save' => true,
                     'validate' => ['required'],
-                    'width' => 50,
                 ],
             ],
             [
