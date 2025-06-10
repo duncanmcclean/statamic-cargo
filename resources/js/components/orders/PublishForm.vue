@@ -82,7 +82,7 @@
                                 </div>
 
                                 <div v-if="updatingStatus" class="publish-field form-group">
-                                    <div class="field-inner flex flex-col dark:border-dark-900">
+                                    <div class="field-inner dark:border-dark-900 flex flex-col">
                                         <label for="field_status" class="publish-field-label mb-1.5">{{
                                             __('Status')
                                         }}</label>
@@ -93,7 +93,7 @@
                                             :model-value="values.status"
                                             @update:model-value="setFieldValue('status', $event)"
                                         />
-                                        <div v-if="values.status === 'shipped'" class="mb-0 mt-4 flex flex-col gap-y-4">
+                                        <div v-if="values.status === 'shipped'" class="mt-4 mb-0 flex flex-col gap-y-4">
                                             <div>
                                                 <label for="tracking_number" class="mb-1.5">{{
                                                     __('Tracking Number')
@@ -110,13 +110,13 @@
                                             <a
                                                 :href="cp_url(`orders/${values.id}/packing-slip`)"
                                                 target="_blank"
-                                                class="flex items-center text-sm text-blue"
+                                                class="text-blue flex items-center text-sm"
                                             >
                                                 <SvgIcon name="printer" class="mr-2 h-5 w-5" />
                                                 {{ __('Print Packing Slip') }}
                                             </a>
                                         </div>
-                                        <div v-if="values.status === 'cancelled'" class="help-block mb-0 mt-3">
+                                        <div v-if="values.status === 'cancelled'" class="help-block mt-3 mb-0">
                                             <p class="mb-0">
                                                 <span class="font-semibold">{{ __('Note') }}:</span>
                                                 {{ __('You will still need to refund the payment manually.') }}

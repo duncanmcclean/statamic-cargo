@@ -17,7 +17,7 @@
             <div>
                 <div class="card relative overflow-hidden p-0">
                     <div
-                        class="flex flex-wrap items-center justify-between border-b px-2 pb-2 text-sm dark:border-dark-900"
+                        class="dark:border-dark-900 flex flex-wrap items-center justify-between border-b px-2 pb-2 text-sm"
                     >
                         <data-list-filter-presets
                             ref="presets"

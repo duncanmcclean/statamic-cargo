@@ -1,6 +1,6 @@
 <template>
     <div class="relationship-input-items space-y-1 outline-none">
-        <div class="item item select-none outline-none">
+        <div class="item item outline-none select-none">
             <div class="item-inner">
                 <div
                     v-if="value.invalid"
@@ -27,7 +27,7 @@
 
                     <div
                         v-if="value.email"
-                        class="mt-1 truncate text-xs text-gray-800 dark:text-dark-150"
+                        class="dark:text-dark-150 mt-1 truncate text-xs text-gray-800"
                         v-text="value.email"
                     ></div>
                 </div>

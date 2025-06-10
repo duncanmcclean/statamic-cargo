@@ -29,8 +29,5 @@
         )
     @endunless
 
-    <x-statamic::docs-callout
-        :topic="__('Tax Classes')"
-        url="https://builtwithcargo.dev/docs/taxes#tax-classes"
-    />
+    <x-statamic::docs-callout :topic="__('Tax Classes')" url="https://builtwithcargo.dev/docs/taxes#tax-classes" />
 @endsection

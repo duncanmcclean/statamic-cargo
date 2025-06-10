@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- Variants -->
-        <div class="flex flex-col gap-y-2 mb-8">
+        <div class="mb-8 flex flex-col gap-y-2">
             <div
                 v-for="(variant, index) in variants"
                 :key="index"
@@ -54,13 +54,10 @@ import { Fieldtype, ValidatesFieldConditions } from 'statamic';
 import Fields from '@statamic/components/ui/Publish/Fields.vue';
 import FieldsProvider from '@statamic/components/ui/Publish/FieldsProvider.vue';
 import PublishContainer from '@statamic/components/ui/Publish/Container.vue';
-import { Button } from '@statamic/ui'
+import { Button } from '@statamic/ui';
 
 export default {
-    mixins: [
-        Fieldtype,
-        ValidatesFieldConditions,
-    ],
+    mixins: [Fieldtype, ValidatesFieldConditions],
 
     components: {
         Button,
@@ -83,17 +80,15 @@ export default {
         cartesian() {
             let data = this.variants
                 .filter((variant) => {
-                    return variant.values.length != 0
+                    return variant.values.length != 0;
                 })
-                .flatMap((variant) => [variant.values])
+                .flatMap((variant) => [variant.values]);
 
             if (data.length == 0) {
-                return []
+                return [];
             }
 
-            return data.reduce((acc, curr) =>
-                acc.flatMap((c) => curr.map((n) => [].concat(c, n)))
-            )
+            return data.reduce((acc, curr) => acc.flatMap((c) => curr.map((n) => [].concat(c, n))));
         },
     },
 
@@ -105,7 +100,7 @@ export default {
                     {
                         name: '',
                         values: [],
-                    }
+                    },
                 ],
                 options: this.value.options,
             });
@@ -138,39 +133,37 @@ export default {
                 this.update({
                     variants: this.value.variants,
                     options: this.cartesian.map((item, index) => {
-                        let key = typeof item === 'string' ? item : item.join('_')
-                        let variantName = typeof item === 'string' ? item : item.join(', ')
+                        let key = typeof item === 'string' ? item : item.join('_');
+                        let variantName = typeof item === 'string' ? item : item.join(', ');
 
                         let existingData = this.value.options.filter((option) => {
-                            return option.key === key
-                        })[0]
+                            return option.key === key;
+                        })[0];
 
                         if (existingData === undefined) {
                             existingData = {
                                 price: 0,
-                            }
+                            };
 
-                            Object.entries(this.meta.options.defaults).forEach(
-                                ([key, value]) => {
-                                    existingData[key] = value
-                                }
-                            )
+                            Object.entries(this.meta.options.defaults).forEach(([key, value]) => {
+                                existingData[key] = value;
+                            });
 
                             let meta = this.meta;
                             meta['options']['existing'][index] = this.meta.options.new;
-                            this.updateMeta(meta)
+                            this.updateMeta(meta);
                         }
 
                         return {
                             ...existingData,
                             key: key,
                             variant: variantName,
-                        }
-                    })
-                })
+                        };
+                    }),
+                });
             },
             deep: true,
         },
     },
-}
+};
 </script>

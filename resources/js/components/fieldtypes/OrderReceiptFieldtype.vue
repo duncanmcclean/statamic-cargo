@@ -15,7 +15,7 @@
                 :form-component-props="meta.product.formComponentProps"
                 @updated="lineItemUpdated"
             />
-            <div class="receipt-total border-t font-semibold dark:border-dark-500">
+            <div class="receipt-total dark:border-dark-500 border-t font-semibold">
                 <div>{{ __('Subtotal') }}</div>
                 <div>{{ value.totals.sub_total }}</div>
             </div>

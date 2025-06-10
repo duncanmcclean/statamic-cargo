@@ -7,7 +7,11 @@
     >
         <ui-card-panel :heading="__('Collection Details')">
             <div class="space-y-8">
-                <ui-field :label="__('Name')" :instructions="__('cargo::messages.tax_classes_name_instructions')" :instructions-below="true">
+                <ui-field
+                    :label="__('Name')"
+                    :instructions="__('cargo::messages.tax_classes_name_instructions')"
+                    :instructions-below="true"
+                >
                     <ui-input v-model="name" autofocus tabindex="1" />
                 </ui-field>
             </div>
