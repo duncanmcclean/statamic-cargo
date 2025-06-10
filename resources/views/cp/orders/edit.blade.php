@@ -1,4 +1,5 @@
 @use(Statamic\CP\Breadcrumbs\Breadcrumbs)
+
 @extends('statamic::layout')
 @section('title', Breadcrumbs::title($title))
 @section('wrapper_class', 'max-w-3xl')
