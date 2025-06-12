@@ -15,9 +15,7 @@ import OrdersListing from './components/orders/Listing.vue';
 import OrderPublishForm from './components/orders/PublishForm.vue';
 import TaxClassCreateForm from './components/tax-classes/CreateForm.vue';
 import TaxClassListing from './components/tax-classes/Listing.vue';
-import BaseTaxZoneCreateForm from './components/tax-zones/BaseCreateForm.vue';
 import TaxZoneListing from './components/tax-zones/Listing.vue';
-import TaxZonePublishForm from './components/tax-zones/PublishForm.vue';
 
 Statamic.booting(() => {
     // Discounts
@@ -46,7 +44,5 @@ Statamic.booting(() => {
     Statamic.$components.register('tax-class-listing', TaxClassListing);
 
     // Tax Zones
-    Statamic.$components.register('base-tax-zone-create-form', BaseTaxZoneCreateForm);
     Statamic.$components.register('tax-zone-listing', TaxZoneListing);
-    Statamic.$components.register('tax-zone-publish-form', TaxZonePublishForm);
 });

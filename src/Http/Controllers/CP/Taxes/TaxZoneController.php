@@ -2,12 +2,15 @@
 
 namespace DuncanMcClean\Cargo\Http\Controllers\CP\Taxes;
 
+use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Facades\TaxZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Statamic\CP\Column;
+use Statamic\CP\PublishForm;
 use Statamic\Facades\User;
 use Statamic\Http\Controllers\CP\CpController;
+use Statamic\Support\Arr;
 
 class TaxZoneController extends CpController
 {
@@ -48,132 +51,45 @@ class TaxZoneController extends CpController
     {
         $this->authorize('manage taxes');
 
-        $blueprint = TaxZone::blueprint();
-
-        $fields = $blueprint->fields()->preProcess();
-        $values = $fields->values();
-
-        $viewData = [
-            'title' => __('Create Tax Zone'),
-            'actions' => [
-                'save' => cp_route('cargo.tax-zones.store'),
-            ],
-            'values' => $values->all(),
-            'meta' => $fields->meta(),
-            'blueprint' => $blueprint->toPublishArray(),
-        ];
-
-        if ($request->wantsJson()) {
-            return $viewData;
-        }
-
-        return view('cargo::cp.tax-zones.create', $viewData);
+        return PublishForm::make(TaxZone::blueprint())
+            ->icon(Cargo::svg('tax-zones'))
+            ->title(__('Create Tax Zone'))
+            ->submittingTo(cp_route('cargo.tax-zones.store'), 'POST');
     }
 
     public function store(Request $request)
     {
         $this->authorize('manage taxes');
 
-        $blueprint = TaxZone::blueprint();
-
-        $data = $request->all();
-
-        $fields = $blueprint->fields()->addValues($data);
-
-        $fields->validator()->validate();
-
-        $values = $fields->process()->values();
+        $values = PublishForm::make(TaxZone::blueprint())->submit($request->values);
 
         $taxZone = TaxZone::make()
-            ->handle(Str::slug($values->get('name')))
-            ->data($values->except('handle'));
+            ->handle(Str::slug(Arr::get($values, 'name')))
+            ->data($values);
 
-        $saved = $taxZone->save();
+        $taxZone->save();
 
-        $fields = $blueprint->fields()
-            ->setParent($taxZone)
-            ->addValues($taxZone->data()->all())
-            ->preProcess();
-
-        return [
-            'data' => [
-                'id' => $taxZone->handle(),
-                'title' => $taxZone->get('name'),
-                'edit_url' => $taxZone->editUrl(),
-                'values' => $fields->values()->all(),
-            ],
-            'saved' => $saved,
-        ];
+        return ['redirect' => $taxZone->editUrl()];
     }
 
     public function edit(Request $request, $taxZone)
     {
         $this->authorize('manage taxes');
 
-        $blueprint = TaxZone::blueprint();
-
-        $values = $taxZone->data();
-
-        $fields = $blueprint->fields()
-            ->setParent($taxZone)
-            ->addValues($values->all())
-            ->preProcess();
-
-        $viewData = [
-            'title' => $taxZone->get('name'),
-            'actions' => [
-                'save' => $taxZone->updateUrl(),
-            ],
-            'values' => $fields->values()->all(),
-            'meta' => $fields->meta()->all(),
-            'blueprint' => $blueprint->toPublishArray(),
-            'readOnly' => User::current()->cant('update', $taxZone),
-        ];
-
-        if ($request->wantsJson()) {
-            return $viewData;
-        }
-
-        if ($request->has('created')) {
-            session()->now('success', __('Tax Zone created'));
-        }
-
-        return view('cargo::cp.tax-zones.edit', array_merge($viewData, [
-            'taxClass' => $taxZone,
-        ]));
+        return PublishForm::make(TaxZone::blueprint())
+            ->icon(Cargo::svg('tax-zones'))
+            ->title(__('Edit Tax Zone'))
+            ->values($taxZone->data()->all())
+            ->submittingTo($taxZone->updateUrl());
     }
 
     public function update(Request $request, $taxZone)
     {
         $this->authorize('manage taxes');
 
-        $blueprint = TaxZone::blueprint();
+        $values = PublishForm::make(TaxZone::blueprint())->submit($request->values);
 
-        $data = $request->except('handle');
-
-        $fields = $blueprint->fields()->addValues($data);
-
-        $fields->validator()->validate();
-
-        $values = $fields->process()->values();
-
-        $taxZone->merge($values);
-
-        $saved = $taxZone->save();
-
-        $fields = $blueprint->fields()
-            ->setParent($taxZone)
-            ->addValues($taxZone->data()->all())
-            ->preProcess();
-
-        return [
-            'data' => [
-                'id' => $taxZone->handle(),
-                'title' => $taxZone->get('name'),
-                'values' => $fields->values()->all(),
-            ],
-            'saved' => $saved,
-        ];
+        $taxZone->data($values)->save();
     }
 
     public function destroy(Request $request, $taxZone)
