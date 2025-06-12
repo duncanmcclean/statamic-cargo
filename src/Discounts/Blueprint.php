@@ -4,6 +4,7 @@ namespace DuncanMcClean\Cargo\Discounts;
 
 use DuncanMcClean\Cargo\Discounts\Types\DiscountType;
 use DuncanMcClean\Cargo\Facades;
+use DuncanMcClean\Cargo\Rules\UniqueDiscountValue;
 use Statamic\Fields\Blueprint as FieldsBlueprint;
 
 class Blueprint
@@ -16,6 +17,7 @@ class Blueprint
                     'display' => __('General'),
                     'sections' => [
                         [
+                            'display' => __('Details'),
                             'fields' => [
                                 [
                                     'handle' => 'name',
@@ -74,6 +76,7 @@ class Blueprint
                                                     $fail('statamic::validation.handle')->translate();
                                                 }
                                             },
+//                                            new UniqueDiscountValue, // todo: exclude the current discount
                                         ],
                                     ],
                                 ],

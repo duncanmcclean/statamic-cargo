@@ -1,4 +1,3 @@
-import BaseDiscountCreateForm from './components/discounts/BaseCreateForm.vue';
 import DiscountsListing from './components/discounts/Listing.vue';
 import DiscountPublishForm from './components/discounts/PublishForm.vue';
 import CustomersFieldtype from './components/fieldtypes/CustomersFieldtype.vue';
@@ -18,7 +17,6 @@ import TaxZoneListing from './components/tax-zones/Listing.vue';
 
 Statamic.booting(() => {
     // Discounts
-    Statamic.$components.register('base-discount-create-form', BaseDiscountCreateForm);
     Statamic.$components.register('discounts-listing', DiscountsListing);
     Statamic.$components.register('discount-publish-form', DiscountPublishForm);
 
