@@ -70,7 +70,7 @@ class TaxClassController extends CpController
 
         return PublishForm::make(TaxClass::blueprint())
             ->icon(Cargo::svg('tax-classes'))
-            ->title(__('Edit Tax Class'))
+            ->title($taxClass->get('name'))
             ->values($taxClass->data()->all())
             ->submittingTo($taxClass->updateUrl());
     }

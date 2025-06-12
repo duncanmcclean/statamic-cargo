@@ -119,7 +119,7 @@ class DiscountController extends CpController
 
         return PublishForm::make(Discount::blueprint())
             ->icon(Cargo::svg('discounts'))
-            ->title(__('Edit Discount'))
+            ->title($discount->name())
             ->values($discount->data()->merge([
                 'name' => $discount->name(),
                 'type' => $discount->type(),
