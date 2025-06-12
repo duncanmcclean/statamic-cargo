@@ -83,7 +83,7 @@ class Blueprint
                                 ],
                                 [
                                     'handle' => 'shipping_state',
-                                    'field' => ['type' => 'states', 'from' => 'shipping_country', 'display' => __('State'), 'listable' => false, 'max_items' => 1, 'width' => 50],
+                                    'field' => ['type' => 'states', 'from' => 'shipping_country', 'display' => __('State/County'), 'listable' => false, 'max_items' => 1, 'width' => 50],
                                 ],
                             ],
                         ],
