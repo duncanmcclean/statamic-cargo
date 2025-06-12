@@ -1,6 +1,6 @@
 <template>
-    <div class="receipt-line-item">
-        <div>
+    <TableRow>
+        <TableCell>
             <div
                 v-if="lineItem.product.invalid"
                 v-tooltip.top="__('A product with this ID could not be found')"
@@ -11,10 +11,10 @@
                 {{ lineItem.product.title }}
                 <span v-if="lineItem.variant" class="text-sm" v-text="`(${lineItem.variant.name})`"></span>
             </a>
-        </div>
-        <div>{{ lineItem.unit_price }}</div>
-        <div>{{ lineItem.quantity }}</div>
-        <div>{{ lineItem.sub_total }}</div>
+        </TableCell>
+        <TableCell>{{ lineItem.unit_price }}</TableCell>
+        <TableCell>{{ lineItem.quantity }}</TableCell>
+        <TableCell class="text-right">{{ lineItem.sub_total }}</TableCell>
 
         <inline-edit-form
             v-if="isEditing"
@@ -24,14 +24,17 @@
             @updated="itemUpdated"
             @closed="isEditing = false"
         />
-    </div>
+    </TableRow>
 </template>
 
 <script>
+import { TableRow, TableCell } from '@statamic/ui';
 import InlineEditForm from '@statamic/components/inputs/relationship/InlineEditForm.vue';
 
 export default {
     components: {
+        TableRow,
+        TableCell,
         InlineEditForm,
     },
 

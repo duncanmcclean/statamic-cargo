@@ -1,414 +1,136 @@
-<template>
-    <div>
-        <div class="mb-6 flex items-center">
-            <h1 class="flex-1">
-                <div class="flex items-center">
-                    <span v-html="formattedTitle" />
-                </div>
-            </h1>
+<script setup>
+import { computed, ref, useTemplateRef } from 'vue';
+import { SavePipeline } from 'statamic';
+import { Header, Button, PublishContainer, PublishTabs, Panel, PanelHeader, Heading, Card, Dropdown, DropdownMenu, DropdownItem, DropdownSeparator } from '@statamic/ui';
+import OrderStatus from './OrderStatus.vue';
+const { Pipeline, Request, BeforeSaveHooks, AfterSaveHooks } = SavePipeline;
+import ItemActions from '@statamic/components/actions/ItemActions.vue';
 
-            <dropdown-list v-if="itemActions.length" class="ltr:mr-4 rtl:ml-4">
-                <data-list-inline-actions
-                    :item="values.id"
-                    :url="itemActionUrl"
-                    :actions="itemActions"
-                    :is-dirty="isDirty"
-                    @started="actionStarted"
-                    @completed="actionCompleted"
-                />
-            </dropdown-list>
+// todo: implement actions
+// todo: implement read only
 
-            <div class="hidden items-center md:flex">
-                <save-button-options
-                    v-if="!readOnly"
-                    :show-options="!isInline"
-                    button-class="btn-primary"
-                    :preferences-prefix="preferencesPrefix"
-                >
-                    <button class="btn-primary" :disabled="!canSave" @click.prevent="save" v-text="__('Save')" />
-                </save-button-options>
-            </div>
+const props = defineProps({
+    blueprint: Object,
+    icon: String,
+    initialTitle: String,
+    initialValues: Object,
+    initialMeta: Object,
+    initialReadOnly: Boolean,
+    actions: Object,
+    itemActions: Array,
+    itemActionUrl: String,
+    packingSlipUrl: String,
+    canEditBlueprint: Boolean,
+});
 
-            <slot name="action-buttons-right" />
-        </div>
+const container = useTemplateRef('container');
+const title = ref(props.initialTitle);
+const values = ref(props.initialValues);
+const meta = ref(props.initialMeta);
+const errors = ref({});
+const saving = ref(false);
 
-        <publish-container
-            v-if="fieldset"
-            ref="container"
-            :name="publishContainer"
-            :blueprint="fieldset"
-            :values="values"
-            :reference="initialReference"
-            :meta="meta"
-            :errors="errors"
-            :track-dirty-state="trackDirtyState"
-            @updated="values = $event"
-            v-slot="{ container, components, setFieldMeta }"
-        >
-            <div>
-                <component
-                    v-for="component in components"
-                    :key="component.id"
-                    :is="component.name"
-                    :container="container"
-                    v-bind="component.props"
-                    v-on="component.events"
-                />
-
-                <transition name="live-preview-tabs-drop">
-                    <publish-tabs
-                        v-show="tabsVisible"
-                        :read-only="readOnly"
-                        @updated="setFieldValue"
-                        @meta-updated="setFieldMeta"
-                        @focus="container.$emit('focus', $event)"
-                        @blur="container.$emit('blur', $event)"
-                    >
-                        <template #actions="{ shouldShowSidebar }">
-                            <div class="card mb-5 p-0">
-                                <div v-if="!updatingStatus" class="text-md flex items-center justify-between p-4">
-                                    <div class="flex items-center gap-x-2">
-                                        <span
-                                            class="little-dot size-2.5"
-                                            v-tooltip="statusLabel"
-                                            :class="statusClass"
-                                        />
-                                        {{ statusLabel }}
-                                    </div>
-
-                                    <button class="btn btn-sm" type="button" @click="updatingStatus = true">
-                                        {{ __('Change') }}
-                                    </button>
-                                </div>
-
-                                <div v-if="updatingStatus" class="publish-field form-group">
-                                    <div class="field-inner dark:border-dark-900 flex flex-col">
-                                        <label for="field_status" class="publish-field-label mb-1.5">{{
-                                            __('Status')
-                                        }}</label>
-                                        <select-input
-                                            class="w-full"
-                                            name="field_status"
-                                            :options="meta.status.options"
-                                            :model-value="values.status"
-                                            @update:model-value="setFieldValue('status', $event)"
-                                        />
-                                        <div v-if="values.status === 'shipped'" class="mt-4 mb-0 flex flex-col gap-y-4">
-                                            <div>
-                                                <label for="tracking_number" class="mb-1.5">{{
-                                                    __('Tracking Number')
-                                                }}</label>
-                                                <input
-                                                    type="text"
-                                                    class="input-text w-full"
-                                                    id="tracking_number"
-                                                    name="tracking_number"
-                                                    v-model="values.tracking_number"
-                                                />
-                                            </div>
-
-                                            <a
-                                                :href="cp_url(`orders/${values.id}/packing-slip`)"
-                                                target="_blank"
-                                                class="text-blue flex items-center text-sm"
-                                            >
-                                                <SvgIcon name="printer" class="mr-2 h-5 w-5" />
-                                                {{ __('Print Packing Slip') }}
-                                            </a>
-                                        </div>
-                                        <div v-if="values.status === 'cancelled'" class="help-block mt-3 mb-0">
-                                            <p class="mb-0">
-                                                <span class="font-semibold">{{ __('Note') }}:</span>
-                                                {{ __('You will still need to refund the payment manually.') }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
-                    </publish-tabs>
-                </transition>
-            </div>
-        </publish-container>
-
-        <div class="mt-6 flex items-center md:hidden">
-            <button v-if="!readOnly" class="btn-lg btn-primary w-full" :disabled="!canSave" @click.prevent="save">
-                Save
-            </button>
-        </div>
-    </div>
-</template>
-
-<script>
-import SaveButtonOptions from '@statamic/components/publish/SaveButtonOptions.vue';
-import HasPreferences from '@statamic/components/data-list/HasPreferences.js';
-import HasHiddenFields from '@statamic/components/publish/HasHiddenFields.js';
-import HasActions from '@statamic/components/publish/HasActions.js';
-import SvgIcon from '../SvgIcon.vue';
-import clone from '@statamic/util/clone.js';
-import striptags from 'striptags';
-
-export default {
-    mixins: [HasPreferences, HasHiddenFields, HasActions],
-
-    components: {
-        SvgIcon,
-        SaveButtonOptions,
-    },
-
-    props: {
-        publishContainer: String,
-        initialReference: String,
-        initialFieldset: Object,
-        initialValues: Object,
-        initialMeta: Object,
-        initialTitle: String,
-        initialReadOnly: Boolean,
-        initialActions: Object,
-        method: String,
-        isCreating: Boolean,
-        isInline: Boolean,
-        createAnotherUrl: String,
-        initialListingUrl: String,
-    },
-
-    data() {
-        return {
-            actions: this.initialActions,
-            saving: false,
-            trackDirtyState: true,
-            fieldset: this.initialFieldset,
-            title: this.initialTitle,
-            values: clone(this.initialValues),
-            meta: clone(this.initialMeta),
-            error: null,
-            errors: {},
-            tabsVisible: true,
-            state: 'new',
-            preferencesPrefix: `cargo.orders`,
-            readOnly: this.initialReadOnly,
-
-            saveKeyBinding: null,
-            quickSaveKeyBinding: null,
-            quickSave: false,
-
-            updatingStatus: false,
-        };
-    },
-
-    computed: {
-        store() {
-            return this.$refs.container.store;
-        },
-
-        formattedTitle() {
-            return striptags(__(this.title));
-        },
-
-        hasErrors() {
-            return this.error || Object.keys(this.errors).length;
-        },
-
-        somethingIsLoading() {
-            return !this.$progress.isComplete();
-        },
-
-        canSave() {
-            return !this.readOnly && !this.somethingIsLoading;
-        },
-
-        listingUrl() {
-            return `${this.initialListingUrl}`;
-        },
-
-        isBase() {
-            return this.publishContainer === 'base';
-        },
-
-        isDirty() {
-            return this.$dirty.has(this.publishContainer);
-        },
-
-        afterSaveOption() {
-            return this.getPreference('after_save');
-        },
-
-        direction() {
-            return this.$config.get('direction', 'ltr');
-        },
-
-        statusLabel() {
-            return this.meta.status.options.find((option) => option.value === this.values.status).label;
-        },
-
-        statusClass() {
-            switch (this.values.status) {
-                case 'payment_pending':
-                    return 'bg-gray-500';
-                case 'cancelled':
-                    return 'bg-red-500';
-                default:
-                    return 'bg-green-500';
-            }
-        },
-    },
-
-    watch: {
-        saving(saving) {
-            this.$progress.loading(`${this.publishContainer}-order-publish-form`, saving);
-        },
-    },
-
-    methods: {
-        clearErrors() {
-            this.error = null;
-            this.errors = {};
-        },
-
-        save() {
-            if (!this.canSave) {
-                this.quickSave = false;
-                return;
-            }
-
-            this.saving = true;
-            this.clearErrors();
-
-            setTimeout(() => this.runBeforeSaveHook(), 151); // 150ms is the debounce time for fieldtype updates
-        },
-
-        runBeforeSaveHook() {
-            this.$refs.container.saving();
-
-            Statamic.$hooks
-                .run('order.saving', {
-                    values: this.values,
-                    container: this.$refs.container,
-                    storeName: this.publishContainer,
-                })
-                .then(this.performSaveRequest)
-                .catch((error) => {
-                    this.saving = false;
-                    this.$toast.error(error || 'Something went wrong');
-                });
-        },
-
-        performSaveRequest() {
-            // Once the hook has completed, we need to make the actual request.
-            // We build the payload here because the before hook may have modified values.
-            const payload = {
-                ...this.visibleValues,
-                ...{
-                    _blueprint: this.fieldset.handle,
-                },
-            };
-
-            this.$axios[this.method](this.actions.save, payload)
-                .then((response) => {
-                    this.saving = false;
-                    if (!response.data.saved) {
-                        return this.$toast.error(__(`Couldn't save order`));
-                    }
-                    this.title = response.data.data.title;
-                    this.$toast.success(__('Saved'));
-                    this.$refs.container.saved();
-                    this.runAfterSaveHook(response);
-                })
-                .catch((error) => this.handleAxiosError(error));
-        },
-
-        runAfterSaveHook(response) {
-            // Once the save request has completed, we want to run the "after" hook.
-            // Devs can do what they need and we'll wait for them, but they can't cancel anything.
-            Statamic.$hooks
-                .run('order.saved', {
-                    reference: this.initialReference,
-                    response,
-                })
-                .then(() => {
-                    let nextAction = this.quickSave ? 'continue_editing' : this.afterSaveOption;
-
-                    // If the user has opted to create another order, redirect them to create page.
-                    if (!this.isInline && nextAction === 'create_another') {
-                        window.location = this.createAnotherUrl;
-                    }
-
-                    // If the user has opted to go to listing (default/null option), redirect them there.
-                    else if (!this.isInline && nextAction === null) {
-                        window.location = this.listingUrl;
-                    }
-
-                    // Otherwise, leave them on the edit form and emit an event. We need to wait until after
-                    // the hooks are resolved because if this form is being shown in a stack, we only
-                    // want to close it once everything's done.
-                    else {
-                        clearTimeout(this.trackDirtyStateTimeout);
-                        this.trackDirtyState = false;
-                        this.updatingStatus = false;
-                        this.values = this.resetValuesFromResponse(response.data.data.values);
-                        this.trackDirtyStateTimeout = setTimeout(() => (this.trackDirtyState = true), 350);
-                        this.$nextTick(() => this.$emit('saved', response));
-                    }
-
-                    this.quickSave = false;
-                })
-                .catch((e) => console.error(e));
-        },
-
-        handleAxiosError(e) {
-            this.saving = false;
-            if (e.response && e.response.status === 422) {
-                const { message, errors } = e.response.data;
-                this.error = message;
-                this.errors = errors;
-                this.$toast.error(message);
-                this.$reveal.invalid();
-            } else if (e.response) {
-                this.$toast.error(e.response.data.message);
-            } else {
-                this.$toast.error(e || 'Something went wrong');
-            }
-        },
-
-        setFieldValue(handle, value) {
-            this.$refs.container.setFieldValue(handle, value);
-        },
-
-        afterActionSuccessfullyCompleted(response) {
-            if (response.data) {
-                this.title = response.data.title;
-                clearTimeout(this.trackDirtyStateTimeout);
-                this.trackDirtyState = false;
-                this.values = this.resetValuesFromResponse(response.data.values);
-                this.meta = response.data.meta;
-                this.trackDirtyStateTimeout = setTimeout(() => (this.trackDirtyState = true), 500);
-                this.itemActions = response.data.itemActions;
-            }
-        },
-    },
-
-    mounted() {
-        this.saveKeyBinding = this.$keys.bindGlobal(['mod+return'], (e) => {
-            e.preventDefault();
-            this.save();
+function save() {
+    new Pipeline()
+        .provide({ container, errors, saving })
+        .through([
+            new BeforeSaveHooks('order'),
+            new Request(props.actions.save, 'patch', { values: values.value }),
+            new AfterSaveHooks('order'),
+        ])
+        .then((response) => {
+            Statamic.$toast.success('Saved');
         });
+}
 
-        this.quickSaveKeyBinding = this.$keys.bindGlobal(['mod+s'], (e) => {
-            e.preventDefault();
-            this.quickSave = true;
-            this.save();
-        });
-    },
+const isDirty = computed(() => Statamic.$dirty.has('order'));
+const hasItemActions = computed(() => props.itemActions.length > 0);
 
-    created() {
-        window.history.replaceState({}, document.title, document.location.href.replace('created=true', ''));
-    },
+function actionStarted() {
+    saving.value = true;
+}
 
-    unmounted() {
-        clearTimeout(this.trackDirtyStateTimeout);
+function actionCompleted(successful = null, response) {
+    saving.value = false;
 
-        this.saveKeyBinding.destroy();
-        this.quickSaveKeyBinding.destroy();
-    },
-};
+    if (successful === false) return;
+
+    Statamic.$events.$emit('reset-action-modals');
+
+    if (response.success === false) {
+        Statamic.$toast.error(response.message || __('Action failed'));
+    } else {
+        Statamic.$toast.success(response.message || __('Action completed'));
+    }
+
+    if (response.data) {
+        props.itemActions.value = response.data.itemActions; // todo: does this need to be initial?
+    }
+}
 </script>
+
+<template>
+    <Header :title :icon>
+        <ItemActions
+            v-if="canEditBlueprint || hasItemActions"
+            :item="values.id"
+            :url="itemActionUrl"
+            :actions="itemActions"
+            :is-dirty="isDirty"
+            @started="actionStarted"
+            @completed="actionCompleted"
+            v-slot="{ actions }"
+        >
+            <Dropdown>
+                <template #trigger>
+                    <Button icon="ui/dots" variant="ghost" />
+                </template>
+                <DropdownMenu>
+                    <DropdownItem :text="__('Edit Blueprint')" icon="blueprint-edit" v-if="canEditBlueprint" :href="actions.editBlueprint" />
+                    <DropdownSeparator v-if="canEditBlueprint && itemActions.length" />
+                    <DropdownItem
+                        v-for="action in itemActions"
+                        :key="action.handle"
+                        :text="__(action.title)"
+                        :icon="action.icon"
+                        :variant="action.dangerous ? 'destructive' : 'default'"
+                        @click="action.run"
+                    />
+                </DropdownMenu>
+            </Dropdown>
+        </ItemActions>
+
+        <Button variant="primary" text="Save" @click="save" :disabled="saving" />
+    </Header>
+
+    <PublishContainer
+        ref="container"
+        name="order"
+        :blueprint="blueprint"
+        :values="values"
+        :meta="meta"
+        :errors="errors"
+        @updated="values = $event"
+    >
+        <PublishTabs>
+            <template #actions>
+                <Panel>
+                    <PanelHeader>
+                        <Heading :text="__('Order Status')" />
+                    </PanelHeader>
+                    <Card>
+                        <OrderStatus
+                            :order-id="values.id"
+                            :statuses="meta.status.options"
+                            :packing-slip-url="packingSlipUrl"
+                            :model-value="values.status"
+                            :tracking-number="values.tracking_number"
+                            @update:modelValue="values.status = $event"
+                            @update:trackingNumber="values.tracking_number = $event"
+                        />
+                    </Card>
+                </Panel>
+            </template>
+        </PublishTabs>
+    </PublishContainer>
+</template>

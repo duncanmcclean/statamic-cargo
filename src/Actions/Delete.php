@@ -9,6 +9,8 @@ class Delete extends Action
 {
     protected $dangerous = true;
 
+    protected $icon = 'trash';
+
     protected static $handle = 'cargo-delete';
 
     public static function title()

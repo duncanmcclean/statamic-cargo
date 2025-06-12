@@ -1,3 +1,4 @@
+@use(DuncanMcClean\Cargo\Cargo)
 @use(Statamic\CP\Breadcrumbs\Breadcrumbs)
 
 @extends('statamic::layout')
@@ -6,17 +7,16 @@
 
 @section('content')
     <order-publish-form
-        publish-container="base"
-        :initial-actions="{{ json_encode($actions) }}"
-        method="patch"
+        :blueprint="{{ json_encode($blueprint) }}"
+        icon="{{ Cargo::svg('orders') }}"
         initial-title="{{ $title }}"
-        initial-reference="{{ $order->reference() }}"
-        :initial-fieldset="{{ json_encode($blueprint) }}"
         :initial-values="{{ json_encode($values) }}"
         :initial-meta="{{ json_encode($meta) }}"
         :initial-read-only="{{ json_encode($readOnly) }}"
-        initial-listing-url="{{ cp_route('cargo.orders.index') }}"
-        :initial-item-actions="{{ json_encode($itemActions) }}"
+        :actions="{{ json_encode($actions) }}"
+        :item-actions="{{ json_encode($itemActions) }}"
         item-action-url="{{ cp_route('cargo.orders.actions.run') }}"
+        packing-slip-url="{{ cp_route('cargo.orders.packing-slip', $order->id()) }}"
+        :can-edit-blueprint="{{ json_encode($canEditBlueprint) }}"
     ></order-publish-form>
 @endsection

@@ -90,6 +90,7 @@ class OrderController extends CpController
 
     public function edit(Request $request, $order)
     {
+        // todo: slim down whats returned here (maybe, if it doesn't break inline publish forms which need fixing up anyway)
         $this->authorize('edit', $order);
 
         $blueprint = Order::blueprint();
@@ -101,6 +102,7 @@ class OrderController extends CpController
             'title' => __('Order #:number', ['number' => $order->orderNumber()]),
             'actions' => [
                 'save' => $order->updateUrl(),
+                'editBlueprint' => cp_route('blueprints.edit', ['cargo', 'order']),
             ],
             'values' => array_merge($values, [
                 'id' => $order->id(),
@@ -110,6 +112,7 @@ class OrderController extends CpController
             'blueprint' => $blueprint->toPublishArray(),
             'readOnly' => User::current()->cant('update', $order),
             'itemActions' => Action::for($order, ['view' => 'form']),
+            'canEditBlueprint' => User::current()->can('configure fields'),
         ];
 
         if ($request->wantsJson()) {
@@ -127,10 +130,10 @@ class OrderController extends CpController
 
         $blueprint = Order::blueprint();
 
-        $data = $request->except($except = [
+        $data = collect($request->values)->except($except = [
             'id', 'customer', 'date', 'status', 'discount_total', 'grand_total', 'line_items', 'order_number',
             'payment_details', 'receipt', 'shipping_total', 'sub_total', 'tax_total', 'shipping_method',
-        ]);
+        ])->all();
 
         $fields = $blueprint
             ->fields()
@@ -145,8 +148,8 @@ class OrderController extends CpController
 
         $values = $fields->process()->values()->except($except);
 
-        if ($request->status) {
-            $order->status($request->status);
+        if ($request->values['status'] ?? null) {
+            $order->status($request->values['status']);
         }
 
         $order->merge($values->all());
@@ -156,10 +159,10 @@ class OrderController extends CpController
         [$values] = $this->extractFromFields($order, $blueprint);
 
         return [
-            'data' => array_merge((new OrderResource($order->fresh()))->resolve()['data'], [
-                'values' => $values,
-            ]),
-            'saved' => $saved,
+//            'data' => array_merge((new OrderResource($order->fresh()))->resolve()['data'], [
+//                'values' => $values,
+//            ]),
+//            'saved' => $saved,
         ];
     }
 }

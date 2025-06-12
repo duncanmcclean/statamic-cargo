@@ -42,7 +42,7 @@ class States extends Fieldtype
         return StatesData::byCountry($this->country())->firstWhere('code', $value);
     }
 
-    private function country(): string
+    private function country(): ?string
     {
         $country = $this->field()->parent()?->get($this->config('from'));
 
