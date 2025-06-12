@@ -97,7 +97,5 @@ class TaxZoneController extends CpController
         $this->authorize('manage taxes');
 
         $taxZone->delete();
-
-        return response('', 204);
     }
 }

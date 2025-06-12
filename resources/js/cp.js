@@ -13,7 +13,6 @@ import ShippingDetailsFieldtype from './components/fieldtypes/ShippingDetailsFie
 import StatesFieldtype from './components/fieldtypes/StatesFieldtype.vue';
 import OrdersListing from './components/orders/Listing.vue';
 import OrderPublishForm from './components/orders/PublishForm.vue';
-import TaxClassCreateForm from './components/tax-classes/CreateForm.vue';
 import TaxClassListing from './components/tax-classes/Listing.vue';
 import TaxZoneListing from './components/tax-zones/Listing.vue';
 
@@ -40,7 +39,6 @@ Statamic.booting(() => {
     Statamic.$components.register('order-publish-form', OrderPublishForm);
 
     // Tax Classes
-    Statamic.$components.register('tax-class-create-form', TaxClassCreateForm);
     Statamic.$components.register('tax-class-listing', TaxClassListing);
 
     // Tax Zones

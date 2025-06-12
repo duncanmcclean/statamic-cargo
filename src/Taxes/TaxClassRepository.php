@@ -63,17 +63,21 @@ class TaxClassRepository implements Contract
     public function blueprint(): \Statamic\Fields\Blueprint
     {
         return Blueprint::make('tax-class')->setContents([
-            'sections' => [
+            'tabs' => [
                 'main' => [
-                    'display' => 'Main',
-                    'fields' => [
+                    'sections' => [
                         [
-                            'handle' => 'name',
-                            'field' => [
-                                'type' => 'text',
-                                'display' => __('Name'),
-                                'instructions' => __('cargo::messages.tax_classes_name_instructions'),
-                                'validate' => 'required',
+                            'display' => 'Tax Class Details',
+                            'fields' => [
+                                [
+                                    'handle' => 'name',
+                                    'field' => [
+                                        'type' => 'text',
+                                        'display' => __('Name'),
+                                        'instructions' => __('cargo::messages.tax_classes_name_instructions'),
+                                        'validate' => 'required',
+                                    ],
+                                ],
                             ],
                         ],
                     ],
