@@ -81,10 +81,10 @@ class ProductVariants extends Fieldtype
 
         return [
             'variants' => collect(Arr::get($data, 'variants'))
-                ->map(fn ($variant) => $this->variantFields()->addValues($variant)->process()->values()->all())
+                ->map(fn ($variant) => $this->variantFields()->addValues($variant)->process()->values()->filter()->all())
                 ->all(),
             'options' => collect(Arr::get($data, 'options'))
-                ->map(fn ($option) => $this->optionFields()->addValues($option)->process()->values()->all())
+                ->map(fn ($option) => $this->optionFields()->addValues($option)->process()->values()->filter()->all())
                 ->all(),
         ];
     }
