@@ -19,4 +19,7 @@ export default defineConfig({
         svgLoader(),
         tailwindcss(),
     ],
+    server: {
+        hmr: false
+    }
 });

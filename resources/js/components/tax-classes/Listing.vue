@@ -1,40 +1,41 @@
 <template>
-    <data-list :rows="rows" :columns="columns">
-        <div class="card p-0">
+    <data-list :visible-columns="columns" :columns="columns" :rows="rows" v-slot="{ filteredRows: rows }">
+        <ui-panel>
             <data-list-table>
-                <template #cell-name="{ row: taxClass, index }">
+                <template #cell-name="{ row: taxClass }">
                     <a :href="taxClass.edit_url">{{ __(taxClass.name) }}</a>
                 </template>
-                <template #cell-handle="{ value: handle }">
-                    <span class="font-mono text-xs">{{ handle }}</span>
-                </template>
-                <template #actions="{ row: taxClass, index }">
-                    <dropdown-list>
-                        <dropdown-item :text="__('Edit')" :redirect="taxClass.edit_url" />
-                        <dropdown-item
-                            :text="__('Delete')"
-                            class="warning"
-                            @click="$refs[`deleter_${taxClass.id}`].confirm()"
-                        >
-                            <resource-deleter
-                                :ref="`deleter_${taxClass.id}`"
-                                :resource="taxClass"
-                                @deleted="removeRow(taxClass)"
-                            >
-                            </resource-deleter>
-                        </dropdown-item>
-                    </dropdown-list>
+                <template #actions="{ row: taxClass }">
+                    <Dropdown placement="left-start" class="me-2">
+                        <DropdownMenu>
+                            <DropdownItem :text="__('Edit')" icon="edit" :href="taxClass.edit_url" />
+                            <DropdownItem :text="__('Delete')" icon="trash" variant="destructive" @click="$refs[`deleter_${taxClass.id}`].confirm()" />
+                        </DropdownMenu>
+                    </Dropdown>
+
+                    <resource-deleter
+                        :ref="`deleter_${taxClass.id}`"
+                        :resource="taxClass"
+                        @deleted="removeRow(taxClass)"
+                    />
                 </template>
             </data-list-table>
-        </div>
+        </ui-panel>
     </data-list>
 </template>
 
 <script>
 import Listing from '@statamic/components/Listing.vue';
+import { Dropdown, DropdownMenu, DropdownItem } from '@statamic/ui';
 
 export default {
     mixins: [Listing],
+
+    components: {
+        Dropdown,
+        DropdownMenu,
+        DropdownItem,
+    },
 
     props: ['initialRows', 'initialColumns'],
 

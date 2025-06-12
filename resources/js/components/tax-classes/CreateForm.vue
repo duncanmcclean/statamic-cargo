@@ -5,7 +5,7 @@
         :icon="icon"
         @submit="submit"
     >
-        <ui-card-panel :heading="__('Collection Details')">
+        <ui-card-panel :heading="__('Tax Class Details')">
             <div class="space-y-8">
                 <ui-field
                     :label="__('Name')"

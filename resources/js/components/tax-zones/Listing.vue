@@ -1,37 +1,41 @@
 <template>
-    <data-list :rows="rows" :columns="columns">
-        <div class="card p-0">
+    <data-list :visible-columns="columns" :columns="columns" :rows="rows" v-slot="{ filteredRows: rows }">
+        <ui-panel>
             <data-list-table>
-                <template #cell-name="{ row: taxZone, index }">
+                <template #cell-name="{ row: taxZone }">
                     <a :href="taxZone.edit_url">{{ __(taxZone.name) }}</a>
                 </template>
-                <template #actions="{ row: taxZone, index }">
-                    <dropdown-list>
-                        <dropdown-item :text="__('Edit')" :redirect="taxZone.edit_url" />
-                        <dropdown-item
-                            :text="__('Delete')"
-                            class="warning"
-                            @click="$refs[`deleter_${taxZone.id}`].confirm()"
-                        >
-                            <resource-deleter
-                                :ref="`deleter_${taxZone.id}`"
-                                :resource="taxZone"
-                                @deleted="removeRow(taxZone)"
-                            >
-                            </resource-deleter>
-                        </dropdown-item>
-                    </dropdown-list>
+                <template #actions="{ row: taxZone }">
+                    <Dropdown placement="left-start" class="me-2">
+                        <DropdownMenu>
+                            <DropdownItem :text="__('Edit')" icon="edit" :href="taxZone.edit_url" />
+                            <DropdownItem :text="__('Delete')" icon="trash" variant="destructive" @click="$refs[`deleter_${taxZone.id}`].confirm()" />
+                        </DropdownMenu>
+                    </Dropdown>
+
+                    <resource-deleter
+                        :ref="`deleter_${taxZone.id}`"
+                        :resource="taxZone"
+                        @deleted="removeRow(taxZone)"
+                    />
                 </template>
             </data-list-table>
-        </div>
+        </ui-panel>
     </data-list>
 </template>
 
 <script>
 import Listing from '@statamic/components/Listing.vue';
+import { Dropdown, DropdownMenu, DropdownItem } from '@statamic/ui';
 
 export default {
     mixins: [Listing],
+
+    components: {
+        Dropdown,
+        DropdownMenu,
+        DropdownItem,
+    },
 
     props: ['initialRows', 'initialColumns'],
 
