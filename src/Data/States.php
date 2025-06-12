@@ -7,8 +7,12 @@ use Illuminate\Support\Facades\File;
 
 class States
 {
-    public static function byCountry(string $country): Collection
+    public static function byCountry(?string $country = null): Collection
     {
+        if (! $country) {
+            return collect([]);
+        }
+
         $states = (new self)->getStates();
 
         return collect($states[$country] ?? []);

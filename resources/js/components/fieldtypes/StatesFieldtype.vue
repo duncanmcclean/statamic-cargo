@@ -1,98 +1,76 @@
 <template>
-    <div class="flex">
-        <v-select
-            ref="input"
-            :input-id="fieldId"
-            class="flex-1"
-            append-to-body
-            searchable
-            close-on-select
-            clearable
-            :calculate-position="positionOptions"
-            :name="name"
-            :disabled="config.disabled || isReadOnly || (multiple && limitReached)"
-            :options="options"
-            :multiple="multiple"
-            :model-value="selectedOptions"
-            :get-option-key="(option) => option.value"
-            :loading="loading"
-            @update:model-value="vueSelectUpdated"
-            @focus="$emit('focus')"
-            @search:focus="$emit('focus')"
-            @search:blur="$emit('blur')"
-        >
-            <template #selected-option-container v-if="multiple"><i class="hidden"></i></template>
-            <template #search="{ events, attributes }" v-if="multiple">
-                <input
-                    :placeholder="__(config.placeholder)"
-                    class="vs__search"
-                    type="search"
-                    v-on="events"
-                    v-bind="attributes"
-                />
-            </template>
-            <template #option="{ label }">
-                <div v-html="label" />
-            </template>
-            <template #selected-option="{ label }">
-                <div v-html="label" />
-            </template>
-            <template #no-options>
-                <div
-                    class="px-4 py-2 text-sm text-gray-700 ltr:text-left rtl:text-right"
-                    v-text="__('No options to choose from.')"
-                />
-            </template>
-            <template #footer="{ deselect }" v-if="multiple">
-                <sortable-list
-                    item-class="sortable-item"
-                    handle-class="sortable-item"
-                    :model-value="value"
-                    :distance="5"
-                    :mirror="false"
-                    @update:model-value="update"
-                >
-                    <div class="vs__selected-options-outside flex flex-wrap">
-                        <span
-                            v-for="option in selectedOptions"
-                            :key="option.value"
-                            class="vs__selected sortable-item mt-2"
-                            :class="{ invalid: option.invalid }"
-                        >
-                            <div v-html="option.label" />
+    <Combobox
+        class="w-full"
+        searchable
+        :disabled="config.disabled || isReadOnly"
+        :max-selections="config.max_items"
+        :options="normalizedOptions"
+        :placeholder="__(config.placeholder)"
+        :multiple
+        :model-value="value"
+        @update:modelValue="comboboxUpdated"
+    >
+        <!--
+            This slot is *basically* exactly the same as the default selected-options slot in Combobox. We're just looping
+            through the State Fieldtype's selectedOptions state, rather than the one maintained by the Combobox component.
+        -->
+        <template #selected-options="{ disabled, getOptionLabel, getOptionValue, labelHtml, deselect }">
+            <sortable-list
+                v-if="multiple"
+                item-class="sortable-item"
+                handle-class="sortable-item"
+                :distance="5"
+                :mirror="false"
+                :disabled
+                :model-value="value"
+                @update:modelValue="comboboxUpdated"
+            >
+                <div class="vs__selected-options-outside flex flex-wrap gap-2 pt-3">
+                    <div
+                        v-for="option in selectedOptions"
+                        :key="getOptionValue(option)"
+                        class="vs__selected sortable-item cursor-grab"
+                    >
+                        <Badge size="lg" color="white">
+                            <div v-if="labelHtml" v-html="getOptionLabel(option)"></div>
+                            <div v-else>{{ __(getOptionLabel(option)) }}</div>
+
                             <button
-                                v-if="!readOnly"
-                                @click="deselect(option)"
+                                v-if="!disabled"
                                 type="button"
+                                class="-mx-3 cursor-pointer px-3 text-gray-400 hover:text-gray-700"
                                 :aria-label="__('Deselect option')"
-                                class="vs__deselect"
+                                @click="deselect(option.value)"
                             >
-                                <span>×</span>
+                                <span>&times;</span>
                             </button>
-                            <button v-else type="button" class="vs__deselect">
-                                <span class="text-gray-500">×</span>
+                            <button
+                                v-else
+                                type="button"
+                                class="-mx-3 cursor-pointer px-3 text-gray-400 hover:text-gray-700"
+                            >
+                                <span>&times;</span>
                             </button>
-                        </span>
+                        </Badge>
                     </div>
-                </sortable-list>
-            </template>
-        </v-select>
-        <div class="mt-3 text-xs ltr:ml-2 rtl:mr-2" :class="limitIndicatorColor" v-if="config.max_items > 1">
-            <span v-text="currentLength"></span>/<span v-text="config.max_items"></span>
-        </div>
-    </div>
+                </div>
+            </sortable-list>
+        </template>
+    </Combobox>
 </template>
 
 <script>
-import PositionsSelectOptions from '@statamic/mixins/PositionsSelectOptions.js';
+import { Fieldtype } from 'statamic';
 import HasInputOptions from '@statamic/components/fieldtypes/HasInputOptions.js';
 import SortableList from '@statamic/components/sortable/SortableList.vue';
-import { Fieldtype } from 'statamic';
+import { Badge, Combobox } from '@statamic/ui';
 
 export default {
-    mixins: [Fieldtype, HasInputOptions, PositionsSelectOptions],
+    mixins: [Fieldtype, HasInputOptions],
 
     components: {
+        Badge,
+        Combobox,
         SortableList,
     },
 
@@ -101,6 +79,7 @@ export default {
     data() {
         return {
             states: this.meta?.states,
+            selectedOptionData: this.meta.selectedOptions,
             loading: false,
         };
     },
@@ -110,16 +89,12 @@ export default {
             return this.store.values[this.config.from];
         },
 
-        options() {
-            return this.normalizeInputOptions(this.states?.map((state) => ({ value: state.code, label: state.name })));
-        },
-
-        configParameter() {
-            return utf8btoa(JSON.stringify(this.config));
-        },
-
         multiple() {
             return this.config.max_items !== 1;
+        },
+
+        normalizedOptions() {
+            return this.normalizeInputOptions(this.states?.map((state) => ({ value: state.code, label: state.name })));
         },
 
         selectedOptions() {
@@ -130,57 +105,44 @@ export default {
             }
 
             return selections.map((value) => {
-                let option = this.options.find((option) => option.value === value);
+                let option = this.selectedOptionData.find((option) => option.value === value);
 
                 if (!option) return { value, label: value };
 
-                return { value: option.value, label: option.label, invalid: false };
+                return { value: option.value, label: option.label, invalid: option.invalid };
             });
         },
 
-        limitReached() {
-            if (!this.config.max_items) return false;
+        replicatorPreview() {
+            if (!this.showFieldPreviews || !this.config.replicator_preview) return;
 
-            return this.currentLength >= this.config.max_items;
+            return this.selectedOptions.map((option) => option.label).join(', ');
         },
 
-        limitExceeded() {
-            if (!this.config.max_items) return false;
-
-            return this.currentLength > this.config.max_items;
-        },
-
-        currentLength() {
-            if (this.value) {
-                return typeof this.value == 'string' ? 1 : this.value.length;
-            }
-
-            return 0;
-        },
-
-        limitIndicatorColor() {
-            if (this.limitExceeded) {
-                return 'text-red-500';
-            } else if (this.limitReached) {
-                return 'text-green-600';
-            }
-
-            return 'text-gray';
+        configParameter() {
+            return utf8btoa(JSON.stringify(this.config));
         },
     },
 
     methods: {
-        vueSelectUpdated(value) {
-            if (this.multiple) {
-                this.update(value.map((v) => v.value));
-            } else {
-                if (value) {
-                    this.update(value.value);
-                    // this.states.push(value)
-                } else {
-                    this.update(null);
-                }
+        comboboxUpdated(value) {
+            this.update(value || null);
+
+            let selections = value || [];
+
+            if (typeof selections === 'string' || typeof selections === 'number') {
+                selections = [selections];
             }
+
+            selections.forEach((value) => {
+                if (this.selectedOptionData.find((option) => option.value === value)) {
+                    return;
+                }
+
+                let option = this.normalizedOptions.find((option) => option.value === value);
+
+                this.selectedOptionData.push(option);
+            });
         },
 
         request(params = {}) {
