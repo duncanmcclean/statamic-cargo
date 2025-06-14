@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Console\Commands\Migration;
+namespace DuncanMcClean\Cargo\Commands\Migration;
 
 use DuncanMcClean\Cargo\Facades\Discount;
 use Illuminate\Console\Command;
@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\File;
 use SplFileInfo;
 use Statamic\Console\RunsInPlease;
 use Statamic\Facades\YAML;
-
 use function Laravel\Prompts\progress;
 
 class MigrateDiscounts extends Command

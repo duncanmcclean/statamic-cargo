@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Console\Commands;
+namespace DuncanMcClean\Cargo\Commands;
 
 use DuncanMcClean\Cargo\Jobs\PurgeAbandonedCarts as PurgeAbandonedCartsJob;
 use Illuminate\Console\Command;

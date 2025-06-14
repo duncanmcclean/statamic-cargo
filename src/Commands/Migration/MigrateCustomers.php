@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Console\Commands\Migration;
+namespace DuncanMcClean\Cargo\Commands\Migration;
 
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Casts\Json;
@@ -15,7 +15,6 @@ use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
 use Statamic\Facades\User;
 use stdClass;
-
 use function Laravel\Prompts\progress;
 
 class MigrateCustomers extends Command

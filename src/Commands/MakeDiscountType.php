@@ -1,10 +1,10 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Console\Commands;
+namespace DuncanMcClean\Cargo\Commands;
 
 use Statamic\Console\RunsInPlease;
 
-class MakeShippingMethod extends GeneratorCommand
+class MakeDiscountType extends GeneratorCommand
 {
     use RunsInPlease;
 
@@ -13,28 +13,28 @@ class MakeShippingMethod extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'statamic:make:shipping-method';
+    protected $name = 'statamic:make:discount-type';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new shipping method';
+    protected $description = 'Create a new discount type';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'ShippingMethod';
+    protected $type = 'DiscountType';
 
     /**
      * The stub to be used for generating the class.
      *
      * @var string
      */
-    protected $stub = 'shipping-method.php.stub';
+    protected $stub = 'discount-type.php.stub';
 
     /**
      * Execute the console command.

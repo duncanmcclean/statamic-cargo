@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Console\Commands\Concerns;
+namespace DuncanMcClean\Cargo\Commands\Concerns;
 
 use Illuminate\Support\Facades\File;
 use Statamic\Support\Str;

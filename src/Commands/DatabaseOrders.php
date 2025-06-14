@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Console\Commands;
+namespace DuncanMcClean\Cargo\Commands;
 
 use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
 use DuncanMcClean\Cargo\Customers\GuestCustomer;
@@ -11,7 +11,6 @@ use Illuminate\Support\Collection;
 use Statamic\Console\RunsInPlease;
 use Statamic\Statamic;
 use Stillat\Proteus\Support\Facades\ConfigWriter;
-
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\progress;
 

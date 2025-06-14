@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Console\Commands;
+namespace DuncanMcClean\Cargo\Commands;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart as CartContract;
 use DuncanMcClean\Cargo\Customers\GuestCustomer;
@@ -11,7 +11,6 @@ use Illuminate\Support\Collection;
 use Statamic\Console\RunsInPlease;
 use Statamic\Statamic;
 use Stillat\Proteus\Support\Facades\ConfigWriter;
-
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\progress;
 
@@ -136,8 +135,6 @@ class DatabaseCarts extends Command
         $progress->finish();
 
         $this->components->info('Orders imported successfully.');
-
-        return $this;
 
         return $this;
     }

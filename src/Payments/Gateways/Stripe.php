@@ -8,7 +8,6 @@ use DuncanMcClean\Cargo\Contracts\Orders\Order;
 use DuncanMcClean\Cargo\Facades;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Support\Money;
-use DuncanMcClean\Cargo\Support\QueuedClosure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
@@ -138,7 +137,7 @@ class Stripe extends PaymentGateway
 
             // We're queuing this logic so that we can release the job and retry later if
             // the order hasn't been created yet.
-            QueuedClosure::dispatch(function ($job) use ($paymentIntent): void {
+            dispatch(function ($job) use ($paymentIntent): void {
                 $order = Facades\Order::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
 
                 if (! $order) {
@@ -149,7 +148,7 @@ class Stripe extends PaymentGateway
 
                 $this->__construct();
                 $this->capture($order);
-            });
+            })->delay(3);
         }
 
         if ($request->type === Event::PAYMENT_INTENT_SUCCEEDED) {
@@ -157,7 +156,7 @@ class Stripe extends PaymentGateway
 
             // We're queuing this logic so that we can release the job and retry later if
             // the order hasn't been created yet.
-            QueuedClosure::dispatch(function ($job) use ($paymentIntent): void {
+            dispatch(function ($job) use ($paymentIntent): void {
                 $order = Facades\Order::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
 
                 if (! $order) {
@@ -169,7 +168,7 @@ class Stripe extends PaymentGateway
                 if ($order->status() === OrderStatus::PaymentPending) {
                     $order->status(OrderStatus::PaymentReceived)->save();
                 }
-            });
+            })->delay(3);
         }
 
         if ($request->type === Event::CHARGE_REFUNDED) {

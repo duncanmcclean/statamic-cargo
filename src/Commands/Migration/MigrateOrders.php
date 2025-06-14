@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Console\Commands\Migration;
+namespace DuncanMcClean\Cargo\Commands\Migration;
 
 use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
 use DuncanMcClean\Cargo\Facades\Discount;
@@ -19,12 +19,11 @@ use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
 use Statamic\Statamic;
 use stdClass;
-
 use function Laravel\Prompts\progress;
 
 class MigrateOrders extends Command
 {
-    use Concerns\MapsAddresses, Concerns\MapsCustomData, Concerns\MapsLineItems, Concerns\MapsOrderDates, RunsInPlease;
+    use \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsAddresses, \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsCustomData, \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsLineItems, \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsOrderDates, RunsInPlease;
 
     protected $signature = 'statamic:cargo:migrate:orders';
 

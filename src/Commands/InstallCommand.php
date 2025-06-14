@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Console\Commands;
+namespace DuncanMcClean\Cargo\Commands;
 
 use DuncanMcClean\Cargo\Data\Currencies;
 use DuncanMcClean\Cargo\Facades\TaxClass;
@@ -12,7 +12,6 @@ use Statamic\Facades\Collection;
 use Statamic\Facades\Site;
 use Statamic\Support\Str;
 use Stillat\Proteus\Support\Facades\ConfigWriter;
-
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\search;
 use function Laravel\Prompts\select;

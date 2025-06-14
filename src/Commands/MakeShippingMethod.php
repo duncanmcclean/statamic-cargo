@@ -1,10 +1,10 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Console\Commands;
+namespace DuncanMcClean\Cargo\Commands;
 
 use Statamic\Console\RunsInPlease;
 
-class MakePaymentGateway extends GeneratorCommand
+class MakeShippingMethod extends GeneratorCommand
 {
     use RunsInPlease;
 
@@ -13,28 +13,28 @@ class MakePaymentGateway extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'statamic:make:payment-gateway';
+    protected $name = 'statamic:make:shipping-method';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new payment gateway';
+    protected $description = 'Create a new shipping method';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'PaymentGateway';
+    protected $type = 'ShippingMethod';
 
     /**
      * The stub to be used for generating the class.
      *
      * @var string
      */
-    protected $stub = 'payment-gateway.php.stub';
+    protected $stub = 'shipping-method.php.stub';
 
     /**
      * Execute the console command.
