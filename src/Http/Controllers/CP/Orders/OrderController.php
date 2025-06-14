@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Http\Controllers\CP\Orders;
 
+use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Http\Resources\CP\Orders\Order as OrderResource;
@@ -90,28 +91,31 @@ class OrderController extends CpController
 
     public function edit(Request $request, $order)
     {
-        // todo: slim down whats returned here (maybe, if it doesn't break inline publish forms which need fixing up anyway)
         $this->authorize('edit', $order);
 
         $blueprint = Order::blueprint();
         $blueprint->setParent($order);
 
-        [$values, $meta] = $this->extractFromFields($order, $blueprint);
+        [$values, $meta, $extraValues] = $this->extractFromFields($order, $blueprint);
 
         $viewData = [
+            'blueprint' => $blueprint->toPublishArray(),
+            'icon' => Cargo::svg('orders'),
             'title' => __('Order #:number', ['number' => $order->orderNumber()]),
             'actions' => [
                 'save' => $order->updateUrl(),
                 'editBlueprint' => cp_route('blueprints.edit', ['cargo', 'order']),
+                'packingSlip' => cp_route('cargo.orders.packing-slip', $order->id()),
             ],
             'values' => array_merge($values, [
                 'id' => $order->id(),
                 'status' => $order->status()->value,
             ]),
+            'extraValues' => $extraValues,
             'meta' => $meta,
-            'blueprint' => $blueprint->toPublishArray(),
             'readOnly' => User::current()->cant('update', $order),
             'itemActions' => Action::for($order, ['view' => 'form']),
+            'itemActionUrl' => cp_route('cargo.orders.actions.run'),
             'canEditBlueprint' => User::current()->can('configure fields'),
         ];
 
@@ -156,13 +160,16 @@ class OrderController extends CpController
 
         $saved = $order->save();
 
-        [$values] = $this->extractFromFields($order, $blueprint);
+        [$values, $meta, $extraValues] = $this->extractFromFields($order, $blueprint);
 
         return [
-//            'data' => array_merge((new OrderResource($order->fresh()))->resolve()['data'], [
-//                'values' => $values,
-//            ]),
-//            'saved' => $saved,
+            'data' => array_merge_recursive((new OrderResource($order->fresh()))->resolve(), [
+                'data' => [
+                    'values' => $values,
+                    'extraValues' => $extraValues,
+                ],
+            ]),
+            'saved' => $saved,
         ];
     }
 }

@@ -20,13 +20,16 @@ class Orders extends Relationship
     protected $canSearch = false;
     protected $formComponent = 'order-publish-form';
     protected $formComponentProps = [
-        'initialActions' => 'actions',
+        'blueprint' => 'blueprint',
         'initialTitle' => 'title',
-        'initialReference' => 'reference',
-        'initialFieldset' => 'blueprint',
         'initialValues' => 'values',
+        'initialExtraValues' => 'extraValues',
         'initialMeta' => 'meta',
         'initialReadOnly' => 'readOnly',
+        'actions' => 'actions',
+        'itemActions' => 'itemActions',
+        'itemActionUrl' => 'itemActionUrl',
+        'canEditBlueprint' => 'canEditBlueprint',
     ];
     protected $activeFilterBadges;
 

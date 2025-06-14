@@ -131,7 +131,14 @@ class DiscountController extends CpController
     {
         $this->authorize('update', $discount);
 
-        $values = PublishForm::make(Discount::blueprint())->submit($request->values);
+        $fields = Discount::blueprint()
+            ->fields()
+            ->setParent($this->parent ?? null)
+            ->addValues($request->values);
+
+        $fields->validator()->withReplacements(['handle' => $discount->handle()])->validate();
+
+        $values = $fields->process()->values()->all();
 
         $discount
             ->name(Arr::pull($values, 'name'))

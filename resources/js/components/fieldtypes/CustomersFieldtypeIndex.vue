@@ -1,31 +1,28 @@
 <template>
     <div>
-        <div class="flex items-center">
-            <div class="flex-1">
-                <div class="truncate">
-                    <a
-                        v-if="value.type === 'user' && value.viewable"
-                        :href="value.edit_url"
-                        target="_blank"
-                        class="truncate"
-                    >
-                        {{ value.name }}
-                    </a>
-                    <a v-else-if="value.type === 'guest'" class="truncate">
-                        {{ value.name }}
-                        <div class="status-index-field status-draft ml-2 select-none">{{ __('Guest') }}</div>
-                    </a>
-                    <div v-else v-text="value.name" />
-                </div>
-            </div>
-        </div>
+        <a
+            v-if="value.type === 'user' && value.viewable"
+            :href="value.edit_url"
+            target="_blank"
+            class="truncate"
+        >
+            {{ value.name }}
+        </a>
+        <a v-else-if="value.type === 'guest'" class="truncate">
+            {{ value.name }}
+            <Badge pill size="sm" :text="__('Guest')" />
+        </a>
+        <div v-else v-text="value.name" />
     </div>
 </template>
 
 <script>
 import { IndexFieldtype } from 'statamic';
+import { Badge } from '@statamic/ui';
 
 export default {
     mixins: [IndexFieldtype],
+
+    components: { Badge },
 };
 </script>

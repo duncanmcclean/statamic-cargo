@@ -5,28 +5,28 @@ import { Header, Button, PublishContainer, PublishTabs, Panel, PanelHeader, Head
 import OrderStatus from './OrderStatus.vue';
 const { Pipeline, Request, BeforeSaveHooks, AfterSaveHooks } = SavePipeline;
 import ItemActions from '@statamic/components/actions/ItemActions.vue';
-
-// todo: implement actions
-// todo: implement read only
+import resetValuesFromResponse from '@statamic/util/resetValuesFromResponse.js';
 
 const props = defineProps({
     blueprint: Object,
     icon: String,
     initialTitle: String,
     initialValues: Object,
+    initialExtraValues: Object,
     initialMeta: Object,
     initialReadOnly: Boolean,
     actions: Object,
     itemActions: Array,
     itemActionUrl: String,
-    packingSlipUrl: String,
     canEditBlueprint: Boolean,
 });
 
 const container = useTemplateRef('container');
 const title = ref(props.initialTitle);
 const values = ref(props.initialValues);
+const extraValues = ref(props.initialExtraValues);
 const meta = ref(props.initialMeta);
+const readOnly = ref(props.initialReadOnly);
 const errors = ref({});
 const saving = ref(false);
 
@@ -64,7 +64,10 @@ function actionCompleted(successful = null, response) {
     }
 
     if (response.data) {
-        props.itemActions.value = response.data.itemActions; // todo: does this need to be initial?
+        props.itemActions.value = response.data.data.itemActions;
+
+        container.value.store.setValues(resetValuesFromResponse(response.data.values, container.value.store));
+        container.value.store.setExtraValues(response.data.extraValues);
     }
 }
 </script>
@@ -79,14 +82,14 @@ function actionCompleted(successful = null, response) {
             :is-dirty="isDirty"
             @started="actionStarted"
             @completed="actionCompleted"
-            v-slot="{ actions }"
+            v-slot="{ actions: itemActions }"
         >
             <Dropdown>
                 <template #trigger>
                     <Button icon="ui/dots" variant="ghost" />
                 </template>
                 <DropdownMenu>
-                    <DropdownItem :text="__('Edit Blueprint')" icon="blueprint-edit" v-if="canEditBlueprint" :href="actions.editBlueprint" />
+                    <DropdownItem v-if="canEditBlueprint" :text="__('Edit Blueprint')" icon="blueprint-edit" :href="actions.editBlueprint" />
                     <DropdownSeparator v-if="canEditBlueprint && itemActions.length" />
                     <DropdownItem
                         v-for="action in itemActions"
@@ -108,8 +111,10 @@ function actionCompleted(successful = null, response) {
         name="order"
         :blueprint="blueprint"
         :values="values"
+        :extra-values="extraValues"
         :meta="meta"
         :errors="errors"
+        :read-only="readOnly"
         @updated="values = $event"
     >
         <PublishTabs>
@@ -122,7 +127,7 @@ function actionCompleted(successful = null, response) {
                         <OrderStatus
                             :order-id="values.id"
                             :statuses="meta.status.options"
-                            :packing-slip-url="packingSlipUrl"
+                            :packing-slip-url="actions.packingSlip"
                             :model-value="values.status"
                             :tracking-number="values.tracking_number"
                             @update:modelValue="values.status = $event"
