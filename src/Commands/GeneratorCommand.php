@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Console\Commands;
+namespace DuncanMcClean\Cargo\Commands;
 
 use Statamic\Console\Commands\GeneratorCommand as StatamicGeneratorCommand;
 use Statamic\Support\Str;

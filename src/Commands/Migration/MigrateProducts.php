@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Console\Commands\Migration;
+namespace DuncanMcClean\Cargo\Commands\Migration;
 
 use Illuminate\Console\Command;
 use Statamic\Console\RunsInPlease;

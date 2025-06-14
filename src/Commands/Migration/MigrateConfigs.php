@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Console\Commands\Migration;
+namespace DuncanMcClean\Cargo\Commands\Migration;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -10,7 +10,6 @@ use Statamic\Facades\Entry;
 use Statamic\Facades\Role;
 use Statamic\Facades\Site;
 use Stillat\Proteus\Support\Facades\ConfigWriter;
-
 use function Laravel\Prompts\confirm;
 
 class MigrateConfigs extends Command

@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Console\Commands\Migration;
+namespace DuncanMcClean\Cargo\Commands\Migration;
 
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use DuncanMcClean\Cargo\Facades\TaxZone;

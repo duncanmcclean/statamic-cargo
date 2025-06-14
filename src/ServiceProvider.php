@@ -34,14 +34,14 @@ class ServiceProvider extends AddonServiceProvider
     protected $viewNamespace = 'cargo';
 
     protected $commands = [
-        Console\Commands\Migration\Migrate::class,
-        Console\Commands\Migration\MigrateCarts::class,
-        Console\Commands\Migration\MigrateConfigs::class,
-        Console\Commands\Migration\MigrateCustomers::class,
-        Console\Commands\Migration\MigrateDiscounts::class,
-        Console\Commands\Migration\MigrateOrders::class,
-        Console\Commands\Migration\MigrateProducts::class,
-        Console\Commands\Migration\MigrateTaxes::class,
+        Commands\Migration\Migrate::class,
+        Commands\Migration\MigrateCarts::class,
+        Commands\Migration\MigrateConfigs::class,
+        Commands\Migration\MigrateCustomers::class,
+        Commands\Migration\MigrateDiscounts::class,
+        Commands\Migration\MigrateOrders::class,
+        Commands\Migration\MigrateProducts::class,
+        Commands\Migration\MigrateTaxes::class,
     ];
 
     protected $policies = [

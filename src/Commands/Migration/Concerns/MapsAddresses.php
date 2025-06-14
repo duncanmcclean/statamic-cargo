@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Console\Commands\Migration\Concerns;
+namespace DuncanMcClean\Cargo\Commands\Migration\Concerns;
 
 use DuncanMcClean\Cargo\Data\States;
 use Illuminate\Support\Collection;
