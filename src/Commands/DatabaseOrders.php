@@ -16,7 +16,7 @@ use function Laravel\Prompts\progress;
 
 class DatabaseOrders extends Command
 {
-    use \DuncanMcClean\Cargo\Commands\Concerns\PublishesMigrations, RunsInPlease;
+    use Concerns\PublishesMigrations, RunsInPlease;
 
     protected $signature = 'statamic:cargo:database-orders
         { --import : Whether existing data should be imported }';

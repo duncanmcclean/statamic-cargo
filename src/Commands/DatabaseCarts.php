@@ -16,7 +16,7 @@ use function Laravel\Prompts\progress;
 
 class DatabaseCarts extends Command
 {
-    use \DuncanMcClean\Cargo\Commands\Concerns\PublishesMigrations, RunsInPlease;
+    use Concerns\PublishesMigrations, RunsInPlease;
 
     protected $signature = 'statamic:cargo:database-carts
         { --import : Whether existing data should be imported }';
@@ -135,8 +135,6 @@ class DatabaseCarts extends Command
         $progress->finish();
 
         $this->components->info('Orders imported successfully.');
-
-        return $this;
 
         return $this;
     }
