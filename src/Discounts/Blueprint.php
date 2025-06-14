@@ -126,7 +126,6 @@ class Blueprint
                                                         return [$rule];
                                                     })
                                                     ->values()
-                                                    ->ray()
                                                     ->all(),
                                             ],
                                         ])->all(),
