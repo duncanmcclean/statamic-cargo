@@ -3,6 +3,7 @@
 namespace Tests\Orders;
 
 use DuncanMcClean\Cargo\Facades\Order;
+use DuncanMcClean\Cargo\Orders\OrderStatus;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Role;
@@ -29,11 +30,14 @@ class UpdateOrdersTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->patch(cp_route('cargo.orders.update', $order->id()), [
-                'shipping_line_1' => '123 Fake Street',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA1 1KE',
-                'shipping_country' => 'United Kingdom',
-                'grand_total' => 1000, // This should be ignored.
+                'values' => [
+                    'shipping_line_1' => '123 Fake Street',
+                    'shipping_city' => 'Fakeville',
+                    'shipping_postcode' => 'FA1 1KE',
+                    'shipping_country' => 'United Kingdom',
+                    'status' => 'shipped',
+                    'grand_total' => 1000, // This should be ignored.
+                ],
             ])
             ->assertOk()
             ->assertSee('Order #1002');
@@ -44,6 +48,7 @@ class UpdateOrdersTest extends TestCase
         $this->assertEquals($order->get('shipping_city'), 'Fakeville');
         $this->assertEquals($order->get('shipping_postcode'), 'FA1 1KE');
         $this->assertEquals($order->get('shipping_country'), 'United Kingdom');
+        $this->assertEquals($order->status(), OrderStatus::Shipped);
         $this->assertEquals($order->grandTotal(), 0);
     }
 
