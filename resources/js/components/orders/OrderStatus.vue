@@ -42,7 +42,7 @@ function update() {
 
 <template>
     <div v-if="!updating">
-        <div class="flex justify-between items-center">
+        <div class="flex items-center justify-between">
             <Badge :text="statusLabel" size="lg" flat :color="statusBadgeColour" />
             <Button :text="__('Change')" size="sm" @click="updating = true" />
         </div>
@@ -56,11 +56,7 @@ function update() {
 
     <div v-else class="publish-fields">
         <Field label="Status">
-            <Select
-                class="w-full"
-                :options="statuses"
-                v-model:modelValue="status"
-            />
+            <Select class="w-full" :options="statuses" v-model:modelValue="status" />
         </Field>
 
         <Field v-if="status === 'shipped'" label="Tracking Number">
@@ -71,7 +67,7 @@ function update() {
             <Description :text="__('Any payment will need to be refunded manually.')" />
         </div>
 
-        <div class="flex items-center justify-between w-full">
+        <div class="flex w-full items-center justify-between">
             <Button :text="__('Update')" @click="update" />
 
             <Button

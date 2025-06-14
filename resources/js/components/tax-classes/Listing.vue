@@ -9,7 +9,12 @@
                     <Dropdown placement="left-start" class="me-3">
                         <DropdownMenu>
                             <DropdownItem :text="__('Edit')" icon="edit" :href="taxClass.edit_url" />
-                            <DropdownItem :text="__('Delete')" icon="trash" variant="destructive" @click="$refs[`deleter_${taxClass.id}`].confirm()" />
+                            <DropdownItem
+                                :text="__('Delete')"
+                                icon="trash"
+                                variant="destructive"
+                                @click="$refs[`deleter_${taxClass.id}`].confirm()"
+                            />
                         </DropdownMenu>
                     </Dropdown>
 

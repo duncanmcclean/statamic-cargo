@@ -1,11 +1,6 @@
 <template>
     <div>
-        <a
-            v-if="value.type === 'user' && value.viewable"
-            :href="value.edit_url"
-            target="_blank"
-            class="truncate"
-        >
+        <a v-if="value.type === 'user' && value.viewable" :href="value.edit_url" target="_blank" class="truncate">
             {{ value.name }}
         </a>
         <a v-else-if="value.type === 'guest'" class="truncate">

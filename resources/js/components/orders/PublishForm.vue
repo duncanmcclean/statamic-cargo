@@ -1,7 +1,20 @@
 <script setup>
 import { computed, ref, useTemplateRef } from 'vue';
 import { SavePipeline } from 'statamic';
-import { Header, Button, PublishContainer, PublishTabs, Panel, PanelHeader, Heading, Card, Dropdown, DropdownMenu, DropdownItem, DropdownSeparator } from '@statamic/ui';
+import {
+    Header,
+    Button,
+    PublishContainer,
+    PublishTabs,
+    Panel,
+    PanelHeader,
+    Heading,
+    Card,
+    Dropdown,
+    DropdownMenu,
+    DropdownItem,
+    DropdownSeparator,
+} from '@statamic/ui';
 import OrderStatus from './OrderStatus.vue';
 const { Pipeline, Request, BeforeSaveHooks, AfterSaveHooks } = SavePipeline;
 import ItemActions from '@statamic/components/actions/ItemActions.vue';
@@ -89,7 +102,12 @@ function actionCompleted(successful = null, response) {
                     <Button icon="ui/dots" variant="ghost" />
                 </template>
                 <DropdownMenu>
-                    <DropdownItem v-if="canEditBlueprint" :text="__('Edit Blueprint')" icon="blueprint-edit" :href="actions.editBlueprint" />
+                    <DropdownItem
+                        v-if="canEditBlueprint"
+                        :text="__('Edit Blueprint')"
+                        icon="blueprint-edit"
+                        :href="actions.editBlueprint"
+                    />
                     <DropdownSeparator v-if="canEditBlueprint && itemActions.length" />
                     <DropdownItem
                         v-for="action in itemActions"

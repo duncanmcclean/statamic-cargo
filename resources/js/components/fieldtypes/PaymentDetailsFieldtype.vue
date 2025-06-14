@@ -6,11 +6,7 @@
 
         <div v-else>
             <div class="flex items-center">
-                <SvgIcon
-                    v-if="value.logo"
-                    :name="value.logo"
-                    class="mr-3 h-10 w-10"
-                />
+                <SvgIcon v-if="value.logo" :name="value.logo" class="mr-3 h-10 w-10" />
 
                 <div class="flex flex-col space-y-1">
                     <Heading
@@ -21,7 +17,7 @@
                 </div>
             </div>
 
-            <hr v-if="value.details" class="my-4">
+            <hr v-if="value.details" class="my-4" />
 
             <div v-if="value.details">
                 <ul class="list-none space-y-2">

@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\URL;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Asset;
 use Statamic\Facades\AssetContainer;
-use Statamic\Facades\Blink;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
@@ -30,7 +29,7 @@ class ProductDownloadTest extends TestCase
         AssetContainer::make()->handle('assets')->disk('local')->save();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         Collection::find('products')?->entryBlueprint()?->delete();
 

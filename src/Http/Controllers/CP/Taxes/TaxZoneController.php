@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Statamic\CP\Column;
 use Statamic\CP\PublishForm;
-use Statamic\Facades\User;
 use Statamic\Http\Controllers\CP\CpController;
 use Statamic\Support\Arr;
 

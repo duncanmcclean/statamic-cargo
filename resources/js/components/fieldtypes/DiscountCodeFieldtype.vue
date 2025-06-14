@@ -1,6 +1,6 @@
 <template>
     <Input
-        class="uppercase font-mono"
+        class="font-mono uppercase"
         :focus="true"
         :autoselect="true"
         input-type="text"

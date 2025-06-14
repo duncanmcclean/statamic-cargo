@@ -26,7 +26,7 @@
                     <TableCell />
                     <TableCell />
                     <TableCell>
-                        <strong class="block font-medium mb-1">{{ __('Discount') }}</strong>
+                        <strong class="mb-1 block font-medium">{{ __('Discount') }}</strong>
                         <Description :text="discount.description" />
                     </TableCell>
                     <TableCell class="text-right">-{{ discount.amount }}</TableCell>
@@ -35,7 +35,7 @@
                     <TableCell />
                     <TableCell />
                     <TableCell>
-                        <strong class="block font-medium mb-1">{{ __('Shipping') }}</strong>
+                        <strong class="mb-1 block font-medium">{{ __('Shipping') }}</strong>
                         <Description :text="value.shipping.name" />
                     </TableCell>
                     <TableCell class="text-right">{{ value.shipping.price }}</TableCell>
@@ -44,7 +44,7 @@
                     <TableCell />
                     <TableCell />
                     <TableCell>
-                        <strong class="block font-medium mb-1">{{ __('Taxes') }}</strong>
+                        <strong class="mb-1 block font-medium">{{ __('Taxes') }}</strong>
                         <Description
                             v-for="item in value.taxes.breakdown"
                             class="mb-1"

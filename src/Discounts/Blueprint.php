@@ -4,7 +4,6 @@ namespace DuncanMcClean\Cargo\Discounts;
 
 use DuncanMcClean\Cargo\Discounts\Types\DiscountType;
 use DuncanMcClean\Cargo\Facades;
-use DuncanMcClean\Cargo\Rules\UniqueDiscountValue;
 use Statamic\Fields\Blueprint as FieldsBlueprint;
 
 class Blueprint

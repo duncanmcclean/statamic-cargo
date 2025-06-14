@@ -1,7 +1,9 @@
 <template>
-    <div class="relationship-input @container w-full h-full">
+    <div class="relationship-input @container h-full w-full">
         <div>
-            <div class="shadow-ui-sm relative z-2 flex w-full h-full items-center gap-2 rounded-lg border border-gray-200 bg-white px-1.5 py-1.5 mb-1.5 last:mb-0 text-base dark:border-x-0 dark:border-t-0 dark:border-white/15 dark:bg-gray-900 dark:inset-shadow-2xs dark:inset-shadow-black related-item">
+            <div
+                class="shadow-ui-sm related-item relative z-2 mb-1.5 flex h-full w-full items-center gap-2 rounded-lg border border-gray-200 bg-white px-1.5 py-1.5 text-base last:mb-0 dark:border-x-0 dark:border-t-0 dark:border-white/15 dark:bg-gray-900 dark:inset-shadow-2xs dark:inset-shadow-black"
+            >
                 <div class="flex flex-1 items-center p-1">
                     <Heading v-if="value.invalid">
                         <Tooltip :text="__('An item with this ID could not be found')" :delay="1000">
@@ -39,7 +41,7 @@
                                 v-if="
                                     (value.type === 'user' && value.editable) ||
                                     (value.type === 'guest' && meta.canCreateUsers)
-                               "
+                                "
                             >
                                 <DropdownMenu>
                                     <DropdownItem

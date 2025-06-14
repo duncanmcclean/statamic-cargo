@@ -1,11 +1,13 @@
 @use(DuncanMcClean\Cargo\Cargo)
-@php use function Statamic\trans as __; @endphp
+@php
+    use function Statamic\trans as __;
+@endphp
 
 @extends('statamic::layout')
 @section('title', __('Tax Classes'))
 
 @section('content')
-    @unless($taxClasses->isEmpty())
+    @unless ($taxClasses->isEmpty())
         <ui-header title="{{ __('Tax Classes') }}" icon="{{ Cargo::svg('tax-classes') }}">
             <ui-button
                 href="{{ cp_route('cargo.tax-classes.create') }}"

@@ -9,7 +9,7 @@
 
 <script>
 import { Fieldtype } from 'statamic';
-import { Input } from '@statamic/ui'
+import { Input } from '@statamic/ui';
 
 export default {
     name: 'money-fieldtype',
@@ -21,7 +21,7 @@ export default {
     data() {
         return {
             symbol: this.meta.symbol,
-        }
+        };
     },
-}
+};
 </script>
