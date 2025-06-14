@@ -15,7 +15,7 @@ export default defineConfig({
             input: ['resources/js/cp.js', 'resources/css/cp.css'],
         }),
         vue(),
-        viteExternalsPlugin({ vue: 'Vue', pinia: 'Pinia' }),
+        viteExternalsPlugin({ vue: 'Vue', pinia: 'Pinia', 'vue-demi': 'Vue' }),
         svgLoader(),
         tailwindcss(),
     ],
