@@ -6,7 +6,7 @@
                     <a :href="taxZone.edit_url">{{ __(taxZone.name) }}</a>
                 </template>
                 <template #actions="{ row: taxZone }">
-                    <Dropdown placement="left-start" class="me-2">
+                    <Dropdown placement="left-start" class="me-3">
                         <DropdownMenu>
                             <DropdownItem :text="__('Edit')" icon="edit" :href="taxZone.edit_url" />
                             <DropdownItem :text="__('Delete')" icon="trash" variant="destructive" @click="$refs[`deleter_${taxZone.id}`].confirm()" />
