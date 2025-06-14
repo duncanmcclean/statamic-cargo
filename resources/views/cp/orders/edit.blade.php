@@ -7,7 +7,7 @@
 @section('content')
     <order-publish-form
         :blueprint="{{ json_encode($blueprint) }}"
-        icon="{{ $svg }}"
+        icon="{{ $icon }}"
         initial-title="{{ $title }}"
         :initial-values="{{ json_encode($values) }}"
         :initial-extra-values="{{ json_encode($extraValues) }}"
