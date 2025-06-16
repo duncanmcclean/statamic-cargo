@@ -1,5 +1,5 @@
 ---
-title: "JSON API: Overview"
+title: "JSON API: Introduction"
 ---
 When the `<form>` tag just doesn't cut it anymore, Cargo provides a JSON API scoped to the customer's cart.
 

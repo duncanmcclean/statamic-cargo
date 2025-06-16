@@ -1,5 +1,5 @@
 ---
-title: "Checkout: Overview"
+title: "Checkout: Introduction"
 ---
 It's all well and good having a website listing your products, but if your customers can't actually buy anything, then what's the point?
 

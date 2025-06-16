@@ -1,7 +1,6 @@
 ---
 title: Events
 ---
-
 ## Overview
 Like Statamic, Cargo dispatches numerous events which you can listen for in your app code in order to trigger API calls or run custom logic.
 
