@@ -45,8 +45,6 @@ class InstallCommand extends Command
             return;
         }
 
-        return;
-
         $this
             ->publishConfig()
             ->configureSiteCurrencies()
