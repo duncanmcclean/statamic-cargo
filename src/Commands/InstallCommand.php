@@ -27,13 +27,16 @@ class InstallCommand extends Command
 
     public function handle(): void
     {
-        $this->output->write(PHP_EOL.'<fg=#02747E;options=bold>
-     ______                     
-    / ____/___ __________ _____ 
-   / /   / __ `/ ___/ __ `/ __ \
-  / /___/ /_/ / /  / /_/ / /_/ /
-  \____/\__,_/_/   \__, /\____/ 
-                  /____/        
+        $this->output->write(PHP_EOL.'<fg=#00A63E;options=bold>
+  /$$$$$$$  /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$ 
+ /$$_____/ |____  $$ /$$__  $$ /$$__  $$ /$$__  $$
+| $$        /$$$$$$$| $$  \__/| $$  \ $$| $$  \ $$
+| $$       /$$__  $$| $$      | $$  | $$| $$  | $$
+|  $$$$$$$|  $$$$$$$| $$      |  $$$$$$$|  $$$$$$/
+ \_______/ \_______/|__/       \____  $$ \______/ 
+                               /$$  \ $$          
+                              |  $$$$$$/          
+                               \______/           
                 </>'.PHP_EOL);
 
         if (! $this->input->isInteractive()) {
@@ -41,6 +44,8 @@ class InstallCommand extends Command
 
             return;
         }
+
+        return;
 
         $this
             ->publishConfig()
