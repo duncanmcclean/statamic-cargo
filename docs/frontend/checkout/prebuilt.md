@@ -41,11 +41,22 @@ If you're curious, here's a brief rundown of how the pre-built Checkout page wor
 	* We're not using the equivalent Antlers tags for this as the available options could change from when the page is loaded vs when the customer is presented with the options.
 		* For example: some shipping options may only be available for certain areas, but when the page is loaded, we don't have the customer's address yet so we need to fetch them later.
 
-## Customising
-### Adding additional steps
-You can find the existing checkout steps in `resources/views/checkout/index.antlers.html`. 
+### Customization
+#### Header / Logo
+You can customize the header, including the logo, by editing the `resources/views/checkout/_header.antlers.html` view:
 
-To add your own step, simply [create a partial](https://statamic.dev/tags/partial), and reference it from within the `index` template. 
+```antlers
+<header class="p-8 md:pb-0 flex justify-center md:justify-start">
+    <a href="{{ link to="/" }}" target="_blank" alt="{{ site:name }}">
+        <img src="{{ asset:src src="images/logo.svg" }}" alt="{{ site:name }}" class="h-12"> {{# [tl! add] #}}
+    </a>
+</header>
+```
+
+#### Adding additional steps
+You can find the existing checkout steps in `resources/views/checkout/index.antlers.html`.
+
+To add your own step, simply [create a partial](https://statamic.dev/tags/partial), and reference it from within the `index` template.
 
 All steps should be wrapped in the provided `step` partial, like this:
 
@@ -72,7 +83,7 @@ You should make sure to pass a `title` parameter to the partial, then provide th
 
 By default, all steps are wrapped in the `{{ cart:update }}` tag, meaning whenever you submit the step, it'll make an AJAX request and update Alpine's `cart` object (you can read more about this under [How it works](#how-it-works)). You can provide the `formless` parameter to opt-out of this behaviour.
 
-### Using your own Tailwind CSS build
+#### Using your own Tailwind CSS build
 When you publish the pre-built checkout flow, a compiled `.css` file will be copied into your site's `public` directory.
 
 To make changes to the design of the checkout page, you should integrate the styles into your own Tailwind CSS build, rather than using the pre-built one.
@@ -99,8 +110,8 @@ Next, import the plugin and add the required colours to your Tailwind CSS config
 @plugin '@tailwindcss/forms'; /* [tl! highlight] */
 
 @theme { /* [tl! highlight:3] */
-    --color-primary: #041B34;
-    --color-secondary: #02747E;
+	--color-brand: oklch(62.7% 0.194 149.214);
+	--color-secondary: oklch(0.398438 0.090625 160);
 }
 ```
 ::tab tailwind3
@@ -111,8 +122,8 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: { // [tl! highlight:3]
-				primary: '#041B34',
-				secondary: '#02747E',
+				brand: 'oklch(62.7% 0.194 149.214)',
+				secondary: 'oklch(0.398438 0.090625 160)',
 			},
 		},
 	},
