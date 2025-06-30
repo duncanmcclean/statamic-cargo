@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Payments\Gateways;
 
+use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Orders\Order;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
@@ -38,5 +39,10 @@ class Dummy extends PaymentGateway
     public function refund(Order $order, int $amount): void
     {
         $order->set('amount_refunded', $amount)->save();
+    }
+
+    public function logo(): ?string
+    {
+        return Cargo::svg('cargo-mark');
     }
 }

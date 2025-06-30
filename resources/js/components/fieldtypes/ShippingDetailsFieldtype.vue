@@ -6,7 +6,7 @@
 
         <div v-else>
             <div class="flex items-center">
-                <SvgIcon v-if="value.shipping_method.logo" :name="value.shipping_method.logo" class="mr-3 h-10 w-10" />
+                <SvgIcon v-if="value.shipping_method.logo" :name="value.shipping_method.logo" class="mr-4 h-8 w-8" />
 
                 <div class="flex flex-col space-y-1">
                     <Heading

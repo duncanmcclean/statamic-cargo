@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Shipping;
 
+use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use Illuminate\Support\Collection;
 
@@ -16,5 +17,10 @@ class FreeShipping extends ShippingMethod
                 ->name(__('Free Shipping'))
                 ->price(0),
         ]);
+    }
+
+    public function logo(): ?string
+    {
+        return Cargo::svg('cargo-mark');
     }
 }
