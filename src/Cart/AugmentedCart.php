@@ -54,11 +54,16 @@ class AugmentedCart extends AbstractAugmented
             ->map(function (array $item) {
                 $discount = Discount::find($item['discount']);
 
+                if (! $discount) {
+                    return null;
+                }
+
                 return [
                     ...$discount->toAugmentedArray(),
                     'amount' => (new Money)->augment($item['amount']),
                 ];
             })
+            ->filter()
             ->values()
             ->all();
     }
