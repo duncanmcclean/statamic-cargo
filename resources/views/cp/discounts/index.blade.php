@@ -1,15 +1,22 @@
+@php
+    use DuncanMcClean\Cargo\Cargo;
+    use function Statamic\trans as __;
+@endphp
+
 @extends('statamic::layout')
 @section('title', __('Discounts'))
 @section('wrapper_class', 'max-w-3xl')
 
 @section('content')
-    <div class="mb-6 flex items-center justify-between">
-        <h1 class="flex-1">{{ __('Discounts') }}</h1>
-
+    <ui-header title="{{ __('Discounts') }}" icon="{{ Cargo::svg('discounts') }}">
         @if (auth()->user()->can('create discounts'))
-            <a class="btn-primary" href="{{ cp_route('cargo.discounts.create') }}">{{ __('Create Discount') }}</a>
+            <ui-button
+                href="{{ cp_route('cargo.discounts.create') }}"
+                text="{{ __('Create Discount') }}"
+                variant="primary"
+            ></ui-button>
         @endif
-    </div>
+    </ui-header>
 
     <discounts-listing
         sort-column="code"
@@ -19,11 +26,5 @@
         :action-url="{{ json_encode(cp_route('cargo.discounts.actions.run')) }}"
     ></discounts-listing>
 
-    @include(
-        'statamic::partials.docs-callout',
-        [
-            'topic' => __('Discounts'),
-            'url' => 'https://builtwithcargo.dev/docs/discounts',
-        ]
-    )
+    <x-statamic::docs-callout :topic="__('Discounts')" url="https://builtwithcargo.dev/docs/discounts" />
 @endsection

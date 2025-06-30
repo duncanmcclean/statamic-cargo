@@ -71,6 +71,7 @@ class ServiceProvider extends AddonServiceProvider
         ], 'cargo-config');
 
         $this->publishes([
+            __DIR__.'/../resources/dist-checkout/build' => public_path('checkout'),
             __DIR__.'/../resources/views/checkout' => resource_path('views/checkout'),
         ], 'cargo-prebuilt-checkout');
 
@@ -171,26 +172,26 @@ class ServiceProvider extends AddonServiceProvider
             $nav->create(__('Orders'))
                 ->section('Store')
                 ->route('cargo.orders.index')
-                ->icon(Cargo::svg('shop'))
+                ->icon(Cargo::svg('orders'))
                 ->can('view orders');
 
             $nav->create(__('Discounts'))
                 ->section('Store')
                 ->route('cargo.discounts.index')
-                ->icon('tags')
+                ->icon(Cargo::svg('discounts'))
                 ->can('view discounts');
 
             if (Cargo::usingDefaultTaxDriver()) {
                 $nav->create(__('Tax Classes'))
                     ->section('Store')
                     ->route('cargo.tax-classes.index')
-                    ->icon(Cargo::svg('money-cash-file-dollar'))
+                    ->icon(Cargo::svg('tax-classes'))
                     ->can('manage taxes');
 
                 $nav->create(__('Tax Zones'))
                     ->section('Store')
                     ->route('cargo.tax-zones.index')
-                    ->icon('pin')
+                    ->icon(Cargo::svg('tax-zones'))
                     ->can('manage taxes');
             }
         });

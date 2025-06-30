@@ -11,12 +11,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.4
-          extensions: fileinfo, exif, gd, pdo, sqlite, pdo_sqlite, intl
-
       - name: Check PHP code style issues
         uses: aglipanci/laravel-pint-action@v2
         with:
@@ -28,7 +22,7 @@ jobs:
         uses: actions/setup-node@v4
 
       - name: Install dependencies
-        run: npm ci && composer install
+        run: npm ci
 
       - name: Check formatting with Prettier
         run: npm run prettier:check

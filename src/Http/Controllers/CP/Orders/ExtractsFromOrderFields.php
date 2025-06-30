@@ -26,6 +26,10 @@ trait ExtractsFromOrderFields
             ->addValues($values->all())
             ->preProcess();
 
-        return [$fields->values()->all(), $fields->meta()->all()];
+        $extraValues = [
+            'id' => $order->id(),
+        ];
+
+        return [$fields->values()->all(), $fields->meta()->all(), $extraValues];
     }
 }

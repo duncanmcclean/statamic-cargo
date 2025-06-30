@@ -10,6 +10,7 @@ use Statamic\Facades\Entry;
 use Statamic\Facades\Role;
 use Statamic\Facades\Site;
 use Stillat\Proteus\Support\Facades\ConfigWriter;
+
 use function Laravel\Prompts\confirm;
 
 class MigrateConfigs extends Command

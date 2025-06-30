@@ -29,10 +29,11 @@ class UpdateTaxClassesTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->patch(cp_route('cargo.tax-classes.update', $taxClass->handle()), [
-                'name' => 'Standard Tax Rate',
+                'values' => [
+                    'name' => 'Standard Tax Rate',
+                ],
             ])
-            ->assertOk()
-            ->assertJson(['data' => ['id' => 'standard']]);
+            ->assertOk();
 
         $taxClass = TaxClass::find('standard');
         $this->assertEquals('Standard Tax Rate', $taxClass->get('name'));
@@ -48,7 +49,9 @@ class UpdateTaxClassesTest extends TestCase
         $this
             ->actingAs(User::make()->assignRole('test')->save())
             ->patch(cp_route('cargo.tax-classes.update', $taxClass->handle()), [
-                'name' => 'Standard Tax Rate',
+                'values' => [
+                    'name' => 'Standard Tax Rate',
+                ],
             ])
             ->assertRedirect('/cp');
 

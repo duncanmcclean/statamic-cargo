@@ -69,6 +69,7 @@ class TaxZoneRepository implements Contract
                 'main' => [
                     'sections' => [
                         [
+                            'display' => __('Tax Zone Details'),
                             'fields' => [
                                 [
                                     'handle' => 'name',
@@ -100,7 +101,7 @@ class TaxZoneRepository implements Contract
                                         'type' => 'dictionary',
                                         'display' => __('Countries'),
                                         'dictionary' => 'countries',
-                                        'validate' => ['required_unless:type,everywhere', 'min:1'],
+                                        'validate' => ['required_unless:type,everywhere'],
                                         'unless' => ['type' => 'everywhere'],
                                     ],
                                 ],

@@ -2,13 +2,14 @@
 
 namespace DuncanMcClean\Cargo\Http\Controllers\CP\Taxes;
 
+use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Statamic\CP\Breadcrumbs;
 use Statamic\CP\Column;
-use Statamic\Facades\User;
+use Statamic\CP\PublishForm;
 use Statamic\Http\Controllers\CP\CpController;
+use Statamic\Support\Arr;
 
 class TaxClassController extends CpController
 {
@@ -30,11 +31,14 @@ class TaxClassController extends CpController
             return $taxClasses;
         }
 
+        if ($taxClasses->isEmpty()) {
+            return view('cargo::cp.tax-classes.empty');
+        }
+
         return view('cargo::cp.tax-classes.index', [
             'taxClasses' => $taxClasses,
             'columns' => [
                 Column::make('name')->label(__('Name')),
-                Column::make('handle')->label(__('Handle')),
             ],
         ]);
     }
@@ -43,138 +47,45 @@ class TaxClassController extends CpController
     {
         $this->authorize('manage taxes');
 
-        $blueprint = TaxClass::blueprint();
-
-        $fields = $blueprint->fields()->preProcess();
-        $values = $fields->values();
-
-        $viewData = [
-            'title' => __('Create Tax Class'),
-            'actions' => [
-                'save' => cp_route('cargo.tax-classes.store'),
-            ],
-            'values' => $values->all(),
-            'meta' => $fields->meta(),
-            'blueprint' => $blueprint->toPublishArray(),
-            'breadcrumbs' => [
-                ['text' => __('Tax Classes'), 'url' => cp_route('cargo.tax-classes.index')],
-            ],
-        ];
-
-        if ($request->wantsJson()) {
-            return $viewData;
-        }
-
-        return view('cargo::cp.tax-classes.create', $viewData);
+        return PublishForm::make(TaxClass::blueprint())
+            ->icon(Cargo::svg('tax-classes'))
+            ->title(__('Create Tax Class'))
+            ->submittingTo(cp_route('cargo.tax-classes.store'), 'POST');
     }
 
     public function store(Request $request)
     {
         $this->authorize('manage taxes');
 
-        $blueprint = TaxClass::blueprint();
-
-        $data = $request->all();
-
-        $fields = $blueprint->fields()->addValues($data);
-
-        $fields->validator()->validate();
-
-        $values = $fields->process()->values();
+        $values = PublishForm::make(TaxClass::blueprint())->submit($request->values);
 
         $taxClass = TaxClass::make()
-            ->handle(Str::slug($values->get('name')))
-            ->data($values->except('handle'));
+            ->handle(Str::slug(Arr::get($values, 'name')))
+            ->data($values);
 
-        $saved = $taxClass->save();
+        $taxClass->save();
 
-        $fields = $blueprint->fields()
-            ->setParent($taxClass)
-            ->addValues($taxClass->data()->all())
-            ->preProcess();
-
-        return [
-            'data' => [
-                'id' => $taxClass->handle(),
-                'title' => $taxClass->get('name'),
-                'values' => $fields->values()->all(),
-            ],
-            'saved' => $saved,
-            'redirect' => $taxClass->editUrl().'?created=true',
-        ];
+        return ['redirect' => $taxClass->editUrl()];
     }
 
     public function edit(Request $request, $taxClass)
     {
         $this->authorize('manage taxes');
 
-        $blueprint = TaxClass::blueprint();
-
-        $values = $taxClass->data();
-
-        $fields = $blueprint->fields()
-            ->setParent($taxClass)
-            ->addValues($values->all())
-            ->preProcess();
-
-        $viewData = [
-            'title' => $taxClass->get('name'),
-            'actions' => [
-                'save' => $taxClass->updateUrl(),
-            ],
-            'values' => $fields->values()->all(),
-            'meta' => $fields->meta()->all(),
-            'blueprint' => $blueprint->toPublishArray(),
-            'readOnly' => User::current()->cant('update', $taxClass),
-            'breadcrumbs' => new Breadcrumbs([
-                ['text' => __('Tax Classes'), 'url' => cp_route('cargo.tax-classes.index')],
-            ]),
-        ];
-
-        if ($request->wantsJson()) {
-            return $viewData;
-        }
-
-        if ($request->has('created')) {
-            session()->now('success', __('Tax Class created'));
-        }
-
-        return view('cargo::cp.tax-classes.edit', array_merge($viewData, [
-            'taxClass' => $taxClass,
-        ]));
+        return PublishForm::make(TaxClass::blueprint())
+            ->icon(Cargo::svg('tax-classes'))
+            ->title($taxClass->get('name'))
+            ->values($taxClass->data()->all())
+            ->submittingTo($taxClass->updateUrl());
     }
 
     public function update(Request $request, $taxClass)
     {
         $this->authorize('manage taxes');
 
-        $blueprint = TaxClass::blueprint();
+        $values = PublishForm::make(TaxClass::blueprint())->submit($request->values);
 
-        $data = $request->except('handle');
-
-        $fields = $blueprint->fields()->addValues($data);
-
-        $fields->validator()->validate();
-
-        $values = $fields->process()->values();
-
-        $taxClass->merge($values);
-
-        $saved = $taxClass->save();
-
-        $fields = $blueprint->fields()
-            ->setParent($taxClass)
-            ->addValues($taxClass->data()->all())
-            ->preProcess();
-
-        return [
-            'data' => [
-                'id' => $taxClass->handle(),
-                'title' => $taxClass->get('name'),
-                'values' => $fields->values()->all(),
-            ],
-            'saved' => $saved,
-        ];
+        $taxClass->data($values)->save();
     }
 
     public function destroy(Request $request, $taxClass)
@@ -182,7 +93,5 @@ class TaxClassController extends CpController
         $this->authorize('manage taxes');
 
         $taxClass->delete();
-
-        return response('', 204);
     }
 }

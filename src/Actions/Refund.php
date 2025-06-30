@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Actions;
 
+use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Contracts;
 use DuncanMcClean\Cargo\Events\OrderRefunded;
 use Statamic\Actions\Action;
@@ -13,6 +14,11 @@ class Refund extends Action
     public static function title()
     {
         return __('Refund');
+    }
+
+    public function icon(): string
+    {
+        return Cargo::svg('refund');
     }
 
     public function visibleTo($item)

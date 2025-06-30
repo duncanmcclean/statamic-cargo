@@ -54,7 +54,7 @@ If you're curious, here's a brief rundown of how the pre-built Checkout page wor
 		* For example: some shipping options may only be available for certain areas, but when the page is loaded, we don't have the customer's address yet so we need to fetch them later.
 
 ### Customising
-#### Adding an additional step
+#### Adding additional steps
 You can find the existing checkout steps in `resources/views/checkout/index.antlers.html`. 
 
 To add your own step, simply [create a partial](https://statamic.dev/tags/partial), and reference it from within the `index` template. 
@@ -85,21 +85,64 @@ You should make sure to pass a `title` parameter to the partial, then provide th
 By default, all steps are wrapped in the `{{ cart:update }}` tag, meaning whenever you submit the step, it'll make an AJAX request and update Alpine's `cart` object (you can read more about this under [How it works](#how-it-works)). You can provide the `formless` parameter to opt-out of this behaviour.
 
 #### Using your own Tailwind CSS build
-When you publish the checkout page, a compiled `.css` file will be copied into your `public` directory.
+When you publish the pre-built checkout flow, a compiled `.css` file will be copied into your site's `public` directory.
 
-If you want to use your own Tailwind CSS build, maybe to change the colours, update the `checkout/layout.antlers.html` and replace the stylesheet line:
+To make changes to the design of the checkout page, you should integrate the styles into your own Tailwind CSS build, rather than using the pre-built one.
 
-```html
-TODO
+:::tip Note
+These steps assume you already have Tailwind CSS setup in your project. If you don't, you can follow the [Tailwind CSS installation guide](https://tailwindcss.com/docs/installation/using-vite) to get started.
+:::
+
+First, install the `@tailwindcss/forms` plugin:
+
+```bash
+npm install @tailwindcss/forms
 ```
 
-You'll also want to add the default colour values to your Tailwind config:
+Next, import the plugin and add the required colours to your Tailwind CSS config:
 
+::tabs
+::tab tailwind4
 ```css
-/* TODO */
+/* site.css */
+
+@import "tailwindcss";
+
+@plugin '@tailwindcss/forms'; /* [tl! highlight] */
+
+@theme { /* [tl! highlight:3] */
+    --color-primary: #041B34;
+    --color-secondary: #02747E;
+}
+```
+::tab tailwind3
+```js
+// tailwind.config.js
+
+module.exports = {
+	theme: {
+		extend: {
+			colors: { // [tl! highlight:3]
+				primary: '#041B34',
+				secondary: '#02747E',
+			},
+		},
+	},
+	plugins: [
+		require('@tailwindcss/forms'), // [tl! highlight]
+	],
+};
+```
+::
+
+Finally, update the `checkout/layout.antlers.html` file to reference your own stylesheet:
+
+```antlers
+{{ vite directory="checkout" src="resources/css/checkout.css" }} {{# [tl! remove] #}}
+{{ vite src="resources/css/site.css" }} {{# [tl! add] #}}
 ```
 
-Finally, to stay organised, you can delete the published `.css` file. 
+To stay organised, you may now delete the `public/checkout` directory.
 
 ## Custom checkout flow
 We recommend splitting your checkout flow into multiple steps, to allow for totals to be recalculated when the customer's cart is updated.

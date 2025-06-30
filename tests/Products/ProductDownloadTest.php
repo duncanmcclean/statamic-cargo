@@ -24,7 +24,16 @@ class ProductDownloadTest extends TestCase
     {
         parent::setUp();
 
+        config('statamic.cargo.products.digital_products', true);
+
         AssetContainer::make()->handle('assets')->disk('local')->save();
+    }
+
+    protected function tearDown(): void
+    {
+        Collection::find('products')?->entryBlueprint()?->delete();
+
+        parent::tearDown();
     }
 
     #[Test]
@@ -209,7 +218,7 @@ class ProductDownloadTest extends TestCase
     {
         $collection = tap(Collection::make('products'))->save();
 
-        $collection->entryBlueprint()->ensureFieldHasConfig('product_variants', [
+        $collection->entryBlueprint()->ensureField('product_variants', [
             'type' => 'product_variants',
             'option_fields' => [
                 ['handle' => 'downloads', 'field' => ['type' => 'assets']],

@@ -39,7 +39,7 @@ class EnsureProductFields
             ], 'sidebar');
         }
 
-        if (config('statamic.cargo.products.digital_products')) {
+        if (config('statamic.cargo.products.digital_products', false)) {
             $this->ensureDigitalProductFields($event);
         }
     }

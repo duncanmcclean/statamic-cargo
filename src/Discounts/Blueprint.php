@@ -16,6 +16,7 @@ class Blueprint
                     'display' => __('General'),
                     'sections' => [
                         [
+                            'display' => __('Details'),
                             'fields' => [
                                 [
                                     'handle' => 'name',
@@ -74,6 +75,7 @@ class Blueprint
                                                     $fail('statamic::validation.handle')->translate();
                                                 }
                                             },
+                                            'new \DuncanMcClean\Cargo\Rules\UniqueDiscountValue({handle})',
                                         ],
                                     ],
                                 ],
@@ -115,12 +117,12 @@ class Blueprint
                                                     'type' => "equals {$discountType->handle()}",
                                                 ],
                                                 'validate' => collect($field['validate'] ?? [])
-                                                    ->map(function ($rule) use ($discountType) {
+                                                    ->flatMap(function ($rule) use ($discountType) {
                                                         if ($rule === 'required') {
-                                                            return "required_if:type,{$discountType->handle()}";
+                                                            return ['nullable', "required_if:type,{$discountType->handle()}"];
                                                         }
 
-                                                        return $rule;
+                                                        return [$rule];
                                                     })
                                                     ->values()
                                                     ->all(),
