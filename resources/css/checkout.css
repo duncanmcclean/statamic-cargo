@@ -5,6 +5,6 @@
 @plugin '@tailwindcss/forms';
 
 @theme {
-    --color-primary: #041b34;
-    --color-secondary: #02747e;
+    --color-brand: oklch(62.7% 0.194 149.214);
+    --color-secondary: oklch(0.398438 0.090625 160);
 }

@@ -53,7 +53,18 @@ If you're curious, here's a brief rundown of how the pre-built Checkout page wor
 	* We're not using the equivalent Antlers tags for this as the available options could change from when the page is loaded vs when the customer is presented with the options.
 		* For example: some shipping options may only be available for certain areas, but when the page is loaded, we don't have the customer's address yet so we need to fetch them later.
 
-### Customising
+### Customization
+#### Header / Logo
+You can customize the header, including the logo, by editing the `resources/views/checkout/_header.antlers.html` view:
+
+```antlers
+<header class="p-8 md:pb-0 flex justify-center md:justify-start">
+    <a href="{{ link to="/" }}" target="_blank" alt="{{ site:name }}">
+        <img src="{{ asset:src src="images/logo.svg" }}" alt="{{ site:name }}" class="h-12"> {{# [tl! add] #}}
+    </a>
+</header>
+```
+
 #### Adding additional steps
 You can find the existing checkout steps in `resources/views/checkout/index.antlers.html`. 
 
@@ -111,8 +122,8 @@ Next, import the plugin and add the required colours to your Tailwind CSS config
 @plugin '@tailwindcss/forms'; /* [tl! highlight] */
 
 @theme { /* [tl! highlight:3] */
-    --color-primary: #041B34;
-    --color-secondary: #02747E;
+	--color-brand: oklch(62.7% 0.194 149.214);
+	--color-secondary: oklch(0.398438 0.090625 160);
 }
 ```
 ::tab tailwind3
@@ -123,8 +134,8 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: { // [tl! highlight:3]
-				primary: '#041B34',
-				secondary: '#02747E',
+				brand: 'oklch(62.7% 0.194 149.214)',
+				secondary: 'oklch(0.398438 0.090625 160)',
 			},
 		},
 	},

@@ -11,7 +11,7 @@
     type="{{ type ?? 'submit' }}"
     :disabled="{{ disabled || 'busy' }}"
     {{ if xOnClick }} @click="{{ xOnClick }}" {{ /if }}
-    class="w-full flex items-center justify-center rounded-md border border-transparent bg-secondary hover:bg-secondary/90 px-4 py-1.5 text-base font-medium text-white shadow-sm hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed"
+    class="w-full flex items-center justify-center rounded-md border border-transparent bg-secondary hover:bg-secondary/90 px-4 py-1.5 text-base font-medium text-white shadow-sm hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer disabled:cursor-not-allowed"
 >
     <svg x-show="{{ disabled || 'busy' }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 h-8 animate-spin text-white/75">
         <style>@keyframes spinner_svv2{to{transform:rotate(360deg)}}</style>
