@@ -26,6 +26,7 @@ cd vendor/statamic/cms
 npm ci
 npm run build
 cd ../../..
+php artisan statamic:install
 ```
 
 You can safely ignore any `Failed to download` or `Can't locate path` errors thrown by Composer, they are happening because we're installing a dev version of Statamic rather than a proper release.
