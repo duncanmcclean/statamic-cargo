@@ -1,7 +1,7 @@
 @layer theme, base, components, utilities;
 
 @import 'tailwindcss/theme.css' layer(theme);
-@import "./listings.css";
+@import './listings.css';
 
 @source "../js";
 @source "../views";
@@ -11,4 +11,3 @@
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
-

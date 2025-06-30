@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 use Statamic\Console\RunsInPlease;
 use Statamic\Statamic;
 use Stillat\Proteus\Support\Facades\ConfigWriter;
+
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\progress;
 

@@ -19,6 +19,7 @@ use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
 use Statamic\Statamic;
 use stdClass;
+
 use function Laravel\Prompts\progress;
 
 class MigrateOrders extends Command
