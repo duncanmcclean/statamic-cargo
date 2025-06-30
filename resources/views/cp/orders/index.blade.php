@@ -25,7 +25,7 @@
     <orders-listing
         sort-column="order_number"
         sort-direction="desc"
-        :initial-columns="{{ $columns->toJson() }}"
+        :columns="{{ $columns->toJson() }}"
         :filters="{{ $filters->toJson() }}"
         :action-url="{{ json_encode(cp_route('cargo.orders.actions.run')) }}"
     ></orders-listing>

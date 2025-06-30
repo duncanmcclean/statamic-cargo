@@ -1,0 +1,21 @@
+/* Index Fields
+  ========================================================================== */
+
+/* Basically .title-index-field without the min/max width */
+.order-number-index-field {
+    @apply text-sm font-medium line-clamp-2 flex items-center gap-2 hover:text-black dark:hover:text-white;
+}
+
+.discount-status-index-field {
+    .status-active {
+        @apply bg-green-200 text-green-900 dark:bg-green-300 dark:text-green-950;
+    }
+
+    .status-scheduled {
+        @apply bg-amber-200 text-amber-900 dark:bg-amber-300 dark:text-amber-950;
+    }
+
+    .status-scheduled-dot {
+        @apply bg-amber-300 dark:bg-amber-400;
+    }
+}
