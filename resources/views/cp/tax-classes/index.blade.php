@@ -1,5 +1,5 @@
-@use(DuncanMcClean\Cargo\Cargo)
 @php
+    use DuncanMcClean\Cargo\Cargo;
     use function Statamic\trans as __;
 @endphp
 
@@ -30,5 +30,8 @@
         />
     @endunless
 
-    <x-statamic::docs-callout :topic="__('Tax Classes')" url="https://builtwithcargo.dev/docs/taxes#tax-classes" />
+    <x-statamic::docs-callout
+        :topic="__('Tax Classes')"
+        url="https://builtwithcargo.dev/docs/taxes#tax-classes"
+    />
 @endsection

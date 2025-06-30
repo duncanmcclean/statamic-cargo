@@ -1,5 +1,5 @@
-@use(DuncanMcClean\Cargo\Cargo)
 @php
+    use DuncanMcClean\Cargo\Cargo;
     use function Statamic\trans as __;
 @endphp
 
@@ -30,5 +30,8 @@
         :action-url="{{ json_encode(cp_route('cargo.orders.actions.run')) }}"
     ></orders-listing>
 
-    <x-statamic::docs-callout :topic="__('Orders')" url="https://builtwithcargo.dev/docs/carts-and-orders" />
+    <x-statamic::docs-callout
+        :topic="__('Orders')"
+        url="https://builtwithcargo.dev/docs/carts-and-orders"
+    />
 @endsection
