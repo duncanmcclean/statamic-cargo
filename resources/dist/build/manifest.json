@@ -1,82 +1,2202 @@
 {
-  "_vue.runtime.esm-bundler-DQM3OGQG.js": {
-    "file": "assets/vue.runtime.esm-bundler-DQM3OGQG.js",
+  "../../Statamic/cms/resources/svg/icons/add-bookmark.svg": {
+    "file": "assets/add-bookmark-CsUc7dc9.js",
+    "name": "add-bookmark",
+    "src": "../../Statamic/cms/resources/svg/icons/add-bookmark.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/add-circle.svg": {
+    "file": "assets/add-circle-DbbNlMOX.js",
+    "name": "add-circle",
+    "src": "../../Statamic/cms/resources/svg/icons/add-circle.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/add-entry.svg": {
+    "file": "assets/add-entry-BvCCKqIw.js",
+    "name": "add-entry",
+    "src": "../../Statamic/cms/resources/svg/icons/add-entry.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/add-folder.svg": {
+    "file": "assets/add-folder-Dh4Xbbt_.js",
+    "name": "add-folder",
+    "src": "../../Statamic/cms/resources/svg/icons/add-folder.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/add-group.svg": {
+    "file": "assets/add-group-BgUX9_Ug.js",
+    "name": "add-group",
+    "src": "../../Statamic/cms/resources/svg/icons/add-group.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/add-sticky.svg": {
+    "file": "assets/add-sticky-8FT5nJ7e.js",
+    "name": "add-sticky",
+    "src": "../../Statamic/cms/resources/svg/icons/add-sticky.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/add-tag.svg": {
+    "file": "assets/add-tag-t4yYhMgE.js",
+    "name": "add-tag",
+    "src": "../../Statamic/cms/resources/svg/icons/add-tag.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/add-user.svg": {
+    "file": "assets/add-user-mdVGH0qB.js",
+    "name": "add-user",
+    "src": "../../Statamic/cms/resources/svg/icons/add-user.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/addons.svg": {
+    "file": "assets/addons-vvF5eVBd.js",
+    "name": "addons",
+    "src": "../../Statamic/cms/resources/svg/icons/addons.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/ai.svg": {
+    "file": "assets/ai-D5Xq2b7w.js",
+    "name": "ai",
+    "src": "../../Statamic/cms/resources/svg/icons/ai.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/align-center.svg": {
+    "file": "assets/align-center-C45CEIY4.js",
+    "name": "align-center",
+    "src": "../../Statamic/cms/resources/svg/icons/align-center.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/align-left.svg": {
+    "file": "assets/align-left-BV45ArPQ.js",
+    "name": "align-left",
+    "src": "../../Statamic/cms/resources/svg/icons/align-left.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/align-right.svg": {
+    "file": "assets/align-right-DI3FOcWE.js",
+    "name": "align-right",
+    "src": "../../Statamic/cms/resources/svg/icons/align-right.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/arrow-down.svg": {
+    "file": "assets/arrow-down-T_OmQpLj.js",
+    "name": "arrow-down",
+    "src": "../../Statamic/cms/resources/svg/icons/arrow-down.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/arrow-left.svg": {
+    "file": "assets/arrow-left-DcDZkX61.js",
+    "name": "arrow-left",
+    "src": "../../Statamic/cms/resources/svg/icons/arrow-left.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/arrow-right.svg": {
+    "file": "assets/arrow-right-D6HnIoYc.js",
+    "name": "arrow-right",
+    "src": "../../Statamic/cms/resources/svg/icons/arrow-right.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/arrow-up-right.svg": {
+    "file": "assets/arrow-up-right-CMgVTBeB.js",
+    "name": "arrow-up-right",
+    "src": "../../Statamic/cms/resources/svg/icons/arrow-up-right.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/asset-folder.svg": {
+    "file": "assets/asset-folder-EHFNIqBD.js",
+    "name": "asset-folder",
+    "src": "../../Statamic/cms/resources/svg/icons/asset-folder.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/assets.svg": {
+    "file": "assets/assets-CN9X5nuk.js",
+    "name": "assets",
+    "src": "../../Statamic/cms/resources/svg/icons/assets.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/avatar.svg": {
+    "file": "assets/avatar-CNMw-8Vv.js",
+    "name": "avatar",
+    "src": "../../Statamic/cms/resources/svg/icons/avatar.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/bell.svg": {
+    "file": "assets/bell-DHwiEKfc.js",
+    "name": "bell",
+    "src": "../../Statamic/cms/resources/svg/icons/bell.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/blueprint-edit.svg": {
+    "file": "assets/blueprint-edit-DCG85hHd.js",
+    "name": "blueprint-edit",
+    "src": "../../Statamic/cms/resources/svg/icons/blueprint-edit.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/blueprints-large.svg": {
+    "file": "assets/blueprints-large-DItgryQX.js",
+    "name": "blueprints-large",
+    "src": "../../Statamic/cms/resources/svg/icons/blueprints-large.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/blueprints.svg": {
+    "file": "assets/blueprints-B9yBENVJ.js",
+    "name": "blueprints",
+    "src": "../../Statamic/cms/resources/svg/icons/blueprints.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/book-next-page.svg": {
+    "file": "assets/book-next-page-Bagai7ws.js",
+    "name": "book-next-page",
+    "src": "../../Statamic/cms/resources/svg/icons/book-next-page.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/book-prev-page.svg": {
+    "file": "assets/book-prev-page-BxpjPSWb.js",
+    "name": "book-prev-page",
+    "src": "../../Statamic/cms/resources/svg/icons/book-prev-page.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/burger-menu.svg": {
+    "file": "assets/burger-menu-DPjlsLSy.js",
+    "name": "burger-menu",
+    "src": "../../Statamic/cms/resources/svg/icons/burger-menu.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/cache.svg": {
+    "file": "assets/cache-Cah-dbuS.js",
+    "name": "cache",
+    "src": "../../Statamic/cms/resources/svg/icons/cache.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/calendar.svg": {
+    "file": "assets/calendar-CY8invGF.js",
+    "name": "calendar",
+    "src": "../../Statamic/cms/resources/svg/icons/calendar.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/checkmark.svg": {
+    "file": "assets/checkmark-CwnhPFsP.js",
+    "name": "checkmark",
+    "src": "../../Statamic/cms/resources/svg/icons/checkmark.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/clipboard-check.svg": {
+    "file": "assets/clipboard-check-CKXFK2nS.js",
+    "name": "clipboard-check",
+    "src": "../../Statamic/cms/resources/svg/icons/clipboard-check.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/clipboard.svg": {
+    "file": "assets/clipboard-BlRJ9l1_.js",
+    "name": "clipboard",
+    "src": "../../Statamic/cms/resources/svg/icons/clipboard.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/cog-solid.svg": {
+    "file": "assets/cog-solid-ZiE69CEi.js",
+    "name": "cog-solid",
+    "src": "../../Statamic/cms/resources/svg/icons/cog-solid.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/cog.svg": {
+    "file": "assets/cog-BdLlFSCU.js",
+    "name": "cog",
+    "src": "../../Statamic/cms/resources/svg/icons/cog.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/collections.svg": {
+    "file": "assets/collections-TA5Edc-r.js",
+    "name": "collections",
+    "src": "../../Statamic/cms/resources/svg/icons/collections.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/columns.svg": {
+    "file": "assets/columns-DNqljyad.js",
+    "name": "columns",
+    "src": "../../Statamic/cms/resources/svg/icons/columns.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/configure-large.svg": {
+    "file": "assets/configure-large-N3gAFay5.js",
+    "name": "configure-large",
+    "src": "../../Statamic/cms/resources/svg/icons/configure-large.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/container-add.svg": {
+    "file": "assets/container-add-BuSOGzEh.js",
+    "name": "container-add",
+    "src": "../../Statamic/cms/resources/svg/icons/container-add.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/credit-card.svg": {
+    "file": "assets/credit-card-DYli5biF.js",
+    "name": "credit-card",
+    "src": "../../Statamic/cms/resources/svg/icons/credit-card.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/dashboard.svg": {
+    "file": "assets/dashboard-CnlEDL5v.js",
+    "name": "dashboard",
+    "src": "../../Statamic/cms/resources/svg/icons/dashboard.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/delete.svg": {
+    "file": "assets/delete-DWpvjkP7.js",
+    "name": "delete",
+    "src": "../../Statamic/cms/resources/svg/icons/delete.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/down-square.svg": {
+    "file": "assets/down-square-DbaNT3HH.js",
+    "name": "down-square",
+    "src": "../../Statamic/cms/resources/svg/icons/down-square.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/download.svg": {
+    "file": "assets/download-DjAwZI3i.js",
+    "name": "download",
+    "src": "../../Statamic/cms/resources/svg/icons/download.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/duplicate.svg": {
+    "file": "assets/duplicate-h-OTCek5.js",
+    "name": "duplicate",
+    "src": "../../Statamic/cms/resources/svg/icons/duplicate.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/earth.svg": {
+    "file": "assets/earth-D7Nu9bUq.js",
+    "name": "earth",
+    "src": "../../Statamic/cms/resources/svg/icons/earth.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/edit.svg": {
+    "file": "assets/edit-CWl7_3JY.js",
+    "name": "edit",
+    "src": "../../Statamic/cms/resources/svg/icons/edit.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/entry.svg": {
+    "file": "assets/entry-DyVG5zfY.js",
+    "name": "entry",
+    "src": "../../Statamic/cms/resources/svg/icons/entry.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/external-link.svg": {
+    "file": "assets/external-link-BC1e967M.js",
+    "name": "external-link",
+    "src": "../../Statamic/cms/resources/svg/icons/external-link.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/eye-closed.svg": {
+    "file": "assets/eye-closed-DgmYi15O.js",
+    "name": "eye-closed",
+    "src": "../../Statamic/cms/resources/svg/icons/eye-closed.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/eye-slash.svg": {
+    "file": "assets/eye-slash-gMsRaGGT.js",
+    "name": "eye-slash",
+    "src": "../../Statamic/cms/resources/svg/icons/eye-slash.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/eye.svg": {
+    "file": "assets/eye-D-2sk4_g.js",
+    "name": "eye",
+    "src": "../../Statamic/cms/resources/svg/icons/eye.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldsets.svg": {
+    "file": "assets/fieldsets-DZ9Pk67s.js",
+    "name": "fieldsets",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldsets.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-array.svg": {
+    "file": "assets/fieldtype-array-mw609Ysi.js",
+    "name": "fieldtype-array",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-array.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-assets.svg": {
+    "file": "assets/fieldtype-assets-Cpk40Ow6.js",
+    "name": "fieldtype-assets",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-assets.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-bard.svg": {
+    "file": "assets/fieldtype-bard-Ldal80vI.js",
+    "name": "fieldtype-bard",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-bard.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-button_group.svg": {
+    "file": "assets/fieldtype-button_group-B7JADcsd.js",
+    "name": "fieldtype-button_group",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-button_group.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-checkboxes.svg": {
+    "file": "assets/fieldtype-checkboxes-k5rqemSb.js",
+    "name": "fieldtype-checkboxes",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-checkboxes.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-code.svg": {
+    "file": "assets/fieldtype-code-CStZ6s-6.js",
+    "name": "fieldtype-code",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-code.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-collections.svg": {
+    "file": "assets/fieldtype-collections-DQEPg04n.js",
+    "name": "fieldtype-collections",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-collections.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-color.svg": {
+    "file": "assets/fieldtype-color-BVEo8sxW.js",
+    "name": "fieldtype-color",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-color.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-date.svg": {
+    "file": "assets/fieldtype-date-C2B2h2h2.js",
+    "name": "fieldtype-date",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-date.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-dictionary.svg": {
+    "file": "assets/fieldtype-dictionary-XCqbdti8.js",
+    "name": "fieldtype-dictionary",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-dictionary.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-entries-large.svg": {
+    "file": "assets/fieldtype-entries-large-Zqx_TqpE.js",
+    "name": "fieldtype-entries-large",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-entries-large.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-entries.svg": {
+    "file": "assets/fieldtype-entries-mODOS51A.js",
+    "name": "fieldtype-entries",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-entries.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-float.svg": {
+    "file": "assets/fieldtype-float-Df81-g2p.js",
+    "name": "fieldtype-float",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-float.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-form.svg": {
+    "file": "assets/fieldtype-form-BSHhipH1.js",
+    "name": "fieldtype-form",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-form.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-grid.svg": {
+    "file": "assets/fieldtype-grid-Bv2ygBvq.js",
+    "name": "fieldtype-grid",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-grid.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-group.svg": {
+    "file": "assets/fieldtype-group-CbLU2wuR.js",
+    "name": "fieldtype-group",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-group.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-hidden.svg": {
+    "file": "assets/fieldtype-hidden-hwo0ToUm.js",
+    "name": "fieldtype-hidden",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-hidden.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-html.svg": {
+    "file": "assets/fieldtype-html-CWpQu-lo.js",
+    "name": "fieldtype-html",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-html.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-icon_picker.svg": {
+    "file": "assets/fieldtype-icon_picker-8vvqcyGi.js",
+    "name": "fieldtype-icon_picker",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-icon_picker.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-integer.svg": {
+    "file": "assets/fieldtype-integer-mlznNpOS.js",
+    "name": "fieldtype-integer",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-integer.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-link.svg": {
+    "file": "assets/fieldtype-link-DQLJf7d-.js",
+    "name": "fieldtype-link",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-link.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-list.svg": {
+    "file": "assets/fieldtype-list-CQGLlzUd.js",
+    "name": "fieldtype-list",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-list.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-markdown.svg": {
+    "file": "assets/fieldtype-markdown-D99hCqCe.js",
+    "name": "fieldtype-markdown",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-markdown.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-navigation.svg": {
+    "file": "assets/fieldtype-navigation-Br0Gn4ZU.js",
+    "name": "fieldtype-navigation",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-navigation.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-radio.svg": {
+    "file": "assets/fieldtype-radio-EkZ6nsjk.js",
+    "name": "fieldtype-radio",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-radio.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-range.svg": {
+    "file": "assets/fieldtype-range-DmDhh-FM.js",
+    "name": "fieldtype-range",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-range.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-replicator.svg": {
+    "file": "assets/fieldtype-replicator-Y9NP1OIl.js",
+    "name": "fieldtype-replicator",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-replicator.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-revealer.svg": {
+    "file": "assets/fieldtype-revealer--pz5Ep8U.js",
+    "name": "fieldtype-revealer",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-revealer.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-section.svg": {
+    "file": "assets/fieldtype-section-QGhUixbG.js",
+    "name": "fieldtype-section",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-section.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-select.svg": {
+    "file": "assets/fieldtype-select-CMu2h5pz.js",
+    "name": "fieldtype-select",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-select.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-sites.svg": {
+    "file": "assets/fieldtype-sites-9U1KlzH9.js",
+    "name": "fieldtype-sites",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-sites.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-slug.svg": {
+    "file": "assets/fieldtype-slug-CpeR-TdP.js",
+    "name": "fieldtype-slug",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-slug.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-spacer.svg": {
+    "file": "assets/fieldtype-spacer-Bg6AedqH.js",
+    "name": "fieldtype-spacer",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-spacer.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-structures.svg": {
+    "file": "assets/fieldtype-structures-Y0J9zKvz.js",
+    "name": "fieldtype-structures",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-structures.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-table.svg": {
+    "file": "assets/fieldtype-table-D6upnA33.js",
+    "name": "fieldtype-table",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-table.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-taggable.svg": {
+    "file": "assets/fieldtype-taggable-BBLCqcIy.js",
+    "name": "fieldtype-taggable",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-taggable.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-taxonomy.svg": {
+    "file": "assets/fieldtype-taxonomy-Btlm_WU5.js",
+    "name": "fieldtype-taxonomy",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-taxonomy.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-template.svg": {
+    "file": "assets/fieldtype-template-CPj4IDCx.js",
+    "name": "fieldtype-template",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-template.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-text.svg": {
+    "file": "assets/fieldtype-text-7UmQHiVW.js",
+    "name": "fieldtype-text",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-text.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-textarea.svg": {
+    "file": "assets/fieldtype-textarea-BAz4EFGX.js",
+    "name": "fieldtype-textarea",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-textarea.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-time.svg": {
+    "file": "assets/fieldtype-time-Dr53uSvT.js",
+    "name": "fieldtype-time",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-time.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-toggle.svg": {
+    "file": "assets/fieldtype-toggle-8UoeczQi.js",
+    "name": "fieldtype-toggle",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-toggle.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-user_groups.svg": {
+    "file": "assets/fieldtype-user_groups-Ddjari_S.js",
+    "name": "fieldtype-user_groups",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-user_groups.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-user_roles.svg": {
+    "file": "assets/fieldtype-user_roles-D8_byNPR.js",
+    "name": "fieldtype-user_roles",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-user_roles.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-users.svg": {
+    "file": "assets/fieldtype-users-0MwoRfhC.js",
+    "name": "fieldtype-users",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-users.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-video.svg": {
+    "file": "assets/fieldtype-video-D7iLBt53.js",
+    "name": "fieldtype-video",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-video.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-width.svg": {
+    "file": "assets/fieldtype-width-Du-R0Pi2.js",
+    "name": "fieldtype-width",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-width.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fieldtype-yaml.svg": {
+    "file": "assets/fieldtype-yaml-mw609Ysi.js",
+    "name": "fieldtype-yaml",
+    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-yaml.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/filter.svg": {
+    "file": "assets/filter-CS_NJ0ZF.js",
+    "name": "filter",
+    "src": "../../Statamic/cms/resources/svg/icons/filter.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fit-height.svg": {
+    "file": "assets/fit-height-DnF9Ct0Z.js",
+    "name": "fit-height",
+    "src": "../../Statamic/cms/resources/svg/icons/fit-height.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fit-width.svg": {
+    "file": "assets/fit-width-BCPCQYtd.js",
+    "name": "fit-width",
+    "src": "../../Statamic/cms/resources/svg/icons/fit-width.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/folder-add.svg": {
+    "file": "assets/folder-add-BfbLd_8I.js",
+    "name": "folder-add",
+    "src": "../../Statamic/cms/resources/svg/icons/folder-add.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/folder-ai.svg": {
+    "file": "assets/folder-ai-RAk8GAEH.js",
+    "name": "folder-ai",
+    "src": "../../Statamic/cms/resources/svg/icons/folder-ai.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/folder-block.svg": {
+    "file": "assets/folder-block-DxP24455.js",
+    "name": "folder-block",
+    "src": "../../Statamic/cms/resources/svg/icons/folder-block.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/folder-check.svg": {
+    "file": "assets/folder-check-pCXbeRXY.js",
+    "name": "folder-check",
+    "src": "../../Statamic/cms/resources/svg/icons/folder-check.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/folder-download.svg": {
+    "file": "assets/folder-download-DYiO-3V_.js",
+    "name": "folder-download",
+    "src": "../../Statamic/cms/resources/svg/icons/folder-download.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/folder-edit.svg": {
+    "file": "assets/folder-edit-DHrTyxpS.js",
+    "name": "folder-edit",
+    "src": "../../Statamic/cms/resources/svg/icons/folder-edit.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/folder-ghost.svg": {
+    "file": "assets/folder-ghost-JmuU5o0i.js",
+    "name": "folder-ghost",
+    "src": "../../Statamic/cms/resources/svg/icons/folder-ghost.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/folder-history.svg": {
+    "file": "assets/folder-history-C-BPRz-7.js",
+    "name": "folder-history",
+    "src": "../../Statamic/cms/resources/svg/icons/folder-history.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/folder-lock.svg": {
+    "file": "assets/folder-lock-DToKyh3J.js",
+    "name": "folder-lock",
+    "src": "../../Statamic/cms/resources/svg/icons/folder-lock.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/folder-music.svg": {
+    "file": "assets/folder-music-DDQTPtQ4.js",
+    "name": "folder-music",
+    "src": "../../Statamic/cms/resources/svg/icons/folder-music.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/folder-open.svg": {
+    "file": "assets/folder-open-BAuLeM7w.js",
+    "name": "folder-open",
+    "src": "../../Statamic/cms/resources/svg/icons/folder-open.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/folder-photos.svg": {
+    "file": "assets/folder-photos-B6IPqyVP.js",
+    "name": "folder-photos",
+    "src": "../../Statamic/cms/resources/svg/icons/folder-photos.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/folder-play.svg": {
+    "file": "assets/folder-play-DLp3vgSC.js",
+    "name": "folder-play",
+    "src": "../../Statamic/cms/resources/svg/icons/folder-play.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/folder-remove.svg": {
+    "file": "assets/folder-remove-BSzO4vmp.js",
+    "name": "folder-remove",
+    "src": "../../Statamic/cms/resources/svg/icons/folder-remove.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/folder-settings.svg": {
+    "file": "assets/folder-settings-BMyNe05-.js",
+    "name": "folder-settings",
+    "src": "../../Statamic/cms/resources/svg/icons/folder-settings.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/folder-warning.svg": {
+    "file": "assets/folder-warning-Bql5OuJu.js",
+    "name": "folder-warning",
+    "src": "../../Statamic/cms/resources/svg/icons/folder-warning.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/folder.svg": {
+    "file": "assets/folder-DV5PbRDb.js",
+    "name": "folder",
+    "src": "../../Statamic/cms/resources/svg/icons/folder.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/forms.svg": {
+    "file": "assets/forms-BlRJ9l1_.js",
+    "name": "forms",
+    "src": "../../Statamic/cms/resources/svg/icons/forms.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/globals.svg": {
+    "file": "assets/globals-SzPHz55z.js",
+    "name": "globals",
+    "src": "../../Statamic/cms/resources/svg/icons/globals.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/graphql.svg": {
+    "file": "assets/graphql-C7LTqbqm.js",
+    "name": "graphql",
+    "src": "../../Statamic/cms/resources/svg/icons/graphql.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/groups.svg": {
+    "file": "assets/groups-2zGwPjpz.js",
+    "name": "groups",
+    "src": "../../Statamic/cms/resources/svg/icons/groups.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/handles-sm.svg": {
+    "file": "assets/handles-sm-DcsNfCLu.js",
+    "name": "handles-sm",
+    "src": "../../Statamic/cms/resources/svg/icons/handles-sm.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/handles.svg": {
+    "file": "assets/handles-BdlG_deY.js",
+    "name": "handles",
+    "src": "../../Statamic/cms/resources/svg/icons/handles.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/heart.svg": {
+    "file": "assets/heart-C9csxPFG.js",
+    "name": "heart",
+    "src": "../../Statamic/cms/resources/svg/icons/heart.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/hierarchy.svg": {
+    "file": "assets/hierarchy-D62c7fxv.js",
+    "name": "hierarchy",
+    "src": "../../Statamic/cms/resources/svg/icons/hierarchy.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/history.svg": {
+    "file": "assets/history-CUoJCHp2.js",
+    "name": "history",
+    "src": "../../Statamic/cms/resources/svg/icons/history.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/home.svg": {
+    "file": "assets/home-D1qoFJcG.js",
+    "name": "home",
+    "src": "../../Statamic/cms/resources/svg/icons/home.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/info-square.svg": {
+    "file": "assets/info-square-B4-kw_dV.js",
+    "name": "info-square",
+    "src": "../../Statamic/cms/resources/svg/icons/info-square.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/info.svg": {
+    "file": "assets/info-Cr3ktNg4.js",
+    "name": "info",
+    "src": "../../Statamic/cms/resources/svg/icons/info.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/key.svg": {
+    "file": "assets/key-CWu8j0Px.js",
+    "name": "key",
+    "src": "../../Statamic/cms/resources/svg/icons/key.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/layout-grid.svg": {
+    "file": "assets/layout-grid-DLrgbCNg.js",
+    "name": "layout-grid",
+    "src": "../../Statamic/cms/resources/svg/icons/layout-grid.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/layout-list.svg": {
+    "file": "assets/layout-list-q9tjSaos.js",
+    "name": "layout-list",
+    "src": "../../Statamic/cms/resources/svg/icons/layout-list.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/layout-masonry.svg": {
+    "file": "assets/layout-masonry-C71dmJfJ.js",
+    "name": "layout-masonry",
+    "src": "../../Statamic/cms/resources/svg/icons/layout-masonry.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/license.svg": {
+    "file": "assets/license-BbA_UScs.js",
+    "name": "license",
+    "src": "../../Statamic/cms/resources/svg/icons/license.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/link.svg": {
+    "file": "assets/link-CiEmSmQw.js",
+    "name": "link",
+    "src": "../../Statamic/cms/resources/svg/icons/link.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/live-preview.svg": {
+    "file": "assets/live-preview-BvLNu_oz.js",
+    "name": "live-preview",
+    "src": "../../Statamic/cms/resources/svg/icons/live-preview.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/loading.svg": {
+    "file": "assets/loading-RgBPVNqS.js",
+    "name": "loading",
+    "src": "../../Statamic/cms/resources/svg/icons/loading.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/magnifying-glass.svg": {
+    "file": "assets/magnifying-glass-Bv034eqx.js",
+    "name": "magnifying-glass",
+    "src": "../../Statamic/cms/resources/svg/icons/magnifying-glass.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/mail-check.svg": {
+    "file": "assets/mail-check-D6oBwc6f.js",
+    "name": "mail-check",
+    "src": "../../Statamic/cms/resources/svg/icons/mail-check.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/mail-settings.svg": {
+    "file": "assets/mail-settings-DiM9wiU-.js",
+    "name": "mail-settings",
+    "src": "../../Statamic/cms/resources/svg/icons/mail-settings.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/mail.svg": {
+    "file": "assets/mail-CQZrwG8t.js",
+    "name": "mail",
+    "src": "../../Statamic/cms/resources/svg/icons/mail.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/markdown.svg": {
+    "file": "assets/markdown-BTi0MYOz.js",
+    "name": "markdown",
+    "src": "../../Statamic/cms/resources/svg/icons/markdown.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/mask.svg": {
+    "file": "assets/mask-1cOyFh6J.js",
+    "name": "mask",
+    "src": "../../Statamic/cms/resources/svg/icons/mask.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/maximize.svg": {
+    "file": "assets/maximize-CFycI5vn.js",
+    "name": "maximize",
+    "src": "../../Statamic/cms/resources/svg/icons/maximize.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/megaphone.svg": {
+    "file": "assets/megaphone-Cx8JYN6C.js",
+    "name": "megaphone",
+    "src": "../../Statamic/cms/resources/svg/icons/megaphone.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/minimize.svg": {
+    "file": "assets/minimize-BhVHXgOg.js",
+    "name": "minimize",
+    "src": "../../Statamic/cms/resources/svg/icons/minimize.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/monitor.svg": {
+    "file": "assets/monitor-C3iygLcy.js",
+    "name": "monitor",
+    "src": "../../Statamic/cms/resources/svg/icons/monitor.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/moon.svg": {
+    "file": "assets/moon-XFTAa8Py.js",
+    "name": "moon",
+    "src": "../../Statamic/cms/resources/svg/icons/moon.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/move-folder.svg": {
+    "file": "assets/move-folder-60bTMYpX.js",
+    "name": "move-folder",
+    "src": "../../Statamic/cms/resources/svg/icons/move-folder.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/navigation.svg": {
+    "file": "assets/navigation-CnqKQ21g.js",
+    "name": "navigation",
+    "src": "../../Statamic/cms/resources/svg/icons/navigation.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/page-ghost.svg": {
+    "file": "assets/page-ghost-DBWB_Xhr.js",
+    "name": "page-ghost",
+    "src": "../../Statamic/cms/resources/svg/icons/page-ghost.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/page.svg": {
+    "file": "assets/page-C09VuHxC.js",
+    "name": "page",
+    "src": "../../Statamic/cms/resources/svg/icons/page.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/palette.svg": {
+    "file": "assets/palette-BVioqhUV.js",
+    "name": "palette",
+    "src": "../../Statamic/cms/resources/svg/icons/palette.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/pdf.svg": {
+    "file": "assets/pdf-CzvRm9Ep.js",
+    "name": "pdf",
+    "src": "../../Statamic/cms/resources/svg/icons/pdf.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/pencil.svg": {
+    "file": "assets/pencil-BZ-HOqu6.js",
+    "name": "pencil",
+    "src": "../../Statamic/cms/resources/svg/icons/pencil.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/permissions.svg": {
+    "file": "assets/permissions-D2qqLhE0.js",
+    "name": "permissions",
+    "src": "../../Statamic/cms/resources/svg/icons/permissions.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/phone-lock.svg": {
+    "file": "assets/phone-lock-DLuEIW6T.js",
+    "name": "phone-lock",
+    "src": "../../Statamic/cms/resources/svg/icons/phone-lock.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/playground.svg": {
+    "file": "assets/playground-m1egbRNG.js",
+    "name": "playground",
+    "src": "../../Statamic/cms/resources/svg/icons/playground.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/plus.svg": {
+    "file": "assets/plus-CmXUmplS.js",
+    "name": "plus",
+    "src": "../../Statamic/cms/resources/svg/icons/plus.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/preferences.svg": {
+    "file": "assets/preferences-ByAUpImq.js",
+    "name": "preferences",
+    "src": "../../Statamic/cms/resources/svg/icons/preferences.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/pulse.svg": {
+    "file": "assets/pulse-OXKqwaPg.js",
+    "name": "pulse",
+    "src": "../../Statamic/cms/resources/svg/icons/pulse.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/rename.svg": {
+    "file": "assets/rename-tKT7haGO.js",
+    "name": "rename",
+    "src": "../../Statamic/cms/resources/svg/icons/rename.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/replace.svg": {
+    "file": "assets/replace-CzQnErGm.js",
+    "name": "replace",
+    "src": "../../Statamic/cms/resources/svg/icons/replace.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/return-square.svg": {
+    "file": "assets/return-square-Df3ws8HQ.js",
+    "name": "return-square",
+    "src": "../../Statamic/cms/resources/svg/icons/return-square.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/rewind.svg": {
+    "file": "assets/rewind-CkpFUYGA.js",
+    "name": "rewind",
+    "src": "../../Statamic/cms/resources/svg/icons/rewind.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/rss.svg": {
+    "file": "assets/rss-COEshaEo.js",
+    "name": "rss",
+    "src": "../../Statamic/cms/resources/svg/icons/rss.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/save.svg": {
+    "file": "assets/save-D0D3vRgi.js",
+    "name": "save",
+    "src": "../../Statamic/cms/resources/svg/icons/save.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/scaffold-large.svg": {
+    "file": "assets/scaffold-large-D24Z6V1g.js",
+    "name": "scaffold-large",
+    "src": "../../Statamic/cms/resources/svg/icons/scaffold-large.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/scaffold.svg": {
+    "file": "assets/scaffold-JvPwimMf.js",
+    "name": "scaffold",
+    "src": "../../Statamic/cms/resources/svg/icons/scaffold.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/script.svg": {
+    "file": "assets/script-DQkMN6t6.js",
+    "name": "script",
+    "src": "../../Statamic/cms/resources/svg/icons/script.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/sign-in.svg": {
+    "file": "assets/sign-in-DVfKc2uo.js",
+    "name": "sign-in",
+    "src": "../../Statamic/cms/resources/svg/icons/sign-in.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/sign-out.svg": {
+    "file": "assets/sign-out-D4y9LCxu.js",
+    "name": "sign-out",
+    "src": "../../Statamic/cms/resources/svg/icons/sign-out.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/site-settings.svg": {
+    "file": "assets/site-settings-Ck9MMAI9.js",
+    "name": "site-settings",
+    "src": "../../Statamic/cms/resources/svg/icons/site-settings.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/site.svg": {
+    "file": "assets/site-Ck9MMAI9.js",
+    "name": "site",
+    "src": "../../Statamic/cms/resources/svg/icons/site.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/slider.svg": {
+    "file": "assets/slider-DwqG9svw.js",
+    "name": "slider",
+    "src": "../../Statamic/cms/resources/svg/icons/slider.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/sliders-horizontal.svg": {
+    "file": "assets/sliders-horizontal-3dyI9D4k.js",
+    "name": "sliders-horizontal",
+    "src": "../../Statamic/cms/resources/svg/icons/sliders-horizontal.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/sliders-vertical.svg": {
+    "file": "assets/sliders-vertical-B2MXG1Dr.js",
+    "name": "sliders-vertical",
+    "src": "../../Statamic/cms/resources/svg/icons/sliders-vertical.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/star-half.svg": {
+    "file": "assets/star-half-T3vYX-0t.js",
+    "name": "star-half",
+    "src": "../../Statamic/cms/resources/svg/icons/star-half.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/star.svg": {
+    "file": "assets/star-BPmhpS7c.js",
+    "name": "star",
+    "src": "../../Statamic/cms/resources/svg/icons/star.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/statamic-logo-lime.svg": {
+    "file": "assets/statamic-logo-lime-C1fQ1zqQ.js",
+    "name": "statamic-logo-lime",
+    "src": "../../Statamic/cms/resources/svg/icons/statamic-logo-lime.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/statamic-mark-lime.svg": {
+    "file": "assets/statamic-mark-lime-CvehgS1X.js",
+    "name": "statamic-mark-lime",
+    "src": "../../Statamic/cms/resources/svg/icons/statamic-mark-lime.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/steps.svg": {
+    "file": "assets/steps-veHi_c1T.js",
+    "name": "steps",
+    "src": "../../Statamic/cms/resources/svg/icons/steps.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/sun.svg": {
+    "file": "assets/sun-CQoHuzsg.js",
+    "name": "sun",
+    "src": "../../Statamic/cms/resources/svg/icons/sun.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/support.svg": {
+    "file": "assets/support-CQcvEV-u.js",
+    "name": "support",
+    "src": "../../Statamic/cms/resources/svg/icons/support.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/synced.svg": {
+    "file": "assets/synced-BTmXOQ3b.js",
+    "name": "synced",
+    "src": "../../Statamic/cms/resources/svg/icons/synced.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/taxonomies.svg": {
+    "file": "assets/taxonomies-DMMqyPo9.js",
+    "name": "taxonomies",
+    "src": "../../Statamic/cms/resources/svg/icons/taxonomies.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/team.svg": {
+    "file": "assets/team-DDfGXg6R.js",
+    "name": "team",
+    "src": "../../Statamic/cms/resources/svg/icons/team.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/trash.svg": {
+    "file": "assets/trash-DvUAcYfj.js",
+    "name": "trash",
+    "src": "../../Statamic/cms/resources/svg/icons/trash.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/unsynced.svg": {
+    "file": "assets/unsynced-Bggwf_iM.js",
+    "name": "unsynced",
+    "src": "../../Statamic/cms/resources/svg/icons/unsynced.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/up-down.svg": {
+    "file": "assets/up-down-Cs2b_3vX.js",
+    "name": "up-down",
+    "src": "../../Statamic/cms/resources/svg/icons/up-down.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/up-square.svg": {
+    "file": "assets/up-square-ClvJkdSR.js",
+    "name": "up-square",
+    "src": "../../Statamic/cms/resources/svg/icons/up-square.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/updates.svg": {
+    "file": "assets/updates-CPtFdr1j.js",
+    "name": "updates",
+    "src": "../../Statamic/cms/resources/svg/icons/updates.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/upload-cloud.svg": {
+    "file": "assets/upload-cloud-CtsNIPU0.js",
+    "name": "upload-cloud",
+    "src": "../../Statamic/cms/resources/svg/icons/upload-cloud.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/upload.svg": {
+    "file": "assets/upload-BhHNSGiI.js",
+    "name": "upload",
+    "src": "../../Statamic/cms/resources/svg/icons/upload.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/users.svg": {
+    "file": "assets/users-Ccjx7YRa.js",
+    "name": "users",
+    "src": "../../Statamic/cms/resources/svg/icons/users.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/utilities.svg": {
+    "file": "assets/utilities-BujdNzbF.js",
+    "name": "utilities",
+    "src": "../../Statamic/cms/resources/svg/icons/utilities.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/visit-website.svg": {
+    "file": "assets/visit-website-B41Rz4Rr.js",
+    "name": "visit-website",
+    "src": "../../Statamic/cms/resources/svg/icons/visit-website.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/wand.svg": {
+    "file": "assets/wand-4DuQYBNq.js",
+    "name": "wand",
+    "src": "../../Statamic/cms/resources/svg/icons/wand.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/warning-diamond.svg": {
+    "file": "assets/warning-diamond-5o0Z3Gfr.js",
+    "name": "warning-diamond",
+    "src": "../../Statamic/cms/resources/svg/icons/warning-diamond.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/web.svg": {
+    "file": "assets/web-BsR90MgB.js",
+    "name": "web",
+    "src": "../../Statamic/cms/resources/svg/icons/web.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/workflow.svg": {
+    "file": "assets/workflow-BrJ94mqX.js",
+    "name": "workflow",
+    "src": "../../Statamic/cms/resources/svg/icons/workflow.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/x.svg": {
+    "file": "assets/x-BJ2NwqD5.js",
+    "name": "x",
+    "src": "../../Statamic/cms/resources/svg/icons/x.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/ui/architectural-lines.svg": {
+    "file": "assets/architectural-lines-BtMp9Cne.js",
+    "name": "architectural-lines",
+    "src": "../../Statamic/cms/resources/svg/ui/architectural-lines.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/ui/chevron-down.svg": {
+    "file": "assets/chevron-down-BzjNzqYK.js",
+    "name": "chevron-down",
+    "src": "../../Statamic/cms/resources/svg/ui/chevron-down.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/ui/chevron-left.svg": {
+    "file": "assets/chevron-left-BQoQujio.js",
+    "name": "chevron-left",
+    "src": "../../Statamic/cms/resources/svg/ui/chevron-left.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/ui/chevron-right.svg": {
+    "file": "assets/chevron-right-D-4f5Ty2.js",
+    "name": "chevron-right",
+    "src": "../../Statamic/cms/resources/svg/ui/chevron-right.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/ui/chevron-vertical.svg": {
+    "file": "assets/chevron-vertical-PgB1dFVk.js",
+    "name": "chevron-vertical",
+    "src": "../../Statamic/cms/resources/svg/ui/chevron-vertical.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/ui/dots.svg": {
+    "file": "assets/dots-DaGHB8eW.js",
+    "name": "dots",
+    "src": "../../Statamic/cms/resources/svg/ui/dots.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "_vue.runtime.esm-bundler-B9i9wuim.js": {
+    "file": "assets/vue.runtime.esm-bundler-B9i9wuim.js",
     "name": "vue.runtime.esm-bundler"
   },
   "resources/css/cp.css": {
-    "file": "assets/cp-Y5FXgi1u.css",
+    "file": "assets/cp-CMfU58Xx.css",
     "src": "resources/css/cp.css",
     "isEntry": true
   },
   "resources/js/cp.js": {
-    "file": "assets/cp-MpsWbiOY.js",
+    "file": "assets/cp-DpD297nP.js",
     "name": "cp",
     "src": "resources/js/cp.js",
     "isEntry": true,
     "dynamicImports": [
-      "resources/svg/money-cash-file-dollar.svg",
+      "../../Statamic/cms/resources/svg/icons/add-bookmark.svg",
+      "../../Statamic/cms/resources/svg/icons/add-circle.svg",
+      "../../Statamic/cms/resources/svg/icons/add-entry.svg",
+      "../../Statamic/cms/resources/svg/icons/add-folder.svg",
+      "../../Statamic/cms/resources/svg/icons/add-group.svg",
+      "../../Statamic/cms/resources/svg/icons/add-sticky.svg",
+      "../../Statamic/cms/resources/svg/icons/add-tag.svg",
+      "../../Statamic/cms/resources/svg/icons/add-user.svg",
+      "../../Statamic/cms/resources/svg/icons/addons.svg",
+      "../../Statamic/cms/resources/svg/icons/ai.svg",
+      "../../Statamic/cms/resources/svg/icons/align-center.svg",
+      "../../Statamic/cms/resources/svg/icons/align-left.svg",
+      "../../Statamic/cms/resources/svg/icons/align-right.svg",
+      "../../Statamic/cms/resources/svg/icons/arrow-down.svg",
+      "../../Statamic/cms/resources/svg/icons/arrow-left.svg",
+      "../../Statamic/cms/resources/svg/icons/arrow-right.svg",
+      "../../Statamic/cms/resources/svg/icons/arrow-up-right.svg",
+      "../../Statamic/cms/resources/svg/icons/asset-folder.svg",
+      "../../Statamic/cms/resources/svg/icons/assets.svg",
+      "../../Statamic/cms/resources/svg/icons/avatar.svg",
+      "../../Statamic/cms/resources/svg/icons/bell.svg",
+      "../../Statamic/cms/resources/svg/icons/blueprint-edit.svg",
+      "../../Statamic/cms/resources/svg/icons/blueprints-large.svg",
+      "../../Statamic/cms/resources/svg/icons/blueprints.svg",
+      "../../Statamic/cms/resources/svg/icons/book-next-page.svg",
+      "../../Statamic/cms/resources/svg/icons/book-prev-page.svg",
+      "../../Statamic/cms/resources/svg/icons/burger-menu.svg",
+      "../../Statamic/cms/resources/svg/icons/cache.svg",
+      "../../Statamic/cms/resources/svg/icons/calendar.svg",
+      "../../Statamic/cms/resources/svg/icons/checkmark.svg",
+      "../../Statamic/cms/resources/svg/icons/clipboard-check.svg",
+      "../../Statamic/cms/resources/svg/icons/clipboard.svg",
+      "../../Statamic/cms/resources/svg/icons/cog-solid.svg",
+      "../../Statamic/cms/resources/svg/icons/cog.svg",
+      "../../Statamic/cms/resources/svg/icons/collections.svg",
+      "../../Statamic/cms/resources/svg/icons/columns.svg",
+      "../../Statamic/cms/resources/svg/icons/configure-large.svg",
+      "../../Statamic/cms/resources/svg/icons/container-add.svg",
+      "../../Statamic/cms/resources/svg/icons/credit-card.svg",
+      "../../Statamic/cms/resources/svg/icons/dashboard.svg",
+      "../../Statamic/cms/resources/svg/icons/delete.svg",
+      "../../Statamic/cms/resources/svg/icons/down-square.svg",
+      "../../Statamic/cms/resources/svg/icons/download.svg",
+      "../../Statamic/cms/resources/svg/icons/duplicate.svg",
+      "../../Statamic/cms/resources/svg/icons/earth.svg",
+      "../../Statamic/cms/resources/svg/icons/edit.svg",
+      "../../Statamic/cms/resources/svg/icons/entry.svg",
+      "../../Statamic/cms/resources/svg/icons/external-link.svg",
+      "../../Statamic/cms/resources/svg/icons/eye-closed.svg",
+      "../../Statamic/cms/resources/svg/icons/eye-slash.svg",
+      "../../Statamic/cms/resources/svg/icons/eye.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldsets.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-array.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-assets.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-bard.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-button_group.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-checkboxes.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-code.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-collections.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-color.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-date.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-dictionary.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-entries-large.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-entries.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-float.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-form.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-grid.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-group.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-hidden.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-html.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-icon_picker.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-integer.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-link.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-list.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-markdown.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-navigation.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-radio.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-range.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-replicator.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-revealer.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-section.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-select.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-sites.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-slug.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-spacer.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-structures.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-table.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-taggable.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-taxonomy.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-template.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-text.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-textarea.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-time.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-toggle.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-user_groups.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-user_roles.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-users.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-video.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-width.svg",
+      "../../Statamic/cms/resources/svg/icons/fieldtype-yaml.svg",
+      "../../Statamic/cms/resources/svg/icons/filter.svg",
+      "../../Statamic/cms/resources/svg/icons/fit-height.svg",
+      "../../Statamic/cms/resources/svg/icons/fit-width.svg",
+      "../../Statamic/cms/resources/svg/icons/folder-add.svg",
+      "../../Statamic/cms/resources/svg/icons/folder-ai.svg",
+      "../../Statamic/cms/resources/svg/icons/folder-block.svg",
+      "../../Statamic/cms/resources/svg/icons/folder-check.svg",
+      "../../Statamic/cms/resources/svg/icons/folder-download.svg",
+      "../../Statamic/cms/resources/svg/icons/folder-edit.svg",
+      "../../Statamic/cms/resources/svg/icons/folder-ghost.svg",
+      "../../Statamic/cms/resources/svg/icons/folder-history.svg",
+      "../../Statamic/cms/resources/svg/icons/folder-lock.svg",
+      "../../Statamic/cms/resources/svg/icons/folder-music.svg",
+      "../../Statamic/cms/resources/svg/icons/folder-open.svg",
+      "../../Statamic/cms/resources/svg/icons/folder-photos.svg",
+      "../../Statamic/cms/resources/svg/icons/folder-play.svg",
+      "../../Statamic/cms/resources/svg/icons/folder-remove.svg",
+      "../../Statamic/cms/resources/svg/icons/folder-settings.svg",
+      "../../Statamic/cms/resources/svg/icons/folder-warning.svg",
+      "../../Statamic/cms/resources/svg/icons/folder.svg",
+      "../../Statamic/cms/resources/svg/icons/forms.svg",
+      "../../Statamic/cms/resources/svg/icons/globals.svg",
+      "../../Statamic/cms/resources/svg/icons/graphql.svg",
+      "../../Statamic/cms/resources/svg/icons/groups.svg",
+      "../../Statamic/cms/resources/svg/icons/handles-sm.svg",
+      "../../Statamic/cms/resources/svg/icons/handles.svg",
+      "../../Statamic/cms/resources/svg/icons/heart.svg",
+      "../../Statamic/cms/resources/svg/icons/hierarchy.svg",
+      "../../Statamic/cms/resources/svg/icons/history.svg",
+      "../../Statamic/cms/resources/svg/icons/home.svg",
+      "../../Statamic/cms/resources/svg/icons/info-square.svg",
+      "../../Statamic/cms/resources/svg/icons/info.svg",
+      "../../Statamic/cms/resources/svg/icons/key.svg",
+      "../../Statamic/cms/resources/svg/icons/layout-grid.svg",
+      "../../Statamic/cms/resources/svg/icons/layout-list.svg",
+      "../../Statamic/cms/resources/svg/icons/layout-masonry.svg",
+      "../../Statamic/cms/resources/svg/icons/license.svg",
+      "../../Statamic/cms/resources/svg/icons/link.svg",
+      "../../Statamic/cms/resources/svg/icons/live-preview.svg",
+      "../../Statamic/cms/resources/svg/icons/loading.svg",
+      "../../Statamic/cms/resources/svg/icons/magnifying-glass.svg",
+      "../../Statamic/cms/resources/svg/icons/mail-check.svg",
+      "../../Statamic/cms/resources/svg/icons/mail-settings.svg",
+      "../../Statamic/cms/resources/svg/icons/mail.svg",
+      "../../Statamic/cms/resources/svg/icons/markdown.svg",
+      "../../Statamic/cms/resources/svg/icons/mask.svg",
+      "../../Statamic/cms/resources/svg/icons/maximize.svg",
+      "../../Statamic/cms/resources/svg/icons/megaphone.svg",
+      "../../Statamic/cms/resources/svg/icons/minimize.svg",
+      "../../Statamic/cms/resources/svg/icons/monitor.svg",
+      "../../Statamic/cms/resources/svg/icons/moon.svg",
+      "../../Statamic/cms/resources/svg/icons/move-folder.svg",
+      "../../Statamic/cms/resources/svg/icons/navigation.svg",
+      "../../Statamic/cms/resources/svg/icons/page-ghost.svg",
+      "../../Statamic/cms/resources/svg/icons/page.svg",
+      "../../Statamic/cms/resources/svg/icons/palette.svg",
+      "../../Statamic/cms/resources/svg/icons/pdf.svg",
+      "../../Statamic/cms/resources/svg/icons/pencil.svg",
+      "../../Statamic/cms/resources/svg/icons/permissions.svg",
+      "../../Statamic/cms/resources/svg/icons/phone-lock.svg",
+      "../../Statamic/cms/resources/svg/icons/playground.svg",
+      "../../Statamic/cms/resources/svg/icons/plus.svg",
+      "../../Statamic/cms/resources/svg/icons/preferences.svg",
+      "../../Statamic/cms/resources/svg/icons/pulse.svg",
+      "../../Statamic/cms/resources/svg/icons/rename.svg",
+      "../../Statamic/cms/resources/svg/icons/replace.svg",
+      "../../Statamic/cms/resources/svg/icons/return-square.svg",
+      "../../Statamic/cms/resources/svg/icons/rewind.svg",
+      "../../Statamic/cms/resources/svg/icons/rss.svg",
+      "../../Statamic/cms/resources/svg/icons/save.svg",
+      "../../Statamic/cms/resources/svg/icons/scaffold-large.svg",
+      "../../Statamic/cms/resources/svg/icons/scaffold.svg",
+      "../../Statamic/cms/resources/svg/icons/script.svg",
+      "../../Statamic/cms/resources/svg/icons/sign-in.svg",
+      "../../Statamic/cms/resources/svg/icons/sign-out.svg",
+      "../../Statamic/cms/resources/svg/icons/site-settings.svg",
+      "../../Statamic/cms/resources/svg/icons/site.svg",
+      "../../Statamic/cms/resources/svg/icons/slider.svg",
+      "../../Statamic/cms/resources/svg/icons/sliders-horizontal.svg",
+      "../../Statamic/cms/resources/svg/icons/sliders-vertical.svg",
+      "../../Statamic/cms/resources/svg/icons/star-half.svg",
+      "../../Statamic/cms/resources/svg/icons/star.svg",
+      "../../Statamic/cms/resources/svg/icons/statamic-logo-lime.svg",
+      "../../Statamic/cms/resources/svg/icons/statamic-mark-lime.svg",
+      "../../Statamic/cms/resources/svg/icons/steps.svg",
+      "../../Statamic/cms/resources/svg/icons/sun.svg",
+      "../../Statamic/cms/resources/svg/icons/support.svg",
+      "../../Statamic/cms/resources/svg/icons/synced.svg",
+      "../../Statamic/cms/resources/svg/icons/taxonomies.svg",
+      "../../Statamic/cms/resources/svg/icons/team.svg",
+      "../../Statamic/cms/resources/svg/icons/trash.svg",
+      "../../Statamic/cms/resources/svg/icons/unsynced.svg",
+      "../../Statamic/cms/resources/svg/icons/up-down.svg",
+      "../../Statamic/cms/resources/svg/icons/up-square.svg",
+      "../../Statamic/cms/resources/svg/icons/updates.svg",
+      "../../Statamic/cms/resources/svg/icons/upload-cloud.svg",
+      "../../Statamic/cms/resources/svg/icons/upload.svg",
+      "../../Statamic/cms/resources/svg/icons/users.svg",
+      "../../Statamic/cms/resources/svg/icons/utilities.svg",
+      "../../Statamic/cms/resources/svg/icons/visit-website.svg",
+      "../../Statamic/cms/resources/svg/icons/wand.svg",
+      "../../Statamic/cms/resources/svg/icons/warning-diamond.svg",
+      "../../Statamic/cms/resources/svg/icons/web.svg",
+      "../../Statamic/cms/resources/svg/icons/workflow.svg",
+      "../../Statamic/cms/resources/svg/icons/x.svg",
+      "../../Statamic/cms/resources/svg/ui/architectural-lines.svg",
+      "../../Statamic/cms/resources/svg/ui/chevron-down.svg",
+      "../../Statamic/cms/resources/svg/ui/chevron-left.svg",
+      "../../Statamic/cms/resources/svg/ui/chevron-right.svg",
+      "../../Statamic/cms/resources/svg/ui/chevron-vertical.svg",
+      "../../Statamic/cms/resources/svg/ui/dots.svg",
+      "resources/svg/discounts.svg",
       "resources/svg/money.svg",
-      "resources/svg/printer.svg",
-      "resources/svg/shop.svg",
+      "resources/svg/orders.svg",
+      "resources/svg/refund.svg",
       "resources/svg/stripe.svg",
-      "resources/svg/travel-map.svg"
+      "resources/svg/tax-classes.svg",
+      "resources/svg/tax-zones.svg"
     ],
     "css": [
-      "assets/cp-CIJP5ALk.css"
+      "assets/cp-FAgvdl6f.css"
     ]
   },
-  "resources/svg/money-cash-file-dollar.svg": {
-    "file": "assets/money-cash-file-dollar-DEEQuvod.js",
-    "name": "money-cash-file-dollar",
-    "src": "resources/svg/money-cash-file-dollar.svg",
+  "resources/svg/discounts.svg": {
+    "file": "assets/discounts-Bix7-SWe.js",
+    "name": "discounts",
+    "src": "resources/svg/discounts.svg",
     "isDynamicEntry": true,
     "imports": [
-      "_vue.runtime.esm-bundler-DQM3OGQG.js"
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
   "resources/svg/money.svg": {
-    "file": "assets/money-8vlXok74.js",
+    "file": "assets/money-Den49J7j.js",
     "name": "money",
     "src": "resources/svg/money.svg",
     "isDynamicEntry": true,
     "imports": [
-      "_vue.runtime.esm-bundler-DQM3OGQG.js"
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
-  "resources/svg/printer.svg": {
-    "file": "assets/printer-ClSZeoQr.js",
-    "name": "printer",
-    "src": "resources/svg/printer.svg",
+  "resources/svg/orders.svg": {
+    "file": "assets/orders-Cv41_znU.js",
+    "name": "orders",
+    "src": "resources/svg/orders.svg",
     "isDynamicEntry": true,
     "imports": [
-      "_vue.runtime.esm-bundler-DQM3OGQG.js"
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
-  "resources/svg/shop.svg": {
-    "file": "assets/shop-CAOGpr81.js",
-    "name": "shop",
-    "src": "resources/svg/shop.svg",
+  "resources/svg/refund.svg": {
+    "file": "assets/refund-DymVmDEf.js",
+    "name": "refund",
+    "src": "resources/svg/refund.svg",
     "isDynamicEntry": true,
     "imports": [
-      "_vue.runtime.esm-bundler-DQM3OGQG.js"
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
   "resources/svg/stripe.svg": {
-    "file": "assets/stripe-By2w7HvL.js",
+    "file": "assets/stripe-CtFNF14x.js",
     "name": "stripe",
     "src": "resources/svg/stripe.svg",
     "isDynamicEntry": true,
     "imports": [
-      "_vue.runtime.esm-bundler-DQM3OGQG.js"
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
-  "resources/svg/travel-map.svg": {
-    "file": "assets/travel-map-BG-uiPHA.js",
-    "name": "travel-map",
-    "src": "resources/svg/travel-map.svg",
+  "resources/svg/tax-classes.svg": {
+    "file": "assets/tax-classes-CuB5iUP6.js",
+    "name": "tax-classes",
+    "src": "resources/svg/tax-classes.svg",
     "isDynamicEntry": true,
     "imports": [
-      "_vue.runtime.esm-bundler-DQM3OGQG.js"
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "resources/svg/tax-zones.svg": {
+    "file": "assets/tax-zones-BlzE4aB2.js",
+    "name": "tax-zones",
+    "src": "resources/svg/tax-zones.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   }
 }
