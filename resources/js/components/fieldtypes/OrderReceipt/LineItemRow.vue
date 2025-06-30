@@ -16,7 +16,7 @@
         <TableCell>{{ lineItem.quantity }}</TableCell>
         <TableCell class="text-right">{{ lineItem.sub_total }}</TableCell>
 
-        <inline-edit-form
+        <InlineEditForm
             v-if="isEditing"
             :item="lineItem.product"
             :component="formComponent"

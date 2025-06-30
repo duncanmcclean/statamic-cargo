@@ -1,3 +1,28 @@
+<script setup>
+import { DropdownItem, Listing } from '@statamic/ui';
+import { ref } from 'vue';
+
+const props = defineProps({
+    actionUrl: String,
+    sortColumn: String,
+    sortDirection: String,
+    columns: Array,
+    filters: Array,
+});
+
+const preferencesPrefix = 'cargo.orders';
+const requestUrl = cp_url(`orders`);
+const items = ref(null);
+const page = ref(null);
+const perPage = ref(null);
+
+function requestComplete({ items: newItems, parameters }) {
+    items.value = newItems;
+    page.value = parameters.page;
+    perPage.value = parameters.perPage;
+}
+</script>
+
 <template>
     <Listing
         ref="listing"
@@ -21,40 +46,3 @@
         </template>
     </Listing>
 </template>
-
-<script>
-import { DropdownItem, Listing } from '@statamic/ui';
-
-export default {
-    components: {
-        Listing,
-        DropdownItem,
-    },
-
-    props: {
-        actionUrl: String,
-        sortColumn: String,
-        sortDirection: String,
-        columns: Array,
-        filters: Array,
-    },
-
-    data() {
-        return {
-            preferencesPrefix: `cargo.orders`,
-            requestUrl: cp_url(`orders`),
-            items: null,
-            page: null,
-            perPage: null,
-        };
-    },
-
-    methods: {
-        requestComplete({ items, parameters, activeFilters }) {
-            this.items = items;
-            this.page = parameters.page;
-            this.perPage = parameters.perPage;
-        },
-    },
-};
-</script>
