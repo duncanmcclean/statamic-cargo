@@ -13,7 +13,7 @@ class ApplyDiscounts
 {
     public function handle(Cart $cart, Closure $next)
     {
-        if ($cart->has('discount_code') && ! Facades\Discount::findByDiscountCode($cart->get('discount_code'))) {
+        if ($cart->get('discount_code') && ! Facades\Discount::findByDiscountCode($cart->get('discount_code'))) {
             $cart->remove('discount_code');
         }
 

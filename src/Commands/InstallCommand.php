@@ -9,9 +9,11 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Statamic\Console\RunsInPlease;
 use Statamic\Facades\Collection;
+use Statamic\Facades\Preference;
 use Statamic\Facades\Site;
 use Statamic\Support\Str;
 use Stillat\Proteus\Support\Facades\ConfigWriter;
+
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\search;
 use function Laravel\Prompts\select;
@@ -27,13 +29,16 @@ class InstallCommand extends Command
 
     public function handle(): void
     {
-        $this->output->write(PHP_EOL.'<fg=#02747E;options=bold>
-     ______                     
-    / ____/___ __________ _____ 
-   / /   / __ `/ ___/ __ `/ __ \
-  / /___/ /_/ / /  / /_/ / /_/ /
-  \____/\__,_/_/   \__, /\____/ 
-                  /____/        
+        $this->output->write(PHP_EOL.'<fg=#00A63E;options=bold>
+  /$$$$$$$  /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$ 
+ /$$_____/ |____  $$ /$$__  $$ /$$__  $$ /$$__  $$
+| $$        /$$$$$$$| $$  \__/| $$  \ $$| $$  \ $$
+| $$       /$$__  $$| $$      | $$  | $$| $$  | $$
+|  $$$$$$$|  $$$$$$$| $$      |  $$$$$$$|  $$$$$$/
+ \_______/ \_______/|__/       \____  $$ \______/ 
+                               /$$  \ $$          
+                              |  $$$$$$/          
+                               \______/           
                 </>'.PHP_EOL);
 
         if (! $this->input->isInteractive()) {
@@ -51,7 +56,8 @@ class InstallCommand extends Command
             ->publishMailables()
             ->publishPrebuiltCheckout()
             ->schedulePurgeAbandonedCartsCommand()
-            ->createGeneralTaxClass();
+            ->createGeneralTaxClass()
+            ->setDefaultPreferences();
 
         $this->line('  <fg=green;options=bold>Cargo has been installed successfully!</> 🎉');
         $this->newLine();
@@ -248,6 +254,24 @@ PHP;
     private function createGeneralTaxClass(): self
     {
         TaxClass::make()->handle('general')->set('name', __('General'))->save();
+
+        return $this;
+    }
+
+    private function setDefaultPreferences(): self
+    {
+        Preference::default()->setPreference('cargo', [
+            'orders' => [
+                'columns' => [
+                    'order_number',
+                    'date',
+                    'customer',
+                    'grand_total',
+                    'status',
+                    'line_items',
+                ],
+            ],
+        ])->save();
 
         return $this;
     }

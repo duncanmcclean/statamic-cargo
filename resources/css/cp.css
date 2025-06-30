@@ -1,43 +1,13 @@
-@import 'tailwindcss/utilities';
+@layer theme, base, components, utilities;
 
-.receipt-table {
-    .receipt-table-header {
-        @apply grid grid-cols-6 border-b py-2 font-medium dark:border-dark-500;
-    }
+@import 'tailwindcss/theme.css' layer(theme);
+@import './listings.css';
 
-    .receipt-line-item {
-        @apply grid grid-cols-6 py-4;
+@source "../js";
+@source "../views";
 
-        div {
-            @apply text-right;
-        }
-
-        :first-child {
-            @apply col-span-3 text-left;
-        }
-    }
-
-    .receipt-total {
-        @apply grid grid-cols-6 py-2;
-
-        :first-child {
-            @apply col-span-5 flex flex-col gap-y-1 text-right;
-        }
-
-        :last-child {
-            @apply col-span-1 text-right;
-        }
-    }
+@theme {
+    --color-dark-150: #bbbdc0;
 }
 
-.discount-status-index-field {
-    @apply inline-block shrink justify-center rounded-full bg-gray-300 px-2 py-0.5 text-center text-xs text-gray-800 dark:bg-dark-200 dark:text-dark-150;
-
-    &.status-active {
-        @apply bg-green-200 text-green-900 dark:bg-green-300 dark:text-green-950;
-    }
-
-    &.status-scheduled {
-        @apply bg-amber-200 text-amber-900 dark:bg-amber-300 dark:text-amber-950;
-    }
-}
+@custom-variant dark (&:where(.dark, .dark *));

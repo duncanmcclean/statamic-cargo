@@ -15,6 +15,7 @@ use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
 use Statamic\Facades\User;
 use stdClass;
+
 use function Laravel\Prompts\progress;
 
 class MigrateCustomers extends Command

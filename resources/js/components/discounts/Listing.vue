@@ -1,197 +1,53 @@
-<template>
-    <div>
-        <div v-if="initializing" class="card loading">
-            <loading-graphic />
-        </div>
+<script setup>
+import { DropdownItem, Listing } from '@statamic/ui';
+import DiscountStatusIndicator from './DiscountStatusIndicator.vue';
+import { ref } from 'vue';
 
-        <data-list
-            v-if="!initializing"
-            ref="dataList"
-            :rows="items"
-            :columns="columns"
-            :sort="false"
-            :sort-column="sortColumn"
-            :sort-direction="sortDirection"
-            @visible-columns-updated="visibleColumns = $event"
-        >
-            <div>
-                <div class="card relative overflow-hidden p-0">
-                    <div
-                        class="flex flex-wrap items-center justify-between border-b px-2 pb-2 text-sm dark:border-dark-900"
-                    >
-                        <data-list-filter-presets
-                            ref="presets"
-                            :active-preset="activePreset"
-                            :active-preset-payload="activePresetPayload"
-                            :active-filters="activeFilters"
-                            :has-active-filters="hasActiveFilters"
-                            :preferences-prefix="preferencesPrefix"
-                            :search-query="searchQuery"
-                            @selected="selectPreset"
-                            @reset="filtersReset"
-                        />
+const props = defineProps({
+    actionUrl: String,
+    sortColumn: String,
+    sortDirection: String,
+    columns: Array,
+    filters: Array,
+});
 
-                        <data-list-search
-                            class="mt-2 h-8 w-full min-w-[240px]"
-                            ref="search"
-                            v-model="searchQuery"
-                            :placeholder="searchPlaceholder"
-                        />
+const preferencesPrefix = 'cargo.discounts';
+const requestUrl = cp_url(`discounts`);
+const items = ref(null);
+const page = ref(null);
+const perPage = ref(null);
 
-                        <div class="mt-2 flex space-x-2">
-                            <button
-                                class="btn btn-sm ltr:ml-2 rtl:mr-2"
-                                v-text="__('Reset')"
-                                v-show="isDirty"
-                                @click="$refs.presets.refreshPreset()"
-                            />
-                            <button
-                                class="btn btn-sm ltr:ml-2 rtl:mr-2"
-                                v-text="__('Save')"
-                                v-show="isDirty"
-                                @click="$refs.presets.savePreset()"
-                            />
-                            <data-list-column-picker :preferences-key="preferencesKey('columns')" />
-                        </div>
-                    </div>
-                    <div>
-                        <data-list-filters
-                            ref="filters"
-                            :filters="filters"
-                            :active-preset="activePreset"
-                            :active-preset-payload="activePresetPayload"
-                            :active-filters="activeFilters"
-                            :active-filter-badges="activeFilterBadges"
-                            :active-count="activeFilterCount"
-                            :search-query="searchQuery"
-                            :is-searching="true"
-                            :saves-presets="true"
-                            :preferences-prefix="preferencesPrefix"
-                            @changed="filterChanged"
-                            @saved="$refs.presets.setPreset($event)"
-                            @deleted="$refs.presets.refreshPresets()"
-                        />
-                    </div>
-
-                    <div v-show="items.length === 0" class="p-6 text-center text-gray-500" v-text="__('No results')" />
-
-                    <data-list-bulk-actions :url="actionUrl" @started="actionStarted" @completed="actionCompleted" />
-                    <div class="overflow-x-auto overflow-y-hidden">
-                        <data-list-table
-                            v-show="items.length"
-                            :allow-bulk-actions="true"
-                            :loading="loading"
-                            :sortable="true"
-                            :toggle-selection-on-row-click="true"
-                            @sorted="sorted"
-                        >
-                            <template #cell-name="{ row: discount, value }">
-                                <div class="title-index-field">
-                                    <a
-                                        class="title-index-field inline-flex items-center"
-                                        :href="discount.edit_url"
-                                        @click.stop
-                                    >
-                                        <span
-                                            class="little-dot ltr:mr-2 rtl:ml-2"
-                                            v-tooltip="getStatusLabel(discount)"
-                                            :class="getStatusClass(discount)"
-                                            v-if="!columnShowing('status')"
-                                        />
-                                        <span v-text="discount.name" />
-                                    </a>
-                                </div>
-                            </template>
-                            <template #cell-status="{ row: discount }">
-                                <div
-                                    class="discount-status-index-field select-none"
-                                    v-tooltip="getStatusTooltip(discount)"
-                                    :class="`status-${discount.status}`"
-                                    v-text="getStatusLabel(discount)"
-                                />
-                            </template>
-                            <template #actions="{ row: discount, index }">
-                                <dropdown-list placement="left-start">
-                                    <dropdown-item
-                                        :text="__('Edit')"
-                                        :redirect="discount.edit_url"
-                                        v-if="discount.editable"
-                                    />
-                                    <div class="divider" v-if="discount.actions.length" />
-                                    <data-list-inline-actions
-                                        :item="discount.id"
-                                        :url="actionUrl"
-                                        :actions="discount.actions"
-                                        @started="actionStarted"
-                                        @completed="actionCompleted"
-                                    />
-                                </dropdown-list>
-                            </template>
-                        </data-list-table>
-                    </div>
-                </div>
-                <data-list-pagination
-                    class="mt-6"
-                    :resource-meta="meta"
-                    :per-page="perPage"
-                    :show-totals="true"
-                    @page-selected="selectPage"
-                    @per-page-changed="changePerPage"
-                />
-            </div>
-        </data-list>
-    </div>
-</template>
-
-<script>
-import Listing from '@statamic/components/Listing.vue';
-
-export default {
-    mixins: [Listing],
-
-    data() {
-        return {
-            listingKey: 'discounts',
-            preferencesPrefix: `cargo.discounts`,
-            requestUrl: cp_url(`discounts`),
-            pushQuery: true,
-        };
-    },
-
-    methods: {
-        getStatusClass(discount) {
-            if (discount.status === 'active') {
-                return 'bg-green-600';
-            } else if (discount.status === 'scheduled') {
-                return 'bg-amber-200 dark:bg-amber-300';
-            } else if (discount.status === 'expired') {
-                return 'bg-gray-400 dark:bg-dark-200';
-            }
-        },
-
-        getStatusLabel(discount) {
-            if (discount.status === 'active') {
-                return __('Active');
-            } else if (discount.status === 'scheduled') {
-                return __('Scheduled');
-            } else if (discount.status === 'expired') {
-                return __('Expired');
-            }
-        },
-
-        getStatusTooltip(discount) {
-            if (discount.status === 'active') {
-                return __('Active');
-            } else if (discount.status === 'scheduled') {
-                return __('Scheduled');
-            } else if (discount.status === 'expired') {
-                return __('Expired');
-            }
-        },
-
-        columnShowing(column) {
-            return this.visibleColumns.find((c) => c.field === column);
-        },
-    },
-};
+function requestComplete({ items: newItems, parameters }) {
+    items.value = newItems;
+    page.value = parameters.page;
+    perPage.value = parameters.perPage;
+}
 </script>
+
+<template>
+    <Listing
+        ref="listing"
+        :url="requestUrl"
+        :columns="columns"
+        :action-url="actionUrl"
+        :sort-column="sortColumn"
+        :sort-direction="sortDirection"
+        :preferences-prefix="preferencesPrefix"
+        :filters="filters"
+        push-query
+        @request-completed="requestComplete"
+    >
+        <template #cell-name="{ row: discount, isColumnVisible }">
+            <a class="title-index-field" :href="discount.edit_url" @click.stop>
+                <DiscountStatusIndicator v-if="!isColumnVisible('status')" :status="discount.status" />
+                <span v-text="discount.name" />
+            </a>
+        </template>
+        <template #cell-status="{ row: discount }">
+            <DiscountStatusIndicator :status="discount.status" show-label :show-dot="false" />
+        </template>
+        <template #prepended-row-actions="{ row: discount }">
+            <DropdownItem :text="__('Edit')" :href="discount.edit_url" icon="edit" v-if="discount.editable" />
+        </template>
+    </Listing>
+</template>

@@ -20,20 +20,22 @@ class Orders extends Relationship
     protected $canSearch = false;
     protected $formComponent = 'order-publish-form';
     protected $formComponentProps = [
-        'initialActions' => 'actions',
+        'blueprint' => 'blueprint',
         'initialTitle' => 'title',
-        'initialReference' => 'reference',
-        'initialFieldset' => 'blueprint',
         'initialValues' => 'values',
+        'initialExtraValues' => 'extraValues',
         'initialMeta' => 'meta',
         'initialReadOnly' => 'readOnly',
-        'breadcrumbs' => 'breadcrumbs',
+        'actions' => 'actions',
+        'itemActions' => 'itemActions',
+        'itemActionUrl' => 'itemActionUrl',
+        'canEditBlueprint' => 'canEditBlueprint',
     ];
     protected $activeFilterBadges;
 
     public function icon()
     {
-        return Cargo::svg('shop');
+        return Cargo::svg('orders');
     }
 
     protected function toItemArray($id)

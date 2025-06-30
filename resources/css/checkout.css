@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+
+@source "../views/checkout";
+
+@plugin '@tailwindcss/forms';
+
+@theme {
+    --color-brand: oklch(62.7% 0.194 149.214);
+    --color-secondary: oklch(0.398438 0.090625 160);
+}

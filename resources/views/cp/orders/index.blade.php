@@ -1,34 +1,34 @@
+@php
+    use DuncanMcClean\Cargo\Cargo;
+    use function Statamic\trans as __;
+@endphp
+
 @extends('statamic::layout')
 @section('title', __('Orders'))
 @section('wrapper_class', 'max-w-full')
 
 @section('content')
-    <div class="mb-6 flex items-center justify-between">
-        <h1 class="flex-1">{{ __('Orders') }}</h1>
-
+    <ui-header title="{{ __('Orders') }}" icon="{{ Cargo::svg('orders') }}">
         @can('configure fields')
-            <dropdown-list class="ltr:mr-2 rtl:ml-2">
-                <dropdown-item
-                    :text="__('Edit Blueprint')"
-                    redirect="{{ cp_route('blueprints.edit', ['cargo', 'order']) }}"
-                ></dropdown-item>
-            </dropdown-list>
+            <ui-dropdown placement="left-start" class="me-2">
+                <ui-dropdown-menu>
+                    <ui-dropdown-item
+                        :text="__('Edit Blueprint')"
+                        icon="blueprint-edit"
+                        href="{{ cp_route('blueprints.edit', ['cargo', 'order']) }}"
+                    ></ui-dropdown-item>
+                </ui-dropdown-menu>
+            </ui-dropdown>
         @endcan
-    </div>
+    </ui-header>
 
     <orders-listing
         sort-column="order_number"
         sort-direction="desc"
-        :initial-columns="{{ $columns->toJson() }}"
+        :columns="{{ $columns->toJson() }}"
         :filters="{{ $filters->toJson() }}"
         :action-url="{{ json_encode(cp_route('cargo.orders.actions.run')) }}"
     ></orders-listing>
 
-    @include(
-        'statamic::partials.docs-callout',
-        [
-            'topic' => __('Orders'),
-            'url' => 'https://builtwithcargo.dev/docs/carts-and-orders',
-        ]
-    )
+    <x-statamic::docs-callout :topic="__('Orders')" url="https://builtwithcargo.dev/docs/carts-and-orders" />
 @endsection

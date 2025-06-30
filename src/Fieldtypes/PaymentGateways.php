@@ -14,7 +14,7 @@ class PaymentGateways extends Fieldtype
         return collect($data)->map(function ($item) {
             $paymentGateway = PaymentGateway::find($item);
 
-            return $paymentGateway->title();
+            return $paymentGateway?->title();
         })->implode(', ');
     }
 }

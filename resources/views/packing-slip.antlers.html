@@ -51,7 +51,7 @@
 
             {{# Order Details #}}
             <div
-                class="border-zinc-300 divide-zinc-300 {{ ['grid-cols-3' => order:shipping_method, 'grid-cols-1' => !order_shipping_method] | classes }} grid divide-x-2 rounded-lg border"
+                class="{{ ['grid-cols-3' => order:shipping_method, 'grid-cols-1' => !order_shipping_method] | classes }} grid divide-x-2 divide-zinc-300 rounded-lg border border-zinc-300"
             >
                 <div class="flex flex-col items-center justify-center space-y-1 px-6 py-4">
                     <span class="text-sm">{{ trans key="Order Date" }}</span>
@@ -71,17 +71,17 @@
             </div>
 
             {{# Line Items #}}
-            <table class="border-zinc-300 w-full rounded-t-lg border">
-                <thead class="border-zinc-300 border-b text-lg font-bold">
-                    <tr class="divide-zinc-300 divide-x">
+            <table class="w-full rounded-t-lg border border-zinc-300">
+                <thead class="border-b border-zinc-300 text-lg font-bold">
+                    <tr class="divide-x divide-zinc-300">
                         <th class="w-[10%] px-3 py-3 text-center text-sm">{{ trans key="Qty" }}</th>
                         <th class="px-3 py-3 text-left text-sm">{{ trans key="Description" }}</th>
                     </tr>
                 </thead>
-                <tbody class="divide-zinc-300 divide-y">
+                <tbody class="divide-y divide-zinc-300">
                     {{ order:line_items }}
                         {{ if product:type === 'physical' }}
-                            <tr class="divide-zinc-300 divide-x">
+                            <tr class="divide-x divide-zinc-300">
                                 <td class="px-3 py-3 text-center">{{ quantity }}</td>
                                 <td class="px-3 py-3">{{ product:title }}</td>
                             </tr>

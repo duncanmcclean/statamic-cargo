@@ -4,7 +4,6 @@ namespace DuncanMcClean\Cargo\Http\Resources\CP\Discounts;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Carbon;
-use Statamic\Facades\Action;
 use Statamic\Facades\User;
 
 class ListedDiscount extends JsonResource
@@ -41,7 +40,6 @@ class ListedDiscount extends JsonResource
             'edit_url' => $discount->editUrl(),
             'viewable' => User::current()->can('view', $discount),
             'editable' => User::current()->can('edit', $discount),
-            'actions' => Action::for($discount),
         ];
     }
 

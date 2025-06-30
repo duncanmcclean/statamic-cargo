@@ -1,66 +1,64 @@
 <template>
-    <div class="relationship-input-items space-y-1 outline-none">
-        <div class="item item select-none outline-none">
-            <div class="item-inner">
-                <div
-                    v-if="value.invalid"
-                    v-tooltip.top="__('An item with this ID could not be found')"
-                    v-text="value.id"
-                />
+    <div class="relationship-input @container h-full w-full">
+        <div>
+            <div
+                class="shadow-ui-sm related-item relative z-2 mb-1.5 flex h-full w-full items-center gap-2 rounded-lg border border-gray-200 bg-white px-1.5 py-1.5 text-base last:mb-0 dark:border-x-0 dark:border-t-0 dark:border-white/15 dark:bg-gray-900 dark:inset-shadow-2xs dark:inset-shadow-black"
+            >
+                <div class="flex flex-1 items-center p-1">
+                    <Heading v-if="value.invalid">
+                        <Tooltip :text="__('An item with this ID could not be found')" :delay="1000">
+                            {{ value.id }}
+                            <Badge pill color="red" :text="__('Invalid')" />
+                        </Tooltip>
+                    </Heading>
 
-                <div v-else>
-                    <a
-                        v-if="value.type === 'user' && value.editable"
-                        :href="value.edit_url"
-                        @click.prevent="edit"
-                        class="v-popper--has-tooltip truncate"
-                    >
-                        {{ value.name }}
-                    </a>
+                    <div v-else>
+                        <Heading v-if="value.type === 'user' && value.editable">
+                            <a :href="value.edit_url" @click.prevent="edit" v-text="value.name" />
+                        </Heading>
 
-                    <div v-else-if="value.type === 'guest'" class="v-popper--has-tooltip truncate">
-                        {{ value.name }}
-                        <div class="status-index-field status-draft ml-1 select-none">Guest</div>
+                        <Heading v-else-if="value.type === 'guest'" class="truncate">
+                            {{ value.name }}
+                            <Badge pill size="sm" :text="__('Guest')" />
+                        </Heading>
+
+                        <Heading v-else :text="value.name" />
+                        <Description v-if="value.email" :text="value.email" />
                     </div>
 
-                    <div v-else v-text="value.name" />
+                    <inline-edit-form
+                        v-if="isEditingUser"
+                        :item="value"
+                        :component="meta.user.formComponent"
+                        :component-props="meta.user.formComponentProps"
+                        @updated="itemUpdated"
+                        @closed="isEditingUser = false"
+                    />
 
-                    <div
-                        v-if="value.email"
-                        class="mt-1 truncate text-xs text-gray-800 dark:text-dark-150"
-                        v-text="value.email"
-                    ></div>
-                </div>
-
-                <inline-edit-form
-                    v-if="isEditingUser"
-                    :item="value"
-                    :component="meta.user.formComponent"
-                    :component-props="meta.user.formComponentProps"
-                    @updated="itemUpdated"
-                    @closed="isEditingUser = false"
-                />
-
-                <div class="flex flex-1 items-center justify-end">
-                    <div class="flex items-center">
-                        <dropdown-list
-                            v-if="
-                                (value.type === 'user' && value.editable) ||
-                                (value.type === 'guest' && meta.canCreateUsers)
-                            "
-                            class="ml-2"
-                        >
-                            <dropdown-item
-                                v-if="value.type === 'user' && value.editable"
-                                :text="__('Edit')"
-                                @click="edit"
-                            />
-                            <dropdown-item
-                                v-else-if="value.type === 'guest' && meta.canCreateUsers"
-                                :text="__('Convert to User')"
-                                @click="convertToUser"
-                            />
-                        </dropdown-list>
+                    <div class="flex flex-1 items-center justify-end">
+                        <div class="flex items-center">
+                            <Dropdown
+                                v-if="
+                                    (value.type === 'user' && value.editable) ||
+                                    (value.type === 'guest' && meta.canCreateUsers)
+                                "
+                            >
+                                <DropdownMenu>
+                                    <DropdownItem
+                                        v-if="value.type === 'user' && value.editable"
+                                        :text="__('Edit')"
+                                        icon="edit"
+                                        @click="edit"
+                                    />
+                                    <DropdownItem
+                                        v-else-if="value.type === 'guest' && meta.canCreateUsers"
+                                        :text="__('Convert to User')"
+                                        icon="add-user"
+                                        @click="convertToUser"
+                                    />
+                                </DropdownMenu>
+                            </Dropdown>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -72,10 +70,18 @@
 import axios from 'axios';
 import InlineEditForm from '@statamic/components/inputs/relationship/InlineEditForm.vue';
 import { Fieldtype } from 'statamic';
+import { Dropdown, DropdownMenu, DropdownItem, Heading, Description, Badge, Tooltip } from '@statamic/ui';
 
 export default {
     components: {
         InlineEditForm,
+        Dropdown,
+        DropdownMenu,
+        DropdownItem,
+        Heading,
+        Description,
+        Badge,
+        Tooltip,
     },
 
     mixins: [Fieldtype],

@@ -1,25 +1,26 @@
 <template>
-    <text-fieldtype
-        :handle="config.handle"
-        :meta="{}"
-        :config="{
-            classes: 'uppercase font-mono',
-            focus: true,
-            autoselect: true,
-            input_type: 'text',
-        }"
-        :value="value"
-        @update:value="updateDebounced"
+    <Input
+        class="font-mono uppercase"
+        :focus="true"
+        :autoselect="true"
+        input-type="text"
+        :disabled="isReadOnly"
+        :copyable="true"
+        :model-value="value"
+        @update:model-value="updateDebounced"
         @keydown.native.space.prevent
     />
 </template>
 
 <script>
 import { Fieldtype } from 'statamic';
+import { Input } from '@statamic/ui';
 import debounce from '@statamic/util/debounce.js';
 
 export default {
     mixins: [Fieldtype],
+
+    components: { Input },
 
     methods: {
         updateDebounced: debounce(function (value) {

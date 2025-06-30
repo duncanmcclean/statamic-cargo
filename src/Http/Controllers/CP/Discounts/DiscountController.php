@@ -2,24 +2,22 @@
 
 namespace DuncanMcClean\Cargo\Http\Controllers\CP\Discounts;
 
+use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Contracts\Discounts\Discount as DiscountContract;
 use DuncanMcClean\Cargo\Facades\Discount;
-use DuncanMcClean\Cargo\Http\Resources\CP\Discounts\Discount as DiscountResource;
 use DuncanMcClean\Cargo\Http\Resources\CP\Discounts\Discounts;
-use DuncanMcClean\Cargo\Rules\UniqueDiscountValue;
 use Illuminate\Http\Request;
-use Statamic\CP\Breadcrumbs;
 use Statamic\CP\Column;
-use Statamic\Facades\Action;
+use Statamic\CP\PublishForm;
 use Statamic\Facades\Scope;
-use Statamic\Facades\User;
 use Statamic\Http\Controllers\CP\CpController;
 use Statamic\Http\Requests\FilteredRequest;
 use Statamic\Query\Scopes\Filters\Concerns\QueriesFilters;
+use Statamic\Support\Arr;
 
 class DiscountController extends CpController
 {
-    use ExtractsFromDiscountFields, QueriesFilters;
+    use QueriesFilters;
 
     public function index(FilteredRequest $request)
     {
@@ -93,145 +91,60 @@ class DiscountController extends CpController
     {
         $this->authorize('create', DiscountContract::class);
 
-        $blueprint = Discount::blueprint();
-
-        $values = Discount::make()->data()->all();
-
-        $fields = $blueprint
-            ->fields()
-            ->addValues($values)
-            ->preProcess();
-
-        $values = $fields->values();
-
-        $viewData = [
-            'title' => __('Create Discount'),
-            'actions' => [
-                'save' => cp_route('cargo.discounts.store'),
-            ],
-            'values' => $values->all(),
-            'meta' => $fields->meta(),
-            'blueprint' => $blueprint->toPublishArray(),
-            'breadcrumbs' => new Breadcrumbs([
-                ['text' => __('Discounts'), 'url' => cp_route('cargo.discounts.index')],
-            ]),
-        ];
-
-        if ($request->wantsJson()) {
-            return $viewData;
-        }
-
-        return view('cargo::cp.discounts.create', $viewData);
+        return PublishForm::make(Discount::blueprint())
+            ->icon(Cargo::svg('discounts'))
+            ->title(__('Create Discount'))
+            ->submittingTo(cp_route('cargo.discounts.store'), 'POST');
     }
 
     public function store(Request $request)
     {
         $this->authorize('store', DiscountContract::class);
 
-        $blueprint = Discount::blueprint();
-
-        $data = $request->all();
-
-        $fields = $blueprint->fields()->addValues($data);
-
-        $fields->validator()->withRules([
-            'discount_code' => [new UniqueDiscountValue],
-        ])->validate();
-
-        $values = $fields->process()->values();
+        $values = PublishForm::make(Discount::blueprint())->submit($request->values);
 
         $discount = Discount::make()
-            ->name($values->get('name'))
-            ->type($values->get('type'))
-            ->data($values->except(['name', 'type']));
+            ->name(Arr::pull($values, 'name'))
+            ->type(Arr::pull($values, 'type'))
+            ->data($values);
 
-        $saved = $discount->save();
+        $discount->save();
 
-        return [
-            'data' => (new DiscountResource($discount))->resolve()['data'],
-            'saved' => $saved,
-        ];
+        return ['redirect' => $discount->editUrl()];
     }
 
     public function edit(Request $request, $discount)
     {
         $this->authorize('view', $discount);
 
-        $blueprint = Discount::blueprint();
-        $blueprint->setParent($discount);
-
-        [$values, $meta] = $this->extractFromFields($discount, $blueprint);
-
-        $viewData = [
-            'title' => $discount->name(),
-            'reference' => $discount->reference(),
-            'actions' => [
-                'save' => $discount->updateUrl(),
-            ],
-            'values' => array_merge($values, [
-                'id' => $discount->handle(),
-            ]),
-            'meta' => $meta,
-            'blueprint' => $blueprint->toPublishArray(),
-            'readOnly' => User::current()->cant('update', $discount),
-            'breadcrumbs' => new Breadcrumbs([
-                ['text' => __('Discounts'), 'url' => cp_route('cargo.discounts.index')],
-            ]),
-            'itemActions' => Action::for($discount, ['view' => 'form']),
-        ];
-
-        if ($request->wantsJson()) {
-            return $viewData;
-        }
-
-        if ($request->has('created')) {
-            session()->now('success', __('Discount created'));
-        }
-
-        return view('cargo::cp.discounts.edit', array_merge($viewData, [
-            'discount' => $discount,
-        ]));
+        return PublishForm::make(Discount::blueprint())
+            ->icon(Cargo::svg('discounts'))
+            ->title($discount->name())
+            ->values($discount->data()->merge([
+                'name' => $discount->name(),
+                'type' => $discount->type(),
+            ])->all())
+            ->submittingTo($discount->updateUrl());
     }
 
     public function update(Request $request, $discount)
     {
         $this->authorize('update', $discount);
 
-        $blueprint = Discount::blueprint();
-
-        $data = $request->except('id');
-
-        $fields = $discount
-            ->blueprint()
+        $fields = Discount::blueprint()
             ->fields()
-            ->addValues($data);
+            ->setParent($this->parent ?? null)
+            ->addValues($request->values);
 
-        $fields
-            ->validator()
-            ->withRules([
-                'discount_code' => [new UniqueDiscountValue(except: $discount->handle())],
-            ])
-            ->withReplacements([
-                'id' => $discount->handle(),
-            ])
-            ->validate();
+        $fields->validator()->withReplacements(['handle' => $discount->handle()])->validate();
 
-        $values = $fields->process()->values();
+        $values = $fields->process()->values()->all();
 
         $discount
-            ->name($values->get('name'))
-            ->type($values->get('type'))
-            ->merge($values->except(['name', 'type']));
+            ->name(Arr::pull($values, 'name'))
+            ->type(Arr::pull($values, 'type'))
+            ->data($values);
 
-        $saved = $discount->save();
-
-        [$values] = $this->extractFromFields($discount, $blueprint);
-
-        return [
-            'data' => array_merge((new DiscountResource($discount->fresh()))->resolve()['data'], [
-                'values' => $values,
-            ]),
-            'saved' => $saved,
-        ];
+        $discount->save();
     }
 }

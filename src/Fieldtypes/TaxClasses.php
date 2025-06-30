@@ -12,15 +12,18 @@ class TaxClasses extends Relationship
     protected $canCreate = true;
     protected $canSearch = true;
     protected $selectable = false;
-    protected $formComponent = 'tax-class-publish-form';
+    protected $formComponent = 'ui-publish-form';
     protected $formStackSize = 'narrow';
 
     protected $formComponentProps = [
-        'initialActions' => 'actions',
-        'initialTitle' => 'title',
-        'initialFieldset' => 'blueprint',
+        'icon' => 'icon',
+        'title' => 'title',
+        'blueprint' => 'blueprint',
         'initialValues' => 'values',
         'initialMeta' => 'meta',
+        'submitUrl' => 'submitUrl',
+        'submitMethod' => 'submitMethod',
+        'readOnly' => 'readOnly',
     ];
 
     protected function toItemArray($id)

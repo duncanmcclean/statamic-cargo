@@ -3,7 +3,6 @@
 namespace DuncanMcClean\Cargo\Http\Resources\CP\Orders;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Statamic\Facades\Action;
 use Statamic\Facades\User;
 
 class ListedOrder extends JsonResource
@@ -50,7 +49,6 @@ class ListedOrder extends JsonResource
             'edit_url' => $order->editUrl(),
             'viewable' => User::current()->can('view', $order),
             'editable' => User::current()->can('edit', $order),
-            'actions' => Action::for($order),
         ];
     }
 

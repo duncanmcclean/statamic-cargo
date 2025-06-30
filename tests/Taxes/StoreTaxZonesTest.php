@@ -32,16 +32,18 @@ class StoreTaxZonesTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.tax-zones.store'), [
-                'name' => 'United Kingdom',
-                'type' => 'countries',
-                'countries' => ['GB'],
-                'rates' => [
-                    'standard' => 20,
-                    'reduced' => 5,
+                'values' => [
+                    'name' => 'United Kingdom',
+                    'type' => 'countries',
+                    'countries' => ['GB'],
+                    'rates' => [
+                        'standard' => 20,
+                        'reduced' => 5,
+                    ],
                 ],
             ])
             ->assertOk()
-            ->assertJson(['data' => ['id' => 'united-kingdom']]);
+            ->assertJson(['redirect' => cp_route('cargo.tax-zones.edit', 'united-kingdom')]);
 
         $taxZone = TaxZone::find('united-kingdom');
 
@@ -62,12 +64,14 @@ class StoreTaxZonesTest extends TestCase
         $this
             ->actingAs(User::make()->assignRole('test')->save())
             ->post(cp_route('cargo.tax-zones.store'), [
-                'name' => 'United Kingdom',
-                'type' => 'countries',
-                'countries' => ['GB'],
-                'rates' => [
-                    'standard' => 20,
-                    'reduced' => 5,
+                'values' => [
+                    'name' => 'United Kingdom',
+                    'type' => 'countries',
+                    'countries' => ['GB'],
+                    'rates' => [
+                        'standard' => 20,
+                        'reduced' => 5,
+                    ],
                 ],
             ])
             ->assertRedirect('/cp');
@@ -86,12 +90,14 @@ class StoreTaxZonesTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.tax-zones.store'), [
-                'name' => 'United Kingdom',
-                'type' => 'countries',
-                'countries' => ['GB'],
-                'rates' => [
-                    'standard' => 20,
-                    'reduced' => 5,
+                'values' => [
+                    'name' => 'United Kingdom',
+                    'type' => 'countries',
+                    'countries' => ['GB'],
+                    'rates' => [
+                        'standard' => 20,
+                        'reduced' => 5,
+                    ],
                 ],
             ])
             ->assertSessionHasErrors('type');
@@ -110,13 +116,15 @@ class StoreTaxZonesTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.tax-zones.store'), [
-                'name' => 'Glasgow(ish)',
-                'type' => 'states',
-                'countries' => ['GB'],
-                'states' => ['GLG', 'SLK'],
-                'rates' => [
-                    'standard' => 20,
-                    'reduced' => 5,
+                'values' => [
+                    'name' => 'Glasgow(ish)',
+                    'type' => 'states',
+                    'countries' => ['GB'],
+                    'states' => ['GLG', 'SLK'],
+                    'rates' => [
+                        'standard' => 20,
+                        'reduced' => 5,
+                    ],
                 ],
             ])
             ->assertSessionHasErrors('type');
@@ -135,13 +143,15 @@ class StoreTaxZonesTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.tax-zones.store'), [
-                'name' => 'Glasgow(ish)',
-                'type' => 'postcodes',
-                'countries' => ['GB'],
-                'postcodes' => ['G*'],
-                'rates' => [
-                    'standard' => 20,
-                    'reduced' => 5,
+                'values' => [
+                    'name' => 'Glasgow(ish)',
+                    'type' => 'postcodes',
+                    'countries' => ['GB'],
+                    'postcodes' => ['G*'],
+                    'rates' => [
+                        'standard' => 20,
+                        'reduced' => 5,
+                    ],
                 ],
             ])
             ->assertSessionHasErrors('type');
