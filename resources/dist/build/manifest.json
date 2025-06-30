@@ -1908,7 +1908,7 @@
     "isEntry": true
   },
   "resources/js/cp.js": {
-    "file": "assets/cp-DpD297nP.js",
+    "file": "assets/cp-B4EjcpY1.js",
     "name": "cp",
     "src": "resources/js/cp.js",
     "isEntry": true,
@@ -2124,6 +2124,7 @@
       "../../Statamic/cms/resources/svg/ui/chevron-right.svg",
       "../../Statamic/cms/resources/svg/ui/chevron-vertical.svg",
       "../../Statamic/cms/resources/svg/ui/dots.svg",
+      "resources/svg/cargo-mark.svg",
       "resources/svg/discounts.svg",
       "resources/svg/money.svg",
       "resources/svg/orders.svg",
@@ -2134,6 +2135,15 @@
     ],
     "css": [
       "assets/cp-FAgvdl6f.css"
+    ]
+  },
+  "resources/svg/cargo-mark.svg": {
+    "file": "assets/cargo-mark-Cbdql3LI.js",
+    "name": "cargo-mark",
+    "src": "resources/svg/cargo-mark.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
   "resources/svg/discounts.svg": {
