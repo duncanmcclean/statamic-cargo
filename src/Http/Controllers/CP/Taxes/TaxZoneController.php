@@ -37,6 +37,10 @@ class TaxZoneController extends CpController
             return $taxZones;
         }
 
+        if ($taxZones->isEmpty()) {
+            return view('cargo::cp.tax-zones.empty');
+        }
+
         return view('cargo::cp.tax-zones.index', [
             'taxZones' => $taxZones,
             'columns' => [

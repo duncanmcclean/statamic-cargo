@@ -31,6 +31,10 @@ class TaxClassController extends CpController
             return $taxClasses;
         }
 
+        if ($taxClasses->isEmpty()) {
+            return view('cargo::cp.tax-classes.empty');
+        }
+
         return view('cargo::cp.tax-classes.index', [
             'taxClasses' => $taxClasses,
             'columns' => [
