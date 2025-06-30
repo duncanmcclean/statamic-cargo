@@ -21,7 +21,7 @@
     <discounts-listing
         sort-column="code"
         sort-direction="asc"
-        :initial-columns="{{ $columns->toJson() }}"
+        :columns="{{ $columns->toJson() }}"
         :filters="{{ $filters->toJson() }}"
         :action-url="{{ json_encode(cp_route('cargo.discounts.actions.run')) }}"
     ></discounts-listing>
