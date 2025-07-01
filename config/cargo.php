@@ -68,7 +68,7 @@ return [
         | By default, carts are stored in flat files. However, it's also possible to
         | store them in a database by changing the "driver" to "eloquent".
         |
-        | Learn more at https://builtwithcargo.dev/docs/carts-and-orders
+        | Learn more at https://builtwithcargo.dev/docs/carts
         |
         */
 
@@ -144,7 +144,7 @@ return [
         | By default, orders are stored in flat files. However, it's also possible to
         | store them in a database by changing the "driver" to "eloquent".
         |
-        | Learn more at https://builtwithcargo.dev/docs/carts-and-orders
+        | Learn more at https://builtwithcargo.dev/docs/orders
         |
         */
 
