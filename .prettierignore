@@ -1,5 +1,6 @@
 node_modules
 resources/dist
+resources/dist-checkout
 resources/views/checkout
 vendor/
 /vendor
