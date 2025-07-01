@@ -330,31 +330,12 @@ You can find a mapping of API endpoints below:
 For more information about the JSON API, please consult the [JSON API](/docs/json-api) page.
 
 ### Checkout
-In order to improve reliability and make things easier to understand, Cargo has re-worked the checkout process. As a result, you will need to make some changes to your checkout templates.
+To improve performance and reliability, the checkout process has been completely re-worked in Cargo. As a result, you will need to makes changes to your checkout templates.
 
 :::tip Tip
-If you haven't made too many changes to your checkout page, we recommend publishing Cargo's pre-built checkout page and working from there.
+If you're not too precious about your checkout page, you might be better off adopting Cargo's new [pre-built checkout flow](/docs/checkout#pre-built-checkout-flow) instead.
 
-It handles everything on one page, without the need for full-page refreshes, in addition to a sleek modern design.
-
-To publish the pre-built checkout flow into your project, run this command:
-
-```
-php artisan vendor:publish --tag=cargo-prebuilt-checkout
-```
-
-Then, add the following to your `routes/web.php` file:
-
-```php
-Route::statamic('checkout', 'checkout.index', ['title' => 'Checkout', 'layout' => 'checkout.layout'])  
-	->name('checkout');  
-		  
-Route::statamic('checkout/confirmation', 'checkout.confirmation', ['title' => 'Order Confirmation', 'layout' => 'checkout.layout'])  
-	->name('checkout.confirmation')  
-	->middleware('signed');
-```
-
-![Screenshot of Cargo's pre-built checkout flow](/images/prebuilt-checkout.png)
+It'll save you a lot of time and effort. It also reduces friction for customers, handling everything on a single page.
 :::
 
 Cargo removes the `{{ checkout }}` tag, which was used for collecting the customer's payment details.
@@ -740,8 +721,9 @@ Once you're happy that everything has been migrated across successfully, there's
 * If you were storing customers and orders as entries, you can delete the "Customers" and "Orders" collections.
 * If you were storing customers and orders in the database, you can drop the `customers` and `orders` tables.
 	* You can also remove the models from the `runway.php` config. If you're not using Runway elsewhere, you can also uninstall Runway:
+    * You can also remove the models from the `runway.php` config. If you're not using Runway elsewhere, you can also uninstall Runway:
 	```
-	composer remove statamic-rad-pack/runway
+	 composer remove statamic-rad-pack/runway
 	```
 
 ## The End
