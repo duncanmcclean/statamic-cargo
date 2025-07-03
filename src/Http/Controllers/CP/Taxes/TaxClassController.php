@@ -57,7 +57,7 @@ class TaxClassController extends CpController
     {
         $this->authorize('manage taxes');
 
-        $values = PublishForm::make(TaxClass::blueprint())->submit($request->values);
+        $values = PublishForm::make(TaxClass::blueprint())->submit($request->all());
 
         $taxClass = TaxClass::make()
             ->handle(Str::slug(Arr::get($values, 'name')))
@@ -83,7 +83,7 @@ class TaxClassController extends CpController
     {
         $this->authorize('manage taxes');
 
-        $values = PublishForm::make(TaxClass::blueprint())->submit($request->values);
+        $values = PublishForm::make(TaxClass::blueprint())->submit($request->all());
 
         $taxClass->data($values)->save();
     }

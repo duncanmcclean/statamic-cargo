@@ -48,7 +48,7 @@ function save() {
         .provide({ container, errors, saving })
         .through([
             new BeforeSaveHooks('order'),
-            new Request(props.actions.save, 'patch', { values: values.value }),
+            new Request(props.actions.save, 'patch'),
             new AfterSaveHooks('order'),
         ])
         .then((response) => {
@@ -128,7 +128,7 @@ function actionCompleted(successful = null, response) {
         ref="container"
         name="order"
         :blueprint="blueprint"
-        :values="values"
+        v-model="values"
         :extra-values="extraValues"
         :meta="meta"
         :errors="errors"
