@@ -4,9 +4,7 @@
         "dev": "vite",
         "build": "vite build",
         "checkout-dev": "vite -c vite-checkout.config.js",
-        "checkout-build": "vite build -c vite-checkout.config.js",
-        "prettier:format": "prettier --write \"**/*.{js,ts,jsx,tsx,cjs,cts,mjs,mts,vue,blade.php,antlers.html,css}\"",
-        "prettier:check": "prettier --check \"**/*.{js,ts,jsx,tsx,cjs,cts,mjs,mts,vue,blade.php,antlers.html,css}\""
+        "checkout-build": "vite build -c vite-checkout.config.js"
     },
     "dependencies": {
         "@floating-ui/dom": "^1.6.12",
@@ -21,10 +19,6 @@
         "marked": "^4.0.12",
         "postcss": "^8.4.41",
         "postcss-import": "^16.1.0",
-        "prettier": "^3.4.2",
-        "prettier-plugin-antlers": "^2.0.5",
-        "prettier-plugin-blade": "^2.1.19",
-        "prettier-plugin-tailwindcss": "^0.6.12",
         "striptags": "^3.2.0",
         "svgo": "^3.3.2",
         "tailwindcss": "^4.1.8",
