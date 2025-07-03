@@ -30,11 +30,9 @@ class UpdateDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->patch(cp_route('cargo.discounts.update', $discount->handle()), [
-                'values' => [
-                    'name' => 'Bazqux 50%',
-                    'type' => 'percentage_off',
-                    'percentage_off' => 50,
-                ],
+                'name' => 'Bazqux 50%',
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
             ])
             ->assertOk();
 
@@ -56,12 +54,10 @@ class UpdateDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->assignRole('test')->save())
             ->patch(cp_route('cargo.discounts.update', $discount->handle()), [
-                'values' => [
-                    'name' => 'Bazqux 50%',
-                    'type' => 'percentage_off',
-                    'percentage_off' => 50,
-                    'customer_eligibility' => 'all',
-                ],
+                'name' => 'Bazqux 50%',
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
+                'customer_eligibility' => 'all',
             ])
             ->assertRedirect('/cp');
 
@@ -77,13 +73,11 @@ class UpdateDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->patch(cp_route('cargo.discounts.update', $discount->handle()), [
-                'values' => [
-                    'name' => 'Foobar',
-                    'discount_code' => 'FOOB;//-\(R',
-                    'type' => 'percentage_off',
-                    'percentage_off' => 50,
-                    'customer_eligibility' => 'all',
-                ],
+                'name' => 'Foobar',
+                'discount_code' => 'FOOB;//-\(R',
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
+                'customer_eligibility' => 'all',
             ])
             ->assertSessionHasErrors('discount_code');
 
@@ -99,13 +93,11 @@ class UpdateDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->patch(cp_route('cargo.discounts.update', $discount->handle()), [
-                'values' => [
-                    'name' => 'Foobar',
-                    'discount_code' => 'foobar',
-                    'type' => 'percentage_off',
-                    'percentage_off' => 50,
-                    'customer_eligibility' => 'all',
-                ],
+                'name' => 'Foobar',
+                'discount_code' => 'foobar',
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
+                'customer_eligibility' => 'all',
             ])
             ->assertSessionHasErrors('discount_code');
 
@@ -121,13 +113,11 @@ class UpdateDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->patch(cp_route('cargo.discounts.update', $discount->handle()), [
-                'values' => [
-                    'name' => 'Foobar',
-                    'discount_code' => 'FOOBAR',
-                    'type' => 'percentage_off',
-                    'percentage_off' => 50,
-                    'customer_eligibility' => 'all',
-                ],
+                'name' => 'Foobar',
+                'discount_code' => 'FOOBAR',
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
+                'customer_eligibility' => 'all',
             ])
             ->assertSessionHasErrors('discount_code');
 

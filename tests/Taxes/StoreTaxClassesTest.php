@@ -27,9 +27,7 @@ class StoreTaxClassesTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.tax-classes.store'), [
-                'values' => [
-                    'name' => 'Standard',
-                ],
+                'name' => 'Standard',
             ])
             ->assertOk()
             ->assertJson(['redirect' => cp_route('cargo.tax-classes.edit', 'standard')]);
@@ -46,9 +44,7 @@ class StoreTaxClassesTest extends TestCase
         $this
             ->actingAs(User::make()->assignRole('test')->save())
             ->post(cp_route('cargo.tax-classes.store'), [
-                'values' => [
-                    'name' => 'Standard',
-                ],
+                'name' => 'Standard',
             ])
             ->assertRedirect('/cp');
 

@@ -38,13 +38,11 @@ class UpdateTaxZonesTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->patch(cp_route('cargo.tax-zones.update', $taxZone->handle()), [
-                'values' => [
-                    'name' => 'United Kingdom',
-                    'type' => 'countries',
-                    'countries' => ['GB'],
-                    'rates' => [
-                        'standard' => 25,
-                    ],
+                'name' => 'United Kingdom',
+                'type' => 'countries',
+                'countries' => ['GB'],
+                'rates' => [
+                    'standard' => 25,
                 ],
             ])
             ->assertOk();
@@ -70,13 +68,11 @@ class UpdateTaxZonesTest extends TestCase
         $this
             ->actingAs(User::make()->assignRole('test')->save())
             ->patch(cp_route('cargo.tax-zones.update', $taxZone->handle()), [
-                'values' => [
-                    'name' => 'United Kingdom',
-                    'type' => 'countries',
-                    'countries' => ['GB'],
-                    'rates' => [
-                        'standard' => 25,
-                    ],
+                'name' => 'United Kingdom',
+                'type' => 'countries',
+                'countries' => ['GB'],
+                'rates' => [
+                    'standard' => 25,
                 ],
             ])
             ->assertRedirect('/cp');
