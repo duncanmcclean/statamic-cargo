@@ -133,7 +133,6 @@ function actionCompleted(successful = null, response) {
         :meta="meta"
         :errors="errors"
         :read-only="readOnly"
-        @updated="values = $event"
     >
         <PublishTabs>
             <template #actions>
