@@ -30,14 +30,12 @@ class UpdateOrdersTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->patch(cp_route('cargo.orders.update', $order->id()), [
-                'values' => [
-                    'shipping_line_1' => '123 Fake Street',
-                    'shipping_city' => 'Fakeville',
-                    'shipping_postcode' => 'FA1 1KE',
-                    'shipping_country' => 'United Kingdom',
-                    'status' => 'shipped',
-                    'grand_total' => 1000, // This should be ignored.
-                ],
+                'shipping_line_1' => '123 Fake Street',
+                'shipping_city' => 'Fakeville',
+                'shipping_postcode' => 'FA1 1KE',
+                'shipping_country' => 'United Kingdom',
+                'status' => 'shipped',
+                'grand_total' => 1000, // This should be ignored.
             ])
             ->assertOk()
             ->assertSee('Order #1002');

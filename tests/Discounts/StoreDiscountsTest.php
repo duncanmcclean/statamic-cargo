@@ -27,11 +27,9 @@ class StoreDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
-                'values' => [
-                    'name' => 'Bazqux',
-                    'type' => 'percentage_off',
-                    'percentage_off' => 50,
-                ],
+                'name' => 'Bazqux',
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
             ])
             ->assertOk()
             ->assertJson(['redirect' => cp_route('cargo.discounts.edit', 'bazqux')]);
@@ -51,12 +49,10 @@ class StoreDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->assignRole('test')->save())
             ->post(cp_route('cargo.discounts.store'), [
-                'values' => [
-                    'name' => 'Bazqux',
-                    'type' => 'percentage_off',
-                    'percentage_off' => 50,
-                    'customer_eligibility' => 'all',
-                ],
+                'name' => 'Bazqux',
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
+                'customer_eligibility' => 'all',
             ])
             ->assertRedirect('/cp');
 
@@ -69,13 +65,11 @@ class StoreDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
-                'values' => [
-                    'name' => 'Foobar',
-                    'discount_code' => 'FOOB;//-\(R',
-                    'type' => 'percentage_off',
-                    'percentage_off' => 50,
-                    'customer_eligibility' => 'all',
-                ],
+                'name' => 'Foobar',
+                'discount_code' => 'FOOB;//-\(R',
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
+                'customer_eligibility' => 'all',
             ])
             ->assertSessionHasErrors('discount_code');
 
@@ -88,13 +82,11 @@ class StoreDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
-                'values' => [
-                    'name' => 'Foobar',
-                    'discount_code' => 'foobar',
-                    'type' => 'percentage_off',
-                    'percentage_off' => 50,
-                    'customer_eligibility' => 'all',
-                ],
+                'name' => 'Foobar',
+                'discount_code' => 'foobar',
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
+                'customer_eligibility' => 'all',
             ])
             ->assertSessionHasErrors('discount_code');
 
@@ -109,12 +101,10 @@ class StoreDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
-                'values' => [
-                    'name' => 'Foobar',
-                    'discount_code' => 'FOOBAR',
-                    'type' => 'percentage_off',
-                    'percentage_off' => 50,
-                ],
+                'name' => 'Foobar',
+                'discount_code' => 'FOOBAR',
+                'type' => 'percentage_off',
+                'percentage_off' => 50,
             ])
             ->assertSessionHasErrors('discount_code');
     }

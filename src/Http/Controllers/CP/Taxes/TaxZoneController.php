@@ -64,7 +64,7 @@ class TaxZoneController extends CpController
     {
         $this->authorize('manage taxes');
 
-        $values = PublishForm::make(TaxZone::blueprint())->submit($request->values);
+        $values = PublishForm::make(TaxZone::blueprint())->submit($request->all());
 
         $taxZone = TaxZone::make()
             ->handle(Str::slug(Arr::get($values, 'name')))
@@ -90,7 +90,7 @@ class TaxZoneController extends CpController
     {
         $this->authorize('manage taxes');
 
-        $values = PublishForm::make(TaxZone::blueprint())->submit($request->values);
+        $values = PublishForm::make(TaxZone::blueprint())->submit($request->all());
 
         $taxZone->data($values)->save();
     }

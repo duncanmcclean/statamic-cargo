@@ -20,5 +20,8 @@
         :initial-columns="{{ json_encode($columns) }}"
     ></tax-class-listing>
 
-    <x-statamic::docs-callout :topic="__('Tax Zones')" url="https://builtwithcargo.dev/docs/taxes#tax-zones" />
+    <x-statamic::docs-callout
+        :topic="__('Tax Zones')"
+        url="https://builtwithcargo.dev/docs/taxes#tax-zones"
+    />
 @endsection

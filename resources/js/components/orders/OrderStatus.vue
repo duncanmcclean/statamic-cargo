@@ -54,7 +54,7 @@ function update() {
         />
     </div>
 
-    <div v-else class="publish-fields">
+    <div v-else class="flex flex-col space-y-6">
         <Field label="Status">
             <Select class="w-full" :options="statuses" v-model:modelValue="status" />
         </Field>
@@ -63,7 +63,7 @@ function update() {
             <Input v-model:modelValue="trackingNumber" />
         </Field>
 
-        <div v-if="status === 'returned' || status === 'cancelled'" class="w-full">
+        <div v-if="status === 'returned' || status === 'cancelled'">
             <Description :text="__('Any payment will need to be refunded manually.')" />
         </div>
 

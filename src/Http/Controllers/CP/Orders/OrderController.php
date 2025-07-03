@@ -134,7 +134,7 @@ class OrderController extends CpController
 
         $blueprint = Order::blueprint();
 
-        $data = collect($request->values)->except($except = [
+        $data = collect($request->all())->except($except = [
             'id', 'customer', 'date', 'status', 'discount_total', 'grand_total', 'line_items', 'order_number',
             'payment_details', 'receipt', 'shipping_total', 'sub_total', 'tax_total', 'shipping_method',
         ])->all();
@@ -152,8 +152,8 @@ class OrderController extends CpController
 
         $values = $fields->process()->values()->except($except);
 
-        if ($request->values['status'] ?? null) {
-            $order->status($request->values['status']);
+        if ($request->status) {
+            $order->status($request->status);
         }
 
         $order->merge($values->all());

@@ -101,7 +101,7 @@ class DiscountController extends CpController
     {
         $this->authorize('store', DiscountContract::class);
 
-        $values = PublishForm::make(Discount::blueprint())->submit($request->values);
+        $values = PublishForm::make(Discount::blueprint())->submit($request->all());
 
         $discount = Discount::make()
             ->name(Arr::pull($values, 'name'))
@@ -134,7 +134,7 @@ class DiscountController extends CpController
         $fields = Discount::blueprint()
             ->fields()
             ->setParent($this->parent ?? null)
-            ->addValues($request->values);
+            ->addValues($request->all());
 
         $fields->validator()->withReplacements(['handle' => $discount->handle()])->validate();
 
