@@ -286,49 +286,16 @@ public function boot(): void
 }
 ```
 ### Methods
-#### `setup`
-This method is called by the `{{ payment_gateways }}` tag (or its [AJAX equivalent](/docs/json-api#available-payment-gateways)).
 
-You should do whatever you need to do to create the "payment". Anything you return from this method will be available on the checkout form.
-
-:::tip Note
-Please ensure that sensitive API keys aren't returned by this method, as they could be exposed using the AJAX endpoint.
-:::
-
-#### `process`
-This method is called when the payment gateway's "checkout URL" is hit.
-
-#### `capture`
-When your payment gateway supports "authorise and capture", you can call this method in your webhook code to capture the payment.
-
-This method can be left blank when "authorise and capture" isn't supported.
-
-#### `cancel`
-This method is called when the payment gateway's "checkout URL" is hit, but the payment needs to be cancelled.
-
-Payments may need to be cancelled when a coupon is invalid, there's not enough stock to fulfil the order, or customer/address information is missing from the order.
-
-#### `webhook`
-This method is called when a webhook request is received.
-
-When possible, you should verify that the request is genuine before taking action (eg. by verifying headers).
-
-#### `refund`
-This method is called when a refund is initiated in the Control Panel.
-
-#### `fieldtypeDetails`
-If you want to, you can add a `fieldtypeDetails` method to your payment gateway, allowing you to display information about the transaction in the Control Panel, under the "Payment" tab.
-
-```php
-public function fieldtypeDetails(Order $order): array  
-{  
-	return [
-		__('Payment ID') => $order->get('payment_id'),
-		__('Card Brand') => 'Mastercard',
-		__('Card Last Four') => '4242',
-	];
-}
-```
+| Method             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `setup`            | This method is called by the `{{ payment_gateways }}` tag (or its [AJAX equivalent](/docs/json-api#available-payment-gateways)).<br><br>You should do whatever you need to in order to create the "payment". Anything you return from this method will be available on the checkout form.<br><br>You shouldn't return any sensitive API keys from this method, as they could be exposed via the [AJAX endpoint](/frontend/json-api/endpoints#available-payment-gateways). |
+| `process`          | This method is called when the payment gateway's "checkout URL" is hit.                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `capture`          | When your payment gateway supports "authorise and capture", you can call this method in your webhook code to capture the payment.<br><br>This method can be left blank when "authorise and capture" isn't supported.                                                                                                                                                                                                                                                      |
+| `cancel`           | This method is called when the payment gateway's "checkout URL" is hit, but the payment needs to be cancelled.<br><br>Payments may need to be cancelled when a coupon is invalid, there's not enough stock to fulfil the order, or customer/address information is missing from the order.                                                                                                                                                                                |
+| `webhook`          | This method is called when a webhook request is received.<br><br>When possible, you should verify that the request is genuine before taking action (eg. by verifying headers).                                                                                                                                                                                                                                                                                            |
+| `refund`           | This method is called when a refund is initiated in the Control Panel.                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `fieldtypeDetails` | The `fieldtypeDetails` method allows you to display information about the payment in the Control Panel. For example: payment ID, card brand, etc. <br><br>You can find [an example](https://github.com/duncanmcclean/statamic-cargo/blob/2a70ce37c8e4f1214565b42d5c0eaf2cc65aeb0f/src/Payments/Gateways/Stripe.php#L200) of it being used in the built-in Stripe gateway.                                                                                                 |
 
 ### Notes
 * Every payment gateway has a unique checkout URL...
