@@ -265,7 +265,7 @@ When you submit the form, Cargo will also expect you to pass a `shipping_method`
                 type="radio" 
                 name="shipping_option" 
                 value="{{ handle }}" 
-<!--                 onchange="document.getElementsByName('shipping_method')[0].value = '{{ shipping_method }}'" -->
+           <!-- onchange="document.getElementsByName('shipping_method')[0].value = '{{ shipping_method }}'" -->
                 required>
 
             <label for="{{ handle }}">{{ name }} ({{ price }})</label>
@@ -278,7 +278,11 @@ When you submit the form, Cargo will also expect you to pass a `shipping_method`
 {{ cart }}
 	{{ partial:checkout/summary }}
 {{ /cart }}
-``` 
+```
+
+:::tip Note
+The `onchange` attribute is commented out in the above example, as it causes an infinite loop with the syntax highlighter. You should uncomment it in your code.
+:::
 
 After the form has been submitted, the cart's shipping costs will be calculated.
 
@@ -345,7 +349,7 @@ Cargo generates a temporary signed URL, meaning the confirmation page will be va
 
 The URL contains the `order_id` as a query parameter, which you can pass into the [`{{ orders }}`](/docs/orders-tag) tag to display the order information:
 
-```html
+```antlers
 {{ orders :id:is="get:order_id" }}
 	<h1>Thanks for your order!</h1>
 	<p>Your order number is <strong>#{{ order_number }}</strong>. We'll send you a confirmation email once we've finished processing your payment.</p>

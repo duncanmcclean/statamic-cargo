@@ -431,14 +431,12 @@ If you're adopting Cargo's [pre-built checkout flow](/docs/checkout), you don't 
 You will need to update the payment form for the Stripe payment gateway in your templates. You can find the latest version on the [Payment Gateways](/docs/payment-gateways#dummy) page.
 
 #### Webhook
-When deploying your changes live, you will need to update your app's webhook URL in the Stripe Dashboard.
+When deploying your changes, you will need to update your webhook URL in the Stripe Dashboard. 
 
-Previously, the URL was `https://example.com/!/simple-commerce/gateways/{gateway}/webhook`.
-
-It is now `https://example.com/!/cargo/payments/{gateway}/webhook`.
+Previously, the webhook URL was `/!/simple-commerce/gateways/stripe/webhook`.  It is now `/!/cargo/payments/stripe/webhook`.
 
 :::tip Note
-If you were using Simple Commerce's Card Elements implementation, you will need to *create* a webhook in Stripe. It should listen for all charge and payment intent events.
+If you don't already have a Stripe webhook configured, you will need to create one. It should listen for all charge and payment intent events.
 :::
 
 Whilst not strictly required, we highly recommend configuring a "webhook secret" to prevent malicious requests to the webhook.

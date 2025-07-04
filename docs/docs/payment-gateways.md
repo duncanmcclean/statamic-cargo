@@ -32,11 +32,10 @@ Gateways often have things like API keys, or other options you may need to provi
 
 Sensitive values should be stored in your `.env` file, which should be ignored by Git.
 
-## First-party gateways
-### Dummy
+## Dummy
 Like the name suggests, the Dummy payment gateway exists to make it easy to get up and running with Cargo, without fussing about setting up and configuring a payment gateway.
 
-#### Payment Form
+### Payment Form
 :::tip Note
 You don't need to copy this into your project if you're using the [built-in checkout flow](/docs/checkout), as you'll already have it.
 :::
@@ -56,8 +55,8 @@ To use the Dummy gateway, copy and paste this template into your checkout flow:
 </form>
 ``` 
 
-### Stripe
-#### Payment Form
+## Stripe
+### Payment Form
 :::tip Note
 You don't need to copy this into your project if you're using the [built-in checkout flow](/docs/checkout), as you'll already have it.
 :::
@@ -168,7 +167,7 @@ You may wish to disable the "Link" payment method, as it can sometimes get in th
 
 If possible, you should move Stripe's JS into the `<head>`.
 
-#### Webhooks
+### Webhooks
 Cargo relies on webhooks sent by Stripe to capture payments, update order statuses and handle refunds.
 
 The easiest way to receive webhooks locally is by using the [Stripe CLI](https://docs.stripe.com/stripe-cli). Once you've got it setup, all you need to do is run this command any time you want to listen for events:
@@ -189,8 +188,8 @@ For additional security, we recommend copying the "Webhook Secret" into your `.e
 STRIPE_WEBHOOK_SECRET=whsec_...
 ```
 
-### Mollie
-#### Payment Form
+## Mollie
+### Payment Form
 :::tip Note
 You don't need to copy this into your project if you're using the [built-in checkout flow](/docs/checkout), as you'll already have it.
 :::
@@ -203,21 +202,16 @@ Since the transaction happens on Mollie's website, all we need to do is take the
 </a>
 ```
 
-#### Webhooks
+### Webhooks
 Cargo relies on webhooks sent by Mollie in order to update order statuses and handle refunds. 
 
 When the payment gateway creates the payment in Mollie, it automatically configures the webhook URL for us.
 
 However, when you're developing locally, your local development site won't be accessible by Mollie in order for it to send webhook requests.
 
-You can workaround this by setting up a tunneling service, like Expose or Ngrok, which will provide you with a publicly accessible URL that Mollie can use to talk with your local dev site.
+You can workaround this by setting up a tunneling service, like [Expose](https://expose.dev) or [Ngrok](https://ngrok.com), which will provide you with a publicly accessible URL that Mollie can use to talk with your local dev site.
 
 You will need to update the `APP_URL` key in your `.env` while your tunnel is active, so the gateway points towards the tunnel.
-
-## Third-party gateways
-Right now, there aren't any payment gateways built by the community. But, when there are, we'll list them here. Check back soon!
-
-If you've created a custom payment gateway others can use, please [let us know](mailto:support@builtwithcargo.dev) and we'll update the list.
 
 ## Build your own
 If you need to use a payment processor that Cargo doesn't support out-of-the-box, it's pretty easy to build your own payment gateway.
