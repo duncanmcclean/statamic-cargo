@@ -43,7 +43,7 @@ If you're curious, here's a brief rundown of how the pre-built Checkout page wor
 
 ### Customization
 #### Header / Logo
-You can customize the header, including the logo, by editing the `resources/views/checkout/_header.antlers.html` view:
+You can customise the header, including the logo, by editing the `resources/views/checkout/_header.antlers.html` view:
 
 ```antlers
 <header class="p-8 md:pb-0 flex justify-center md:justify-start">

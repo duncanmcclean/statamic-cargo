@@ -18,9 +18,9 @@ Cargo takes everything you love about Simple Commerce, and makes it better in ev
 * **Pre-built Checkout Page**, allowing you to level up your customer's purchasing experience.
 
 ## Licensing
-Before deploying Cargo to production, you will need to obtain a new license via the [Statamic Marketplace](https://statamic.com/addons/duncanmcclean/cargo). 
+Before deploying Cargo to production, you will need to obtain a new licence via the [Statamic Marketplace](https://statamic.com/addons/duncanmcclean/cargo). 
 
-Cargo now costs $199 for new licenses, then $85 per year thereafter for support & updates, similar to Statamic Pro.
+Cargo now costs $199 for new licences, then $85 per year thereafter for support & updates, similar to Statamic Pro.
 
 If you've purchased Simple Commerce **within the last 12 months**, you can migrate for free.
 
@@ -99,7 +99,7 @@ Like Simple Commerce, Cargo allows you to specify downloads for digital products
 
 ![Download fields on the product publish form](/images/product-downloads.png)
 
-Cargo doesn't include the "license keys" feature included in Simple Commerce. If you need this, we recommend building it yourself.
+Cargo doesn't include the "licence keys" feature included in Simple Commerce. If you need this, we recommend building it yourself.
 
 Cargo also doesn't track IP addresses & timestamps of downloads. If you need this, you can listen to the `ProductDownloaded` event and update the line item accordingly:
 
