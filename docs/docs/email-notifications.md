@@ -46,3 +46,18 @@ Event::listen(OrderShipped::class, function ($event) {
 ```
 
 For more information on sending emails, please consult the [Laravel documentation](https://laravel.com/docs/master/mail).
+
+## Previewing emails in the browser
+You can preview Mailables by returning them from a route, like this:
+
+```php
+// routes/web.php
+
+Route::get('/order-confirmation', function () {
+	$order = Order::query()->orderByDesc('date')->first();
+
+	return new OrderConfirmation($order);
+});
+```
+
+You may want to wrap the route in a `if (! app()->isProduction())` conditional to ensure the email isn't accessible in production.
