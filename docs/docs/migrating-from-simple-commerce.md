@@ -523,7 +523,7 @@ The gateway's `setup` method should return anything you need in the payment form
 You shouldn't return any sensitive API keys though, as they will be available using Cargo's JSON API endpoint.
 
 #### Webhooks
-Each payment gateway is assigned its own webhook URL: `/!/cargo/payments/custom_payment_gateway/webhook`
+Each payment gateway is assigned a webhook URL, usually in the format of `/!/cargo/payments/gatway_name/webhook`.
 
 ## Shipping
 After migrating to Cargo, you'll need to re-configure your site's shipping methods in the `cargo.php` config file:
