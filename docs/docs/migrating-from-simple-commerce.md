@@ -288,6 +288,7 @@ You should use the "find & replace" feature in your code editor to well... find 
 | `{{ sc:regions }}`                                             | `{{ states }}`                                                                                                                                                                                                                                 |
 | `{{ sc:errors }}`                                              | `{{ get_errors:all }}`<br><br>The `get_errors` tag is [built into Statamic](https://statamic.dev/tags/get_errors).                                                                                                                             |
 | `{{ sc:has_errors }}` / `{{ sc:hasErrors }}`                   | `{{ {get_errors:all \| count} > 0 }}`<br><br>The `get_errors` tag is [built into Statamic](https://statamic.dev/tags/get_errors).                                                                                                              |
+
 In addition to changes of tag names, some variables have been renamed as well. A non-exclusive list is provided below:
 
 | Old                   | New               |
