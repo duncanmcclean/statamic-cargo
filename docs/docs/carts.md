@@ -34,7 +34,7 @@ Cargo will automatically inject the product `id` from [the context](https://stat
 <input type="hidden" name="product" value="{{ page:id }}">
 ``` 
 
-This example only scratches the surface of what you can do using the cart tag. To find out more, see the [Cart Tag](/docs/cart-tag) page.
+This example only scratches the surface of what you can do using the cart tag. To find out more, see the [Cart Tag](/docs/tags/cart) page.
 
 ## Storage
 Out of the box, carts are stored as YAML files in the `content/cargo/carts` directory. If you wish, you can change the directory in the `cargo.php` config file:

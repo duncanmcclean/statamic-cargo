@@ -42,6 +42,8 @@ You don't need to copy this into your project if you're using the [built-in chec
 
 To use the Dummy gateway, copy and paste this template into your checkout flow:
 
+::tabs
+::tab antlers
 ```antlers
 <form action="{{ checkout_url }}" method="POST">
 	<div class="grid grid-cols-2 gap-4 mb-4">
@@ -53,7 +55,21 @@ To use the Dummy gateway, copy and paste this template into your checkout flow:
 	
 	<button>Pay Now</button>
 </form>
-``` 
+```
+::tab blade
+```blade
+<form action="{{ $checkout_url }}" method="POST">  
+    <div class="grid grid-cols-2 gap-4 mb-4">  
+        <input type="text" name="cardholder" placeholder="Name on Card" value="{{ Statamic::tag('cart:customer:name') }}" required>  
+        <input type="text" name="card_number" placeholder="Card Number" value="4242 4242 4242 4242" required>  
+        <input type="text" name="card_expiry" placeholder="Expiry" value="{{ now()->format('m') }}/{{ now()->addYear()->format('m') }}" required>  
+        <input type="text" name="card_cvc" placeholder="CVC" value="123" required>  
+    </div>  
+  
+    <button>Pay Now</button>  
+</form>
+```
+::
 
 ## Stripe
 ### Payment Form
@@ -63,6 +79,8 @@ You don't need to copy this into your project if you're using the [built-in chec
 
 To use the Stripe gateway, copy and paste this template into your checkout flow:
 
+::tabs
+::tab antlers
 ```antlers
 {{# You should really load this in your <head> if possible. #}}
 <script src="https://js.stripe.com/v3/"></script>
@@ -160,6 +178,101 @@ To use the Stripe gateway, copy and paste this template into your checkout flow:
     }
 </script>
 ``` 
+::tab blade
+```blade
+{{# You should really load this in your <head> if possible. #}}  
+<script src="https://js.stripe.com/v3/"></script>  
+  
+<form id="payment-form">  
+    <div id="payment-element" class="mb-4">  
+        <!--Stripe.js injects the Payment Element-->  
+    </div>  
+    <button id="submit" class="bg-blue-400 text-white uppercase font-semibold px-4 py-2">Pay Now</button>  
+    <div id="payment-message" class="hidden"></div>  
+</form>  
+  
+<script>  
+    // This is a public sample test API key.  
+    // Don’t submit any personally identifiable information in requests made with this key.    
+    // Sign in to see your own test API key embedded in code samples.    
+    const stripe = Stripe("{{ $api_key }}");  
+  
+    let elements;  
+  
+    initialize();  
+  
+    document  
+        .querySelector("#payment-form")  
+        .addEventListener("submit", handleSubmit);  
+  
+    // Fetches a payment intent and captures the client secret  
+    async function initialize() {  
+        elements = stripe.elements({ clientSecret: '{{ $client_secret }}' });  
+  
+        const paymentElementOptions = {  
+            layout: "accordion",  
+            defaultValues: {  
+                billingDetails: {  
+                    name: '{{ Statamic::tag('cart:customer:name') }}',  
+                    email: '{{ Statamic::tag('cart:customer:email') }}',  
+                    address: {  
+                        line1: '{{ Statamic::tag('cart:billing_line_1') }}',  
+                        line2: '{{ Statamic::tag('cart:billing_line_2') }}',  
+                        city: '{{ Statamic::tag('cart:billing_city') }}',  
+                        postal_code: '{{ Statamic::tag('cart:billing_postcode') }}',  
+                        state: '{{ Statamic::tag('cart:billing_state:code') }}',  
+                        country: '{{ {{ Statamic::tag('cart:billing_country:iso2') }} }}',  
+                    },  
+                },  
+            },  
+        };  
+  
+        const paymentElement = elements.create("payment", paymentElementOptions);  
+        paymentElement.mount("#payment-element");  
+    }  
+  
+    async function handleSubmit(e) {  
+        e.preventDefault();  
+        setLoading(true);  
+  
+        const { error } = await stripe.confirmPayment({  
+            elements,  
+            confirmParams: {  
+                // Make sure to change this to your payment completion page  
+                return_url: "{{ $checkout_url }}",  
+            },  
+        });  
+  
+        // This point will only be reached if there is an immediate error when  
+        // confirming the payment. Otherwise, your customer will be redirected to        // your `return_url`. For some payment methods like iDEAL, your customer will        // be redirected to an intermediate site first to authorize the payment, then        // redirected to the `return_url`.        if (error.type === "card_error" || error.type === "validation_error") {  
+            showMessage(error.message);  
+        } else {  
+            showMessage("An unexpected error occurred.");  
+        }  
+  
+        setLoading(false);  
+    }  
+  
+    // ------- UI helpers -------  
+  
+    function showMessage(messageText) {  
+        const messageContainer = document.querySelector("#payment-message");  
+  
+        messageContainer.classList.remove("hidden");  
+        messageContainer.textContent = messageText;  
+  
+        setTimeout(function () {  
+            messageContainer.classList.add("hidden");  
+            messageContainer.textContent = "";  
+        }, 4000);  
+    }  
+  
+    function setLoading(isLoading) {  
+        document.getElementById('submit').disabled = isLoading;  
+    }  
+</script>
+```
+::
 
 We're using Stripe's [Payment Elements implementation](https://docs.stripe.com/payments/quickstart), which allows customers to choose from any of the payment methods enabled in your account.
 
@@ -196,11 +309,20 @@ You don't need to copy this into your project if you're using the [built-in chec
 
 Since the transaction happens on Mollie's website, all we need to do is take the customer there, which makes the payment form incredibly simple:
 
+::tabs
+::tab antlers
 ```antlers
 <a href="{{ checkout_url }}">
 	Checkout with Mollie
 </a>
 ```
+::tab blade
+```blade
+<a href="{{ $checkout_url }}">
+	Checkout with Mollie
+</a>
+```
+::
 
 ### Webhooks
 Cargo relies on webhooks sent by Mollie in order to update order statuses and handle refunds. 
