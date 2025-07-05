@@ -15,4 +15,4 @@ Please submit any feature requests via GitHub Discussions on the Cargo repositor
 [-> Submit a feature request](https://github.com/duncanmcclean/cargo/discussions/new?category=feature-requests)
 
 ## Anything else
-If you have any other questions or email, please email support@builtwithcargo.dev. We'll aim to get back to you within a couple of days, although usually a lot sooner.
+If you have any other questions or need help, please email support@builtwithcargo.dev. We'll aim to get back to you within a couple of days, although usually a lot sooner.

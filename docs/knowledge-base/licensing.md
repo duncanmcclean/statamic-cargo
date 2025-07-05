@@ -6,11 +6,11 @@ Cargo is a **paid** Statamic addon.
 
 It's not my full time job, but maintaining and supporting it still takes up a fair chunk of my time, so payment is only fair.
 
-Cargo costs $199 for new licenses, then $85 per year thereafter for support & updates, similar to Statamic itself.
+Cargo costs $199 for new licences, then $85 per year thereafter for support & updates, similar to Statamic itself.
 
-You can use Cargo for free while in development. You only need to purchase a license when your site goes live. 
+You can use Cargo for free while in development. You only need to purchase a licence when your site goes live. 
 
-Licenses can be purchased from the [Statamic Marketplace](https://statamic.com/addons/duncanmcclean/cargo).
+Licences can be purchased from the [Statamic Marketplace](https://statamic.com/addons/duncanmcclean/cargo).
 
 ## Simple Commerce customers
 If you've purchased Simple Commerce **within the last 12 months**, you can migrate to Cargo for free.

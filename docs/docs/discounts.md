@@ -12,7 +12,7 @@ Both of them are created in the same way, and work exactly the same, except for 
 
 When a "Discount code" is set, the discount will only be applied when a customer enters the code. Otherwise, when a code isn't set, it will apply to everyone, without them needing to do anything.
 
-You can create as many discounts as you like, and they can be used together. However, customers can only use on discount code at a time.
+You can create as many discounts as you like, and they can be used together. However, customers can only use one discount code at a time.
 
 ## Creating discounts
 You can create discounts in the Control Panel. 

@@ -289,7 +289,7 @@ The easiest way to receive webhooks locally is by using the [Stripe CLI](https:/
 stripe listen --forward-to https://your-store.test/!/cargo/payments/stripe/webhook --skip-verify
 ``` 
 
-When you setup your site on production, you can should create a webhook in the Stripe Dashboard. 
+When you set up your site on production, you should create a webhook in the Stripe Dashboard. 
 
 It should point to `https://your-store.com/!/cargo/payments/stripe/webhook`, and listen for any charge or payment intent events:
 
