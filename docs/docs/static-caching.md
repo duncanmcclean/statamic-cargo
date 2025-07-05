@@ -37,8 +37,8 @@ This could be a counter in your nav, or a dynamic section on a product page that
 ## Cart & Checkout pages
 Since cart and checkout pages are dynamic, we **strongly recommend** excluding them from the static cache.
 
-``` php
-// config/statamic/static_caching.php
+```php
+// config/statamic/static_caching.php 
 
 return [
 	'exclude' => [

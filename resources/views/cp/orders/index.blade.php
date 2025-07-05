@@ -32,6 +32,6 @@
 
     <x-statamic::docs-callout
         :topic="__('Orders')"
-        url="https://builtwithcargo.dev/docs/carts-and-orders"
+        url="https://builtwithcargo.dev/docs/orders"
     />
 @endsection

@@ -18,9 +18,9 @@ Cargo takes everything you love about Simple Commerce, and makes it better in ev
 * **Pre-built Checkout Page**, allowing you to level up your customer's purchasing experience.
 
 ## Licensing
-Before deploying Cargo to production, you will need to obtain a new license via the [Statamic Marketplace](https://statamic.com/addons/duncanmcclean/cargo). 
+Before deploying Cargo to production, you will need to obtain a new licence via the [Statamic Marketplace](https://statamic.com/addons/duncanmcclean/cargo). 
 
-Cargo now costs $199 for new licenses, then $85 per year thereafter for support & updates, similar to Statamic Pro.
+Cargo now costs $199 for new licences, then $85 per year thereafter for support & updates, similar to Statamic Pro.
 
 If you've purchased Simple Commerce **within the last 12 months**, you can migrate for free.
 
@@ -99,7 +99,7 @@ Like Simple Commerce, Cargo allows you to specify downloads for digital products
 
 ![Download fields on the product publish form](/images/product-downloads.png)
 
-Cargo doesn't include the "license keys" feature included in Simple Commerce. If you need this, we recommend building it yourself.
+Cargo doesn't include the "licence keys" feature included in Simple Commerce. If you need this, we recommend building it yourself.
 
 Cargo also doesn't track IP addresses & timestamps of downloads. If you need this, you can listen to the `ProductDownloaded` event and update the line item accordingly:
 
@@ -288,6 +288,7 @@ You should use the "find & replace" feature in your code editor to well... find 
 | `{{ sc:regions }}`                                             | `{{ states }}`                                                                                                                                                                                                                                 |
 | `{{ sc:errors }}`                                              | `{{ get_errors:all }}`<br><br>The `get_errors` tag is [built into Statamic](https://statamic.dev/tags/get_errors).                                                                                                                             |
 | `{{ sc:has_errors }}` / `{{ sc:hasErrors }}`                   | `{{ {get_errors:all \| count} > 0 }}`<br><br>The `get_errors` tag is [built into Statamic](https://statamic.dev/tags/get_errors).                                                                                                              |
+
 In addition to changes of tag names, some variables have been renamed as well. A non-exclusive list is provided below:
 
 | Old                   | New               |
@@ -330,31 +331,12 @@ You can find a mapping of API endpoints below:
 For more information about the JSON API, please consult the [JSON API](/docs/json-api) page.
 
 ### Checkout
-In order to improve reliability and make things easier to understand, Cargo has re-worked the checkout process. As a result, you will need to make some changes to your checkout templates.
+To improve performance and reliability, the checkout process has been completely re-worked in Cargo. As a result, you will need to makes changes to your checkout templates.
 
 :::tip Tip
-If you haven't made too many changes to your checkout page, we recommend publishing Cargo's pre-built checkout page and working from there.
+If you're not too precious about your checkout page, you might be better off adopting Cargo's new [pre-built checkout flow](/docs/checkout#pre-built-checkout-flow) instead.
 
-It handles everything on one page, without the need for full-page refreshes, in addition to a sleek modern design.
-
-To publish the pre-built checkout flow into your project, run this command:
-
-```
-php artisan vendor:publish --tag=cargo-prebuilt-checkout
-```
-
-Then, add the following to your `routes/web.php` file:
-
-```php
-Route::statamic('checkout', 'checkout.index', ['title' => 'Checkout', 'layout' => 'checkout.layout'])  
-	->name('checkout');  
-		  
-Route::statamic('checkout/confirmation', 'checkout.confirmation', ['title' => 'Order Confirmation', 'layout' => 'checkout.layout'])  
-	->name('checkout.confirmation')  
-	->middleware('signed');
-```
-
-![Screenshot of Cargo's pre-built checkout flow](/images/prebuilt-checkout.png)
+It'll save you a lot of time and effort. It also reduces friction for customers, handling everything on a single page.
 :::
 
 Cargo removes the `{{ checkout }}` tag, which was used for collecting the customer's payment details.
@@ -450,14 +432,12 @@ If you're adopting Cargo's [pre-built checkout flow](/docs/checkout), you don't 
 You will need to update the payment form for the Stripe payment gateway in your templates. You can find the latest version on the [Payment Gateways](/docs/payment-gateways#dummy) page.
 
 #### Webhook
-When deploying your changes live, you will need to update your app's webhook URL in the Stripe Dashboard.
+When deploying your changes, you will need to update your webhook URL in the Stripe Dashboard. 
 
-Previously, the URL was `https://example.com/!/simple-commerce/gateways/{gateway}/webhook`.
-
-It is now `https://example.com/!/cargo/payments/{gateway}/webhook`.
+Previously, the webhook URL was `/!/simple-commerce/gateways/stripe/webhook`.  It is now `/!/cargo/payments/stripe/webhook`.
 
 :::tip Note
-If you were using Simple Commerce's Card Elements implementation, you will need to *create* a webhook in Stripe. It should listen for all charge and payment intent events.
+If you don't already have a Stripe webhook configured, you will need to create one. It should listen for all charge and payment intent events.
 :::
 
 Whilst not strictly required, we highly recommend configuring a "webhook secret" to prevent malicious requests to the webhook.
@@ -740,8 +720,9 @@ Once you're happy that everything has been migrated across successfully, there's
 * If you were storing customers and orders as entries, you can delete the "Customers" and "Orders" collections.
 * If you were storing customers and orders in the database, you can drop the `customers` and `orders` tables.
 	* You can also remove the models from the `runway.php` config. If you're not using Runway elsewhere, you can also uninstall Runway:
+    * You can also remove the models from the `runway.php` config. If you're not using Runway elsewhere, you can also uninstall Runway:
 	```
-	composer remove statamic-rad-pack/runway
+	 composer remove statamic-rad-pack/runway
 	```
 
 ## The End

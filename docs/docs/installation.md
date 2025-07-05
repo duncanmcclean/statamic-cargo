@@ -21,7 +21,7 @@ First, install Cargo using Composer:
 composer require duncanmcclean/statamic-cargo
 ```
 
-Then, once Composer has finished doing its thing, run Cargo's install command. It'll publish various stubs, setup your products collection, and more.
+Then, once Composer has finished doing its thing, run Cargo's install command. It'll publish various stubs, set up your products collection, and more.
 
 ```
 php please cargo:install

@@ -7,7 +7,7 @@ No one likes taxes, but we have to deal with them anyway. Cargo represents taxes
 If you need to deal with complicated taxation (eg. US states), we recommend integrating with a service like [TaxJar](https://www.taxjar.com).
 
 ## Tax Classes
-Every product designates a tax class which determines how it's taxes:
+Every product designates a tax class which determines how it's taxed:
 
 ![Tax Class field on product publish form](/images/product-tax-class-field.png)
 
@@ -43,7 +43,7 @@ By default, prices are **inclusive** of tax. If you would rather them be exclusi
 ## Templating
 You can display the cart's tax total using `{{ cart:tax_total }}`.
 
-If needed, you can also display taxes on a more granular level, looping through each tax class and it's amount:
+If needed, you can also display taxes on a more granular level, looping through each tax class and its amount:
 
 ::tabs
 ::tab antlers

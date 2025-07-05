@@ -1,32 +1,14 @@
 ---
-title: JSON API
+title: "JSON API: Endpoints"
 ---
-
-When the `<form>` tag just doesn't cut it anymore, Cargo provides a JSON API scoped to the customer's current cart.
-
-You can do everything you'd do with Cargo's `<form>` tags, but just, with JSON. 
-
-## Validation
-Cargo will report a 422 status code when invalid data is submitted in a request. The response body will look like this:
-
-```json
-{
-	"message": "whatevs",
-	"errors": {
-		"thing": ["Message"]
-	}
-}
-```
-
-## Endpoints
-### Current Cart
+## Current Cart
 `GET` `/!/cargo/cart`
 
 Returns the customer's cart.
 
 When the customer doesn't have a cart, this endpoint will report a 404 status code.
 
-### Update the cart
+## Update the cart
 `POST` `/!/cargo/cart`
 
 Updates the customer's cart. You can post customer information, redeem a discount code, or pass any other order fields here.
@@ -48,14 +30,14 @@ Updates the customer's cart. You can post customer information, redeem a discoun
 
 When the customer doesn't have a cart, this endpoint will report a 404 status code.
 
-### Delete the cart
+## Delete the cart
 `DELETE` `/!/cargo/cart`
 
 Deletes the customer's cart.
 
 When the customer doesn't have a cart, this endpoint will report a 404 status code.
 
-### Add a line item
+## Add a line item
 `POST` `/!/cargo/cart/line-items`
 
 Adds a line item to the customer's cart.
@@ -72,7 +54,7 @@ Adds a line item to the customer's cart.
 	* `email`
 	* Any additional data you want to persist on the customer.
 
-### Update a line item
+## Update a line item
 `PATCH` `/!/cargo/cart/line-items/{id}`
 
 Updates a line item on the customer's cart. The `{id}` should be the ID of the line item you wish to update.
@@ -90,14 +72,14 @@ Updates a line item on the customer's cart. The `{id}` should be the ID of the l
 
 When a line item with the provided ID doesn't exist, this endpoint will return a 404 status code.
 
-### Remove a line item
+## Remove a line item
 `DELETE` `/!/cargo/cart/line-items/{id}`
 
 Removes a line item from the customer's cart. The `{id}` should be the ID of the line item you wish to remove.
 
 When a line item with the provided ID doesn't exist, this endpoint will return a 404 status code.
 
-### Available Shipping Options
+## Available Shipping Options
 `GET` `/!/cargo/cart/shipping`
 
 Returns the available shipping options for the customer's cart.
@@ -106,7 +88,7 @@ When there's no address on the cart, this endpoint will return a 422 status code
 When the customer doesn't have a cart, this endpoint will report a 404 status code. 
 
 
-### Available Payment Gateways
+## Available Payment Gateways
 `GET` `/!/cargo/cart/payment-gateways`
 
 Returns the available payment gateways for the customer's cart, including the array returned by the payment gateway's `setup` method.
@@ -117,7 +99,7 @@ Payment Gateways will be returned *even* when the cart total is £0. In this cas
 
 When the customer doesn't have a cart, this endpoint will report a 404 status code. 
 
-### Checkout: £0 order
+## Checkout: £0 order
 `GET / POST` `/!/cargo/cart/checkout`
 
 When the cart total is equals to £0, you may use this endpoint to create an order without payment.
@@ -129,7 +111,7 @@ When successful, this endpoint will return a redirect response to the checkout c
 
 When the order requires payment, this endpoint will report a 404 status code.
 
-### Checkout: Paid Order
+## Checkout: Paid Order
 `GET / POST` `/!/cargo/payments/{gateway}/checkout`
 
 When the order requires payment, you may use this endpoint to create the order. The `{gateway}` should be the handle of the payment gateway you wish to checkout using.
@@ -141,7 +123,7 @@ When successful, this endpoint will return a redirect response to the checkout c
 
 When the order does not require payment, this endpoint will return a 404 status code.
 
-### States
+## States
 `GET` `/!/cargo/states`
 
 Returns an array of states for a given country.
