@@ -1,5 +1,5 @@
 # Cargo
-Cargo is a comprehensive e-commerce addon for Statamic, allowing you to sell both physical and digital products, keep track of inventory, and manage shipping and taxes. Build bespoke e-commerce sites without the complexity.
+Cargo is a comprehensive e-commerce addon for Statamic, allowing you to sell both physical and digital products, keep track of inventory, and manage Shipping and Taxes. Build bespoke e-commerce sites without the complexity.
 
 [Read the documentation](https://builtwithcargo.dev) to learn how to install, set up and use Cargo.
 
