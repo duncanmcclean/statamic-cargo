@@ -1,3 +1,122 @@
+<script setup>
+import { Fieldtype, ValidatesFieldConditions } from 'statamic';
+import Fields from '@statamic/components/ui/Publish/Fields.vue';
+import FieldsProvider from '@statamic/components/ui/Publish/FieldsProvider.vue';
+import PublishContainer from '@statamic/components/ui/Publish/Container.vue';
+import { Button } from '@statamic/ui';
+import { computed, inject, ref, watch } from 'vue';
+
+const emit = defineEmits(Fieldtype.emits);
+const props = defineProps(Fieldtype.props);
+const { expose, update, updateMeta } = Fieldtype.use(emit, props);
+defineExpose(expose);
+
+const store = inject('store');
+const deletingVariant = ref(null);
+const variants = computed(() => props.value.variants || []);
+const options = computed(() => props.value.options || []);
+
+const cartesian = computed(() => {
+    let cartesian = variants.value
+        .filter((variant) => variant.values.length !== 0)
+        .flatMap((variant) => [variant.values]);
+
+    if (cartesian.length == 0) {
+        return [];
+    }
+
+    return cartesian.reduce((acc, curr) => acc.flatMap((c) => curr.map((n) => [].concat(c, n))));
+});
+
+function addVariant() {
+    update({
+        variants: [
+            ...props.value.variants,
+            {
+                name: '',
+                values: [],
+            },
+        ],
+        options: props.value.options,
+    });
+}
+
+function deleteVariant(index) {
+    update({
+        variants: props.value.variants.filter((_, i) => i !== index),
+        options: props.value.options,
+    });
+}
+
+function variantUpdated(index, variant) {
+    let variants = [...props.value.variants];
+    variants[index] = variant;
+
+    update({
+        variants: variants,
+        options: props.value.options,
+    });
+}
+
+function getErrorsForVariant(index) {
+    return Object.entries(store.errors)
+        .filter(([key]) => key.startsWith(`${props.handle}.variants.${index}.`))
+        .reduce((acc, [key, error]) => {
+            const newKey = key.replace(`${props.handle}.variants.${index}.`, '');
+            acc[newKey] = error;
+            return acc;
+        }, {});
+}
+
+function getErrorsForOption(index) {
+    return Object.entries(store.errors)
+        .filter(([key]) => key.startsWith(`${props.handle}.options.${index}.`))
+        .reduce((acc, [key, error]) => {
+            const newKey = key.replace(`${props.handle}.options.${index}.`, '');
+            acc[newKey] = error;
+            return acc;
+        }, {});
+}
+
+watch(
+    variants,
+    () => {
+        update({
+            variants: props.value.variants,
+            options: cartesian.value.map((item, index) => {
+                let key = typeof item === 'string' ? item : item.join('_');
+                let variantName = typeof item === 'string' ? item : item.join(', ');
+
+                let existingData = props.value.options.filter((option) => {
+                    return option.key === key;
+                })[0];
+
+                if (existingData === undefined) {
+                    existingData = {
+                        price: 0,
+                    };
+
+                    Object.entries(props.meta.options.defaults).forEach(([key, value]) => {
+                        existingData[key] = value;
+                    });
+
+                    let meta = props.meta;
+                    meta['options']['existing'][index] = props.meta.options.new;
+                    updateMeta(meta);
+                }
+
+                return {
+                    ...existingData,
+                    key: key,
+                    variant: variantName,
+                };
+            }),
+        });
+    },
+    { deep: true }
+);
+</script>
+
 <template>
     <div>
         <!-- Variants -->
@@ -99,145 +218,3 @@
         </div>
     </div>
 </template>
-
-<script>
-import { FieldtypeMixin, ValidatesFieldConditions } from 'statamic';
-import Fields from '@statamic/components/ui/Publish/Fields.vue';
-import FieldsProvider from '@statamic/components/ui/Publish/FieldsProvider.vue';
-import PublishContainer from '@statamic/components/ui/Publish/Container.vue';
-import { Button, Icon, Tooltip } from '@statamic/ui';
-
-export default {
-    mixins: [FieldtypeMixin, ValidatesFieldConditions],
-
-    components: {
-        Icon,
-        Tooltip,
-        Button,
-        Fields,
-        FieldsProvider,
-        PublishContainer,
-    },
-
-    inject: ['store'],
-
-    data() {
-        return {
-            deletingVariant: null,
-        };
-    },
-
-    computed: {
-        variants() {
-            return this.value.variants || [];
-        },
-
-        options() {
-            return this.value.options || [];
-        },
-
-        cartesian() {
-            let cartesian = this.variants
-                .filter((variant) => variant.values.length !== 0)
-                .flatMap((variant) => [variant.values]);
-
-            if (cartesian.length == 0) {
-                return [];
-            }
-
-            return cartesian.reduce((acc, curr) => acc.flatMap((c) => curr.map((n) => [].concat(c, n))));
-        },
-    },
-
-    methods: {
-        addVariant() {
-            this.update({
-                variants: [
-                    ...this.value.variants,
-                    {
-                        name: '',
-                        values: [],
-                    },
-                ],
-                options: this.value.options,
-            });
-        },
-
-        deleteVariant(index) {
-            this.update({
-                variants: this.value.variants.filter((_, i) => i !== index),
-                options: this.value.options,
-            });
-        },
-
-        variantUpdated(index, variant) {
-            let variants = [...this.value.variants];
-            variants[index] = variant;
-
-            this.update({
-                variants: variants,
-                options: this.value.options,
-            });
-        },
-
-        getErrorsForVariant(index) {
-            return Object.entries(this.store.errors)
-                .filter(([key]) => key.startsWith(`${this.handle}.variants.${index}.`))
-                .reduce((acc, [key, error]) => {
-                    const newKey = key.replace(`${this.handle}.variants.${index}.`, '');
-                    acc[newKey] = error;
-                    return acc;
-                }, {});
-        },
-
-        getErrorsForOption(index) {
-            return Object.entries(this.store.errors)
-                .filter(([key]) => key.startsWith(`${this.handle}.options.${index}.`))
-                .reduce((acc, [key, error]) => {
-                    const newKey = key.replace(`${this.handle}.options.${index}.`, '');
-                    acc[newKey] = error;
-                    return acc;
-                }, {});
-        },
-    },
-
-    watch: {
-        variants: {
-            handler() {
-                this.update({
-                    variants: this.value.variants,
-                    options: this.cartesian.map((item, index) => {
-                        let key = typeof item === 'string' ? item : item.join('_');
-                        let variantName = typeof item === 'string' ? item : item.join(', ');
-
-                        let existingData = this.value.options.filter((option) => {
-                            return option.key === key;
-                        })[0];
-
-                        if (existingData === undefined) {
-                            existingData = {
-                                price: 0,
-                            };
-
-                            Object.entries(this.meta.options.defaults).forEach(([key, value]) => {
-                                existingData[key] = value;
-                            });
-
-                            let meta = this.meta;
-                            meta['options']['existing'][index] = this.meta.options.new;
-                            this.updateMeta(meta);
-                        }
-
-                        return {
-                            ...existingData,
-                            key: key,
-                            variant: variantName,
-                        };
-                    }),
-                });
-            },
-            deep: true,
-        },
-    },
-};
-</script>
