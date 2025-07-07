@@ -7,7 +7,6 @@ use DuncanMcClean\Cargo\Contracts\Discounts\Discount as DiscountContract;
 use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Http\Resources\CP\Discounts\Discounts;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Statamic\CP\Column;
 use Statamic\CP\PublishForm;
 use Statamic\Facades\Scope;
