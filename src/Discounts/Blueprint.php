@@ -19,11 +19,11 @@ class Blueprint
                             'display' => __('Details'),
                             'fields' => [
                                 [
-                                    'handle' => 'name',
+                                    'handle' => 'title',
                                     'field' => [
                                         'type' => 'text',
-                                        'display' => __('Name'),
-                                        'instructions' => __('cargo::messages.discounts.name'),
+                                        'display' => __('Title'),
+                                        'instructions' => __('cargo::messages.discounts.title'),
                                         'listable' => true,
                                         'width' => 50,
                                         'validate' => ['required', 'string', 'max:255'],

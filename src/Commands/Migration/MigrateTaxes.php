@@ -26,13 +26,13 @@ class MigrateTaxes extends Command
 
         if ($taxEngine === 'DuncanMcClean\SimpleCommerce\Tax\BasicTaxEngine') {
             if (! TaxClass::find('general')) {
-                TaxClass::make()->handle('general')->set('name', 'General')->save();
+                TaxClass::make()->handle('general')->set('title', 'General')->save();
             }
 
             if (! TaxZone::find('international')) {
                 TaxZone::make()
                     ->handle('international')
-                    ->set('name', 'International')
+                    ->set('title', 'International')
                     ->set('type', 'everywhere')
                     ->set('rates', [
                         'general' => config('simple-commerce.tax_engine_config.rate', 20),
@@ -60,7 +60,7 @@ class MigrateTaxes extends Command
 
                     TaxClass::make()
                         ->handle($data['id'])
-                        ->set('name', $data['name'])
+                        ->set('title', $data['title'])
                         ->set('description', $data['description'] ?? '')
                         ->save();
 
@@ -94,7 +94,7 @@ class MigrateTaxes extends Command
 
                     TaxZone::make()
                         ->handle($data['id'])
-                        ->set('name', $data['name'])
+                        ->set('title', $data['title'])
                         ->set('type', $type)
                         ->set('countries', isset($data['country']) ? [$data['country']] : null)
                         ->set('states', isset($data['region']) ? [$data['region']] : null)

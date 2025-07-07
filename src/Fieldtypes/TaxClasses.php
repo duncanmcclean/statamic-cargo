@@ -36,7 +36,7 @@ class TaxClasses extends Relationship
 
         return [
             'id' => $taxClass->handle(),
-            'title' => $taxClass->get('name'),
+            'title' => $taxClass->get('title'),
             'edit_url' => $taxClass->editUrl(),
         ];
     }
@@ -46,7 +46,7 @@ class TaxClasses extends Relationship
         return TaxClass::all()->map(function ($taxClass) {
             return [
                 'id' => $taxClass->handle(),
-                'title' => $taxClass->get('name'),
+                'title' => $taxClass->get('title'),
             ];
         });
     }
@@ -61,7 +61,7 @@ class TaxClasses extends Relationship
         return $this->getItemsForPreProcessIndex($data)->map(function ($item) {
             return [
                 'id' => $item->handle(),
-                'title' => $item->get('name'),
+                'title' => $item->get('title'),
                 'edit_url' => $item->editUrl(),
             ];
         });

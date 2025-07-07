@@ -21,7 +21,7 @@ class TaxZoneController extends CpController
             return [
                 'id' => $taxZone->handle(),
                 'handle' => $taxZone->handle(),
-                'name' => $taxZone->get('name'),
+                'title' => $taxZone->get('title'),
                 'type' => match ($taxZone->get('type')) {
                     'everywhere' => __('Everywhere'),
                     'countries' => __('Countries (:count)', ['count' => count($taxZone->get('countries', []))]),
@@ -44,7 +44,7 @@ class TaxZoneController extends CpController
         return view('cargo::cp.tax-zones.index', [
             'taxZones' => $taxZones,
             'columns' => [
-                Column::make('name')->label(__('Name')),
+                Column::make('title')->label(__('Title')),
                 Column::make('type')->label(__('Type')),
             ],
         ]);
@@ -67,7 +67,7 @@ class TaxZoneController extends CpController
         $values = PublishForm::make(TaxZone::blueprint())->submit($request->all());
 
         $taxZone = TaxZone::make()
-            ->handle(Str::slug(Arr::get($values, 'name')))
+            ->handle(Str::slug(Arr::get($values, 'title')))
             ->data($values);
 
         $taxZone->save();
@@ -81,7 +81,7 @@ class TaxZoneController extends CpController
 
         return PublishForm::make(TaxZone::blueprint())
             ->icon(Cargo::svg('tax-zones'))
-            ->title($taxZone->get('name'))
+            ->title($taxZone->get('title'))
             ->values($taxZone->data()->all())
             ->submittingTo($taxZone->updateUrl());
     }

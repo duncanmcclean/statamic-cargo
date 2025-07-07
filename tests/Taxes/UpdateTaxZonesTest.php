@@ -26,10 +26,10 @@ class UpdateTaxZonesTest extends TestCase
     #[Test]
     public function can_update_tax_zone()
     {
-        TaxClass::make()->handle('standard')->set('name', 'Standard')->save();
+        TaxClass::make()->handle('standard')->set('title', 'Standard')->save();
 
         $taxZone = tap(TaxZone::make()->handle('united-kingdom')->data([
-            'name' => 'United Kingdom',
+            'title' => 'United Kingdom',
             'type' => 'countries',
             'countries' => ['GB'],
             'rates' => ['standard' => 20],
@@ -38,7 +38,7 @@ class UpdateTaxZonesTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->patch(cp_route('cargo.tax-zones.update', $taxZone->handle()), [
-                'name' => 'United Kingdom',
+                'title' => 'United Kingdom',
                 'type' => 'countries',
                 'countries' => ['GB'],
                 'rates' => [
@@ -56,10 +56,10 @@ class UpdateTaxZonesTest extends TestCase
     {
         Role::make('test')->addPermission('access cp')->save();
 
-        TaxClass::make()->handle('standard')->set('name', 'Standard')->save();
+        TaxClass::make()->handle('standard')->set('title', 'Standard')->save();
 
         $taxZone = tap(TaxZone::make()->handle('united-kingdom')->data([
-            'name' => 'United Kingdom',
+            'title' => 'United Kingdom',
             'type' => 'countries',
             'countries' => ['GB'],
             'rates' => ['standard' => 20],
@@ -68,7 +68,7 @@ class UpdateTaxZonesTest extends TestCase
         $this
             ->actingAs(User::make()->assignRole('test')->save())
             ->patch(cp_route('cargo.tax-zones.update', $taxZone->handle()), [
-                'name' => 'United Kingdom',
+                'title' => 'United Kingdom',
                 'type' => 'countries',
                 'countries' => ['GB'],
                 'rates' => [

@@ -27,16 +27,16 @@ class StoreDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
-                'name' => 'Bazqux',
+                'title' => 'Bazqux',
                 'type' => 'percentage_off',
                 'percentage_off' => 50,
             ])
             ->assertOk()
             ->assertJson(['redirect' => cp_route('cargo.discounts.edit', 'bazqux')]);
 
-        $discount = Discount::query()->where('name', 'Bazqux')->first();
+        $discount = Discount::query()->where('title', 'Bazqux')->first();
 
-        $this->assertEquals($discount->name(), 'Bazqux');
+        $this->assertEquals($discount->title(), 'Bazqux');
         $this->assertEquals($discount->type(), 'percentage_off');
         $this->assertEquals($discount->get('percentage_off'), 50);
     }
@@ -49,14 +49,14 @@ class StoreDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->assignRole('test')->save())
             ->post(cp_route('cargo.discounts.store'), [
-                'name' => 'Bazqux',
+                'title' => 'Bazqux',
                 'type' => 'percentage_off',
                 'percentage_off' => 50,
                 'customer_eligibility' => 'all',
             ])
             ->assertRedirect('/cp');
 
-        $this->assertNull(Discount::query()->where('name', 'Bazqux')->first());
+        $this->assertNull(Discount::query()->where('title', 'Bazqux')->first());
     }
 
     #[Test]
@@ -65,7 +65,7 @@ class StoreDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
-                'name' => 'Foobar',
+                'title' => 'Foobar',
                 'discount_code' => 'FOOB;//-\(R',
                 'type' => 'percentage_off',
                 'percentage_off' => 50,
@@ -82,7 +82,7 @@ class StoreDiscountsTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
-                'name' => 'Foobar',
+                'title' => 'Foobar',
                 'discount_code' => 'foobar',
                 'type' => 'percentage_off',
                 'percentage_off' => 50,
@@ -96,12 +96,12 @@ class StoreDiscountsTest extends TestCase
     #[Test]
     public function cant_store_discount_with_duplicate_code()
     {
-        Discount::make()->name('Foobar')->set('discount_code', 'FOOBAR')->type('percentage_off')->set('percentage_off', 50)->save();
+        Discount::make()->title('Foobar')->set('discount_code', 'FOOBAR')->type('percentage_off')->set('percentage_off', 50)->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.discounts.store'), [
-                'name' => 'Foobar',
+                'title' => 'Foobar',
                 'discount_code' => 'FOOBAR',
                 'type' => 'percentage_off',
                 'percentage_off' => 50,

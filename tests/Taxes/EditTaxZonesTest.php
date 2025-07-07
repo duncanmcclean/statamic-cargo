@@ -26,10 +26,10 @@ class EditTaxZonesTest extends TestCase
     #[Test]
     public function can_edit_tax_zone()
     {
-        TaxClass::make()->handle('standard')->set('name', 'Standard')->save();
+        TaxClass::make()->handle('standard')->set('title', 'Standard')->save();
 
         $taxZone = tap(TaxZone::make()->handle('united-kingdom')->data([
-            'name' => 'United Kingdom',
+            'title' => 'United Kingdom',
             'type' => 'countries',
             'countries' => ['GB'],
             'rates' => ['standard' => 20],
@@ -47,10 +47,10 @@ class EditTaxZonesTest extends TestCase
     {
         Role::make('test')->addPermission('access cp')->save();
 
-        TaxClass::make()->handle('standard')->set('name', 'Standard')->save();
+        TaxClass::make()->handle('standard')->set('title', 'Standard')->save();
 
         $taxZone = tap(TaxZone::make()->handle('united-kingdom')->data([
-            'name' => 'United Kingdom',
+            'title' => 'United Kingdom',
             'type' => 'countries',
             'countries' => ['GB'],
             'rates' => ['standard' => 20],

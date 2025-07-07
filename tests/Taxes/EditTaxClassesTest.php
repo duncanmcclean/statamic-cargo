@@ -24,7 +24,7 @@ class EditTaxClassesTest extends TestCase
     #[Test]
     public function can_edit_tax_class()
     {
-        $taxClass = tap(TaxClass::make()->handle('standard')->set('name', 'Standard'))->save();
+        $taxClass = tap(TaxClass::make()->handle('standard')->set('title', 'Standard'))->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
@@ -38,7 +38,7 @@ class EditTaxClassesTest extends TestCase
     {
         Role::make('test')->addPermission('access cp')->save();
 
-        $taxClass = tap(TaxClass::make()->handle('standard')->set('name', 'Standard'))->save();
+        $taxClass = tap(TaxClass::make()->handle('standard')->set('title', 'Standard'))->save();
 
         $this
             ->actingAs(User::make()->assignRole('test')->save())

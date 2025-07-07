@@ -26,13 +26,13 @@ class StoreTaxZonesTest extends TestCase
     #[Test]
     public function can_store_tax_zone()
     {
-        TaxClass::make()->handle('standard')->set('name', 'Standard')->save();
-        TaxClass::make()->handle('reduced')->set('name', 'Reduced')->save();
+        TaxClass::make()->handle('standard')->set('title', 'Standard')->save();
+        TaxClass::make()->handle('reduced')->set('title', 'Reduced')->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.tax-zones.store'), [
-                'name' => 'United Kingdom',
+                'title' => 'United Kingdom',
                 'type' => 'countries',
                 'countries' => ['GB'],
                 'rates' => [
@@ -45,7 +45,7 @@ class StoreTaxZonesTest extends TestCase
 
         $taxZone = TaxZone::find('united-kingdom');
 
-        $this->assertEquals('United Kingdom', $taxZone->get('name'));
+        $this->assertEquals('United Kingdom', $taxZone->get('title'));
         $this->assertEquals('countries', $taxZone->get('type'));
         $this->assertEquals(['GB'], $taxZone->get('countries'));
         $this->assertEquals([
@@ -62,7 +62,7 @@ class StoreTaxZonesTest extends TestCase
         $this
             ->actingAs(User::make()->assignRole('test')->save())
             ->post(cp_route('cargo.tax-zones.store'), [
-                'name' => 'United Kingdom',
+                'title' => 'United Kingdom',
                 'type' => 'countries',
                 'countries' => ['GB'],
                 'rates' => [
@@ -78,15 +78,15 @@ class StoreTaxZonesTest extends TestCase
     #[Test]
     public function cant_store_tax_zone_with_the_same_country_as_another_tax_zone()
     {
-        TaxClass::make()->handle('standard')->set('name', 'Standard')->save();
-        TaxClass::make()->handle('reduced')->set('name', 'Reduced')->save();
+        TaxClass::make()->handle('standard')->set('title', 'Standard')->save();
+        TaxClass::make()->handle('reduced')->set('title', 'Reduced')->save();
 
         TaxZone::make()->handle('uk-original')->data(['type' => 'countries', 'countries' => ['GB']])->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.tax-zones.store'), [
-                'name' => 'United Kingdom',
+                'title' => 'United Kingdom',
                 'type' => 'countries',
                 'countries' => ['GB'],
                 'rates' => [
@@ -102,15 +102,15 @@ class StoreTaxZonesTest extends TestCase
     #[Test]
     public function cant_store_tax_zone_with_the_same_state_as_another_tax_zone()
     {
-        TaxClass::make()->handle('standard')->set('name', 'Standard')->save();
-        TaxClass::make()->handle('reduced')->set('name', 'Reduced')->save();
+        TaxClass::make()->handle('standard')->set('title', 'Standard')->save();
+        TaxClass::make()->handle('reduced')->set('title', 'Reduced')->save();
 
         TaxZone::make()->handle('uk-original')->data(['type' => 'states', 'countries' => ['GB'], 'states' => ['GLG', 'SLK']])->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.tax-zones.store'), [
-                'name' => 'Glasgow(ish)',
+                'title' => 'Glasgow(ish)',
                 'type' => 'states',
                 'countries' => ['GB'],
                 'states' => ['GLG', 'SLK'],
@@ -127,15 +127,15 @@ class StoreTaxZonesTest extends TestCase
     #[Test]
     public function cant_store_tax_zone_with_the_same_postcodes_as_another_tax_zone()
     {
-        TaxClass::make()->handle('standard')->set('name', 'Standard')->save();
-        TaxClass::make()->handle('reduced')->set('name', 'Reduced')->save();
+        TaxClass::make()->handle('standard')->set('title', 'Standard')->save();
+        TaxClass::make()->handle('reduced')->set('title', 'Reduced')->save();
 
         TaxZone::make()->handle('uk-original')->data(['type' => 'postcodes', 'countries' => ['GB'], 'postcodes' => ['G*']])->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.tax-zones.store'), [
-                'name' => 'Glasgow(ish)',
+                'title' => 'Glasgow(ish)',
                 'type' => 'postcodes',
                 'countries' => ['GB'],
                 'postcodes' => ['G*'],

@@ -21,10 +21,10 @@ class ApplyDiscountsTest extends TestCase
         $this->makeProduct('123')->set('price', 2500)->save();
         $this->makeProduct('456')->set('price', 5000)->save();
 
-        $discountA = Discount::make()->handle('a')->name('Discount A')->set('discount_code', 'A')->type('percentage_off')->set('percentage_off', 10); // Shouldn't be applied, it has a coupon code.
-        $discountB = Discount::make()->handle('b')->name('Discount B')->type('percentage_off')->set('percentage_off', 15); // Should be applied to both line items.
-        $discountC = Discount::make()->handle('c')->name('Discount C')->type('amount_off')->set('amount_off', 100)->set('products', ['123']); // Should be applied to the first line item.
-        $discountD = Discount::make()->handle('d')->name('Discount D')->type('amount_off')->set('amount_off', 200)->set('products', ['456'])->set('end_date', '2025-01-01'); // Shouldn't be applied, it has expired.
+        $discountA = Discount::make()->handle('a')->title('Discount A')->set('discount_code', 'A')->type('percentage_off')->set('percentage_off', 10); // Shouldn't be applied, it has a coupon code.
+        $discountB = Discount::make()->handle('b')->title('Discount B')->type('percentage_off')->set('percentage_off', 15); // Should be applied to both line items.
+        $discountC = Discount::make()->handle('c')->title('Discount C')->type('amount_off')->set('amount_off', 100)->set('products', ['123']); // Should be applied to the first line item.
+        $discountD = Discount::make()->handle('d')->title('Discount D')->type('amount_off')->set('amount_off', 200)->set('products', ['456'])->set('end_date', '2025-01-01'); // Shouldn't be applied, it has expired.
 
         $discountA->save();
         $discountB->save();
@@ -54,8 +54,8 @@ class ApplyDiscountsTest extends TestCase
         $this->makeProduct('123')->set('price', 2500)->save();
         $this->makeProduct('456')->set('price', 5000)->save();
 
-        $discountA = Discount::make()->handle('a')->name('Discount A')->set('discount_code', 'A')->type('percentage_off')->set('percentage_off', 10)->set('products', ['123']); // Should only be applied to the first line item.
-        $discountB = Discount::make()->handle('b')->name('Discount B')->type('percentage_off')->set('percentage_off', 15); // Site-wide discount, should be applied to both line items.
+        $discountA = Discount::make()->handle('a')->title('Discount A')->set('discount_code', 'A')->type('percentage_off')->set('percentage_off', 10)->set('products', ['123']); // Should only be applied to the first line item.
+        $discountB = Discount::make()->handle('b')->title('Discount B')->type('percentage_off')->set('percentage_off', 15); // Site-wide discount, should be applied to both line items.
 
         $discountA->save();
         $discountB->save();
@@ -100,8 +100,8 @@ class ApplyDiscountsTest extends TestCase
     {
         $this->makeProduct('123')->set('price', 2500)->save();
 
-        $discountA = Discount::make()->handle('a')->name('Discount A')->type('percentage_off')->set('percentage_off', 50);
-        $discountB = Discount::make()->handle('b')->name('Discount B')->type('amount_off')->set('amount_off', 1300)->set('products', ['123']);
+        $discountA = Discount::make()->handle('a')->title('Discount A')->type('percentage_off')->set('percentage_off', 50);
+        $discountB = Discount::make()->handle('b')->title('Discount B')->type('amount_off')->set('amount_off', 1300)->set('products', ['123']);
 
         $discountA->save();
         $discountB->save();

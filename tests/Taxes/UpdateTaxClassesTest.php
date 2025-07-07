@@ -24,17 +24,17 @@ class UpdateTaxClassesTest extends TestCase
     #[Test]
     public function can_update_tax_class()
     {
-        $taxClass = tap(TaxClass::make()->handle('standard')->set('name', 'Standard'))->save();
+        $taxClass = tap(TaxClass::make()->handle('standard')->set('title', 'Standard'))->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->patch(cp_route('cargo.tax-classes.update', $taxClass->handle()), data: [
-                'name' => 'Standard Tax Rate',
+                'title' => 'Standard Tax Rate',
             ])
             ->assertOk();
 
         $taxClass = TaxClass::find('standard');
-        $this->assertEquals('Standard Tax Rate', $taxClass->get('name'));
+        $this->assertEquals('Standard Tax Rate', $taxClass->get('title'));
     }
 
     #[Test]
@@ -42,16 +42,16 @@ class UpdateTaxClassesTest extends TestCase
     {
         Role::make('test')->addPermission('access cp')->save();
 
-        $taxClass = tap(TaxClass::make()->handle('standard')->set('name', 'Standard'))->save();
+        $taxClass = tap(TaxClass::make()->handle('standard')->set('title', 'Standard'))->save();
 
         $this
             ->actingAs(User::make()->assignRole('test')->save())
             ->patch(cp_route('cargo.tax-classes.update', $taxClass->handle()), [
-                'name' => 'Standard Tax Rate',
+                'title' => 'Standard Tax Rate',
             ])
             ->assertRedirect('/cp');
 
         $taxClass = TaxClass::find('standard');
-        $this->assertEquals('Standard', $taxClass->get('name'));
+        $this->assertEquals('Standard', $taxClass->get('title'));
     }
 }

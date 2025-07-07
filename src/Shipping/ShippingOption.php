@@ -78,7 +78,7 @@ class ShippingOption implements Augmentable, Purchasable
         if (! Facades\TaxClass::find('shipping')) {
             Facades\TaxClass::make()
                 ->handle('shipping')
-                ->set('name', __('Shipping'))
+                ->set('title', __('Shipping'))
                 ->save();
         }
 

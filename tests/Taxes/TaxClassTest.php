@@ -29,8 +29,8 @@ class TaxClassTest extends TestCase
     public function it_can_get_all_tax_classes()
     {
         File::put($this->path, YAML::dump([
-            'standard' => ['name' => 'Standard Tax'],
-            'reduced' => ['name' => 'Reduced Tax'],
+            'standard' => ['title' => 'Standard Tax'],
+            'reduced' => ['title' => 'Reduced Tax'],
         ]));
 
         $all = Facades\TaxClass::all();
@@ -38,23 +38,23 @@ class TaxClassTest extends TestCase
         $this->assertEquals(2, $all->count());
         $this->assertInstanceOf(Collection::class, $all);
 
-        $this->assertEquals('Standard Tax', $all->first()->get('name'));
-        $this->assertEquals('Reduced Tax', $all->last()->get('name'));
+        $this->assertEquals('Standard Tax', $all->first()->get('title'));
+        $this->assertEquals('Reduced Tax', $all->last()->get('title'));
     }
 
     #[Test]
     public function it_can_find_a_tax_class()
     {
         File::put($this->path, YAML::dump([
-            'standard' => ['name' => 'Standard Tax'],
-            'reduced' => ['name' => 'Reduced Tax'],
+            'standard' => ['title' => 'Standard Tax'],
+            'reduced' => ['title' => 'Reduced Tax'],
         ]));
 
         $taxClass = Facades\TaxClass::find('standard');
 
         $this->assertInstanceOf(TaxClass::class, $taxClass);
         $this->assertEquals('standard', $taxClass->handle());
-        $this->assertEquals('Standard Tax', $taxClass->get('name'));
+        $this->assertEquals('Standard Tax', $taxClass->get('title'));
     }
 
     #[Test]
@@ -69,20 +69,20 @@ class TaxClassTest extends TestCase
     public function it_can_save_a_tax_class()
     {
         File::put($this->path, YAML::dump([
-            'standard' => ['name' => 'Standard Tax'],
+            'standard' => ['title' => 'Standard Tax'],
         ]));
 
         $taxClass = Facades\TaxClass::make()
             ->handle('reduced')
-            ->data(['name' => 'Reduced Tax']);
+            ->data(['title' => 'Reduced Tax']);
 
         $save = $taxClass->save();
 
         $this->assertTrue($save);
 
         $this->assertEquals([
-            'standard' => ['name' => 'Standard Tax'],
-            'reduced' => ['name' => 'Reduced Tax'],
+            'standard' => ['title' => 'Standard Tax'],
+            'reduced' => ['title' => 'Reduced Tax'],
         ], YAML::file($this->path)->parse());
     }
 
@@ -90,8 +90,8 @@ class TaxClassTest extends TestCase
     public function it_can_delete_a_tax_class()
     {
         File::put($this->path, YAML::dump([
-            'standard' => ['name' => 'Standard Tax'],
-            'reduced' => ['name' => 'Reduced Tax'],
+            'standard' => ['title' => 'Standard Tax'],
+            'reduced' => ['title' => 'Reduced Tax'],
         ]));
 
         $delete = Facades\TaxClass::find('standard')->delete();
@@ -99,7 +99,7 @@ class TaxClassTest extends TestCase
         $this->assertTrue($delete);
 
         $this->assertEquals([
-            'reduced' => ['name' => 'Reduced Tax'],
+            'reduced' => ['title' => 'Reduced Tax'],
         ], YAML::file($this->path)->parse());
     }
 }

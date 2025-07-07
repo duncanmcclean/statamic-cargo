@@ -32,7 +32,7 @@ class ListedDiscount extends JsonResource
 
         return [
             'id' => $discount->handle(),
-            'name' => $discount->name(),
+            'title' => $discount->title(),
             'status' => $this->status(),
 
             $this->merge($this->values(['type' => $discount->type()])),

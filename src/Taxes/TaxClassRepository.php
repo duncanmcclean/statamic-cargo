@@ -70,11 +70,11 @@ class TaxClassRepository implements Contract
                             'display' => 'Tax Class Details',
                             'fields' => [
                                 [
-                                    'handle' => 'name',
+                                    'handle' => 'title',
                                     'field' => [
                                         'type' => 'text',
-                                        'display' => __('Name'),
-                                        'instructions' => __('cargo::messages.tax_classes_name_instructions'),
+                                        'display' => __('Title'),
+                                        'instructions' => __('cargo::messages.tax_classes_title_instructions'),
                                         'validate' => 'required',
                                     ],
                                 ],
