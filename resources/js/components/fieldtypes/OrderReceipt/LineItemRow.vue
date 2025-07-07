@@ -1,3 +1,36 @@
+<script setup>
+import { TableRow, TableCell } from '@statamic/ui';
+import InlineEditForm from '@statamic/components/inputs/relationship/InlineEditForm.vue';
+import { ref } from 'vue';
+
+const emit = defineEmits(['updated']);
+
+const props = defineProps({
+    lineItem: Object,
+    formComponent: String,
+    formComponentProps: Object,
+});
+
+const isEditing = ref(false);
+
+function edit() {
+    isEditing.value = true;
+}
+
+function itemUpdated(responseData) {
+    emit('updated', {
+        ...props.lineItem,
+        product: {
+            ...props.lineItem.product,
+            title: responseData.title,
+            published: responseData.published,
+            private: responseData.private,
+            status: responseData.status,
+        },
+    });
+}
+</script>
+
 <template>
     <TableRow>
         <TableCell>
@@ -26,50 +59,3 @@
         />
     </TableRow>
 </template>
-
-<script>
-import { TableRow, TableCell } from '@statamic/ui';
-import InlineEditForm from '@statamic/components/inputs/relationship/InlineEditForm.vue';
-
-export default {
-    components: {
-        TableRow,
-        TableCell,
-        InlineEditForm,
-    },
-
-    props: {
-        lineItem: Object,
-        formComponent: String,
-        formComponentProps: Object,
-    },
-
-    data() {
-        return {
-            isEditing: false,
-        };
-    },
-
-    methods: {
-        edit() {
-            // if (! this.editable) return;
-            // if (this.item.invalid) return;
-
-            this.isEditing = true;
-        },
-
-        itemUpdated(responseData) {
-            this.$emit('updated', {
-                ...this.lineItem,
-                product: {
-                    ...this.lineItem.product,
-                    title: responseData.title,
-                    published: responseData.published,
-                    private: responseData.private,
-                    status: responseData.status,
-                },
-            });
-        },
-    },
-};
-</script>
