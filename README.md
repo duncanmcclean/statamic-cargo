@@ -1,10 +1,12 @@
 <!-- statamic:hide -->
 
-<p align="center">
+<p>
+<a href="https://builtwithcargo.dev" align="center">
 <picture>
     <source srcset="./art/logo-dark.svg" media="(prefers-color-scheme: dark)">
     <img align="center" width="250" height="70" src="./art/logo-light.svg">
 </picture>
+</a>
 </p>
 <br>
 
