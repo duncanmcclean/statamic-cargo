@@ -15,6 +15,6 @@ Licences can be purchased from the [Statamic Marketplace](https://statamic.com/a
 ## Simple Commerce customers
 If you've purchased Simple Commerce **within the last 12 months**, you can migrate to Cargo for free.
 
-Otherwise, you purchased Simple Commerce **more than a year ago**, you can migrate to Cargo for $85 (the annual update fee).
+Otherwise, if you purchased Simple Commerce **more than a year ago**, you can migrate to Cargo for $85 (the annual update fee).
 
 Either way, just email [support@builtwithcargo.dev](support@builtwithcargo.dev) with your order number, and I'll send you a coupon code to use at checkout.
