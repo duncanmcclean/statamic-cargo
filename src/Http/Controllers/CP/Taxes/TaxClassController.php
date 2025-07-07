@@ -21,7 +21,7 @@ class TaxClassController extends CpController
             return [
                 'id' => $taxClass->handle(),
                 'handle' => $taxClass->handle(),
-                'name' => $taxClass->get('name'),
+                'title' => $taxClass->get('title'),
                 'edit_url' => $taxClass->editUrl(),
                 'delete_url' => $taxClass->deleteUrl(),
             ];
@@ -38,7 +38,7 @@ class TaxClassController extends CpController
         return view('cargo::cp.tax-classes.index', [
             'taxClasses' => $taxClasses,
             'columns' => [
-                Column::make('name')->label(__('Name')),
+                Column::make('title')->label(__('Title')),
             ],
         ]);
     }
@@ -60,7 +60,7 @@ class TaxClassController extends CpController
         $values = PublishForm::make(TaxClass::blueprint())->submit($request->all());
 
         $taxClass = TaxClass::make()
-            ->handle(Str::slug(Arr::get($values, 'name')))
+            ->handle(Str::slug(Arr::get($values, 'title')))
             ->data($values);
 
         $taxClass->save();
@@ -74,7 +74,7 @@ class TaxClassController extends CpController
 
         return PublishForm::make(TaxClass::blueprint())
             ->icon(Cargo::svg('tax-classes'))
-            ->title($taxClass->get('name'))
+            ->title($taxClass->get('title'))
             ->values($taxClass->data()->all())
             ->submittingTo($taxClass->updateUrl());
     }

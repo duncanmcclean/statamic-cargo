@@ -26,7 +26,7 @@ class UpdateTaxZonesTest extends TestCase
     #[Test]
     public function can_update_tax_zone()
     {
-        TaxClass::make()->handle('standard')->set('name', 'Standard')->save();
+        TaxClass::make()->handle('standard')->set('title', 'Standard')->save();
 
         $taxZone = tap(TaxZone::make()->handle('united-kingdom')->data([
             'name' => 'United Kingdom',
@@ -56,7 +56,7 @@ class UpdateTaxZonesTest extends TestCase
     {
         Role::make('test')->addPermission('access cp')->save();
 
-        TaxClass::make()->handle('standard')->set('name', 'Standard')->save();
+        TaxClass::make()->handle('standard')->set('title', 'Standard')->save();
 
         $taxZone = tap(TaxZone::make()->handle('united-kingdom')->data([
             'name' => 'United Kingdom',

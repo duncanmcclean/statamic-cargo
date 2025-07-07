@@ -98,8 +98,8 @@ class CartTest extends TestCase
     #[Test]
     public function it_returns_the_tax_breakdown()
     {
-        TaxClass::make()->handle('standard')->set('name', 'Standard')->save();
-        TaxClass::make()->handle('reduced')->set('name', 'Reduced')->save();
+        TaxClass::make()->handle('standard')->set('title', 'Standard')->save();
+        TaxClass::make()->handle('reduced')->set('title', 'Reduced')->save();
 
         TaxZone::make()->handle('uk_vat')->data([
             'name' => 'UK VAT',

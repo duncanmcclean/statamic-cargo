@@ -35,7 +35,7 @@ class CalculateTaxesTest extends TestCase
 
         Collection::make('products')->save();
 
-        TaxClass::make()->handle('standard')->set('name', 'Standard')->save();
+        TaxClass::make()->handle('standard')->set('title', 'Standard')->save();
 
         $path = base_path('content/cargo/tax-zones.yaml');
 
@@ -369,7 +369,7 @@ class CalculateTaxesTest extends TestCase
     #[Test]
     public function calculates_tax_for_multiple_line_items()
     {
-        TaxClass::make()->handle('reduced')->set('name', 'Reduced')->save();
+        TaxClass::make()->handle('reduced')->set('title', 'Reduced')->save();
 
         $productA = Entry::make()->collection('products')->data(['price' => 10000, 'tax_class' => 'standard']);
         $productA->save();

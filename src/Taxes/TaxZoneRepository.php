@@ -147,7 +147,7 @@ class TaxZoneRepository implements Contract
                                             'handle' => $taxClass->handle(),
                                             'field' => [
                                                 'type' => 'integer',
-                                                'display' => $taxClass->get('name'),
+                                                'display' => $taxClass->get('title'),
                                                 'validate' => 'min:0',
                                                 'append' => '%',
                                                 'width' => 50,

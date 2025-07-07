@@ -27,13 +27,13 @@ class StoreTaxClassesTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.tax-classes.store'), [
-                'name' => 'Standard',
+                'title' => 'Standard',
             ])
             ->assertOk()
             ->assertJson(['redirect' => cp_route('cargo.tax-classes.edit', 'standard')]);
 
         $taxClass = TaxClass::find('standard');
-        $this->assertEquals('Standard', $taxClass->get('name'));
+        $this->assertEquals('Standard', $taxClass->get('title'));
     }
 
     #[Test]
@@ -44,7 +44,7 @@ class StoreTaxClassesTest extends TestCase
         $this
             ->actingAs(User::make()->assignRole('test')->save())
             ->post(cp_route('cargo.tax-classes.store'), [
-                'name' => 'Standard',
+                'title' => 'Standard',
             ])
             ->assertRedirect('/cp');
 
