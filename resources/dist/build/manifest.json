@@ -44,6 +44,24 @@
       "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
+  "../../Statamic/cms/resources/svg/icons/add-link.svg": {
+    "file": "assets/add-link-CCJieSS0.js",
+    "name": "add-link",
+    "src": "../../Statamic/cms/resources/svg/icons/add-link.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/add-list.svg": {
+    "file": "assets/add-list-DoQKLHZi.js",
+    "name": "add-list",
+    "src": "../../Statamic/cms/resources/svg/icons/add-list.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
   "../../Statamic/cms/resources/svg/icons/add-sticky.svg": {
     "file": "assets/add-sticky-8FT5nJ7e.js",
     "name": "add-sticky",
@@ -197,15 +215,6 @@
       "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
-  "../../Statamic/cms/resources/svg/icons/blueprints-large.svg": {
-    "file": "assets/blueprints-large-DItgryQX.js",
-    "name": "blueprints-large",
-    "src": "../../Statamic/cms/resources/svg/icons/blueprints-large.svg",
-    "isDynamicEntry": true,
-    "imports": [
-      "_vue.runtime.esm-bundler-B9i9wuim.js"
-    ]
-  },
   "../../Statamic/cms/resources/svg/icons/blueprints.svg": {
     "file": "assets/blueprints-B9yBENVJ.js",
     "name": "blueprints",
@@ -323,10 +332,10 @@
       "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
-  "../../Statamic/cms/resources/svg/icons/configure-large.svg": {
-    "file": "assets/configure-large-N3gAFay5.js",
-    "name": "configure-large",
-    "src": "../../Statamic/cms/resources/svg/icons/configure-large.svg",
+  "../../Statamic/cms/resources/svg/icons/configure.svg": {
+    "file": "assets/configure-BjaFS_1h.js",
+    "name": "configure",
+    "src": "../../Statamic/cms/resources/svg/icons/configure.svg",
     "isDynamicEntry": true,
     "imports": [
       "_vue.runtime.esm-bundler-B9i9wuim.js"
@@ -363,6 +372,15 @@
     "file": "assets/delete-DWpvjkP7.js",
     "name": "delete",
     "src": "../../Statamic/cms/resources/svg/icons/delete.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/docs.svg": {
+    "file": "assets/docs-Co_6Y-_g.js",
+    "name": "docs",
+    "src": "../../Statamic/cms/resources/svg/icons/docs.svg",
     "isDynamicEntry": true,
     "imports": [
       "_vue.runtime.esm-bundler-B9i9wuim.js"
@@ -552,15 +570,6 @@
     "file": "assets/fieldtype-dictionary-XCqbdti8.js",
     "name": "fieldtype-dictionary",
     "src": "../../Statamic/cms/resources/svg/icons/fieldtype-dictionary.svg",
-    "isDynamicEntry": true,
-    "imports": [
-      "_vue.runtime.esm-bundler-B9i9wuim.js"
-    ]
-  },
-  "../../Statamic/cms/resources/svg/icons/fieldtype-entries-large.svg": {
-    "file": "assets/fieldtype-entries-large-Zqx_TqpE.js",
-    "name": "fieldtype-entries-large",
-    "src": "../../Statamic/cms/resources/svg/icons/fieldtype-entries-large.svg",
     "isDynamicEntry": true,
     "imports": [
       "_vue.runtime.esm-bundler-B9i9wuim.js"
@@ -899,10 +908,28 @@
       "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
+  "../../Statamic/cms/resources/svg/icons/filter-2.svg": {
+    "file": "assets/filter-2-p-K-i2o2.js",
+    "name": "filter-2",
+    "src": "../../Statamic/cms/resources/svg/icons/filter-2.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
   "../../Statamic/cms/resources/svg/icons/filter.svg": {
     "file": "assets/filter-CS_NJ0ZF.js",
     "name": "filter",
     "src": "../../Statamic/cms/resources/svg/icons/filter.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/fingerprint.svg": {
+    "file": "assets/fingerprint-DZdjCVXX.js",
+    "name": "fingerprint",
+    "src": "../../Statamic/cms/resources/svg/icons/fingerprint.svg",
     "isDynamicEntry": true,
     "imports": [
       "_vue.runtime.esm-bundler-B9i9wuim.js"
@@ -921,6 +948,15 @@
     "file": "assets/fit-width-BCPCQYtd.js",
     "name": "fit-width",
     "src": "../../Statamic/cms/resources/svg/icons/fit-width.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/focus.svg": {
+    "file": "assets/focus-DRjwIWKB.js",
+    "name": "focus",
+    "src": "../../Statamic/cms/resources/svg/icons/focus.svg",
     "isDynamicEntry": true,
     "imports": [
       "_vue.runtime.esm-bundler-B9i9wuim.js"
@@ -1331,6 +1367,15 @@
       "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
+  "../../Statamic/cms/resources/svg/icons/memory.svg": {
+    "file": "assets/memory-HX3nWYrf.js",
+    "name": "memory",
+    "src": "../../Statamic/cms/resources/svg/icons/memory.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
   "../../Statamic/cms/resources/svg/icons/minimize.svg": {
     "file": "assets/minimize-BhVHXgOg.js",
     "name": "minimize",
@@ -1466,6 +1511,15 @@
       "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
+  "../../Statamic/cms/resources/svg/icons/pro-ribbon.svg": {
+    "file": "assets/pro-ribbon-DZan3q3A.js",
+    "name": "pro-ribbon",
+    "src": "../../Statamic/cms/resources/svg/icons/pro-ribbon.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
   "../../Statamic/cms/resources/svg/icons/pulse.svg": {
     "file": "assets/pulse-OXKqwaPg.js",
     "name": "pulse",
@@ -1524,15 +1578,6 @@
     "file": "assets/save-D0D3vRgi.js",
     "name": "save",
     "src": "../../Statamic/cms/resources/svg/icons/save.svg",
-    "isDynamicEntry": true,
-    "imports": [
-      "_vue.runtime.esm-bundler-B9i9wuim.js"
-    ]
-  },
-  "../../Statamic/cms/resources/svg/icons/scaffold-large.svg": {
-    "file": "assets/scaffold-large-D24Z6V1g.js",
-    "name": "scaffold-large",
-    "src": "../../Statamic/cms/resources/svg/icons/scaffold-large.svg",
     "isDynamicEntry": true,
     "imports": [
       "_vue.runtime.esm-bundler-B9i9wuim.js"
@@ -1709,10 +1754,37 @@
       "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
+  "../../Statamic/cms/resources/svg/icons/time-now.svg": {
+    "file": "assets/time-now-BmXiQwCV.js",
+    "name": "time-now",
+    "src": "../../Statamic/cms/resources/svg/icons/time-now.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
   "../../Statamic/cms/resources/svg/icons/trash.svg": {
     "file": "assets/trash-DvUAcYfj.js",
     "name": "trash",
     "src": "../../Statamic/cms/resources/svg/icons/trash.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/tree-collapse.svg": {
+    "file": "assets/tree-collapse-f0d6lc4X.js",
+    "name": "tree-collapse",
+    "src": "../../Statamic/cms/resources/svg/icons/tree-collapse.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/tree-expand.svg": {
+    "file": "assets/tree-expand-DD-rbebY.js",
+    "name": "tree-expand",
+    "src": "../../Statamic/cms/resources/svg/icons/tree-expand.svg",
     "isDynamicEntry": true,
     "imports": [
       "_vue.runtime.esm-bundler-B9i9wuim.js"
@@ -1908,7 +1980,7 @@
     "isEntry": true
   },
   "resources/js/cp.js": {
-    "file": "assets/cp-B4EjcpY1.js",
+    "file": "assets/cp-O4P10WkB.js",
     "name": "cp",
     "src": "resources/js/cp.js",
     "isEntry": true,
@@ -1918,6 +1990,8 @@
       "../../Statamic/cms/resources/svg/icons/add-entry.svg",
       "../../Statamic/cms/resources/svg/icons/add-folder.svg",
       "../../Statamic/cms/resources/svg/icons/add-group.svg",
+      "../../Statamic/cms/resources/svg/icons/add-link.svg",
+      "../../Statamic/cms/resources/svg/icons/add-list.svg",
       "../../Statamic/cms/resources/svg/icons/add-sticky.svg",
       "../../Statamic/cms/resources/svg/icons/add-tag.svg",
       "../../Statamic/cms/resources/svg/icons/add-user.svg",
@@ -1935,7 +2009,6 @@
       "../../Statamic/cms/resources/svg/icons/avatar.svg",
       "../../Statamic/cms/resources/svg/icons/bell.svg",
       "../../Statamic/cms/resources/svg/icons/blueprint-edit.svg",
-      "../../Statamic/cms/resources/svg/icons/blueprints-large.svg",
       "../../Statamic/cms/resources/svg/icons/blueprints.svg",
       "../../Statamic/cms/resources/svg/icons/book-next-page.svg",
       "../../Statamic/cms/resources/svg/icons/book-prev-page.svg",
@@ -1949,11 +2022,12 @@
       "../../Statamic/cms/resources/svg/icons/cog.svg",
       "../../Statamic/cms/resources/svg/icons/collections.svg",
       "../../Statamic/cms/resources/svg/icons/columns.svg",
-      "../../Statamic/cms/resources/svg/icons/configure-large.svg",
+      "../../Statamic/cms/resources/svg/icons/configure.svg",
       "../../Statamic/cms/resources/svg/icons/container-add.svg",
       "../../Statamic/cms/resources/svg/icons/credit-card.svg",
       "../../Statamic/cms/resources/svg/icons/dashboard.svg",
       "../../Statamic/cms/resources/svg/icons/delete.svg",
+      "../../Statamic/cms/resources/svg/icons/docs.svg",
       "../../Statamic/cms/resources/svg/icons/down-square.svg",
       "../../Statamic/cms/resources/svg/icons/download.svg",
       "../../Statamic/cms/resources/svg/icons/duplicate.svg",
@@ -1975,7 +2049,6 @@
       "../../Statamic/cms/resources/svg/icons/fieldtype-color.svg",
       "../../Statamic/cms/resources/svg/icons/fieldtype-date.svg",
       "../../Statamic/cms/resources/svg/icons/fieldtype-dictionary.svg",
-      "../../Statamic/cms/resources/svg/icons/fieldtype-entries-large.svg",
       "../../Statamic/cms/resources/svg/icons/fieldtype-entries.svg",
       "../../Statamic/cms/resources/svg/icons/fieldtype-float.svg",
       "../../Statamic/cms/resources/svg/icons/fieldtype-form.svg",
@@ -2013,9 +2086,12 @@
       "../../Statamic/cms/resources/svg/icons/fieldtype-video.svg",
       "../../Statamic/cms/resources/svg/icons/fieldtype-width.svg",
       "../../Statamic/cms/resources/svg/icons/fieldtype-yaml.svg",
+      "../../Statamic/cms/resources/svg/icons/filter-2.svg",
       "../../Statamic/cms/resources/svg/icons/filter.svg",
+      "../../Statamic/cms/resources/svg/icons/fingerprint.svg",
       "../../Statamic/cms/resources/svg/icons/fit-height.svg",
       "../../Statamic/cms/resources/svg/icons/fit-width.svg",
+      "../../Statamic/cms/resources/svg/icons/focus.svg",
       "../../Statamic/cms/resources/svg/icons/folder-add.svg",
       "../../Statamic/cms/resources/svg/icons/folder-ai.svg",
       "../../Statamic/cms/resources/svg/icons/folder-block.svg",
@@ -2061,6 +2137,7 @@
       "../../Statamic/cms/resources/svg/icons/mask.svg",
       "../../Statamic/cms/resources/svg/icons/maximize.svg",
       "../../Statamic/cms/resources/svg/icons/megaphone.svg",
+      "../../Statamic/cms/resources/svg/icons/memory.svg",
       "../../Statamic/cms/resources/svg/icons/minimize.svg",
       "../../Statamic/cms/resources/svg/icons/monitor.svg",
       "../../Statamic/cms/resources/svg/icons/moon.svg",
@@ -2076,6 +2153,7 @@
       "../../Statamic/cms/resources/svg/icons/playground.svg",
       "../../Statamic/cms/resources/svg/icons/plus.svg",
       "../../Statamic/cms/resources/svg/icons/preferences.svg",
+      "../../Statamic/cms/resources/svg/icons/pro-ribbon.svg",
       "../../Statamic/cms/resources/svg/icons/pulse.svg",
       "../../Statamic/cms/resources/svg/icons/rename.svg",
       "../../Statamic/cms/resources/svg/icons/replace.svg",
@@ -2083,7 +2161,6 @@
       "../../Statamic/cms/resources/svg/icons/rewind.svg",
       "../../Statamic/cms/resources/svg/icons/rss.svg",
       "../../Statamic/cms/resources/svg/icons/save.svg",
-      "../../Statamic/cms/resources/svg/icons/scaffold-large.svg",
       "../../Statamic/cms/resources/svg/icons/scaffold.svg",
       "../../Statamic/cms/resources/svg/icons/script.svg",
       "../../Statamic/cms/resources/svg/icons/sign-in.svg",
@@ -2103,7 +2180,10 @@
       "../../Statamic/cms/resources/svg/icons/synced.svg",
       "../../Statamic/cms/resources/svg/icons/taxonomies.svg",
       "../../Statamic/cms/resources/svg/icons/team.svg",
+      "../../Statamic/cms/resources/svg/icons/time-now.svg",
       "../../Statamic/cms/resources/svg/icons/trash.svg",
+      "../../Statamic/cms/resources/svg/icons/tree-collapse.svg",
+      "../../Statamic/cms/resources/svg/icons/tree-expand.svg",
       "../../Statamic/cms/resources/svg/icons/unsynced.svg",
       "../../Statamic/cms/resources/svg/icons/up-down.svg",
       "../../Statamic/cms/resources/svg/icons/up-square.svg",
