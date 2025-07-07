@@ -34,7 +34,4 @@ Cargo is the natural evolution of Simple Commerce — it takes everything you lo
 * Have another question? [Ask in the Statamic Discord](https://statamic.com/discord) or [send me an email](mailto:support@builtwithcargo.dev)
 
 ## Commercial addon 
-This addon is **paid software**. You may use it for free during development, but you must purchase a license from the [Statamic Marketplace](https://statamic.com/addons/duncanmcclean/cargo) to use it in production.
-
-## Security
-If you discover a security vulnerability within Cargo, please email [support@builtwithcargo.dev](mailto:support@builtwithcargo.dev). We're not able to pay bug bounties at this time.
+This addon is **paid software**. You may use it for free during development, but you must purchase a license from the [Statamic Marketplace](https://statamic.com/addons/duncanmcclean/cargo) before deploying to production.
