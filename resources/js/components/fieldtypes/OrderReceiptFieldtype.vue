@@ -1,3 +1,27 @@
+<script setup>
+import { Fieldtype } from 'statamic';
+import { Table, TableColumns, TableColumn, TableRows, TableRow, TableCell, Description } from '@statamic/ui';
+import LineItemRow from './OrderReceipt/LineItemRow.vue';
+import { ref } from 'vue';
+
+const emit = defineEmits(Fieldtype.emits);
+const props = defineProps(Fieldtype.props);
+const { expose } = Fieldtype.use(emit, props);
+defineExpose(expose);
+
+const receipt = ref(props.value);
+
+function lineItemUpdated(lineItem) {
+    receipt.value.line_items = receipt.value.line_items.map((item) => {
+        if (item.id === lineItem.id) {
+            return lineItem;
+        }
+
+        return item;
+    });
+}
+</script>
+
 <template>
     <div>
         <Table>
@@ -69,42 +93,3 @@
         </Table>
     </div>
 </template>
-
-<script>
-import { FieldtypeMixin } from 'statamic';
-import { Table, TableColumns, TableColumn, TableRows, TableRow, TableCell, Description } from '@statamic/ui';
-import LineItemRow from './OrderReceipt/LineItemRow.vue';
-
-export default {
-    mixins: [FieldtypeMixin],
-
-    components: {
-        Table,
-        TableColumns,
-        TableColumn,
-        TableRows,
-        TableRow,
-        TableCell,
-        Description,
-        LineItemRow,
-    },
-
-    data() {
-        return {
-            receipt: this.value,
-        };
-    },
-
-    methods: {
-        lineItemUpdated(lineItem) {
-            this.value.line_items = this.value.line_items.map((item) => {
-                if (item.id === lineItem.id) {
-                    return lineItem;
-                }
-
-                return item;
-            });
-        },
-    },
-};
-</script>

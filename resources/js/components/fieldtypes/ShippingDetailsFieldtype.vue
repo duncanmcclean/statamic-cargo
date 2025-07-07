@@ -1,3 +1,14 @@
+<script setup>
+import { Fieldtype } from 'statamic';
+import SvgIcon from '../SvgIcon.vue';
+import { Heading, Description } from '@statamic/ui';
+
+const emit = defineEmits(Fieldtype.emits);
+const props = defineProps(Fieldtype.props);
+const { expose } = Fieldtype.use(emit, props);
+defineExpose(expose);
+</script>
+
 <template>
     <div>
         <Description v-if="!value.has_shipping_option">
@@ -36,15 +47,3 @@
         </div>
     </div>
 </template>
-
-<script>
-import { FieldtypeMixin } from 'statamic';
-import SvgIcon from '../SvgIcon.vue';
-import { Heading, Description } from '@statamic/ui';
-
-export default {
-    mixins: [FieldtypeMixin],
-
-    components: { SvgIcon, Heading, Description },
-};
-</script>
