@@ -1,3 +1,58 @@
+<script setup>
+import { Fieldtype } from 'statamic';
+import axios from 'axios';
+import InlineEditForm from '@statamic/components/inputs/relationship/InlineEditForm.vue';
+import { Dropdown, DropdownMenu, DropdownItem, Heading, Description, Badge, Tooltip } from '@statamic/ui';
+import { inject, ref } from 'vue';
+import { getActivePinia } from 'pinia';
+
+const emit = defineEmits(Fieldtype.emits);
+const props = defineProps(Fieldtype.props);
+const { expose } = Fieldtype.use(emit, props);
+defineExpose(expose);
+
+const store = inject('store');
+const isEditingUser = ref(false);
+
+function edit() {
+    if (!props.value.editable) return;
+    if (props.value.invalid) return;
+
+    if (props.value.reference) {
+        const storeRefs = Array.from(getActivePinia()._s.values()).map((store) => store.reference);
+
+        if (Array.from(storeRefs).includes(props.value.reference)) {
+            Statamic.$toast.error(__("You're already editing this item."));
+            return;
+        }
+    }
+
+    isEditingUser.value = true;
+}
+
+function itemUpdated(responseData) {
+    emit('update:value', {
+        ...props.value,
+        // in case we need to merge anything in here
+    });
+}
+
+function convertToUser() {
+    axios
+        .post(props.meta.convertGuestToUserUrl, {
+            email: props.value.email,
+            order_id: store.values.id,
+        })
+        .then((response) => {
+            emit('update:value', response.data);
+            Statamic.$toast.success(__('Guest has been converted to a user.'));
+        })
+        .catch((error) => {
+            Statamic.$toast.error(error.response.data.message);
+        });
+}
+</script>
+
 <template>
     <div class="relationship-input @container h-full w-full">
         <div>
@@ -65,73 +120,3 @@
         </div>
     </div>
 </template>
-
-<script>
-import axios from 'axios';
-import InlineEditForm from '@statamic/components/inputs/relationship/InlineEditForm.vue';
-import { FieldtypeMixin } from 'statamic';
-import { Dropdown, DropdownMenu, DropdownItem, Heading, Description, Badge, Tooltip } from '@statamic/ui';
-
-export default {
-    components: {
-        InlineEditForm,
-        Dropdown,
-        DropdownMenu,
-        DropdownItem,
-        Heading,
-        Description,
-        Badge,
-        Tooltip,
-    },
-
-    mixins: [FieldtypeMixin],
-
-    inject: ['store'],
-
-    data() {
-        return {
-            isEditingUser: false,
-        };
-    },
-
-    methods: {
-        edit() {
-            if (!this.value.editable) return;
-            if (this.value.invalid) return;
-
-            if (this.value.reference) {
-                const storeRefs = this.$pinia?._s.values().map((store) => store.reference);
-
-                if (Array.from(storeRefs).includes(this.value.reference)) {
-                    this.$toast.error(__("You're already editing this item."));
-                    return;
-                }
-            }
-
-            this.isEditingUser = true;
-        },
-
-        itemUpdated(responseData) {
-            this.$emit('update:value', {
-                ...this.value,
-                // in case we need to merge anything in here
-            });
-        },
-
-        convertToUser() {
-            axios
-                .post(this.meta.convertGuestToUserUrl, {
-                    email: this.value.email,
-                    order_id: this.store.values.id,
-                })
-                .then((response) => {
-                    this.$emit('update:value', response.data);
-                    this.$toast.success(__('Guest has been converted to a user.'));
-                })
-                .catch((error) => {
-                    this.$toast.error(error.response.data.message);
-                });
-        },
-    },
-};
-</script>
