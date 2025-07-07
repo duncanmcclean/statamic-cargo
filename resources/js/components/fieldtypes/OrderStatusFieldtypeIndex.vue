@@ -1,30 +1,23 @@
-<template>
-    <Badge :text="String(value.label)" :color="color" variant="flat" pill />
-</template>
-
-<script>
+<script setup>
 import { IndexFieldtype } from 'statamic';
-import { Badge } from 'statamic';
+import { Badge } from '@statamic/ui';
+import { computed } from 'vue';
 
-export default {
-    mixins: [IndexFieldtype],
+const props = defineProps(IndexFieldtype.props);
 
-    components: {
-        Badge,
-    },
+const color = computed(() => {
+    let colors = {
+        payment_pending: 'default',
+        payment_received: 'blue',
+        shipped: 'green',
+        returned: 'orange',
+        cancelled: 'red',
+    };
 
-    computed: {
-        color() {
-            let colors = {
-                payment_pending: 'default',
-                payment_received: 'blue',
-                shipped: 'green',
-                returned: 'orange',
-                cancelled: 'red',
-            };
-
-            return colors[this.value.value] ?? 'green';
-        },
-    },
-};
+    return colors[props.value.value] ?? 'green';
+});
 </script>
+
+<template>
+    <Badge :text="String(value.label)" :color variant="flat" pill />
+</template>
