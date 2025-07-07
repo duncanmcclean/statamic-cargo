@@ -30,7 +30,9 @@ Cargo is the natural evolution of Simple Commerce — it takes everything you lo
 
 ## Support
 Found a bug? [Submit a bug report](https://github.com/duncanmcclean/cargo/issues/new?template=bug_report.yml)
+
 Have a feature request? [Open a feature request](https://github.com/duncanmcclean/cargo/discussions/new?category=feature-requests)
+
 Have another question? [Ask in the Statamic Discord](https://statamic.com/discord) or [send me an email](mailto:support@builtwithcargo.dev)
 
 ## Commercial addon 
