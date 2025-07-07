@@ -135,7 +135,7 @@ class CalculateTaxesTest extends TestCase
             ]);
 
         TaxZone::make()->handle('usa')->data([
-            'name' => 'USA',
+            'title' => 'USA',
             'type' => 'countries',
             'countries' => ['USA'],
             'rates' => ['standard' => 20],
@@ -173,7 +173,7 @@ class CalculateTaxesTest extends TestCase
             ]);
 
         TaxZone::make()->handle('usa')->data([
-            'name' => 'USA',
+            'title' => 'USA',
             'type' => 'countries',
             'countries' => ['USA'],
             'rates' => ['standard' => 20],
@@ -214,7 +214,7 @@ class CalculateTaxesTest extends TestCase
             ]);
 
         TaxZone::make()->handle('usa')->data([
-            'name' => 'USA',
+            'title' => 'USA',
             'type' => 'countries',
             'countries' => ['USA'],
             'rates' => ['standard' => 20],
@@ -253,7 +253,7 @@ class CalculateTaxesTest extends TestCase
             ]);
 
         TaxZone::make()->handle('usa')->data([
-            'name' => 'USA',
+            'title' => 'USA',
             'type' => 'countries',
             'countries' => ['USA'],
             'rates' => ['standard' => 20],
@@ -291,14 +291,14 @@ class CalculateTaxesTest extends TestCase
             ]);
 
         TaxZone::make()->handle('usa')->data([
-            'name' => 'USA',
+            'title' => 'USA',
             'type' => 'countries',
             'countries' => ['USA'],
             'rates' => ['standard' => 20],
         ])->save();
 
         TaxZone::make()->handle('california')->data([
-            'name' => 'California',
+            'title' => 'California',
             'type' => 'states',
             'countries' => ['USA'],
             'states' => ['CA'],
@@ -306,7 +306,7 @@ class CalculateTaxesTest extends TestCase
         ])->save();
 
         TaxZone::make()->handle('ca_fa')->data([
-            'name' => 'CA FA',
+            'title' => 'CA FA',
             'type' => 'postcodes',
             'countries' => ['USA'],
             'postcodes' => ['FA*'],
@@ -347,7 +347,7 @@ class CalculateTaxesTest extends TestCase
             ]);
 
         TaxZone::make()->handle('usa')->data([
-            'name' => 'USA',
+            'title' => 'USA',
             'type' => 'countries',
             'countries' => ['USA'],
             'rates' => ['standard' => 25.5],
@@ -391,7 +391,7 @@ class CalculateTaxesTest extends TestCase
             ]);
 
         TaxZone::make()->handle('usa')->data([
-            'name' => 'USA',
+            'title' => 'USA',
             'type' => 'countries',
             'countries' => ['USA'],
             'rates' => ['standard' => 20, 'reduced' => 15],
@@ -428,7 +428,7 @@ class CalculateTaxesTest extends TestCase
         $product = Entry::make()->collection('products')->data([
             'tax_class' => 'standard',
             'product_variants' => [
-                'variants' => [['name' => 'Colour', 'values' => ['Red']]],
+                'variants' => [['title' => 'Colour', 'values' => ['Red']]],
                 'options' => [['key' => 'Red', 'variant' => 'Red', 'price' => 10000]],
             ],
         ]);
@@ -447,7 +447,7 @@ class CalculateTaxesTest extends TestCase
             ]);
 
         TaxZone::make()->handle('usa')->data([
-            'name' => 'USA',
+            'title' => 'USA',
             'type' => 'countries',
             'countries' => ['USA'],
             'rates' => ['standard' => 20],
@@ -484,7 +484,7 @@ class CalculateTaxesTest extends TestCase
             ]);
 
         TaxZone::make()->handle('usa')->data([
-            'name' => 'USA',
+            'title' => 'USA',
             'type' => 'countries',
             'countries' => ['USA'],
             'rates' => ['shipping' => 20],
@@ -517,7 +517,7 @@ class CalculateTaxesTest extends TestCase
             ]);
 
         TaxZone::make()->handle('usa')->data([
-            'name' => 'USA',
+            'title' => 'USA',
             'type' => 'countries',
             'countries' => ['USA'],
             'rates' => ['shipping' => 20],
@@ -550,14 +550,14 @@ class CalculateTaxesTest extends TestCase
             ]);
 
         TaxZone::make()->handle('usa')->data([
-            'name' => 'USA',
+            'title' => 'USA',
             'type' => 'countries',
             'countries' => ['USA'],
             'rates' => ['shipping' => 20],
         ])->save();
 
         TaxZone::make()->handle('california')->data([
-            'name' => 'California',
+            'title' => 'California',
             'type' => 'states',
             'countries' => ['USA'],
             'states' => ['CA'],
@@ -565,7 +565,7 @@ class CalculateTaxesTest extends TestCase
         ])->save();
 
         TaxZone::make()->handle('ca_fa')->data([
-            'name' => 'CA FA',
+            'title' => 'CA FA',
             'type' => 'postcodes',
             'countries' => ['USA'],
             'postcodes' => ['FA*'],
@@ -601,7 +601,7 @@ class CalculateTaxesTest extends TestCase
             ]);
 
         TaxZone::make()->handle('usa')->data([
-            'name' => 'USA',
+            'title' => 'USA',
             'type' => 'countries',
             'countries' => ['USA'],
             'rates' => ['shipping' => 25.5],

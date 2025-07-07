@@ -57,7 +57,7 @@ class DefaultTaxDriver implements DriverContract
                 $breakdown->push(TaxCalculation::make(
                     rate: $taxRate,
                     description: $this->taxClass()->get('title'),
-                    zone: $taxZone->get('name'),
+                    zone: $taxZone->get('title'),
                     amount: $taxAmount
                 ));
             }
@@ -73,7 +73,7 @@ class DefaultTaxDriver implements DriverContract
             $breakdown->push(TaxCalculation::make(
                 rate: $taxRate,
                 description: $this->taxClass()->get('title'),
-                zone: $taxZone->get('name'),
+                zone: $taxZone->get('title'),
                 amount: $taxAmount
             ));
         }

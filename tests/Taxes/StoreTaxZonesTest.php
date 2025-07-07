@@ -32,7 +32,7 @@ class StoreTaxZonesTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.tax-zones.store'), [
-                'name' => 'United Kingdom',
+                'title' => 'United Kingdom',
                 'type' => 'countries',
                 'countries' => ['GB'],
                 'rates' => [
@@ -45,7 +45,7 @@ class StoreTaxZonesTest extends TestCase
 
         $taxZone = TaxZone::find('united-kingdom');
 
-        $this->assertEquals('United Kingdom', $taxZone->get('name'));
+        $this->assertEquals('United Kingdom', $taxZone->get('title'));
         $this->assertEquals('countries', $taxZone->get('type'));
         $this->assertEquals(['GB'], $taxZone->get('countries'));
         $this->assertEquals([
@@ -62,7 +62,7 @@ class StoreTaxZonesTest extends TestCase
         $this
             ->actingAs(User::make()->assignRole('test')->save())
             ->post(cp_route('cargo.tax-zones.store'), [
-                'name' => 'United Kingdom',
+                'title' => 'United Kingdom',
                 'type' => 'countries',
                 'countries' => ['GB'],
                 'rates' => [
@@ -86,7 +86,7 @@ class StoreTaxZonesTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.tax-zones.store'), [
-                'name' => 'United Kingdom',
+                'title' => 'United Kingdom',
                 'type' => 'countries',
                 'countries' => ['GB'],
                 'rates' => [
@@ -110,7 +110,7 @@ class StoreTaxZonesTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.tax-zones.store'), [
-                'name' => 'Glasgow(ish)',
+                'title' => 'Glasgow(ish)',
                 'type' => 'states',
                 'countries' => ['GB'],
                 'states' => ['GLG', 'SLK'],
@@ -135,7 +135,7 @@ class StoreTaxZonesTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->post(cp_route('cargo.tax-zones.store'), [
-                'name' => 'Glasgow(ish)',
+                'title' => 'Glasgow(ish)',
                 'type' => 'postcodes',
                 'countries' => ['GB'],
                 'postcodes' => ['G*'],

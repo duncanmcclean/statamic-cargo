@@ -29,8 +29,8 @@ class TaxZoneTest extends TestCase
     public function it_can_get_all_tax_zones()
     {
         File::put($this->path, YAML::dump([
-            'uk' => ['name' => 'United Kingdom', 'type' => 'countries', 'countries' => ['GBR'], 'rates' => ['standard' => 20]],
-            'eu' => ['name' => 'European Union', 'type' => 'countries', 'countries' => ['FRA', 'DEU'], 'rates' => ['standard' => 20]],
+            'uk' => ['title' => 'United Kingdom', 'type' => 'countries', 'countries' => ['GBR'], 'rates' => ['standard' => 20]],
+            'eu' => ['title' => 'European Union', 'type' => 'countries', 'countries' => ['FRA', 'DEU'], 'rates' => ['standard' => 20]],
         ]));
 
         $all = Facades\TaxZone::all();
@@ -38,23 +38,23 @@ class TaxZoneTest extends TestCase
         $this->assertEquals(2, $all->count());
         $this->assertInstanceOf(Collection::class, $all);
 
-        $this->assertEquals('United Kingdom', $all->first()->get('name'));
-        $this->assertEquals('European Union', $all->last()->get('name'));
+        $this->assertEquals('United Kingdom', $all->first()->get('title'));
+        $this->assertEquals('European Union', $all->last()->get('title'));
     }
 
     #[Test]
     public function it_can_find_a_tax_zone()
     {
         File::put($this->path, YAML::dump([
-            'uk' => ['name' => 'United Kingdom', 'type' => 'countries', 'countries' => ['GBR'], 'rates' => ['standard' => 20]],
-            'eu' => ['name' => 'European Union', 'type' => 'countries', 'countries' => ['FRA', 'DEU'], 'rates' => ['standard' => 20]],
+            'uk' => ['title' => 'United Kingdom', 'type' => 'countries', 'countries' => ['GBR'], 'rates' => ['standard' => 20]],
+            'eu' => ['title' => 'European Union', 'type' => 'countries', 'countries' => ['FRA', 'DEU'], 'rates' => ['standard' => 20]],
         ]));
 
         $taxZone = Facades\TaxZone::find('uk');
 
         $this->assertInstanceOf(TaxZone::class, $taxZone);
         $this->assertEquals('uk', $taxZone->handle());
-        $this->assertEquals('United Kingdom', $taxZone->get('name'));
+        $this->assertEquals('United Kingdom', $taxZone->get('title'));
         $this->assertEquals('countries', $taxZone->get('type'));
         $this->assertEquals(20, $taxZone->rates()->get('standard'));
     }
@@ -71,13 +71,13 @@ class TaxZoneTest extends TestCase
     public function it_can_save_a_tax_zone()
     {
         File::put($this->path, YAML::dump([
-            'uk' => ['name' => 'United Kingdom', 'type' => 'countries', 'countries' => ['GBR'], 'rates' => ['standard' => 20]],
+            'uk' => ['title' => 'United Kingdom', 'type' => 'countries', 'countries' => ['GBR'], 'rates' => ['standard' => 20]],
         ]));
 
         $taxZone = Facades\TaxZone::make()
             ->handle('eu')
             ->data([
-                'name' => 'European Union',
+                'title' => 'European Union',
                 'type' => 'countries',
                 'countries' => ['FRA', 'DEU'],
                 'rates' => ['standard' => 20],
@@ -88,8 +88,8 @@ class TaxZoneTest extends TestCase
         $this->assertTrue($save);
 
         $this->assertEquals([
-            'uk' => ['name' => 'United Kingdom', 'type' => 'countries', 'countries' => ['GBR'], 'rates' => ['standard' => 20]],
-            'eu' => ['name' => 'European Union', 'type' => 'countries', 'countries' => ['FRA', 'DEU'], 'rates' => ['standard' => 20]],
+            'uk' => ['title' => 'United Kingdom', 'type' => 'countries', 'countries' => ['GBR'], 'rates' => ['standard' => 20]],
+            'eu' => ['title' => 'European Union', 'type' => 'countries', 'countries' => ['FRA', 'DEU'], 'rates' => ['standard' => 20]],
         ], YAML::file($this->path)->parse());
     }
 
@@ -97,8 +97,8 @@ class TaxZoneTest extends TestCase
     public function it_can_delete_a_tax_zone()
     {
         File::put($this->path, YAML::dump([
-            'uk' => ['name' => 'United Kingdom', 'type' => 'countries', 'countries' => ['GBR'], 'rates' => ['standard' => 20]],
-            'eu' => ['name' => 'European Union', 'type' => 'countries', 'countries' => ['FRA', 'DEU'], 'rates' => ['standard' => 20]],
+            'uk' => ['title' => 'United Kingdom', 'type' => 'countries', 'countries' => ['GBR'], 'rates' => ['standard' => 20]],
+            'eu' => ['title' => 'European Union', 'type' => 'countries', 'countries' => ['FRA', 'DEU'], 'rates' => ['standard' => 20]],
         ]));
 
         $delete = Facades\TaxZone::find('uk')->delete();
@@ -106,7 +106,7 @@ class TaxZoneTest extends TestCase
         $this->assertTrue($delete);
 
         $this->assertEquals([
-            'eu' => ['name' => 'European Union', 'type' => 'countries', 'countries' => ['FRA', 'DEU'], 'rates' => ['standard' => 20]],
+            'eu' => ['title' => 'European Union', 'type' => 'countries', 'countries' => ['FRA', 'DEU'], 'rates' => ['standard' => 20]],
         ], YAML::file($this->path)->parse());
     }
 }

@@ -72,10 +72,10 @@ class TaxZoneRepository implements Contract
                             'display' => __('Tax Zone Details'),
                             'fields' => [
                                 [
-                                    'handle' => 'name',
+                                    'handle' => 'title',
                                     'field' => [
                                         'type' => 'text',
-                                        'display' => __('Name'),
+                                        'display' => __('Title'),
                                         'validate' => 'required',
                                     ],
                                 ],
