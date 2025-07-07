@@ -11,7 +11,6 @@ Please open a GitHub issue with everything someone else might need to replicate 
 <x-button text="→ Submit a bug report" target="_blank" href="https://github.com/duncanmcclean/cargo/issues/new?template=bug_report.yml" />
 @endblade
 
-
 ## Have a feature request?
 Please submit any feature requests via GitHub Discussions on the Cargo repository.
 
