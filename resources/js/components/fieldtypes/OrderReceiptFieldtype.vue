@@ -71,12 +71,12 @@
 </template>
 
 <script>
-import { Fieldtype } from 'statamic';
+import { FieldtypeMixin } from 'statamic';
 import { Table, TableColumns, TableColumn, TableRows, TableRow, TableCell, Description } from '@statamic/ui';
 import LineItemRow from './OrderReceipt/LineItemRow.vue';
 
 export default {
-    mixins: [Fieldtype],
+    mixins: [FieldtypeMixin],
 
     components: {
         Table,

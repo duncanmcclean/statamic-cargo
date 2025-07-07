@@ -13,12 +13,12 @@
 </template>
 
 <script>
-import { Fieldtype } from 'statamic';
+import { FieldtypeMixin } from 'statamic';
 import { Input } from '@statamic/ui';
 import debounce from '@statamic/util/debounce.js';
 
 export default {
-    mixins: [Fieldtype],
+    mixins: [FieldtypeMixin],
 
     components: { Input },
 

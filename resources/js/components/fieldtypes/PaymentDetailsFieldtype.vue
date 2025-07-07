@@ -33,12 +33,12 @@
 </template>
 
 <script>
-import { Fieldtype } from 'statamic';
+import { FieldtypeMixin } from 'statamic';
 import SvgIcon from '../SvgIcon.vue';
 import { Heading, Description } from '@statamic/ui';
 
 export default {
-    mixins: [Fieldtype],
+    mixins: [FieldtypeMixin],
 
     components: { SvgIcon, Heading, Description },
 };

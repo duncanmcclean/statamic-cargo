@@ -69,7 +69,7 @@
 <script>
 import axios from 'axios';
 import InlineEditForm from '@statamic/components/inputs/relationship/InlineEditForm.vue';
-import { Fieldtype } from 'statamic';
+import { FieldtypeMixin } from 'statamic';
 import { Dropdown, DropdownMenu, DropdownItem, Heading, Description, Badge, Tooltip } from '@statamic/ui';
 
 export default {
@@ -84,7 +84,7 @@ export default {
         Tooltip,
     },
 
-    mixins: [Fieldtype],
+    mixins: [FieldtypeMixin],
 
     inject: ['store'],
 
