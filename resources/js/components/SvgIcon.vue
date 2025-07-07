@@ -1,7 +1,3 @@
-<template>
-    <component v-if="icon" :is="icon" />
-</template>
-
 <script setup>
 import { defineAsyncComponent, shallowRef, watch } from 'vue';
 
@@ -33,3 +29,7 @@ watch(
     { immediate: true },
 );
 </script>
+
+<template>
+    <component v-if="icon" :is="icon" />
+</template>
