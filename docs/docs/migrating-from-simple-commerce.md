@@ -720,7 +720,6 @@ Once you're happy that everything has been migrated across successfully, there's
 * If you were storing customers and orders as entries, you can delete the "Customers" and "Orders" collections.
 * If you were storing customers and orders in the database, you can drop the `customers` and `orders` tables.
 	* You can also remove the models from the `runway.php` config. If you're not using Runway elsewhere, you can also uninstall Runway:
-    * You can also remove the models from the `runway.php` config. If you're not using Runway elsewhere, you can also uninstall Runway:
 	```
 	 composer remove statamic-rad-pack/runway
 	```
