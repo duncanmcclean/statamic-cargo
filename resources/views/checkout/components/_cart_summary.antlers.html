@@ -67,7 +67,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-1">
                         <span>{{ 'Discount' | trans }}</span>
-                        <span class="text-xs text-gray-500" x-text="`(${discount.discount_code ?? discount.name})`"></span>
+                        <span class="text-xs text-gray-500" x-text="`(${discount.discount_code ?? discount.title})`"></span>
                         <template x-if="discount.discount_code !== null">
                             {{ cart:update class="flex items-center" x-data="RemoveDiscountCodeForm" @submit.prevent="removeDiscountCode" }}
                                 <input type="hidden" name="discount_code" value="">
