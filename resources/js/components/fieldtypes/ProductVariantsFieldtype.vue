@@ -56,9 +56,10 @@
                 <PublishContainer
                     :name="`product-variant-${index}`"
                     :blueprint="meta.variants.fields"
-                    :values="variant"
+                    :model-value="variant"
                     :meta="meta.variants.existing[index]"
                     :errors="getErrorsForVariant(index)"
+                    @update:model-value="variantUpdated(index, $event)"
                 >
                     <FieldsProvider :fields="meta.variants.fields">
                         <Fields class="p-4" />
@@ -86,7 +87,7 @@
                     v-if="meta.options.existing[index]"
                     :name="`product-variant-option-${index}`"
                     :blueprint="meta.options.fields"
-                    :values="store.values"
+                    v-model="store.values"
                     :meta="meta.options.existing[index]"
                     :errors="getErrorsForOption(index)"
                 >
@@ -165,6 +166,16 @@ export default {
         deleteVariant(index) {
             this.update({
                 variants: this.value.variants.filter((_, i) => i !== index),
+                options: this.value.options,
+            });
+        },
+
+        variantUpdated(index, variant) {
+            let variants = [...this.value.variants];
+            variants[index] = variant;
+
+            this.update({
+                variants: variants,
                 options: this.value.options,
             });
         },

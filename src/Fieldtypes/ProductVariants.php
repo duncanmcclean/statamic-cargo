@@ -204,7 +204,7 @@ class ProductVariants extends Fieldtype
                     'listable' => 'hidden',
                     'display' => 'Price',
                     'validate' => ['required'],
-                    'width' => 50,
+                    'width' => $this->config('columns', 2) === 1 ? 50 : 100,
                 ],
             ],
         ])
