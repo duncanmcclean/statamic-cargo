@@ -82,6 +82,7 @@ class TaxZoneController extends CpController
         return PublishForm::make(TaxZone::blueprint())
             ->icon(Cargo::svg('tax-zones'))
             ->title($taxZone->get('title'))
+            ->parent($taxZone)
             ->values($taxZone->data()->all())
             ->submittingTo($taxZone->updateUrl());
     }
