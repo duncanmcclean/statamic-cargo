@@ -2,8 +2,8 @@
     <data-list :visible-columns="columns" :columns="columns" :rows="rows" v-slot="{ filteredRows: rows }">
         <ui-panel>
             <data-list-table>
-                <template #cell-name="{ row: taxClass }">
-                    <a :href="taxClass.edit_url">{{ __(taxClass.name) }}</a>
+                <template #cell-title="{ row: taxClass }">
+                    <a :href="taxClass.edit_url">{{ __(taxClass.title) }}</a>
                 </template>
                 <template #actions="{ row: taxClass }">
                     <Dropdown placement="left-start" class="me-3">
