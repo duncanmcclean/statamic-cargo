@@ -29,7 +29,7 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
     use ContainsData, ExistsAsFile, FluentlyGetsAndSets, HasAugmentedInstance, HasDirtyState, TracksQueriedColumns, TracksQueriedRelations;
 
     protected $handle;
-    protected $name;
+    protected $title;
     protected $amount;
     protected $type;
     protected $withEvents = true;
@@ -58,10 +58,10 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
             ->args(func_get_args());
     }
 
-    public function name($name = null)
+    public function title($title = null)
     {
         return $this
-            ->fluentlyGetOrSet('name')
+            ->fluentlyGetOrSet('title')
             ->args(func_get_args());
     }
 
@@ -143,7 +143,7 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
     public function fileData(): array
     {
         return array_merge([
-            'name' => $this->name(),
+            'title' => $this->title(),
             'type' => $this->type(),
         ], $this->data->all());
     }
@@ -165,7 +165,7 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
 
     public function shallowAugmentedArrayKeys()
     {
-        return ['handle', 'name', 'type', 'discount_code'];
+        return ['handle', 'title', 'type', 'discount_code'];
     }
 
     public function newAugmentedInstance(): Augmented
@@ -176,7 +176,7 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
     public function getCurrentDirtyStateAttributes(): array
     {
         return array_merge([
-            'name' => $this->name(),
+            'title' => $this->title(),
             'type' => $this->type(),
         ], $this->data()->toArray());
     }

@@ -40,7 +40,7 @@ function requestComplete({ items: newItems, parameters }) {
         <template #cell-name="{ row: discount, isColumnVisible }">
             <a class="title-index-field" :href="discount.edit_url" @click.stop>
                 <DiscountStatusIndicator v-if="!isColumnVisible('status')" :status="discount.status" />
-                <span v-text="discount.name" />
+                <span v-text="discount.title" />
             </a>
         </template>
         <template #cell-status="{ row: discount }">

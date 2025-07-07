@@ -29,12 +29,12 @@ class DiscountsStoreTest extends TestCase
     {
         $item = $this->store->makeItemFromFile(
             $this->directory.'/black-friday.yaml',
-            "name: Black Friday\ntype: percentage_off\npercentage_off: 25\nbar: baz",
+            "title: Black Friday\ntype: percentage_off\npercentage_off: 25\nbar: baz",
         );
 
         $this->assertInstanceOf(Discount::class, $item);
         $this->assertEquals('black-friday', $item->handle());
-        $this->assertEquals('Black Friday', $item->name());
+        $this->assertEquals('Black Friday', $item->title());
         $this->assertEquals('percentage_off', $item->type());
         $this->assertEquals(25, $item->get('percentage_off'));
         $this->assertEquals('baz', $item->get('bar'));
@@ -45,7 +45,7 @@ class DiscountsStoreTest extends TestCase
     {
         $discount = Facades\Discount::make()
             ->handle('black-friday')
-            ->name('Black Friday')
+            ->title('Black Friday')
             ->type('percentage_off');
 
         $this->store->save($discount);

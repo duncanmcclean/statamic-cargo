@@ -25,7 +25,7 @@ class AugmentedDiscount extends AbstractAugmented
     {
         return [
             'id',
-            'name',
+            'title',
             'type',
             'discount_code',
         ];

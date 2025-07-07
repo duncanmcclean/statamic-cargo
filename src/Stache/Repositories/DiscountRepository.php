@@ -61,7 +61,7 @@ class DiscountRepository implements RepositoryContract
     public function save(Discount $discount): void
     {
         if (! $discount->handle()) {
-            $discount->handle(Str::slug($discount->name));
+            $discount->handle(Str::slug($discount->title));
         }
 
         $this->store->save($discount);

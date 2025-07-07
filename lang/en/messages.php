@@ -7,7 +7,7 @@ return [
         'discount_code' => 'Enter a discount code, or leave blank to apply discount automatically.',
         'maximum_uses' => 'Specify the maximum number of uses. Leave empty to allow unlimited uses.',
         'minimum_order_value' => 'Specify the minimum order value. Leave empty to allow any order value.',
-        'name' => 'Give your discount a name. May be shown to customers.',
+        'title' => 'Give your discount a title. May be shown to customers.',
         'products' => 'Select which products this discount should be limited to.',
         'type' => 'Select the type of discount you want to create.',
     ],

@@ -7,6 +7,7 @@ use DuncanMcClean\Cargo\Contracts\Discounts\Discount as DiscountContract;
 use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Http\Resources\CP\Discounts\Discounts;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Statamic\CP\Column;
 use Statamic\CP\PublishForm;
 use Statamic\Facades\Scope;
@@ -104,7 +105,7 @@ class DiscountController extends CpController
         $values = PublishForm::make(Discount::blueprint())->submit($request->all());
 
         $discount = Discount::make()
-            ->name(Arr::pull($values, 'name'))
+            ->title(Arr::pull($values, 'title'))
             ->type(Arr::pull($values, 'type'))
             ->data($values);
 
@@ -119,9 +120,9 @@ class DiscountController extends CpController
 
         return PublishForm::make(Discount::blueprint())
             ->icon(Cargo::svg('discounts'))
-            ->title($discount->name())
+            ->title($discount->title())
             ->values($discount->data()->merge([
-                'name' => $discount->name(),
+                'title' => $discount->title(),
                 'type' => $discount->type(),
             ])->all())
             ->submittingTo($discount->updateUrl());
@@ -141,7 +142,7 @@ class DiscountController extends CpController
         $values = $fields->process()->values()->all();
 
         $discount
-            ->name(Arr::pull($values, 'name'))
+            ->title(Arr::pull($values, 'title'))
             ->type(Arr::pull($values, 'type'))
             ->data($values);
 

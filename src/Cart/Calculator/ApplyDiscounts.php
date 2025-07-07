@@ -44,7 +44,7 @@ class ApplyDiscounts
 
                 return (array) DiscountCalculation::make(
                     discount: $discount->handle(),
-                    description: $discount->get('discount_code') ?? $discount->name(),
+                    description: $discount->get('discount_code') ?? $discount->title(),
                     amount: $lineItems->sum(),
                 );
             })

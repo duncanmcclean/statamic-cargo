@@ -29,7 +29,7 @@ class DiscountTest extends TestCase
         $cart = Cart::make()->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->name('Foo Bar')
+            ->title('Foo Bar')
             ->type('percentage_off')
             ->set('percentage_off', 10)
             ->set('products', ['product-1']);
@@ -46,7 +46,7 @@ class DiscountTest extends TestCase
         $cart = Cart::make()->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->name('Foo Bar')
+            ->title('Foo Bar')
             ->type('percentage_off')
             ->set('percentage_off', 10)
             ->set('products', ['product-2']);
@@ -65,7 +65,7 @@ class DiscountTest extends TestCase
         $cart = Cart::make()->customer($user)->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->name('Foo Bar')
+            ->title('Foo Bar')
             ->type('percentage_off')
             ->set('percentage_off', 10)
             ->set('customers', [$user->id()]);
@@ -84,7 +84,7 @@ class DiscountTest extends TestCase
         $cart = Cart::make()->customer($user)->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->name('Foo Bar')
+            ->title('Foo Bar')
             ->type('percentage_off')
             ->set('percentage_off', 10)
             ->set('customers', ['abc']);
@@ -106,7 +106,7 @@ class DiscountTest extends TestCase
             ->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->name('Foo Bar')
+            ->title('Foo Bar')
             ->type('percentage_off')
             ->set('percentage_off', 10)
             ->set('customers', ['abc']);
@@ -123,7 +123,7 @@ class DiscountTest extends TestCase
         $cart = Cart::make()->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->name('Foo Bar')
+            ->title('Foo Bar')
             ->type('percentage_off')
             ->set('percentage_off', 10)
             ->set('start_date', '2030-01-01');
@@ -140,7 +140,7 @@ class DiscountTest extends TestCase
         $cart = Cart::make()->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->name('Foo Bar')
+            ->title('Foo Bar')
             ->type('percentage_off')
             ->set('percentage_off', 10)
             ->set('start_date', '2024-01-01')
@@ -158,7 +158,7 @@ class DiscountTest extends TestCase
         $cart = Cart::make()->lineItems([['product' => 'product-1', 'quantity' => 1]]);
 
         $discount = Discount::make()
-            ->name('Foo Bar')
+            ->title('Foo Bar')
             ->type('percentage_off')
             ->set('percentage_off', 10)
             ->set('end_date', '2024-01-01');
@@ -175,7 +175,7 @@ class DiscountTest extends TestCase
 
         $discount = Discount::make()
             ->handle('foo-bar')
-            ->name('Foo Bar')
+            ->title('Foo Bar')
             ->type('percentage_off')
             ->set('percentage_off', 10);
 
@@ -187,7 +187,7 @@ class DiscountTest extends TestCase
         $this->assertStringContainsString('content/cargo/discounts/foo-bar.yaml', $discount->path());
 
         $this->assertEquals(<<<'YAML'
-name: 'Foo Bar'
+title: 'Foo Bar'
 type: percentage_off
 percentage_off: 10
 
@@ -212,7 +212,7 @@ YAML
 
         $discount = Discount::make()
             ->handle('foo-bar')
-            ->name('Foo Bar')
+            ->title('Foo Bar')
             ->type('percentage_off')
             ->set('percentage_off', 10);
 
@@ -224,7 +224,7 @@ YAML
         $this->assertStringContainsString('content/cargo/discounts/foo-bar.yaml', $discount->path());
 
         $this->assertEquals(<<<'YAML'
-name: 'Foo Bar'
+title: 'Foo Bar'
 type: percentage_off
 percentage_off: 10
 
@@ -247,7 +247,7 @@ YAML
 
         $discount = Discount::make()
             ->handle('abc')
-            ->name('Foo Bar')
+            ->title('Foo Bar')
             ->type('percentage_off')
             ->set('percentage_off', 10);
 
@@ -271,7 +271,7 @@ YAML
 
         $discount = Discount::make()
             ->handle('abc')
-            ->name('Foo Bar')
+            ->title('Foo Bar')
             ->type('percentage_off')
             ->set('percentage_off', 10);
 

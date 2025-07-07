@@ -24,7 +24,7 @@ class EditDiscountsTest extends TestCase
     #[Test]
     public function can_edit_discount()
     {
-        $discount = tap(Discount::make()->name('Foo Bar 2025')->type('percentage_off')->set('percentage_off', 50))->save();
+        $discount = tap(Discount::make()->title('Foo Bar 2025')->type('percentage_off')->set('percentage_off', 50))->save();
 
         $this
             ->actingAs(User::make()->makeSuper()->save())
@@ -36,7 +36,7 @@ class EditDiscountsTest extends TestCase
     #[Test]
     public function cant_edit_discount_without_permissions()
     {
-        $discount = tap(Discount::make()->name('Foo Bar 2025')->type('percentage_off')->set('percentage_off', 50))->save();
+        $discount = tap(Discount::make()->title('Foo Bar 2025')->type('percentage_off')->set('percentage_off', 50))->save();
 
         Role::make('test')->addPermission('access cp')->save();
 

@@ -26,7 +26,7 @@ class DiscountsStore extends BasicStore
 
         return Discount::make()
             ->handle((new GetSlugFromPath)($path))
-            ->name(Arr::pull($data, 'name'))
+            ->title(Arr::pull($data, 'title'))
             ->type(Arr::pull($data, 'type'))
             ->data($data);
     }
