@@ -29,11 +29,9 @@ Cargo is a comprehensive e-commerce addon for Statamic, allowing you to sell bot
 Cargo is the natural evolution of Simple Commerce — it takes everything you love about Simple Commerce and makes it better in every possible way. Find out more about [migrating from Simple Commerce](https://builtwithcargo.dev/docs/migrating-from-simple-commerce).
 
 ## Support
-Found a bug? [Submit a bug report](https://github.com/duncanmcclean/cargo/issues/new?template=bug_report.yml)
-
-Have a feature request? [Open a feature request](https://github.com/duncanmcclean/cargo/discussions/new?category=feature-requests)
-
-Have another question? [Ask in the Statamic Discord](https://statamic.com/discord) or [send me an email](mailto:support@builtwithcargo.dev)
+* Found a bug? [Submit a bug report](https://github.com/duncanmcclean/cargo/issues/new?template=bug_report.yml)
+* Have a feature request? [Open a feature request](https://github.com/duncanmcclean/cargo/discussions/new?category=feature-requests)
+* Have another question? [Ask in the Statamic Discord](https://statamic.com/discord) or [send me an email](mailto:support@builtwithcargo.dev)
 
 ## Commercial addon 
 This addon is **paid software**. You may use it for free during development, but you must purchase a license from the [Statamic Marketplace](https://statamic.com/addons/duncanmcclean/cargo) to use it in production.
