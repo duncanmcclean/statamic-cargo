@@ -58,6 +58,16 @@ function variantUpdated(index, variant) {
     });
 }
 
+function optionUpdated(index, option) {
+    let options = [...props.value.options];
+    options[index] = option;
+
+    update({
+        variants: props.value.variants,
+        options: options,
+    });
+}
+
 function getErrorsForVariant(index) {
     return Object.entries(store.errors)
         .filter(([key]) => key.startsWith(`${props.handle}.variants.${index}.`))
@@ -206,9 +216,10 @@ watch(
                     v-if="meta.options.existing[index]"
                     :name="`product-variant-option-${index}`"
                     :blueprint="meta.options.fields"
-                    v-model="store.values"
+                    :model-value="store.values"
                     :meta="meta.options.existing[index]"
                     :errors="getErrorsForOption(index)"
+                    @update:model-value="optionUpdated(index, $event)"
                 >
                     <FieldsProvider :fields="meta.options.fields" :field-path-prefix="`${handle}.options.${index}`">
                         <Fields class="p-4" />
