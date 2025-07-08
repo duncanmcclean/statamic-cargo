@@ -478,13 +478,9 @@ If you're adopting Cargo's [pre-built checkout flow](/frontend/checkout/prebuilt
 You will need to update the payment form for the Mollie payment gateway in your templates. You can find the latest version on the [Payment Gateways](/docs/payment-gateways#dummy) page.
 
 ### PayPal
-Cargo removed the PayPal payment gateway, in favour of using PayPal via another payment gateway like Stripe or Mollie.
+Cargo doesn't have a built-in PayPal payment gateway, but you can use it via another payment gateway like Stripe or Mollie.
 
-The PayPal SDK used in Simple Commerce had been deprecated, and from what I can gather, there wasn't *too many* people using it.
-
-From personal experience, it was also a pain to do any kind of testing with. 🫠
-
-If anyone wants to port the PayPal gateway for Cargo, and release it as an addon, I'm happy to link to it here.
+PayPal deprecated their official PHP SDK in 2023, and it's not widely used enough to warrant building an updated version for Cargo. If someone builds a PayPal payment gateway for Cargo, and releases it as an addon, I'm happy to link to it here.
 
 ### Custom payment gateways
 You should be able to re-use most of your existing code. It'll just need to be adjusted to work with Cargo's APIs.
