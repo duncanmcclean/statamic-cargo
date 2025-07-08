@@ -24,7 +24,7 @@ Event::listen(OrderPaymentReceived::class, function ($event) {
 To change the content of the email, all you need to do is edit the view or mailable class in your app.
 
 ## Sending your own emails 
-If you want to send any other emails, you can create your own mailable, then configure an event listener to trigger it based on one of [Cargo's events](/docs/events):
+If you want to send any other emails, you can create your own mailable, then configure an event listener to trigger it based on one of [Cargo's events](/extending/events/list):
 
 ```sh
 php artisan make:mail OrderOnTheWay

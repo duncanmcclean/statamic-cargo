@@ -328,13 +328,13 @@ You can find a mapping of API endpoints below:
 | POST `/!/simple-commerce/coupon`                  | Removed, in favour of updating the discount code via the POST `/!/cargo/cart` endpoint.                                                                                                                                           |
 | DELETE `/!/simple-commerce/coupon`                | Removed, in favour of removing the discount code via the POST `/!/cargo/cart` endpoint.                                                                                                                                           |
 
-For more information about the JSON API, please consult the [JSON API](/docs/json-api) page.
+For more information about the JSON API, please consult the [JSON API](/frontend/json-api/introduction) page.
 
 ### Checkout
 To improve performance and reliability, the checkout process has been completely re-worked in Cargo. As a result, you will need to makes changes to your checkout templates.
 
 :::tip Tip
-If you're not too precious about your checkout page, you might be better off adopting Cargo's new [pre-built checkout flow](/docs/checkout#pre-built-checkout-flow) instead.
+If you're not too precious about your checkout page, you might be better off adopting Cargo's new [pre-built checkout flow](/frontend/checkout/prebuilt) instead.
 
 It'll save you a lot of time and effort. It also reduces friction for customers, handling everything on a single page.
 :::
@@ -380,7 +380,7 @@ When the cart total is $0, you should instead display a generic checkout URL, wh
 {{ /if }}
 ```
 
-For more information, and examples on building custom checkout flows, please see the [Checkout](/docs/checkout) page.
+For more information, and examples on building custom checkout flows, please see the [Checkout](/frontend/checkout/introduction) page.
 
 ## Payments
 After migrating to Cargo, you'll need to re-configure your site's payment gateways in the `cargo.php` config file.
@@ -401,7 +401,7 @@ Cargo will have attempted to automatically migrate the `payment.gateways` array 
 
 #### Payment form
 :::tip Note
-If you're adopting Cargo's [pre-built checkout flow](/docs/checkout), you don't need to do this step.
+If you're adopting Cargo's [pre-built checkout flow](/frontend/checkout/prebuilt), you don't need to do this step.
 :::
 
 You will need to update the payment form for the Dummy payment gateway in your templates. You can find the latest version on the [Payment Gateways](/docs/payment-gateways#dummy) page.
@@ -426,7 +426,7 @@ Cargo will have attempted to automatically migrate the `payment.gateways` array 
 
 #### Payment form
 :::tip Note
-If you're adopting Cargo's [pre-built checkout flow](/docs/checkout), you don't need to do this step.
+If you're adopting Cargo's [pre-built checkout flow](/frontend/checkout/prebuilt), you don't need to do this step.
 :::
 
 You will need to update the payment form for the Stripe payment gateway in your templates. You can find the latest version on the [Payment Gateways](/docs/payment-gateways#dummy) page.
@@ -472,7 +472,7 @@ Cargo will have attempted to automatically migrate the `payment.gateways` array 
 
 #### Payment form
 :::tip Note
-If you're adopting Cargo's [pre-built checkout flow](/docs/checkout), you don't need to do this step.
+If you're adopting Cargo's [pre-built checkout flow](/frontend/checkout/prebuilt), you don't need to do this step.
 :::
 
 You will need to update the payment form for the Mollie payment gateway in your templates. You can find the latest version on the [Payment Gateways](/docs/payment-gateways#dummy) page.
@@ -597,7 +597,7 @@ If you're listening to any of Simple Commerce's events, you will need to listen 
 | `DuncanMcClean\SimpleCommerce\Events\StockRunOut`            | `DuncanMcClean\Cargo\Events\ProductNoStockRemaining`                                                                                                                                                                                                                                                                                                                    |
 | `DuncanMcClean\SimpleCommerce\Events\StockRunningLow`        | `DuncanMcClean\Cargo\Events\ProductStockLow`                                                                                                                                                                                                                                                                                                                            |
 
-For a full list of events, please consult the [Events](/docs/events) page.
+For a full list of events, please consult the [Events](/extending/events/list) page.
 
 ### Products
 Like Simple Commerce, Cargo has a `Product` facade, allowing you to fetch products. 
@@ -626,7 +626,7 @@ Cart::make()
 	->save();
 ```
 
-To find out more about the `Cart` facade and its available methods, please visit the [PHP APIs](/docs/php-apis) page.
+To find out more about the `Cart` facade and its available methods, please visit the [PHP APIs](/extending/php-apis/introduction) page.
 
 
 ### Orders

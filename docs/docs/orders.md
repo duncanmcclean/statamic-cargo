@@ -1,7 +1,7 @@
 ---
 title: Orders
 ---
-Orders are created at the end of the [Checkout](/docs/checkout) process, just before the payment is confirmed.
+Orders are created at the end of the [Checkout](/frontend/checkout/introduction) process, just before the payment is confirmed.
 
 ## Blueprint
 If you need to add additional fields to orders, you can do so by updating the Order blueprint, found on the "Blueprints" page in the Control Panel:

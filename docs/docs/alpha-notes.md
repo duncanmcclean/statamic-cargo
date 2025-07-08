@@ -65,7 +65,7 @@ Once Composer has finished doing its thing, run Cargo's install command. It'll p
 php please cargo:install
 ```
 
-Now that you're all set up, I recommend you follow along with the docs, starting with [Carts & Orders](/docs/carts-and-orders) to better understand the core concepts of Cargo.
+Now that you're all set up, I recommend you follow along with the docs, starting with [Products](/docs/products) to better understand the core concepts of Cargo.
 
 ### Existing Simple Commerce site
 First, add a composer repository to your `composer.json` file:

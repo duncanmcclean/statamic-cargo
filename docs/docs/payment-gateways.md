@@ -37,7 +37,7 @@ Like the name suggests, the Dummy payment gateway exists to make it easy to get 
 
 ### Payment Form
 :::tip Note
-You don't need to copy this into your project if you're using the [built-in checkout flow](/docs/checkout), as you'll already have it.
+You don't need to copy this into your project if you're using the [built-in checkout flow](/frontend/checkout/prebuilt), as you'll already have it.
 :::
 
 To use the Dummy gateway, copy and paste this template into your checkout flow:
@@ -74,7 +74,7 @@ To use the Dummy gateway, copy and paste this template into your checkout flow:
 ## Stripe
 ### Payment Form
 :::tip Note
-You don't need to copy this into your project if you're using the [built-in checkout flow](/docs/checkout), as you'll already have it.
+You don't need to copy this into your project if you're using the [built-in checkout flow](/frontend/checkout/prebuilt), as you'll already have it.
 :::
 
 To use the Stripe gateway, copy and paste this template into your checkout flow:
@@ -304,7 +304,7 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 ## Mollie
 ### Payment Form
 :::tip Note
-You don't need to copy this into your project if you're using the [built-in checkout flow](/docs/checkout), as you'll already have it.
+You don't need to copy this into your project if you're using the [built-in checkout flow](/frontend/checkout/prebuilt), as you'll already have it.
 :::
 
 Since the transaction happens on Mollie's website, all we need to do is take the customer there, which makes the payment form incredibly simple:
@@ -411,7 +411,7 @@ public function boot(): void
 
 | Method             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `setup`            | This method is called by the `{{ payment_gateways }}` tag (or its [AJAX equivalent](/docs/json-api#available-payment-gateways)).<br><br>You should do whatever you need to in order to create the "payment". Anything you return from this method will be available on the checkout form.<br><br>You shouldn't return any sensitive API keys from this method, as they could be exposed via the [AJAX endpoint](/frontend/json-api/endpoints#available-payment-gateways). |
+| `setup`            | This method is called by the `{{ payment_gateways }}` tag (or its [AJAX equivalent](/frontend/json-api/introduction#available-payment-gateways)).<br><br>You should do whatever you need to in order to create the "payment". Anything you return from this method will be available on the checkout form.<br><br>You shouldn't return any sensitive API keys from this method, as they could be exposed via the [AJAX endpoint](/frontend/json-api/endpoints#available-payment-gateways). |
 | `process`          | This method is called when the payment gateway's "checkout URL" is hit.                                                                                                                                                                                                                                                                                                                                                                                                   |
 | `capture`          | When your payment gateway supports "authorise and capture", you can call this method in your webhook code to capture the payment.<br><br>This method can be left blank when "authorise and capture" isn't supported.                                                                                                                                                                                                                                                      |
 | `cancel`           | This method is called when the payment gateway's "checkout URL" is hit, but the payment needs to be cancelled.<br><br>Payments may need to be cancelled when a coupon is invalid, there's not enough stock to fulfil the order, or customer/address information is missing from the order.                                                                                                                                                                                |
