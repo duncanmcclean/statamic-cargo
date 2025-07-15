@@ -42,7 +42,7 @@
                             </button>
 
                             {{ yield:summary_total }}
-                                <template x-if="typeof cart !== 'undefined'">
+                                <template x-if="typeof cart !== 'undefined' && cart !== null">
                                     <span class="font-bold" x-text="cart.grand_total"></span>
                                 </template>
                             {{ /yield:summary_total }}
