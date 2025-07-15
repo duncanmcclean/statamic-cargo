@@ -15,10 +15,10 @@
         ></ui-button>
     </ui-header>
 
-    <tax-class-listing
-        :initial-rows="{{ json_encode($taxZones) }}"
+    <tax-zone-listing
+        :initial-items="{{ json_encode($taxZones) }}"
         :initial-columns="{{ json_encode($columns) }}"
-    ></tax-class-listing>
+    ></tax-zone-listing>
 
     <x-statamic::docs-callout
         :topic="__('Tax Zones')"

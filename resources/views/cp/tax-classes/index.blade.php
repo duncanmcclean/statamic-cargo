@@ -16,7 +16,7 @@
     </ui-header>
 
     <tax-class-listing
-        :initial-rows="{{ json_encode($taxClasses) }}"
+        :initial-items="{{ json_encode($taxClasses) }}"
         :initial-columns="{{ json_encode($columns) }}"
     ></tax-class-listing>
 

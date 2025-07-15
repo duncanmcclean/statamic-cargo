@@ -45,7 +45,7 @@ class TaxZoneController extends CpController
             'taxZones' => $taxZones,
             'columns' => [
                 Column::make('title')->label(__('Title')),
-                Column::make('type')->label(__('Type')),
+                Column::make('type')->label(__('Type'))->sortable(false),
             ],
         ]);
     }

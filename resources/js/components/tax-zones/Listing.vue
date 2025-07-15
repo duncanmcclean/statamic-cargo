@@ -1,54 +1,33 @@
-<template>
-    <data-list :visible-columns="columns" :columns="columns" :rows="rows" v-slot="{ filteredRows: rows }">
-        <ui-panel>
-            <data-list-table>
-                <template #cell-title="{ row: taxZone }">
-                    <a :href="taxZone.edit_url">{{ __(taxZone.title) }}</a>
-                </template>
-                <template #actions="{ row: taxZone }">
-                    <Dropdown placement="left-start" class="me-3">
-                        <DropdownMenu>
-                            <DropdownItem :text="__('Edit')" icon="edit" :href="taxZone.edit_url" />
-                            <DropdownItem
-                                :text="__('Delete')"
-                                icon="trash"
-                                variant="destructive"
-                                @click="$refs[`deleter_${taxZone.id}`].confirm()"
-                            />
-                        </DropdownMenu>
-                    </Dropdown>
+<script setup>
+import { Listing, DropdownItem } from '@statamic/ui';
+import { ref } from 'vue';
 
-                    <resource-deleter
-                        :ref="`deleter_${taxZone.id}`"
-                        :resource="taxZone"
-                        @deleted="removeRow(taxZone)"
-                    />
-                </template>
-            </data-list-table>
-        </ui-panel>
-    </data-list>
-</template>
+const props = defineProps({
+    initialItems: Array,
+    initialColumns: Array,
+});
 
-<script>
-import Listing from '@statamic/components/Listing.vue';
-import { Dropdown, DropdownMenu, DropdownItem } from '@statamic/ui';
-
-export default {
-    mixins: [Listing],
-
-    components: {
-        Dropdown,
-        DropdownMenu,
-        DropdownItem,
-    },
-
-    props: ['initialRows', 'initialColumns'],
-
-    data() {
-        return {
-            rows: this.initialRows,
-            columns: this.initialColumns,
-        };
-    },
-};
+const items = ref(props.initialItems);
+const columns = ref(props.initialColumns);
 </script>
+
+<template>
+    <Listing :items :columns :allow-customizing-columns="false" :allow-search="false">
+        <template #cell-title="{ row: taxZone }">
+            <a class="title-index-field" :href="taxZone.edit_url" @click.stop>
+                <span v-text="taxZone.title" />
+            </a>
+
+            <resource-deleter :ref="`deleter_${taxZone.id}`" :resource="taxZone" reload />
+        </template>
+        <template #prepended-row-actions="{ row: taxZone }">
+            <DropdownItem :text="__('Edit')" icon="edit" :href="taxZone.edit_url" />
+            <DropdownItem
+                :text="__('Delete')"
+                icon="trash"
+                variant="destructive"
+                @click="$refs[`deleter_${taxZone.id}`].confirm()"
+            />
+        </template>
+    </Listing>
+</template>
