@@ -128,7 +128,7 @@ watch(
 </script>
 
 <template>
-    <div>
+    <div class="mt-2">
         <!-- Variants -->
         <div class="mb-10 flex flex-col gap-4">
             <div
