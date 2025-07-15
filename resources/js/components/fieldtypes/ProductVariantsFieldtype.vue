@@ -68,26 +68,6 @@ function optionUpdated(index, option) {
     });
 }
 
-function getErrorsForVariant(index) {
-    return Object.entries(store.errors)
-        .filter(([key]) => key.startsWith(`${props.handle}.variants.${index}.`))
-        .reduce((acc, [key, error]) => {
-            const newKey = key.replace(`${props.handle}.variants.${index}.`, '');
-            acc[newKey] = error;
-            return acc;
-        }, {});
-}
-
-function getErrorsForOption(index) {
-    return Object.entries(store.errors)
-        .filter(([key]) => key.startsWith(`${props.handle}.options.${index}.`))
-        .reduce((acc, [key, error]) => {
-            const newKey = key.replace(`${props.handle}.options.${index}.`, '');
-            acc[newKey] = error;
-            return acc;
-        }, {});
-}
-
 watch(
     variants,
     () => {
@@ -185,12 +165,12 @@ watch(
                 <PublishContainer
                     :name="`product-variant-${index}`"
                     :blueprint="meta.variants.fields"
-                    :model-value="variant"
+                    :model-value="store.values"
                     :meta="meta.variants.existing[index]"
-                    :errors="getErrorsForVariant(index)"
+                    :errors="store.errors"
                     @update:model-value="variantUpdated(index, $event)"
                 >
-                    <FieldsProvider :fields="meta.variants.fields">
+                    <FieldsProvider :fields="meta.variants.fields" :field-path-prefix="`${handle}.variants.${index}`">
                         <Fields class="p-4" />
                     </FieldsProvider>
                 </PublishContainer>
@@ -218,7 +198,7 @@ watch(
                     :blueprint="meta.options.fields"
                     :model-value="store.values"
                     :meta="meta.options.existing[index]"
-                    :errors="getErrorsForOption(index)"
+                    :errors="store.errors"
                     @update:model-value="optionUpdated(index, $event)"
                 >
                     <FieldsProvider :fields="meta.options.fields" :field-path-prefix="`${handle}.options.${index}`">
