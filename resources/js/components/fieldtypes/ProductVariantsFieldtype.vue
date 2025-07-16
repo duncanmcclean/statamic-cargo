@@ -77,9 +77,20 @@ watch(
                 let key = typeof item === 'string' ? item : item.join('_');
                 let variantName = typeof item === 'string' ? item : item.join(', ');
 
-                let existingData = props.value.options.filter((option) => {
-                    return option.key === key;
-                })[0];
+                let variantValues = typeof item === 'string' ? [item] : item;
+
+                // First try exact match
+                let existingData = props.value.options.find((option) => option.key === key);
+
+                // If no exact match, try partial match for when variants are added
+                if (!existingData) {
+                    existingData = props.value.options.find((option) => {
+                        let existingValues = option.key.split('_');
+                        // Check if all existing values are contained in the new variant values
+                        return existingValues.every(val => variantValues.includes(val)) && 
+                               existingValues.length < variantValues.length;
+                    });
+                }
 
                 if (existingData === undefined) {
                     existingData = {
