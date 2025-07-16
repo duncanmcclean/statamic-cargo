@@ -71,47 +71,72 @@ function optionUpdated(index, option) {
 watch(
     variants,
     () => {
+        let values = [];
+        let meta = [];
+
+        let originalOptions = options.value;
+
+        cartesian.value.forEach((keys, index) => {
+            let key = typeof keys === 'string' ? keys : keys.join('_');
+
+            let existingOption = originalOptions.find((option) => option.key === key);
+
+            // When the option already exists, use its values and meta.
+            if (existingOption) {
+                let existingOptionIndex = originalOptions.findIndex((option) => option.key === key);
+
+                values.push(existingOption);
+                meta.push(props.meta.options.existing[existingOptionIndex]);
+
+                return;
+            }
+
+            // Attempt to find an existing option by taking away the last part of the key.
+            // Ensures we don't lose existing options when new variants are added.
+            let possibleKey = key.split('_').slice(0, -1).join('_');
+            let possibleOption = originalOptions.find((option) => option.key === possibleKey);
+
+            if (possibleOption) {
+                let possibleOptionIndex = originalOptions.findIndex((option) => option.key === possibleKey);
+
+                possibleOption = {
+                    ...possibleOption,
+                    key: key,
+                    variant: keys.join(', '),
+                };
+
+                values.push(possibleOption);
+                meta.push(props.meta.options.existing[possibleOptionIndex]);
+
+                return;
+            }
+
+            // Otherwise, just create a new option using default values.
+            values.push({
+                ...props.meta.options.defaults,
+                price: 0,
+                key: key,
+                variant: keys.join(', '),
+            });
+
+            meta.push(props.meta.options.new);
+        });
+
+        if (JSON.stringify(values) === JSON.stringify(props.value.options)) {
+            return;
+        }
+
         update({
             variants: props.value.variants,
-            options: cartesian.value.map((item, index) => {
-                let key = typeof item === 'string' ? item : item.join('_');
-                let variantName = typeof item === 'string' ? item : item.join(', ');
+            options: values,
+        });
 
-                let variantValues = typeof item === 'string' ? [item] : item;
-
-                // First try exact match
-                let existingData = props.value.options.find((option) => option.key === key);
-
-                // If no exact match, try partial match for when variants are added
-                if (!existingData) {
-                    existingData = props.value.options.find((option) => {
-                        let existingValues = option.key.split('_');
-                        // Check if all existing values are contained in the new variant values
-                        return existingValues.every(val => variantValues.includes(val)) && 
-                               existingValues.length < variantValues.length;
-                    });
-                }
-
-                if (existingData === undefined) {
-                    existingData = {
-                        price: 0,
-                    };
-
-                    Object.entries(props.meta.options.defaults).forEach(([key, value]) => {
-                        existingData[key] = value;
-                    });
-
-                    let meta = props.meta;
-                    meta['options']['existing'][index] = props.meta.options.new;
-                    updateMeta(meta);
-                }
-
-                return {
-                    ...existingData,
-                    key: key,
-                    variant: variantName,
-                };
-            }),
+        updateMeta({
+           ...props.meta,
+            options: {
+               ...props.meta.options,
+                existing: meta,
+            },
         });
     },
     { deep: true }
@@ -205,7 +230,8 @@ watch(
 
                 <PublishContainer
                     v-if="meta.options.existing[index]"
-                    :name="`product-variant-option-${index}`"
+                    :name="`product-variant-option-${option.key}`"
+                    :key="option.key"
                     :blueprint="meta.options.fields"
                     :model-value="store.values"
                     :meta="meta.options.existing[index]"
