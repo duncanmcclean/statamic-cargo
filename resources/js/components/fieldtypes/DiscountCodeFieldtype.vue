@@ -1,7 +1,6 @@
 <template>
     <Input
         class="font-mono uppercase"
-        :focus="true"
         :autoselect="true"
         input-type="text"
         :disabled="isReadOnly"
