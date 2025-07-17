@@ -440,8 +440,17 @@
       "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
+  "../../Statamic/cms/resources/svg/icons/external-link-original.svg": {
+    "file": "assets/external-link-original-CP-LHNsd.js",
+    "name": "external-link-original",
+    "src": "../../Statamic/cms/resources/svg/icons/external-link-original.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
   "../../Statamic/cms/resources/svg/icons/external-link.svg": {
-    "file": "assets/external-link-BC1e967M.js",
+    "file": "assets/external-link-BHzo0aq4.js",
     "name": "external-link",
     "src": "../../Statamic/cms/resources/svg/icons/external-link.svg",
     "isDynamicEntry": true,
@@ -1970,6 +1979,15 @@
       "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
+  "../../Statamic/cms/resources/svg/ui/drag-dots.svg": {
+    "file": "assets/drag-dots-CNUcGDSz.js",
+    "name": "drag-dots",
+    "src": "../../Statamic/cms/resources/svg/ui/drag-dots.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
   "_vue.runtime.esm-bundler-B9i9wuim.js": {
     "file": "assets/vue.runtime.esm-bundler-B9i9wuim.js",
     "name": "vue.runtime.esm-bundler"
@@ -1980,7 +1998,7 @@
     "isEntry": true
   },
   "resources/js/cp.js": {
-    "file": "assets/cp-C3VOP7DU.js",
+    "file": "assets/cp-CKvjsVA2.js",
     "name": "cp",
     "src": "resources/js/cp.js",
     "isEntry": true,
@@ -2034,6 +2052,7 @@
       "../../Statamic/cms/resources/svg/icons/earth.svg",
       "../../Statamic/cms/resources/svg/icons/edit.svg",
       "../../Statamic/cms/resources/svg/icons/entry.svg",
+      "../../Statamic/cms/resources/svg/icons/external-link-original.svg",
       "../../Statamic/cms/resources/svg/icons/external-link.svg",
       "../../Statamic/cms/resources/svg/icons/eye-closed.svg",
       "../../Statamic/cms/resources/svg/icons/eye-slash.svg",
@@ -2204,10 +2223,12 @@
       "../../Statamic/cms/resources/svg/ui/chevron-right.svg",
       "../../Statamic/cms/resources/svg/ui/chevron-vertical.svg",
       "../../Statamic/cms/resources/svg/ui/dots.svg",
+      "../../Statamic/cms/resources/svg/ui/drag-dots.svg",
       "resources/svg/cargo-mark.svg",
       "resources/svg/discounts.svg",
       "resources/svg/money.svg",
       "resources/svg/orders.svg",
+      "resources/svg/product-variants.svg",
       "resources/svg/refund.svg",
       "resources/svg/stripe.svg",
       "resources/svg/tax-classes.svg",
@@ -2248,6 +2269,15 @@
     "file": "assets/orders-Cv41_znU.js",
     "name": "orders",
     "src": "resources/svg/orders.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "resources/svg/product-variants.svg": {
+    "file": "assets/product-variants-BIqe7MBr.js",
+    "name": "product-variants",
+    "src": "resources/svg/product-variants.svg",
     "isDynamicEntry": true,
     "imports": [
       "_vue.runtime.esm-bundler-B9i9wuim.js"
