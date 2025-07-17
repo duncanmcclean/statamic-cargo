@@ -10,6 +10,8 @@ use Statamic\Statamic;
 
 class Customers extends Fieldtype
 {
+    protected $selectable = false;
+
     public function preload()
     {
         $userField = new Field('user', [

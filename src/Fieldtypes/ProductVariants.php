@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
+use DuncanMcClean\Cargo\Cargo;
 use Illuminate\Support\Arr;
 use Statamic\Fields\Fields;
 use Statamic\Fields\Fieldtype;
@@ -10,7 +11,11 @@ use Statamic\Fields\Validator;
 class ProductVariants extends Fieldtype
 {
     protected static $title = 'Product Variants';
-    protected $icon = 'tags';
+
+    public function icon()
+    {
+        return Cargo::svg('product-variants');
+    }
 
     public function configFieldItems(): array
     {
