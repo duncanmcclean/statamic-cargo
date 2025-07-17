@@ -48,6 +48,7 @@ class TaxClassController extends CpController
         $this->authorize('manage taxes');
 
         return PublishForm::make(TaxClass::blueprint())
+            ->asConfig()
             ->icon(Cargo::svg('tax-classes'))
             ->title(__('Create Tax Class'))
             ->submittingTo(cp_route('cargo.tax-classes.store'), 'POST');
@@ -73,6 +74,7 @@ class TaxClassController extends CpController
         $this->authorize('manage taxes');
 
         return PublishForm::make(TaxClass::blueprint())
+            ->asConfig()
             ->icon(Cargo::svg('tax-classes'))
             ->title($taxClass->get('title'))
             ->values($taxClass->data()->all())

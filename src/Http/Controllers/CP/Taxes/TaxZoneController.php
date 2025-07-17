@@ -55,6 +55,7 @@ class TaxZoneController extends CpController
         $this->authorize('manage taxes');
 
         return PublishForm::make(TaxZone::blueprint())
+            ->asConfig()
             ->icon(Cargo::svg('tax-zones'))
             ->title(__('Create Tax Zone'))
             ->submittingTo(cp_route('cargo.tax-zones.store'), 'POST');
@@ -80,6 +81,7 @@ class TaxZoneController extends CpController
         $this->authorize('manage taxes');
 
         return PublishForm::make(TaxZone::blueprint())
+            ->asConfig()
             ->icon(Cargo::svg('tax-zones'))
             ->title($taxZone->get('title'))
             ->parent($taxZone)
