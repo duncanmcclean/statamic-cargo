@@ -6,6 +6,7 @@ use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Fieldtypes\Money;
 use DuncanMcClean\Cargo\Orders\LineItem;
 use Statamic\Data\AbstractAugmented;
+use Statamic\Fields\Field;
 
 class AugmentedCart extends AbstractAugmented
 {
@@ -50,8 +51,13 @@ class AugmentedCart extends AbstractAugmented
 
     public function discounts()
     {
+        $moneyField = new Field('amount', [
+            'type' => 'money',
+            'save_zero_value' => true,
+        ]);
+
         return collect($this->data->get('discount_breakdown'))
-            ->map(function (array $item) {
+            ->map(function (array $item) use ($moneyField) {
                 $discount = Discount::find($item['discount']);
 
                 if (! $discount) {
@@ -60,7 +66,7 @@ class AugmentedCart extends AbstractAugmented
 
                 return [
                     ...$discount->toAugmentedArray(),
-                    'amount' => (new Money)->augment($item['amount']),
+                    'amount' => (new Money)->setField($moneyField)->augment($item['amount']),
                 ];
             })
             ->filter()
