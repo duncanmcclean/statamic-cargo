@@ -17,6 +17,14 @@
                                 </picture>
                             </a>
                         {{ /if }}
+                        {{ if variant:photos }}
+                            <a href="{{ product:url }}" target="_blank">
+                                <picture>
+                                    <source srcset="{{ glide :src="variant:image" square="64" format="webp" }}" type="image/webp">
+                                    <img src="{{ glide :src="variant:image" square="64" }}" alt="{{ variant:title }}" class="w-16 h-16 rounded-md mr-2 hover:overflow-hidden hover:scale-[1.05] transition">
+                                </picture>
+                            </a>
+                        {{ /if }}
                         <div class="flex flex-col space-y-0.5">
                             <a href="{{ product:url }}" target="_blank" class="block font-semibold">{{ product:title }}</a>
                             {{ if variant }}
@@ -113,9 +121,9 @@
             </div>
 
             {{ if config:statamic:cargo:taxes:price_includes_tax }}
-            <div class="mt-1 text-xs font-normal text-gray-500">
-                {{ trans key="Including :amount in taxes" amount="<span x-text='cart.tax_total'></span>" }}
-            </div>
+                <div class="mt-1 text-xs font-normal text-gray-500">
+                    {{ trans key="Including :amount in taxes" amount="<span x-text='cart.tax_total'></span>" }}
+                </div>
             {{ /if }}
         </div>
     </div>
