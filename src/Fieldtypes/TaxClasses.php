@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
+use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use Statamic\Facades\User;
 use Statamic\Fieldtypes\Relationship;
@@ -25,6 +26,11 @@ class TaxClasses extends Relationship
         'submitMethod' => 'submitMethod',
         'readOnly' => 'readOnly',
     ];
+
+    public function icon()
+    {
+        return Cargo::svg('tax-classes');
+    }
 
     protected function toItemArray($id)
     {
