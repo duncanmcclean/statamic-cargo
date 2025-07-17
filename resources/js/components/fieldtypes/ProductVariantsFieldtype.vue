@@ -99,19 +99,18 @@ watch(
             if (possibleOption) {
                 let possibleOptionIndex = originalOptions.findIndex((option) => option.key === possibleKey);
 
-                possibleOption = {
+                values.push({
                     ...possibleOption,
                     key: key,
                     variant: keys.join(', '),
-                };
+                });
 
-                values.push(possibleOption);
                 meta.push(props.meta.options.existing[possibleOptionIndex]);
 
                 return;
             }
 
-            // Otherwise, just create a new option using default values.
+            // Otherwise, create a new option using default values.
             values.push({
                 ...props.meta.options.defaults,
                 price: 0,
