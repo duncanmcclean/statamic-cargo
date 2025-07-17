@@ -77,6 +77,7 @@ watch(
         let originalOptions = options.value;
 
         cartesian.value.forEach((keys, index) => {
+            if (typeof keys === 'string') keys = [keys];
             let key = typeof keys === 'string' ? keys : keys.join('_');
 
             let existingOption = originalOptions.find((option) => option.key === key);
