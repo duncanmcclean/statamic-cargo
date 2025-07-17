@@ -106,9 +106,17 @@
             </div>
         {{ /if }}
 
-        <div class="flex items-center justify-between font-bold text-lg">
-            <span>{{ 'Total' | trans }}</span>
-            <span x-text="`{{ site:attributes:currency | upper }} ${cart.grand_total}`"></span>
+        <div>
+            <div class="flex items-center justify-between font-bold text-lg">
+                <span>{{ 'Total' | trans }}</span>
+                <span x-text="`{{ site:attributes:currency | upper }} ${cart.grand_total}`"></span>
+            </div>
+
+            {{ if config:statamic:cargo:taxes:price_includes_tax }}
+            <div class="mt-1 text-xs font-normal text-gray-500">
+                {{ trans key="Including :amount in taxes" amount="<span x-text='cart.tax_total'></span>" }}
+            </div>
+            {{ /if }}
         </div>
     </div>
 </template>
