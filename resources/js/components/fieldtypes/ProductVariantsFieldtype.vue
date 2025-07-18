@@ -1,9 +1,6 @@
 <script setup>
 import { Fieldtype } from 'statamic';
-import Fields from '@statamic/components/ui/Publish/Fields.vue';
-import FieldsProvider from '@statamic/components/ui/Publish/FieldsProvider.vue';
-import PublishContainer from '@statamic/components/ui/Publish/Container.vue';
-import { Button } from '@statamic/ui';
+import { Button, PublishContainer, FieldsProvider, PublishFields as Fields } from '@statamic/ui';
 import { computed, inject, ref, watch } from 'vue';
 
 const emit = defineEmits(Fieldtype.emits);
