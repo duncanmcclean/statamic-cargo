@@ -89,21 +89,42 @@ watch(
                 return;
             }
 
-            // Attempt to find an existing option by taking away the last part of the key.
-            // Ensures we don't lose existing options when new variants are added.
-            let possibleKey = key.split('_').slice(0, -1).join('_');
-            let possibleOption = originalOptions.find((option) => option.key === possibleKey);
+            // Attempt to find existing options by progressively removing parts of the key.
+            // This handles both adding new variants and removing variants.
+            let keyParts = key.split('_');
+            let foundOption = null;
+            let foundOptionIndex = -1;
+            
+            // Try all possible shorter keys (removing parts from the end)
+            for (let i = keyParts.length - 1; i >= 0; i--) {
+                let possibleKey = keyParts.slice(0, i).join('_');
+                if (possibleKey === '') continue;
+                
+                foundOption = originalOptions.find(option => option.key === possibleKey);
+                
+                if (foundOption) {
+                    foundOptionIndex = originalOptions.findIndex(option => option.key === possibleKey);
+                    break;
+                }
+            }
+            
+            // Also check for options that start with our key (for when variants are removed)
+            if (!foundOption) {
+                foundOption = originalOptions.find(option => option.key.startsWith(key + '_'));
+                
+                if (foundOption) {
+                    foundOptionIndex = originalOptions.findIndex(option => option.key === foundOption.key);
+                }
+            }
 
-            if (possibleOption) {
-                let possibleOptionIndex = originalOptions.findIndex((option) => option.key === possibleKey);
-
+            if (foundOption) {
                 values.push({
-                    ...possibleOption,
+                    ...foundOption,
                     key: key,
                     variant: keys.join(', '),
                 });
 
-                meta.push(props.meta.options.existing[possibleOptionIndex]);
+                meta.push(props.meta.options.existing[foundOptionIndex]);
 
                 return;
             }
