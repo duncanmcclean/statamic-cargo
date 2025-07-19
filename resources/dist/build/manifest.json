@@ -44,6 +44,15 @@
       "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
+  "../../Statamic/cms/resources/svg/icons/add-item.svg": {
+    "file": "assets/add-item-vifRQqnk.js",
+    "name": "add-item",
+    "src": "../../Statamic/cms/resources/svg/icons/add-item.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
   "../../Statamic/cms/resources/svg/icons/add-link.svg": {
     "file": "assets/add-link-CCJieSS0.js",
     "name": "add-link",
@@ -57,6 +66,15 @@
     "file": "assets/add-list-DoQKLHZi.js",
     "name": "add-list",
     "src": "../../Statamic/cms/resources/svg/icons/add-list.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
+  "../../Statamic/cms/resources/svg/icons/add-section.svg": {
+    "file": "assets/add-section-DYicT3X0.js",
+    "name": "add-section",
+    "src": "../../Statamic/cms/resources/svg/icons/add-section.svg",
     "isDynamicEntry": true,
     "imports": [
       "_vue.runtime.esm-bundler-B9i9wuim.js"
@@ -1493,6 +1511,15 @@
       "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
+  "../../Statamic/cms/resources/svg/icons/pin.svg": {
+    "file": "assets/pin-DLqKaQNG.js",
+    "name": "pin",
+    "src": "../../Statamic/cms/resources/svg/icons/pin.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
   "../../Statamic/cms/resources/svg/icons/playground.svg": {
     "file": "assets/playground-m1egbRNG.js",
     "name": "playground",
@@ -1998,7 +2025,7 @@
     "isEntry": true
   },
   "resources/js/cp.js": {
-    "file": "assets/cp-CKvjsVA2.js",
+    "file": "assets/cp-CN6zIQNH.js",
     "name": "cp",
     "src": "resources/js/cp.js",
     "isEntry": true,
@@ -2008,8 +2035,10 @@
       "../../Statamic/cms/resources/svg/icons/add-entry.svg",
       "../../Statamic/cms/resources/svg/icons/add-folder.svg",
       "../../Statamic/cms/resources/svg/icons/add-group.svg",
+      "../../Statamic/cms/resources/svg/icons/add-item.svg",
       "../../Statamic/cms/resources/svg/icons/add-link.svg",
       "../../Statamic/cms/resources/svg/icons/add-list.svg",
+      "../../Statamic/cms/resources/svg/icons/add-section.svg",
       "../../Statamic/cms/resources/svg/icons/add-sticky.svg",
       "../../Statamic/cms/resources/svg/icons/add-tag.svg",
       "../../Statamic/cms/resources/svg/icons/add-user.svg",
@@ -2169,6 +2198,7 @@
       "../../Statamic/cms/resources/svg/icons/pencil.svg",
       "../../Statamic/cms/resources/svg/icons/permissions.svg",
       "../../Statamic/cms/resources/svg/icons/phone-lock.svg",
+      "../../Statamic/cms/resources/svg/icons/pin.svg",
       "../../Statamic/cms/resources/svg/icons/playground.svg",
       "../../Statamic/cms/resources/svg/icons/plus.svg",
       "../../Statamic/cms/resources/svg/icons/preferences.svg",
