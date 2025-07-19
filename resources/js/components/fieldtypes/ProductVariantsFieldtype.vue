@@ -43,6 +43,8 @@ function deleteVariant(index) {
         variants: props.value.variants.filter((_, i) => i !== index),
         options: props.value.options,
     });
+
+    deletingVariant.value = null;
 }
 
 function variantUpdated(index, variant) {
@@ -210,6 +212,7 @@ watch(
                     v-if="deletingVariant === index"
                     :ref="`variant-deleter-${index}`"
                     :title="__('Delete Variant')"
+                    :danger="true"
                     @cancel="deletingVariant = null"
                     @confirm="deleteVariant(index)"
                 >
