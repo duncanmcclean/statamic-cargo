@@ -11,7 +11,7 @@ title: Installation
 
 ## Install
 
-:::tip
+:::tip info
 For now, please follow the installation steps in [Alpha Notes](/docs/alpha-notes). These steps are intended for when Cargo is publicly available.
 :::
 

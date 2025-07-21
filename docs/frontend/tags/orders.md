@@ -4,7 +4,7 @@ title: Orders Tag
 
 The `{{ orders }}` tag allows you to loop through your orders on the frontend. Useful for display a customer's order history.
 
-:::tip Warning
+:::tip warning
 The `{{ orders }}` tag isn't automatically scoped to the current user's orders. Therefore, you should make sure you have sufficient authorisation / filtering in place to prevent leaking sensitive information.
 :::
 

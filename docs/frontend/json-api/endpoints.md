@@ -93,7 +93,7 @@ When the customer doesn't have a cart, this endpoint will report a 404 status co
 
 Returns the available payment gateways for the customer's cart, including the array returned by the payment gateway's `setup` method.
 
-:::tip Note
+:::tip note
 Payment Gateways will be returned *even* when the cart total is £0. In this case, no `setup` data will be returned.
 :::
 

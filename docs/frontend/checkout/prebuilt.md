@@ -88,7 +88,7 @@ When you publish the pre-built checkout flow, a compiled `.css` file will be cop
 
 To make changes to the design of the checkout page, you should integrate the styles into your own Tailwind CSS build, rather than using the pre-built one.
 
-:::tip Note
+:::tip note
 These steps assume you already have Tailwind CSS setup in your project. If you don't, you can follow the [Tailwind CSS installation guide](https://tailwindcss.com/docs/installation/using-vite) to get started.
 :::
 

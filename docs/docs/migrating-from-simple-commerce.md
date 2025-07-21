@@ -1,7 +1,19 @@
 ---
 title: Migration from Simple Commerce
 ---
-:::tip Note
+:::tip info
+This migration guide is still a work in progress - there's bound to be things missing. If you come across something which hasn't been covered here, please [open an issue](https://github.com/duncanmcclean/cargo/issues/new) or a [pull request](https://github.com/duncanmcclean/statamic-cargo/pulls).
+:::
+
+:::tip warning
+This migration guide is still a work in progress - there's bound to be things missing. If you come across something which hasn't been covered here, please [open an issue](https://github.com/duncanmcclean/cargo/issues/new) or a [pull request](https://github.com/duncanmcclean/statamic-cargo/pulls).
+:::
+
+:::tip note
+This migration guide is still a work in progress - there's bound to be things missing. If you come across something which hasn't been covered here, please [open an issue](https://github.com/duncanmcclean/cargo/issues/new) or a [pull request](https://github.com/duncanmcclean/statamic-cargo/pulls).
+:::
+
+:::tip recommendation
 This migration guide is still a work in progress - there's bound to be things missing. If you come across something which hasn't been covered here, please [open an issue](https://github.com/duncanmcclean/cargo/issues/new) or a [pull request](https://github.com/duncanmcclean/statamic-cargo/pulls).
 :::
 
@@ -60,7 +72,7 @@ If you need to, you can safely re-run the `cargo:migrate` command multiple times
 
 Finally, please review this migration guide thoroughly. You **will** need to make code changes as part of this upgrade.
 
-:::tip Tip
+:::tip note
 Consider making small, regular commits during the migration process. This makes it easier for you to revert any accidental changes or reference things in the future.
 :::
 
@@ -181,7 +193,7 @@ Cargo will have attempted to automatically migrate existing customers when you r
 
 If you need to, you can migrate *just* customers using `php please cargo:migrate:customers`.
 
-:::tip Note
+:::tip info
 You should still run the migration command if you were previously storing customers as users, as it'll remove the `orders` key from user data (it is now a computed field).
 :::
 
@@ -300,7 +312,7 @@ In addition to changes of tag names, some variables have been renamed as well. A
 | `free`                | `is_free`         |
 | `total_including_tax` | Removed.          |
 
-:::tip Tip
+:::tip note
 The [`{{ dump }}`](https://statamic.dev/tags/dump) tag is an easy way of debugging data inside the current view context (eg. seeing which variables are defined at the current point in time).
 :::
 
@@ -333,7 +345,7 @@ For more information about the JSON API, please consult the [JSON API](/frontend
 ### Checkout
 To improve performance and reliability, the checkout process has been completely re-worked in Cargo. As a result, you will need to makes changes to your checkout templates.
 
-:::tip Tip
+:::tip info
 If you're not too precious about your checkout page, you might be better off adopting Cargo's new [pre-built checkout flow](/frontend/checkout/prebuilt) instead.
 
 It'll save you a lot of time and effort. It also reduces friction for customers, handling everything on a single page.
@@ -400,7 +412,7 @@ Cargo will have attempted to automatically migrate the `payment.gateways` array 
 ```
 
 #### Payment form
-:::tip Note
+:::tip info
 If you're adopting Cargo's [pre-built checkout flow](/frontend/checkout/prebuilt), you don't need to do this step.
 :::
 
@@ -425,7 +437,7 @@ Cargo will have attempted to automatically migrate the `payment.gateways` array 
 ```
 
 #### Payment form
-:::tip Note
+:::tip info
 If you're adopting Cargo's [pre-built checkout flow](/frontend/checkout/prebuilt), you don't need to do this step.
 :::
 
@@ -436,7 +448,7 @@ When deploying your changes, you will need to update your webhook URL in the Str
 
 Previously, the webhook URL was `/!/simple-commerce/gateways/stripe/webhook`.  It is now `/!/cargo/payments/stripe/webhook`.
 
-:::tip Note
+:::tip note
 If you don't already have a Stripe webhook configured, you will need to create one. It should listen for all charge and payment intent events.
 :::
 
@@ -471,7 +483,7 @@ Cargo will have attempted to automatically migrate the `payment.gateways` array 
 ```
 
 #### Payment form
-:::tip Note
+:::tip info
 If you're adopting Cargo's [pre-built checkout flow](/frontend/checkout/prebuilt), you don't need to do this step.
 :::
 

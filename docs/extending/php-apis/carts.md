@@ -74,7 +74,7 @@ Finally, save it. It'll return a boolean for whether it succeeded or not.
 $cart->save();
 ```
 
-:::tip Note
+:::tip info
 Cargo will automatically recalculate the cart's totals when you `->save()`. If you wish to save the cart *without* recalculating, you should call `->saveWithoutRecalculating()` instead.
 :::
 

@@ -157,6 +157,6 @@ public function boot(): void
 }
 ```
 
-:::tip Note
+:::tip note
 The "Tax Class" and "Tax Zone" features will be unavailable unless your custom tax driver extends Cargo's `DefaultTaxDriver` class.
 :::

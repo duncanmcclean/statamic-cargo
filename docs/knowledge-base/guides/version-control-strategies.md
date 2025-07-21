@@ -15,7 +15,7 @@ content/cargo/orders
 users
 ```
 
-:::tip Tip
+:::tip warning
 Since you're no longer "backing up" data into version control, you should make sure you have a backup strategy in place.
 
 This may be via a server provider, or using a package like [`spatie/laravel-backup`](https://github.com/spatie/laravel-backup) to backup files to an S3-compatible filesystem.

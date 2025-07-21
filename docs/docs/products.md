@@ -50,7 +50,7 @@ Cargo will also dispatch events when a product is out of stock, and when a produ
 ],
 ```
 
-:::tip Note
+:::tip note
 If you're using [product variants](#product-variants), you should add "Stock" as a variant options field.
 :::
 

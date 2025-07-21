@@ -62,10 +62,8 @@ It'll automatically publish database migrations, update your `cargo.php` config 
 
 If needed, you can customise the eloquent models Cargo uses by updating the `model` and/or `line_items_model` keys in the `cargo.php` config file. 
 
-:::tip Tip
-As a reminder, make sure you have a backup strategy in place before switching to database carts in production, in case the worst happens.
-
-Both [Laravel Forge](https://forge.laravel.com/docs/servers/backups) and [Ploi](https://ploi.io/features/database-backups) have built-in solutions for database backups.
+:::tip warning
+Make sure you have a backup strategy in place before moving carts to the database, in case the worst happens. Both [Laravel Forge](https://forge.laravel.com/docs/servers/backups) and [Ploi](https://ploi.io/features/database-backups) have built-in solutions for database backups.
 :::
 
 ## Abandoned carts

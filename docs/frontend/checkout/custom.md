@@ -12,7 +12,7 @@ Most stores split their checkout flow into the following steps:
 
 In this guide, we're going to cover how to handle each of these steps. 
 
-:::tip Note
+:::tip info
 It's hard to build a good checkout flow. If you'd rather not build everything from scratch, we recommend publishing the [pre-built checkout flow](#pre-built-checkout-flow) and customising it to your needs.
 :::
 
@@ -513,7 +513,7 @@ When you submit the form, Cargo will also expect you to pass a `shipping_method`
 ```
 ::
 
-:::tip Note
+:::tip note
 The `onchange` attribute is commented out in the above example, as it causes an infinite loop with the syntax highlighter. You should uncomment it in your code.
 :::
 

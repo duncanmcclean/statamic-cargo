@@ -36,7 +36,7 @@ Sensitive values should be stored in your `.env` file, which should be ignored b
 Like the name suggests, the Dummy payment gateway exists to make it easy to get up and running with Cargo, without fussing about setting up and configuring a payment gateway.
 
 ### Payment Form
-:::tip Note
+:::tip note
 You don't need to copy this into your project if you're using the [built-in checkout flow](/frontend/checkout/prebuilt), as you'll already have it.
 :::
 
@@ -73,7 +73,7 @@ To use the Dummy gateway, copy and paste this template into your checkout flow:
 
 ## Stripe
 ### Payment Form
-:::tip Note
+:::tip note
 You don't need to copy this into your project if you're using the [built-in checkout flow](/frontend/checkout/prebuilt), as you'll already have it.
 :::
 
@@ -303,7 +303,7 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 
 ## Mollie
 ### Payment Form
-:::tip Note
+:::tip note
 You don't need to copy this into your project if you're using the [built-in checkout flow](/frontend/checkout/prebuilt), as you'll already have it.
 :::
 
