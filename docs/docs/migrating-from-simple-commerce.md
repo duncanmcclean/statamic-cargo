@@ -5,18 +5,6 @@ title: Migration from Simple Commerce
 This migration guide is still a work in progress - there's bound to be things missing. If you come across something which hasn't been covered here, please [open an issue](https://github.com/duncanmcclean/cargo/issues/new) or a [pull request](https://github.com/duncanmcclean/statamic-cargo/pulls).
 :::
 
-:::tip warning
-This migration guide is still a work in progress - there's bound to be things missing. If you come across something which hasn't been covered here, please [open an issue](https://github.com/duncanmcclean/cargo/issues/new) or a [pull request](https://github.com/duncanmcclean/statamic-cargo/pulls).
-:::
-
-:::tip note
-This migration guide is still a work in progress - there's bound to be things missing. If you come across something which hasn't been covered here, please [open an issue](https://github.com/duncanmcclean/cargo/issues/new) or a [pull request](https://github.com/duncanmcclean/statamic-cargo/pulls).
-:::
-
-:::tip recommendation
-This migration guide is still a work in progress - there's bound to be things missing. If you come across something which hasn't been covered here, please [open an issue](https://github.com/duncanmcclean/cargo/issues/new) or a [pull request](https://github.com/duncanmcclean/statamic-cargo/pulls).
-:::
-
 ## Overview
 Cargo is the natural evolution of [Simple Commerce](https://github.com/duncanmcclean/cargo). 
 
