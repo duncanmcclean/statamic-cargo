@@ -21,6 +21,7 @@ class Orders extends Relationship
     protected $formComponent = 'order-publish-form';
     protected $formComponentProps = [
         'blueprint' => 'blueprint',
+        'reference' => 'reference',
         'initialTitle' => 'title',
         'initialValues' => 'values',
         'initialExtraValues' => 'extraValues',

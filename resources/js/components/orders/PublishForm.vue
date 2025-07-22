@@ -23,6 +23,7 @@ import resetValuesFromResponse from '@statamic/util/resetValuesFromResponse.js';
 const props = defineProps({
     blueprint: Object,
     icon: String,
+    reference: String,
     initialTitle: String,
     initialValues: Object,
     initialExtraValues: Object,
@@ -128,6 +129,7 @@ function actionCompleted(successful = null, response) {
         ref="container"
         name="order"
         :blueprint="blueprint"
+        :reference="reference"
         v-model="values"
         :extra-values="extraValues"
         :meta="meta"
