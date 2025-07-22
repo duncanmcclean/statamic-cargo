@@ -18,7 +18,7 @@
     ]
   },
   "../../Statamic/cms/resources/svg/icons/add-entry.svg": {
-    "file": "assets/add-entry-BvCCKqIw.js",
+    "file": "assets/add-entry-BLC5X3Vw.js",
     "name": "add-entry",
     "src": "../../Statamic/cms/resources/svg/icons/add-entry.svg",
     "isDynamicEntry": true,
@@ -468,7 +468,7 @@
     ]
   },
   "../../Statamic/cms/resources/svg/icons/external-link.svg": {
-    "file": "assets/external-link-BHzo0aq4.js",
+    "file": "assets/external-link-DR4jGKCT.js",
     "name": "external-link",
     "src": "../../Statamic/cms/resources/svg/icons/external-link.svg",
     "isDynamicEntry": true,
@@ -1484,8 +1484,17 @@
       "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
+  "../../Statamic/cms/resources/svg/icons/pencil-line.svg": {
+    "file": "assets/pencil-line-B1U2_b2Q.js",
+    "name": "pencil-line",
+    "src": "../../Statamic/cms/resources/svg/icons/pencil-line.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
   "../../Statamic/cms/resources/svg/icons/pencil.svg": {
-    "file": "assets/pencil-BZ-HOqu6.js",
+    "file": "assets/pencil-BHNUJm0u.js",
     "name": "pencil",
     "src": "../../Statamic/cms/resources/svg/icons/pencil.svg",
     "isDynamicEntry": true,
@@ -2020,12 +2029,12 @@
     "name": "vue.runtime.esm-bundler"
   },
   "resources/css/cp.css": {
-    "file": "assets/cp-CMfU58Xx.css",
+    "file": "assets/cp-DablnS9m.css",
     "src": "resources/css/cp.css",
     "isEntry": true
   },
   "resources/js/cp.js": {
-    "file": "assets/cp-DIy8WdEZ.js",
+    "file": "assets/cp-C_d9Oc0a.js",
     "name": "cp",
     "src": "resources/js/cp.js",
     "isEntry": true,
@@ -2195,6 +2204,7 @@
       "../../Statamic/cms/resources/svg/icons/page.svg",
       "../../Statamic/cms/resources/svg/icons/palette.svg",
       "../../Statamic/cms/resources/svg/icons/pdf.svg",
+      "../../Statamic/cms/resources/svg/icons/pencil-line.svg",
       "../../Statamic/cms/resources/svg/icons/pencil.svg",
       "../../Statamic/cms/resources/svg/icons/permissions.svg",
       "../../Statamic/cms/resources/svg/icons/phone-lock.svg",
@@ -2265,7 +2275,7 @@
       "resources/svg/tax-zones.svg"
     ],
     "css": [
-      "assets/cp-FAgvdl6f.css"
+      "assets/cp-cnG242MD.css"
     ]
   },
   "resources/svg/cargo-mark.svg": {
