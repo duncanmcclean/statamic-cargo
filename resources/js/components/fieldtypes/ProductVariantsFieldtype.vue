@@ -236,7 +236,7 @@ watch(
         </div>
 
         <!-- Variant Options -->
-        <div class="grid gap-4" :class="{ 'lg:grid-cols-2': config.columns === 2 }">
+        <div class="product-variant-options grid gap-4" :class="{ 'lg:grid-cols-2': config.columns === 2 }">
             <div
                 v-for="(option, index) in options"
                 :key="option.key"

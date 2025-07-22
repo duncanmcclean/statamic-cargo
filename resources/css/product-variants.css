@@ -1,0 +1,6 @@
+.product-variant-options {
+    .publish-fields {
+        @apply grid grid-cols-none!;
+        --grid-columns: none !important;
+    }
+}
