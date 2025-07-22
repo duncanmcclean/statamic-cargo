@@ -75,7 +75,7 @@ class EnsureProductFields
                 'container' => AssetContainer::all()->first()->handle(),
                 'listable' => 'hidden',
                 'if' => [
-                    'root.type' => 'equals digital',
+                    'type' => 'equals digital',
                 ],
             ],
             'download_limit' => [
@@ -84,7 +84,7 @@ class EnsureProductFields
                 'instructions' => __('cargo::messages.products.download_limit'),
                 'listable' => 'hidden',
                 'if' => [
-                    'root.type' => 'equals digital',
+                    'type' => 'equals digital',
                 ],
             ],
         ]);

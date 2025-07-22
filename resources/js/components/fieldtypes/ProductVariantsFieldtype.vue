@@ -1,14 +1,15 @@
 <script setup>
 import { Fieldtype } from 'statamic';
 import { Icon, Button, PublishContainer, FieldsProvider, PublishFields as Fields } from '@statamic/ui';
-import { computed, inject, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { injectContainerContext } from '@statamic/components/ui/Publish/Container.vue';
+const { values, errors } = injectContainerContext()
 
 const emit = defineEmits(Fieldtype.emits);
 const props = defineProps(Fieldtype.props);
 const { expose, update, updateMeta } = Fieldtype.use(emit, props);
 defineExpose(expose);
 
-const store = inject('store');
 const deletingVariant = ref(null);
 const variants = computed(() => props.value.variants || []);
 const options = computed(() => props.value.options || []);
@@ -47,9 +48,33 @@ function deleteVariant(index) {
     deletingVariant.value = null;
 }
 
-function variantUpdated(index, variant) {
+function variantErrors(index) {
+    const prefix = `${props.handle}.variants.${index}.`;
+
+    return Object.keys(errors.value ?? [])
+        .filter((handle) => handle.startsWith(prefix))
+        .reduce((acc, handle) => {
+            const newKey = handle.replace(prefix, '');
+            acc[newKey] = errors.value[handle];
+            return acc;
+        }, {});
+}
+
+function optionErrors(index) {
+    const prefix = `${props.handle}.options.${index}.`;
+
+    return Object.keys(errors.value ?? [])
+        .filter((handle) => handle.startsWith(prefix))
+        .reduce((acc, handle) => {
+            const newKey = handle.replace(prefix, '');
+            acc[newKey] = errors.value[handle];
+            return acc;
+        }, {});
+}
+
+function variantUpdated(index, values) {
     let variants = [...props.value.variants];
-    variants[index] = variant;
+    variants[index] = values;
 
     update({
         variants: variants,
@@ -57,9 +82,9 @@ function variantUpdated(index, variant) {
     });
 }
 
-function optionUpdated(index, option) {
+function optionUpdated(index, values) {
     let options = [...props.value.options];
-    options[index] = option;
+    options[index] = values;
 
     update({
         variants: props.value.variants,
@@ -193,12 +218,13 @@ watch(
                 <PublishContainer
                     :name="`product-variant-${index}`"
                     :blueprint="meta.variants.fields"
-                    :model-value="store.values"
+                    :model-value="variant"
                     :meta="meta.variants.existing[index]"
-                    :errors="store.errors"
+                    :extra-values="values"
+                    :errors="variantErrors(index)"
                     @update:model-value="variantUpdated(index, $event)"
                 >
-                    <FieldsProvider :fields="meta.variants.fields" :field-path-prefix="`${handle}.variants.${index}`">
+                    <FieldsProvider :fields="meta.variants.fields">
                         <Fields class="p-4" />
                     </FieldsProvider>
                 </PublishContainer>
@@ -225,12 +251,13 @@ watch(
                     :name="`product-variant-option-${option.key}`"
                     :key="option.key"
                     :blueprint="meta.options.fields"
-                    :model-value="store.values"
+                    :model-value="option"
                     :meta="meta.options.existing[index]"
-                    :errors="store.errors"
+                    :extra-values="values"
+                    :errors="optionErrors(index)"
                     @update:model-value="optionUpdated(index, $event)"
                 >
-                    <FieldsProvider :fields="meta.options.fields" :field-path-prefix="`${handle}.options.${index}`">
+                    <FieldsProvider :fields="meta.options.fields">
                         <Fields class="p-4" />
                     </FieldsProvider>
                 </PublishContainer>
