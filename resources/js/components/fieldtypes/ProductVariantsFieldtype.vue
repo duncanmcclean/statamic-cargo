@@ -1,8 +1,7 @@
 <script setup>
 import { Fieldtype } from 'statamic';
-import { Panel, PanelHeader, Heading, Card, Icon, Button, PublishContainer, FieldsProvider, PublishFields as Fields } from '@statamic/ui';
+import { Panel, PanelHeader, Heading, Card, Icon, Button, PublishContainer, FieldsProvider, PublishFields as Fields, injectPublishContext } from '@statamic/ui';
 import { computed, ref, watch } from 'vue';
-import { injectPublishContext } from '@statamic/ui';
 const { values, errors } = injectPublishContext()
 
 const emit = defineEmits(Fieldtype.emits);
