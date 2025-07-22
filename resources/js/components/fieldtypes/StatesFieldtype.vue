@@ -74,8 +74,6 @@ export default {
         SortableList,
     },
 
-    inject: ['store'],
-
     data() {
         return {
             states: this.meta?.states,
@@ -86,7 +84,7 @@ export default {
 
     computed: {
         country() {
-            return this.store.values[this.config.from];
+            return this.publishContainer.values[this.config.from];
         },
 
         multiple() {

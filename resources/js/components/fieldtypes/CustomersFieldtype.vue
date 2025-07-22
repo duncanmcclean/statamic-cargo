@@ -3,15 +3,15 @@ import { Fieldtype } from 'statamic';
 import axios from 'axios';
 import InlineEditForm from '@statamic/components/inputs/relationship/InlineEditForm.vue';
 import { Dropdown, DropdownMenu, DropdownItem, Heading, Description, Badge, Tooltip } from '@statamic/ui';
-import { inject, ref } from 'vue';
-import { getActivePinia } from 'pinia';
+import { ref } from 'vue';
+import { injectPublishContext } from '@statamic/ui';
+const { values, parentContainer: initialParentContainer } = injectPublishContext();
 
 const emit = defineEmits(Fieldtype.emits);
 const props = defineProps(Fieldtype.props);
 const { expose } = Fieldtype.use(emit, props);
 defineExpose(expose);
 
-const store = inject('store');
 const isEditingUser = ref(false);
 
 function edit() {
@@ -19,11 +19,14 @@ function edit() {
     if (props.value.invalid) return;
 
     if (props.value.reference) {
-        const storeRefs = Array.from(getActivePinia()._s.values()).map((store) => store.reference);
+        let parentContainer = initialParentContainer;
 
-        if (Array.from(storeRefs).includes(props.value.reference)) {
-            Statamic.$toast.error(__("You're already editing this item."));
-            return;
+        while (parentContainer) {
+            if (parentContainer.reference.value === props.value.reference) {
+                Statamic.$toast.error(__("You're already editing this item."));
+                return;
+            }
+            parentContainer = parentContainer.parentContainer;
         }
     }
 
@@ -41,7 +44,7 @@ function convertToUser() {
     axios
         .post(props.meta.convertGuestToUserUrl, {
             email: props.value.email,
-            order_id: store.values.id,
+            order_id: values.id,
         })
         .then((response) => {
             emit('update:value', response.data);
