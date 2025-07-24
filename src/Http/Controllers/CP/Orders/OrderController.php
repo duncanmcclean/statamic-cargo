@@ -105,7 +105,7 @@ class OrderController extends CpController
             'title' => __('Order #:number', ['number' => $order->orderNumber()]),
             'actions' => [
                 'save' => $order->updateUrl(),
-                'editBlueprint' => cp_route('blueprints.edit', ['cargo', 'order']),
+                'editBlueprint' => cp_route('blueprints.additional.edit', ['cargo', 'order']),
                 'packingSlip' => cp_route('cargo.orders.packing-slip', $order->id()),
             ],
             'values' => array_merge($values, [

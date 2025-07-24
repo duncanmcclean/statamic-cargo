@@ -15,7 +15,7 @@
                     <ui-dropdown-item
                         :text="__('Edit Blueprint')"
                         icon="blueprint-edit"
-                        href="{{ cp_route('blueprints.edit', ['cargo', 'order']) }}"
+                        href="{{ cp_route('blueprints.additional.edit', ['cargo', 'order']) }}"
                     ></ui-dropdown-item>
                 </ui-dropdown-menu>
             </ui-dropdown>
