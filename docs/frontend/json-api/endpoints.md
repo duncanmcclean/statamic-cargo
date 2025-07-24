@@ -2,22 +2,22 @@
 title: "JSON API: Endpoints"
 ---
 
-## Cart
-
-[//]: # (todo: order keys alphabetically&#41;)
+## Current Cart
+Returns the customer's cart.
 
 @blade
-@include('markdown.api-endpoint', [
-	'method' => 'GET',
-	'path' => '/!/cargo/cart',
-	'description' => "Returns the customer's cart.",
-])
+<x-api-endpoint method="GET" path="/!/cargo/cart" />
+@endblade
 
-@include('markdown.api-endpoint', [
-	'method' => 'POST',
-	'path' => '/!/cargo/cart',
-	'description' => "Updates the customer's cart. You can post customer information, redeem a discount code, or pass any other order fields here.",
-	'parameters' => [
+## Update the cart
+Updates the customer's cart. You can post customer information, redeem a discount code, or pass any other order fields here.
+
+[//]: # (Note: Parameters are duplicated in frontend/tags/cart.md)
+@blade
+<x-api-endpoint
+	method="POST"
+	path="/!/cargo/cart"
+	:parameters="[
 		[
 			'key' => 'customer', 
 			'type' => 'array', 
@@ -47,20 +47,26 @@ title: "JSON API: Endpoints"
 		['key' => 'billing_country', 'type' => 'string', 'description' => 'Must be in [ISO3](https://www.iso.org/obp/ui#iso:pub:PUB500001:en) format.'],
 		['key' => 'billing_state', 'type' => 'string', 'description' => 'Must match one of the states in [Cargo\'s `states.json` file](https://github.com/duncanmcclean/statamic-cargo/blob/main/resources/json/states.json).'],
 		['key' => '*', 'description' => 'Any other fields defined in your [order blueprint](/docs/orders#blueprint).'],
-	],
-])
+	]"
+/>
+@endblade
 
-@include('markdown.api-endpoint', [
-	'method' => 'DELETE',
-	'path' => '/!/cargo/cart',
-	'description' => "Deletes the customer's cart.",
-])
+## Delete the cart
+Deletes the customer's cart.
 
-@include('markdown.api-endpoint', [
-	'method' => 'POST',
-	'path' => '/!/cargo/cart/line-items',
-	'description' => "Adds a line item to the customer's cart.",
-	'parameters' => [
+@blade
+<x-api-endpoint method="DELETE" path="/!/cargo/cart" />
+@endblade
+
+## Add a line item
+Adds a line item to the customer's cart.
+
+[//]: # (Note: Parameters are duplicated in frontend/tags/cart.md)
+@blade
+<x-api-endpoint
+	method="POST"
+	path="/!/cargo/cart/line-items"
+	:parameters="[
 		['key' => 'product', 'type' => 'string', 'required' => true],
 		['key' => 'variant', 'type' => 'string', 'description' => 'Required when adding a variant product.'],
 		['key' => 'quantity', 'type' => 'integer', 'description' => 'Defaults to `1`'],
@@ -78,14 +84,19 @@ title: "JSON API: Endpoints"
 			],
 		],
 		['key' => '*', 'description' => 'Any other data you\'d like to persist on the line item.'],
-	],
-])
+	]"
+/>
+@endblade
 
-@include('markdown.api-endpoint', [
-	'method' => 'PATCH',
-	'path' => '/!/cargo/cart/line-items/{lineItem}',
-	'description' => "Updates a line item on the customer's cart. The `{lineItem}` should be the ID of the line item you wish to update.",
-	'parameters' => [
+## Update a line item
+Updates a line item on the customer's cart. The `{lineItem}` should be the ID of the line item you wish to update.
+
+[//]: # (Note: Parameters are duplicated in frontend/tags/cart.md)
+@blade
+<x-api-endpoint
+	method="PATCH"
+	path="/!/cargo/cart/line-items/{lineItem}"
+	:parameters="[
 		['key' => 'variant', 'type' => 'string', 'description' => 'Required when the product is a variant product.'],
 		['key' => 'quantity', 'type' => 'integer'],
 		[
@@ -102,59 +113,80 @@ title: "JSON API: Endpoints"
 			],
 		],
 		['key' => '*', 'description' => 'Any other data you\'d like to persist on the line item.'],
-	],
-])
-
-@include('markdown.api-endpoint', [
-	'method' => 'DELETE',
-	'path' => '/!/cargo/cart/line-items/{lineItem}',
-	'description' => "Removes a line item from the customer's cart. The `{lineItem}` should be the ID of the line item you wish to remove.",
-])
-
-@include('markdown.api-endpoint', [
-	'method' => 'GET',
-	'path' => '/!/cargo/cart/shipping',
-	'description' => "Returns the available shipping options for the customer's cart. <br><br> When there's no address on the cart, this endpoint will return a 422 status code. When the customer doesn't have a cart, this endpoint will return a 404 status code.",
-])
-
-@include('markdown.api-endpoint', [
-	'method' => 'GET',
-	'path' => '/!/cargo/cart/payment-gateways',
-	'description' => "Returns the available payment gateways for the customer's cart, including the array returned by the payment gateway's `setup` method. <br><br> Payment Gateways will be returned *even* when the cart total is £0. In this case, no `setup` data will be returned. <br><br> When the customer doesn't have a cart, this endpoint will return a 404 status code.",
-])
+	]"
+/>
 @endblade
 
-## Checkout
+## Remove a line item
+Removes a line item from the customer's cart. The `{lineItem}` should be the ID of the line item you wish to remove.
 
 @blade
-@include('markdown.api-endpoint', [
-	'method' => 'GET & POST',
-	'path' => '/!/cargo/cart/checkout',
-	'description' => "When the cart total is equals to £0, you may use this endpoint to create an order without payment. <br><br> When successful, this endpoint will return a redirect response to the checkout confirmation page. <br><br> When the order requires payment, this endpoint will return a 404 status code.",
-	'parameters' => [
-		['key' => 'discount_code', 'type' => 'string'],
-	],
-])
+<x-api-endpoint method="DELETE" path="/!/cargo/cart/line-items/{lineItem}" />
+@endblade
 
-@include('markdown.api-endpoint', [
-	'method' => 'GET & POST',
-	'path' => '/!/cargo/payments/{gateway}/checkout',
-	'description' => "When the order requires payment, you may use this endpoint to create the order. The `{gateway}` should be the handle of the payment gateway you wish to check out using. <br><br> When successful, this endpoint will return a redirect response to the checkout confirmation page. <br><br> When the order does not require payment, this endpoint will return a 404 status code.",
-	'parameters' => [
+## Available Shipping Methods
+Returns the available shipping options for the customer's cart.
+
+This endpoint will return a `422` status code when no shipping address is set on the cart.
+
+@blade
+<x-api-endpoint method="GET" path="/!/cargo/cart/shipping" />
+@endblade
+
+## Available Payment Gateways
+Returns the available payment gateways for the customer's cart, including the array returned by the payment gateway's `setup` method.
+
+:::tip note
+Payment Gateways will be returned *even* when the cart total is £0. In this case, no `setup` data will be returned.
+:::
+
+@blade
+<x-api-endpoint method="GET" path="/!/cargo/cart/payment-gateways" />
+@endblade
+
+## Checkout: £0 order
+When the cart total is equals to £0, you may use this endpoint to create an order without payment.
+
+When successful, this endpoint will return a redirect response to the checkout confirmation page.
+
+When the order requires payment, this endpoint will report a `404` status code.
+
+@blade
+<x-api-endpoint
+	method="GET / POST"
+	path="/!/cargo/cart/checkout"
+	:parameters="[
 		['key' => 'discount_code', 'type' => 'string'],
-	],
-])
+	]"
+/>
+@endblade
+
+## Checkout: Paid Order
+When the order requires payment, you may use this endpoint to create the order. The `{gateway}` should be the handle of the payment gateway you wish to check out using.
+
+When successful, this endpoint will return a redirect response to the checkout confirmation page.
+
+When the order does not require payment, this endpoint will return a `404` status code.
+
+@blade
+<x-api-endpoint
+	method="GET / POST"
+	path="/!/cargo/cart/payments/{gateway}/checkout"
+	:parameters="[
+		['key' => 'discount_code', 'type' => 'string'],
+	]"
+/>
 @endblade
 
 ## States
+Returns an array of states for a given country.
 
 @blade
-@include('markdown.api-endpoint', [
-	'method' => 'GET',
-	'path' => '/!/cargo/states',
-	'description' => "Returns an array of states for a given country.",
-	'parameters' => [
+<x-api-endpoint
+	method="GET"
+	path="/!/cargo/states"
+	:parameters="[
 		['key' => 'country', 'type' => 'string', 'required' => true, 'description' => 'Must be in [ISO3](https://www.iso.org/obp/ui#iso:pub:PUB500001:en) format.'],
-	],
-])
+	]"
+/>
 @endblade
