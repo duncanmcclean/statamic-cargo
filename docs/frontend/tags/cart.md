@@ -164,16 +164,31 @@ When possible, Cargo will automatically inject a hidden `product` input when it 
 
 ### Fields
 This form supports the following fields:
-* `product` (required)
-* `variant` (required, for variant products)
-* `quantity` (defaults to `1`)
-* Any additional data you want to persist on the line item.
-* `customer` (array)
-	* `name`
-	* `first_name`
-	* `last_name`
-	* `email`
-	* Any additional data you want to persist on the customer.
+
+[//]: # (Note: Parameters are duplicated in frontend/json-api/endpoints.md)
+@blade
+<x-tag-parameters
+	:parameters="[
+		['key' => 'product', 'type' => 'string', 'required' => true],
+		['key' => 'variant', 'type' => 'string', 'description' => 'Required when adding a variant product.'],
+		['key' => 'quantity', 'type' => 'integer', 'description' => 'Defaults to `1`'],
+		[
+			'key' => 'customer', 
+			'type' => 'array', 
+			'required' => false,
+			'description' => 'Customer information to persist on the cart.',
+			'parameters' => [
+				['key' => 'name', 'type' => 'string'],
+				['key' => 'first_name', 'type' => 'string'],
+				['key' => 'last_name', 'type' => 'string'],
+				['key' => 'email', 'type' => 'string'],
+				['key' => '*', 'description' => 'Any other fields defined in your [user blueprint](https://statamic.dev/users#user-fields).'],
+			],
+		],
+		['key' => '*', 'description' => 'Any other data you\'d like to persist on the line item.'],
+	]"
+/>
+@endblade
 
 ## Updating a line item
 This tag allows you to update a line item in the customer's cart. You can either pass the `id` of the line item, or the ID of the product.
@@ -199,15 +214,30 @@ Inside the `{{ cart:update_line_item }}` tag, you have access to the line item's
 
 ### Fields
 This form supports the following fields:
-* `variant` (when it's a variant product)
-* `quantity` 
-* Any additional data you want to persist on the line item.
-* `customer` (array)
-	* `name`
-	* `first_name`
-	* `last_name`
-	* `email`
-	* Any additional data you want to persist on the customer.
+
+[//]: # (Note: Parameters are duplicated in frontend/json-api/endpoints.md)
+@blade
+<x-tag-parameters
+	:parameters="[
+		['key' => 'variant', 'type' => 'string', 'description' => 'Required when the product is a variant product.'],
+		['key' => 'quantity', 'type' => 'integer'],
+		[
+			'key' => 'customer', 
+			'type' => 'array', 
+			'required' => false,
+			'description' => 'Customer information to persist on the cart.',
+			'parameters' => [
+				['key' => 'name', 'type' => 'string'],
+				['key' => 'first_name', 'type' => 'string'],
+				['key' => 'last_name', 'type' => 'string'],
+				['key' => 'email', 'type' => 'string'],
+				['key' => '*', 'description' => 'Any other fields defined in your [user blueprint](https://statamic.dev/users#user-fields).'],
+			],
+		],
+		['key' => '*', 'description' => 'Any other data you\'d like to persist on the line item.'],
+	]"
+/>
+@endblade
 
 ## Removing a line item
 This tag allows you to remove a line item from the customer's cart. You can either pass the `id` of the line item, or the ID of the product.
@@ -271,19 +301,43 @@ Inside the `{{ cart:update }}` tag, you have access to the cart's data, allowing
 
 ### Fields
 This form supports the following fields:
-* `customer` (array)
-	* `name`
-	* `first_name`
-	* `last_name`
-	* `email`
-	* Any additional data you want to persist on the customer.
-* `coupon`
-* `shipping_method` (requires `shipping_option`)
-* `shipping_option` (required `shipping_method`)
-* Addresses
-	* Shipping: `shipping_line_1`, `shipping_line_2`, `shipping_city`, `shipping_postcode`, `shipping_country`, `shipping_state`
-	* Billing: `billing_line_1`, `billing_line_2`, `billing_city`, `billing_postcode`, `billing_country`, `billing_state`
-* Any additional fields from your order blueprint
+
+[//]: # (Note: Parameters are duplicated in frontend/json-api/endpoints.md)
+@blade
+<x-tag-parameters
+	:parameters="[
+		[
+			'key' => 'customer',
+			'type' => 'array', 
+			'required' => false,
+			'description' => 'Customer information to persist on the cart.',
+			'parameters' => [
+				['key' => 'name', 'type' => 'string'],
+				['key' => 'first_name', 'type' => 'string'],
+				['key' => 'last_name', 'type' => 'string'],
+				['key' => 'email', 'type' => 'string'],
+				['key' => '*', 'description' => 'Any other fields defined in your [user blueprint](https://statamic.dev/users#user-fields).'],
+			],
+		],
+		['key' => 'discount_code', 'type' => 'string'],
+		['key' => 'shipping_method', 'type' => 'string', 'description' => 'Required when `shipping_option` is provided.'],
+		['key' => 'shipping_option', 'type' => 'string', 'description' => 'Required when `shipping_method` is provided.'],
+		['key' => 'shipping_line_1', 'type' => 'string'],
+		['key' => 'shipping_line_2', 'type' => 'string'],
+		['key' => 'shipping_city', 'type' => 'string'],
+		['key' => 'shipping_postcode', 'type' => 'string'],
+		['key' => 'shipping_country', 'type' => 'string', 'description' => 'Must be in [ISO3](https://www.iso.org/obp/ui#iso:pub:PUB500001:en) format.'],
+		['key' => 'shipping_state', 'type' => 'string', 'description' => 'Must match one of the states in [Cargo\'s `states.json` file](https://github.com/duncanmcclean/statamic-cargo/blob/main/resources/json/states.json).'],
+		['key' => 'billing_line_1', 'type' => 'string'],
+		['key' => 'billing_line_2', 'type' => 'string'],
+		['key' => 'billing_city', 'type' => 'string'],
+		['key' => 'billing_postcode', 'type' => 'string'],
+		['key' => 'billing_country', 'type' => 'string', 'description' => 'Must be in [ISO3](https://www.iso.org/obp/ui#iso:pub:PUB500001:en) format.'],
+		['key' => 'billing_state', 'type' => 'string', 'description' => 'Must match one of the states in [Cargo\'s `states.json` file](https://github.com/duncanmcclean/statamic-cargo/blob/main/resources/json/states.json).'],
+		['key' => '*', 'description' => 'Any other fields defined in your [order blueprint](/docs/orders#blueprint).'],
+	]"
+/>
+@endblade
 
 ## Deleting the cart
 This tag allows you to delete the customer's cart. 
