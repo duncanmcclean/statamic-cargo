@@ -153,7 +153,7 @@ When the order requires payment, this endpoint will report a `404` status code.
 
 @blade
 <x-api-endpoint
-	method="GET / POST"
+	:methods="['GET', 'POST']"
 	path="/!/cargo/cart/checkout"
 	:parameters="[
 		['key' => 'discount_code', 'type' => 'string'],
@@ -170,7 +170,7 @@ When the order does not require payment, this endpoint will return a `404` statu
 
 @blade
 <x-api-endpoint
-	method="GET / POST"
+	:methods="['GET', 'POST']"
 	path="/!/cargo/cart/payments/{gateway}/checkout"
 	:parameters="[
 		['key' => 'discount_code', 'type' => 'string'],
