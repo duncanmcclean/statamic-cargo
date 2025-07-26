@@ -48,6 +48,8 @@ class CartTest extends TestCase
     #[Test]
     public function does_not_recalculate_totals_when_nothing_has_changed()
     {
+        $this->freezeSecond();
+
         Collection::make('products')->save();
         Entry::make()->id('product-id')->collection('products')->data(['price' => 500])->save();
 
