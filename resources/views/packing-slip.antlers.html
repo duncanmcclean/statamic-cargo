@@ -13,7 +13,7 @@
         <main class="mx-auto flex max-w-4xl flex-col gap-y-10 px-2 py-12">
             <header>
                 <h1 class="mb-3 text-4xl font-bold">{{ trans key="Packing Slip" }}</h1>
-                <h3 class="text-xl font-semibold text-[#02747E]">
+                <h3 class="text-xl font-semibold text-[#00A63E]">
                     {{ config:app:name }}
                     - {{ trans key="Order #:orderNumber" :orderNumber="order:order_number" }}
                 </h3>
@@ -22,7 +22,7 @@
             <div class="grid grid-cols-2">
                 {{# Billing Address #}}
                 <div class="py-2">
-                    <h2 class="mb-1 text-lg font-bold text-[#02747E]">{{ trans key="Bill to:" }}</h2>
+                    <h2 class="mb-1 text-lg font-bold text-[#00A63E]">{{ trans key="Bill to:" }}</h2>
                     <div>
                         <p>{{ order:customer:name }}</p>
                         <p>{{ order:billing_line_1 }}</p>
@@ -36,7 +36,7 @@
 
                 {{# Shipping Address #}}
                 <div class="py-2">
-                    <h2 class="mb-1 text-lg font-bold text-[#02747E]">{{ trans key="Ship to:" }}</h2>
+                    <h2 class="mb-1 text-lg font-bold text-[#00A63E]">{{ trans key="Ship to:" }}</h2>
                     <div>
                         <p>{{ order:customer:name }}</p>
                         <p>{{ order:shipping_line_1 }}</p>
