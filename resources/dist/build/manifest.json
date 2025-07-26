@@ -1151,6 +1151,15 @@
       "_vue.runtime.esm-bundler-B9i9wuim.js"
     ]
   },
+  "../../Statamic/cms/resources/svg/icons/git.svg": {
+    "file": "assets/git-DrEGSVjI.js",
+    "name": "git",
+    "src": "../../Statamic/cms/resources/svg/icons/git.svg",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.runtime.esm-bundler-B9i9wuim.js"
+    ]
+  },
   "../../Statamic/cms/resources/svg/icons/globals.svg": {
     "file": "assets/globals-SzPHz55z.js",
     "name": "globals",
@@ -2034,7 +2043,7 @@
     "isEntry": true
   },
   "resources/js/cp.js": {
-    "file": "assets/cp-BT9INpbE.js",
+    "file": "assets/cp-Db4lV5BG.js",
     "name": "cp",
     "src": "resources/js/cp.js",
     "isEntry": true,
@@ -2167,6 +2176,7 @@
       "../../Statamic/cms/resources/svg/icons/folder-warning.svg",
       "../../Statamic/cms/resources/svg/icons/folder.svg",
       "../../Statamic/cms/resources/svg/icons/forms.svg",
+      "../../Statamic/cms/resources/svg/icons/git.svg",
       "../../Statamic/cms/resources/svg/icons/globals.svg",
       "../../Statamic/cms/resources/svg/icons/graphql.svg",
       "../../Statamic/cms/resources/svg/icons/groups.svg",
