@@ -3,7 +3,7 @@ import { Fieldtype } from 'statamic';
 import axios from 'axios';
 import InlineEditForm from '@statamic/components/inputs/relationship/InlineEditForm.vue';
 import { Dropdown, DropdownMenu, DropdownItem, Heading, Description, Badge, Tooltip } from '@statamic/ui';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { injectPublishContext } from '@statamic/ui';
 const { values, parentContainer: initialParentContainer } = injectPublishContext();
 
@@ -11,6 +11,14 @@ const emit = defineEmits(Fieldtype.emits);
 const props = defineProps(Fieldtype.props);
 const { expose } = Fieldtype.use(emit, props);
 defineExpose(expose);
+
+const name = computed(() => {
+    if (props.value.first_name && props.value.last_name) {
+        return `${props.value.first_name} ${props.value.last_name}`;
+    }
+
+    return props.value.name;
+})
 
 const isEditingUser = ref(false);
 
@@ -36,7 +44,7 @@ function edit() {
 function itemUpdated(responseData) {
     emit('update:value', {
         ...props.value,
-        // in case we need to merge anything in here
+        ...responseData.values,
     });
 }
 
@@ -72,15 +80,15 @@ function convertToUser() {
 
                     <div v-else>
                         <Heading v-if="value.type === 'user' && value.editable">
-                            <a :href="value.edit_url" @click.prevent="edit" v-text="value.name" />
+                            <a :href="value.edit_url" @click.prevent="edit" v-text="name" />
                         </Heading>
 
                         <Heading v-else-if="value.type === 'guest'" class="truncate">
-                            {{ value.name }}
+                            {{ name }}
                             <Badge pill size="sm" :text="__('Guest')" />
                         </Heading>
 
-                        <Heading v-else :text="value.name" />
+                        <Heading v-else :text="name" />
                         <Description v-if="value.email" :text="value.email" />
                     </div>
 
