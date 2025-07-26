@@ -1,6 +1,6 @@
 <script setup>
-import { computed, ref } from 'vue';
-import { Badge, Button, Field, Select, Input, Heading, Description } from '@statamic/ui';
+import { computed, ref, onMounted } from 'vue';
+import { Badge, Button, Field, Select, Input, Description } from '@statamic/ui';
 
 const emit = defineEmits(['update:modelValue', 'update:trackingNumber']);
 
@@ -38,6 +38,15 @@ function update() {
     emit('update:trackingNumber', trackingNumber.value);
     updating.value = false;
 }
+
+onMounted(() => {
+    Statamic.$commandPalette.add({
+        text: __('Print Packing Slip'),
+        icon: 'download',
+        when: () => props.packingSlipUrl && (props.modelValue === 'shipped' || status.value === 'shipped'),
+        action: () => window.open(props.packingSlipUrl, '_blank'),
+    })
+});
 </script>
 
 <template>
