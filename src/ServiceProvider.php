@@ -4,6 +4,7 @@ namespace DuncanMcClean\Cargo;
 
 use DuncanMcClean\Cargo\Events\DiscountDeleted;
 use DuncanMcClean\Cargo\Events\DiscountSaved;
+use DuncanMcClean\Cargo\Events\OrderDeleted;
 use DuncanMcClean\Cargo\Events\OrderSaved;
 use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\Order;
@@ -11,6 +12,7 @@ use DuncanMcClean\Cargo\Facades\PaymentGateway;
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use DuncanMcClean\Cargo\Facades\TaxZone;
 use DuncanMcClean\Cargo\Search\DiscountProvider;
+use DuncanMcClean\Cargo\Search\OrderProvider;
 use DuncanMcClean\Cargo\Stache\Query\CartQueryBuilder;
 use DuncanMcClean\Cargo\Stache\Query\DiscountQueryBuilder;
 use DuncanMcClean\Cargo\Stache\Query\OrderQueryBuilder;
@@ -332,7 +334,11 @@ class ServiceProvider extends AddonServiceProvider
 
     protected function registerSearchables(): self
     {
+        OrderProvider::register();
         DiscountProvider::register();
+
+        Event::listen(OrderSaved::class, fn ($event) => Search::updateWithinIndexes($event->order));
+        Event::listen(OrderDeleted::class, fn ($event) => Search::deleteFromIndexes($event->order));
 
         Event::listen(DiscountSaved::class, fn ($event) => Search::updateWithinIndexes($event->discount));
         Event::listen(DiscountDeleted::class, fn ($event) => Search::deleteFromIndexes($event->discount));
