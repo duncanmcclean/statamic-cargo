@@ -6,7 +6,7 @@ This migration guide is still a work in progress - there's bound to be things mi
 :::
 
 ## Overview
-Cargo is the natural evolution of [Simple Commerce](https://github.com/duncanmcclean/cargo). 
+Cargo is the natural evolution of [Simple Commerce](https://github.com/duncanmcclean/simple-commerce). 
 
 What started out as a hobby project for me to learn the internals of Statamic turned into *the way* to build e-commerce sites with Statamic.
 
