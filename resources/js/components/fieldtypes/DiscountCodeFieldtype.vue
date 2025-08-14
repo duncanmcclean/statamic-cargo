@@ -1,3 +1,12 @@
+<script setup>
+import { Fieldtype } from 'statamic';
+import { Input } from '@statamic/ui';
+
+const emit = defineEmits(Fieldtype.emits);
+
+const codeUpdated = (value) => emit('update:value', value.toUpperCase());
+</script>
+
 <template>
     <Input
         class="font-mono uppercase"
@@ -6,25 +15,7 @@
         :disabled="isReadOnly"
         :copyable="true"
         :model-value="value"
-        @update:model-value="updateDebounced"
+        @update:model-value="codeUpdated"
         @keydown.native.space.prevent
     />
 </template>
-
-<script>
-import { FieldtypeMixin } from 'statamic';
-import { Input } from '@statamic/ui';
-import debounce from '@statamic/util/debounce.js';
-
-export default {
-    mixins: [FieldtypeMixin],
-
-    components: { Input },
-
-    methods: {
-        updateDebounced: debounce(function (value) {
-            this.$emit('update:value', value.toUpperCase());
-        }, 500),
-    },
-};
-</script>
