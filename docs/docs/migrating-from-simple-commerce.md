@@ -573,8 +573,8 @@ While most things are in roughly the same place as they used to be in Simple Com
 The most obvious change is that you'll need to reference `Cargo` in any imports instead of `SimpleCommerce`. 
 
 It's a pretty easy find & replace:
-* ***Before:** `DuncanMcClean\SimpleCommerce`
-* ***After:** `DuncanMcClean\Cargo`
+* **Before:** `DuncanMcClean\SimpleCommerce`
+* **After:** `DuncanMcClean\Cargo`
 
 ### Events
 If you're listening to any of Simple Commerce's events, you will need to listen for Cargo's equivalent events.
