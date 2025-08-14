@@ -24,13 +24,13 @@ This could be a counter in your nav, or a dynamic section on a product page that
 ``` 
 ::tab blade
 ```blade
-<statamic:nocache>
+<statamic:nocache> {{-- [tl! add] --}}
 	@if(! Statamic::tag('cart:is_empty'))
 		<a href="/cart">
 			{{ count(Statamic::tag('cart:line_items')) }} items
 		</a>  
 	@endif
-</statamic:nocache>
+</statamic:nocache> {{-- [tl! add] --}}
 ``` 
 ::
 
