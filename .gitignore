@@ -7,5 +7,4 @@ node_modules
 .phpunit.cache
 composer.lock
 .env
-resources/dist
-resources/dist-checkout
+public
