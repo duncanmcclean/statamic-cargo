@@ -1,5 +1,6 @@
 ---
 title: Products
+description: "Cargo's products are just entries, with a few extra fields. This page explains how to set up products, including digital products, inventory tracking, and product variants."
 ---
 
 Products are just entries, with a few additional fields (Price / Type / Tax Class). 

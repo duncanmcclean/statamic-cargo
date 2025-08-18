@@ -1,5 +1,6 @@
 ---
 title: Static Caching
+description: "Static Caching is a must-have for Statamic sites. This page explains how to configure static caching with Cargo, including dynamic content and cart/checkout pages."
 ---
 
 Static Caching is a must-have for Statamic sites. It helps to make your website blazing fast, which is important for e-commerce sites, where every second counts.

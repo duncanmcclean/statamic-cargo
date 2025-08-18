@@ -1,8 +1,9 @@
 ---
 title: Pre-built checkout flow
+description: "Cargo comes with a pre-built checkout flow, which you can publish and customise to suit your needs. This page explains how to install and use the pre-built checkout flow."
 ---
 ## Publishing
-You may have published the pre-built checkout flow during the install process, if so you can skip this step.
+You may have published the pre-built checkout flow during the install process, if so, you can skip this step.
 
 To publish the pre-built checkout flow into your project, run this command:
 

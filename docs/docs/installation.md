@@ -1,5 +1,6 @@
 ---
 title: Installation
+description: "Cargo is a comprehensive e-commerce addon for Statamic. This page explains how to install Cargo, including prerequisites and next steps."
 ---
 
 ## Prerequisites

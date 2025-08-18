@@ -1,5 +1,6 @@
 ---
 title: Discounts
+description: "Discounts are simply reductions to a cart's grand total, calculated using a set of user-defined rules. Cargo supports site-wide and code-based discounts."
 ---
 
 Discounts are simply reductions to a cart's grand total, calculated using a set of user-defined rules.

@@ -1,5 +1,6 @@
 ---
 title: Migration from Simple Commerce
+description: "Cargo is the natural evolution of Simple Commerce. This page explains how to migrate from Simple Commerce to Cargo, including installation, configuration, and code changes."
 ---
 :::tip info
 This migration guide is still a work in progress - there's bound to be things missing. If you come across something which hasn't been covered here, please [open an issue](https://github.com/duncanmcclean/cargo/issues/new) or a [pull request](https://github.com/duncanmcclean/statamic-cargo/pulls).

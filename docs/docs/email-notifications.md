@@ -1,5 +1,6 @@
 ---
 title: Email Notifications
+description: "Cargo can send email notifications to customers when they place an order. This page explains how to configure Cargo to send emails, and how to preview them in the browser."
 ---
 
 When you install Cargo, it will automatically create a [mailable](https://laravel.com/docs/master/mail) for you, resulting in a class in `app/Mail` and a view in `resources/views/emails`.

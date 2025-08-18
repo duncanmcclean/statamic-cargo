@@ -1,5 +1,6 @@
 ---
 title: Cart Tag
+description: "The {{ cart }} tag allows you to add products to the customer's cart, get cart totals and loop through line items."
 ---
 
 You can use the `{{ cart }}` tag to do just about anything related the customer's cart, including getting cart totals and looping through line items.

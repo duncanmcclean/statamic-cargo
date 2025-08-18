@@ -1,5 +1,6 @@
 ---
 title: Taxes
+description: "Cargo supports tax classes and tax zones, allowing you to configure how taxes are applied to products and shipping costs."
 ---
 
 No one likes taxes, but we have to deal with them anyway. Cargo represents taxes using tax classes and tax zones, all configurable in the Control Panel.
