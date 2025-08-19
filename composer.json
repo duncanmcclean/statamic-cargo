@@ -14,10 +14,16 @@
         }
     },
     "extra": {
-        "download-dist": {
-            "url": "https://github.com/duncanmcclean/statamic-cargo/releases/download/{$version}/dist.tar.gz",
-            "path": "resources/dist"
-        },
+        "download-dist": [
+            {
+                "url": "https://github.com/duncanmcclean/statamic-cargo/releases/download/{$version}/dist.tar.gz",
+                "path": "resources/dist"
+            },
+            {
+                "url": "https://github.com/duncanmcclean/statamic-cargo/releases/download/{$version}/dist-checkout.tar.gz",
+                "path": "resources/dist-checkout"
+            }
+        ],
         "statamic": {
             "name": "Cargo",
             "slug": "cargo",
