@@ -1,6 +1,5 @@
 <script setup>
 import { computed, ref, useTemplateRef } from 'vue';
-import { SavePipeline } from 'statamic';
 import {
     Header,
     Button,
@@ -14,11 +13,10 @@ import {
     DropdownMenu,
     DropdownItem,
     DropdownSeparator,
-} from '@statamic/ui';
+} from '@statamic/cms/ui';
 import OrderStatus from './OrderStatus.vue';
-const { Pipeline, Request, BeforeSaveHooks, AfterSaveHooks } = SavePipeline;
-import ItemActions from '@statamic/components/actions/ItemActions.vue';
-import resetValuesFromResponse from '@statamic/util/resetValuesFromResponse.js';
+import { Pipeline, Request, BeforeSaveHooks, AfterSaveHooks } from '@statamic/cms/save-pipeline';
+import { ItemActions, resetValuesFromResponse } from '@statamic/cms';
 
 const props = defineProps({
     blueprint: Object,

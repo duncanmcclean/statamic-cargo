@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue';
-import { Badge, Button, Field, Select, Input, Description } from '@statamic/ui';
+import { Badge, Button, Field, Select, Input, Description } from '@statamic/cms/ui';
 
 const emit = defineEmits(['update:modelValue', 'update:trackingNumber']);
 

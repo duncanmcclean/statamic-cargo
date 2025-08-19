@@ -1,6 +1,6 @@
 <script setup>
-import { Fieldtype } from 'statamic';
-import { Table, TableColumns, TableColumn, TableRows, TableRow, TableCell, Description } from '@statamic/ui';
+import { Fieldtype } from '@statamic/cms';
+import { Table, TableColumns, TableColumn, TableRows, TableRow, TableCell, Description } from '@statamic/cms/ui';
 import LineItemRow from './OrderReceipt/LineItemRow.vue';
 import { ref } from 'vue';
 

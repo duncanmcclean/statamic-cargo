@@ -1,10 +1,8 @@
 <script setup>
-import { Fieldtype } from 'statamic';
+import { Fieldtype, InlineEditForm } from '@statamic/cms';
 import axios from 'axios';
-import InlineEditForm from '@statamic/components/inputs/relationship/InlineEditForm.vue';
-import { Dropdown, DropdownMenu, DropdownItem, Heading, Description, Badge, Tooltip } from '@statamic/ui';
+import { Dropdown, DropdownMenu, DropdownItem, Heading, Description, Badge, Tooltip, injectPublishContext } from '@statamic/cms/ui';
 import { computed, ref } from 'vue';
-import { injectPublishContext } from '@statamic/ui';
 const { values, parentContainer: initialParentContainer } = injectPublishContext();
 
 const emit = defineEmits(Fieldtype.emits);
@@ -92,7 +90,7 @@ function convertToUser() {
                         <Description v-if="value.email" :text="value.email" />
                     </div>
 
-                    <inline-edit-form
+                    <InlineEditForm
                         v-if="isEditingUser"
                         :item="value"
                         :component="meta.user.formComponent"

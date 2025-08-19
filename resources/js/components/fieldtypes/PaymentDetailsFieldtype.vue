@@ -1,7 +1,7 @@
 <script setup>
-import { Fieldtype } from 'statamic';
+import { Fieldtype } from '@statamic/cms';
 import SvgIcon from '../SvgIcon.vue';
-import { Heading, Description } from '@statamic/ui';
+import { Heading, Description } from '@statamic/cms/ui';
 
 const emit = defineEmits(Fieldtype.emits);
 const props = defineProps(Fieldtype.props);
@@ -34,7 +34,7 @@ defineExpose(expose);
                 <ul class="list-none space-y-2">
                     <li v-for="(value, label) in value.details" :key="label">
                         <Description>
-                            <strong>{{ label }}:</strong> {{ value }}
+                            <strong>{{ label }}:</strong> <span v-html="value" />
                         </Description>
                     </li>
                 </ul>

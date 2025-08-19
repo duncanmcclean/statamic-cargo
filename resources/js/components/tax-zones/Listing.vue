@@ -1,5 +1,5 @@
 <script setup>
-import { Listing, DropdownItem } from '@statamic/ui';
+import { Listing, DropdownItem } from '@statamic/cms/ui';
 import { ref } from 'vue';
 
 const props = defineProps({

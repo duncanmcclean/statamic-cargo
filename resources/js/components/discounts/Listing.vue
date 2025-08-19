@@ -1,5 +1,5 @@
 <script setup>
-import { DropdownItem, Listing } from '@statamic/ui';
+import { DropdownItem, Listing } from '@statamic/cms/ui';
 import DiscountStatusIndicator from './DiscountStatusIndicator.vue';
 import { ref } from 'vue';
 
