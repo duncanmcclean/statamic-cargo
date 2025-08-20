@@ -1,8 +1,10 @@
 <script setup>
-import { Fieldtype, InlineEditForm, requireElevatedSession } from '@statamic/cms';
 import axios from 'axios';
+import { Fieldtype, requireElevatedSession } from '@statamic/cms';
+import { InlineEditForm } from '@statamic/cms/temporary';
 import { Dropdown, DropdownMenu, DropdownItem, Heading, Description, Badge, Tooltip, injectPublishContext } from '@statamic/cms/ui';
 import { computed, ref } from 'vue';
+
 const { values, parentContainer: initialParentContainer } = injectPublishContext();
 
 const emit = defineEmits(Fieldtype.emits);

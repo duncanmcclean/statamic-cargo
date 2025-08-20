@@ -1,6 +1,6 @@
 <script setup>
 import { TableRow, TableCell } from '@statamic/cms/ui';
-import { InlineEditForm } from '@statamic/cms';
+import { InlineEditForm } from '@statamic/cms/temporary';
 import { ref } from 'vue';
 
 const emit = defineEmits(['updated']);
