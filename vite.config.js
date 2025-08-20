@@ -9,10 +9,7 @@ export default defineConfig({
         laravel({
             hotFile: 'resources/dist/hot',
             publicDirectory: 'resources/dist',
-            input: [
-                'resources/js/cp.js',
-                // 'resources/css/cp.css',
-            ],
+            input: ['resources/js/cp.js', 'resources/css/cp.css'],
         }),
         tailwindcss(),
     ],
