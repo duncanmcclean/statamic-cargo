@@ -1,6 +1,6 @@
 <script setup>
-import { IndexFieldtype } from 'statamic';
-import { Badge } from '@statamic/ui';
+import { IndexFieldtype } from '@statamic/cms';
+import { Badge } from '@statamic/cms/ui';
 import { computed } from 'vue';
 
 const props = defineProps(IndexFieldtype.props);
