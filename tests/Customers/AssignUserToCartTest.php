@@ -3,6 +3,7 @@
 namespace Tests\Customers;
 
 use DuncanMcClean\Cargo\Facades\Cart;
+use DuncanMcClean\Cargo\Facades\Order;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Blink;
@@ -50,6 +51,24 @@ class AssignUserToCartTest extends TestCase
         Auth::login($user);
 
         $this->assertEquals($recentCart->id(), Cart::current()->id());
+    }
+
+    #[Test]
+    public function the_recent_cart_is_not_made_the_current_cart_when_it_is_assigned_to_an_order()
+    {
+        $user = User::make()->save();
+        $recentCart = tap(Cart::make()->customer($user))->save();
+
+        Order::make()->cart($recentCart)->save();
+
+        // When the Cart is saved above, it'll set the current cart, which we don't want for this test.
+        Blink::forget(config('statamic.cargo.carts.cookie_name'));
+
+        $this->assertFalse(Cart::hasCurrentCart());
+
+        Auth::login($user);
+
+        $this->assertFalse(Cart::hasCurrentCart());
     }
 
     #[Test]
