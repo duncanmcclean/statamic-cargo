@@ -3,6 +3,7 @@
 namespace DuncanMcClean\Cargo\Listeners;
 
 use DuncanMcClean\Cargo\Facades\Cart;
+use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Orders\LineItem;
 use Illuminate\Auth\Events\Login;
 use Statamic\Facades\User;
@@ -16,10 +17,14 @@ class AssignUserToCart
         $recentCart = Cart::query()
             ->where('customer', $user->id())
             ->when(Cart::hasCurrentCart(), fn ($query) => $query->where('id', '!=', Cart::current()->id()))
+            ->get()
+            ->reject(fn ($cart) => Order::query()->where('cart', $cart->id())->exists())
             ->first();
 
         if (! $recentCart) {
-            Cart::current()->customer(User::fromUser($event->user))->save();
+            if (Cart::hasCurrentCart()) {
+                Cart::current()->customer(User::fromUser($event->user))->save();
+            }
 
             return;
         }
