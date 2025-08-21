@@ -253,7 +253,7 @@ PHP;
 
     private function createGeneralTaxClass(): self
     {
-        TaxClass::make()->handle('general')->set('name', __('General'))->save();
+        TaxClass::make()->handle('general')->set('title', __('General'))->save();
 
         return $this;
     }
