@@ -28,7 +28,7 @@ defineExpose(expose);
                 </div>
             </div>
 
-            <hr v-if="value.details" class="my-4" />
+            <hr v-if="value.details" class="my-4 border-gray-300 dark:border-gray-700" />
 
             <div v-if="value.details">
                 <ul class="list-none space-y-2">
