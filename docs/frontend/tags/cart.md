@@ -144,15 +144,15 @@ This tag allows you to add products to the customer's cart:
 ::tab antlers
 ```antlers
 {{ cart:add }}  
-    <input type="number" name="quantity" min="1" required>  
-    <button>Add to cart</button>  
+    <input type="number" name="quantity" min="1" value="1" required>
+    <button>Add to cart</button>
 {{ /cart:add }}
 ``` 
 ::tab blade
 ```blade
 <s:cart:add>  
-    <input type="number" name="quantity" min="1" required>  
-    <button>Add to cart</button>  
+    <input type="number" name="quantity" min="1" value="1" required>
+    <button>Add to cart</button>
 </s:cart:add>
 ``` 
 ::
