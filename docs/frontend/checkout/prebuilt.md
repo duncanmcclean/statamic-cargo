@@ -138,7 +138,7 @@ module.exports = {
 Finally, update the `checkout/layout.antlers.html` file to reference your own stylesheet:
 
 ```antlers
-{{ vite directory="checkout" src="resources/css/checkout.css" }} {{# [tl! remove] #}}
+{{ vite directory="checkout" hot="checkout" src="resources/css/checkout.css" }} {{# [tl! remove] #}}
 {{ vite src="resources/css/site.css" }} {{# [tl! add] #}}
 ```
 
