@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.0.0-alpha.1 (2025-08-xx)
+## v1.0.0-alpha.1 (2025-08-21)
 
 This is the first alpha of **Cargo**, the natural evolution of Simple Commerce! 🚀
 
