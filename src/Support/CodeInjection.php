@@ -7,9 +7,9 @@ use Illuminate\Support\Str;
 
 class CodeInjection
 {
-    public static function injectImportsIntoAppServiceProvider(array $imports): void
+    public static function injectImports(string $file, array $imports): void
     {
-        $contents = File::get(app_path('Providers/AppServiceProvider.php'));
+        $contents = File::get($path);
 
         $lines = explode("\n", $contents);
 
@@ -37,7 +37,7 @@ class CodeInjection
             array_slice($lines, $lastUseLine + 1)
         ));
 
-        File::put(app_path('Providers/AppServiceProvider.php'), $contents);
+        File::put($path, $contents);
     }
 
     public static function injectIntoAppServiceProviderBoot(string $code): void
