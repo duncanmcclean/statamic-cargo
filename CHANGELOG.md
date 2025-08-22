@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.0.0-alpha.3 (2025-08-22)
+
+### What's fixed
+- Fix undefined variable in `CodeInjection` #30
+
+
+
 ## v1.0.0-alpha.2 (2025-08-22)
 
 ### What's fixed
