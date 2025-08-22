@@ -9,7 +9,7 @@ class CodeInjection
 {
     public static function injectImports(string $file, array $imports): void
     {
-        $contents = File::get($path);
+        $contents = File::get($file);
 
         $lines = explode("\n", $contents);
 
@@ -37,7 +37,7 @@ class CodeInjection
             array_slice($lines, $lastUseLine + 1)
         ));
 
-        File::put($path, $contents);
+        File::put($file, $contents);
     }
 
     public static function injectIntoAppServiceProviderBoot(string $code): void
