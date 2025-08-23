@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 use Statamic\Contracts\Data\Augmentable;
 use Statamic\Contracts\Data\Augmented;
 use Statamic\Contracts\Query\ContainsQueryableValues;
+use Statamic\Contracts\Search\Searchable as SearchableContract;
 use Statamic\Data\ContainsData;
 use Statamic\Data\ExistsAsFile;
 use Statamic\Data\HasAugmentedInstance;
@@ -22,11 +23,12 @@ use Statamic\Data\HasDirtyState;
 use Statamic\Data\TracksQueriedColumns;
 use Statamic\Data\TracksQueriedRelations;
 use Statamic\Facades\Stache;
+use Statamic\Search\Searchable;
 use Statamic\Support\Traits\FluentlyGetsAndSets;
 
-class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValues, Contract
+class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValues, Contract, SearchableContract
 {
-    use ContainsData, ExistsAsFile, FluentlyGetsAndSets, HasAugmentedInstance, HasDirtyState, TracksQueriedColumns, TracksQueriedRelations;
+    use ContainsData, ExistsAsFile, FluentlyGetsAndSets, HasAugmentedInstance, HasDirtyState, Searchable, TracksQueriedColumns, TracksQueriedRelations;
 
     protected $handle;
     protected $title;
@@ -194,6 +196,11 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
     public function reference(): string
     {
         return "discount::{$this->handle()}";
+    }
+
+    public function getCpSearchResultBadge(): string
+    {
+        return __('Discounts');
     }
 
     public function getQueryableValue(string $field)
