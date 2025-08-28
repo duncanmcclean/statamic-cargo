@@ -6,6 +6,7 @@
 
 @source "../js";
 @source "../views";
+@source not "../views/checkout";
 
 @theme {
     --color-dark-150: #bbbdc0;
