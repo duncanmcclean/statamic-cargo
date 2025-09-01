@@ -23,7 +23,7 @@ class Money extends Fieldtype
 
     public function icon()
     {
-        return Cargo::svg('money');
+        return Statamic::svg('icons/money-cash-bill');
     }
 
     public function preload()

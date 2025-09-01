@@ -8,7 +8,7 @@
 @section('wrapper_class', 'max-w-full')
 
 @section('content')
-    <ui-header title="{{ __('Orders') }}" icon="{{ Cargo::svg('orders') }}">
+    <ui-header title="{{ __('Orders') }}" icon="shopping-cart">
         @can('configure fields')
             <ui-dropdown placement="left-start" class="me-2">
                 <ui-dropdown-menu>

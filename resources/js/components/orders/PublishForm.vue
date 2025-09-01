@@ -21,7 +21,6 @@ import { resetValuesFromResponse } from '@statamic/cms/temporary';
 
 const props = defineProps({
     blueprint: Object,
-    icon: String,
     reference: String,
     initialTitle: String,
     initialValues: Object,
@@ -86,7 +85,7 @@ function actionCompleted(successful = null, response) {
 </script>
 
 <template>
-    <Header :title :icon>
+    <Header :title icon="shopping-cart">
         <ItemActions
             v-if="canEditBlueprint || hasItemActions"
             :item="values.id"

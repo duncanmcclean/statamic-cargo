@@ -100,7 +100,6 @@ class OrderController extends CpController
 
         $viewData = [
             'blueprint' => $blueprint->toPublishArray(),
-            'icon' => Cargo::svg('orders'),
             'reference' => $order->reference(),
             'title' => __('Order #:number', ['number' => $order->orderNumber()]),
             'actions' => [

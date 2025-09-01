@@ -8,7 +8,7 @@
 @section('wrapper_class', 'max-w-3xl')
 
 @section('content')
-    <ui-header title="{{ __('Discounts') }}" icon="{{ Cargo::svg('discounts') }}">
+    <ui-header title="{{ __('Discounts') }}" icon="shopping-store-discount-percent">
         @if (auth()->user()->can('create discounts'))
             <ui-button
                 href="{{ cp_route('cargo.discounts.create') }}"
