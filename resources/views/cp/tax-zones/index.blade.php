@@ -7,7 +7,7 @@
 @section('title', __('Tax Zones'))
 
 @section('content')
-    <ui-header title="{{ __('Tax Zones') }}" icon="{{ Cargo::svg('tax-zones') }}">
+    <ui-header title="{{ __('Tax Zones') }}" icon="map-search">
         <ui-button
             href="{{ cp_route('cargo.tax-zones.create') }}"
             text="{{ __('Create Tax Zone') }}"

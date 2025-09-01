@@ -172,13 +172,13 @@ class ServiceProvider extends AddonServiceProvider
             $nav->create(__('Orders'))
                 ->section('Store')
                 ->route('cargo.orders.index')
-                ->icon(Cargo::svg('orders'))
+                ->icon('shopping-cart')
                 ->can('view orders');
 
             $nav->create(__('Discounts'))
                 ->section('Store')
                 ->route('cargo.discounts.index')
-                ->icon(Cargo::svg('discounts'))
+                ->icon('shopping-store-discount-percent')
                 ->can('view discounts');
 
             if (Cargo::usingDefaultTaxDriver()) {
@@ -191,7 +191,7 @@ class ServiceProvider extends AddonServiceProvider
                 $nav->create(__('Tax Zones'))
                     ->section('Store')
                     ->route('cargo.tax-zones.index')
-                    ->icon(Cargo::svg('tax-zones'))
+                    ->icon('map-search')
                     ->can('manage taxes');
             }
         });

@@ -2,7 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
-use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Facades\Order;
 use Illuminate\Support\Str;
 use Statamic\CP\Column;
@@ -10,6 +9,7 @@ use Statamic\CP\Columns;
 use Statamic\Facades\User;
 use Statamic\Fieldtypes\Relationship;
 use Statamic\Query\Scopes\Filters\Concerns\QueriesFilters;
+use Statamic\Statamic;
 
 class Orders extends Relationship
 {
@@ -36,7 +36,7 @@ class Orders extends Relationship
 
     public function icon()
     {
-        return Cargo::svg('orders');
+        return Statamic::svg('icons/shopping-cart');
     }
 
     protected function toItemArray($id)

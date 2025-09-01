@@ -2,7 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Http\Controllers\CP\Discounts;
 
-use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Contracts\Discounts\Discount as DiscountContract;
 use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Http\Resources\CP\Discounts\Discounts;
@@ -92,7 +91,7 @@ class DiscountController extends CpController
         $this->authorize('create', DiscountContract::class);
 
         return PublishForm::make(Discount::blueprint())
-            ->icon(Cargo::svg('discounts'))
+            ->icon('shopping-store-discount-percent')
             ->title(__('Create Discount'))
             ->submittingTo(cp_route('cargo.discounts.store'), 'POST');
     }
@@ -118,7 +117,7 @@ class DiscountController extends CpController
         $this->authorize('view', $discount);
 
         return PublishForm::make(Discount::blueprint())
-            ->icon(Cargo::svg('discounts'))
+            ->icon('shopping-store-discount-percent')
             ->title($discount->title())
             ->values($discount->data()->merge([
                 'title' => $discount->title(),
