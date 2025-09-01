@@ -2,7 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Http\Controllers\CP\Taxes;
 
-use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Facades\TaxZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;

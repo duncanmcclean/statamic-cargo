@@ -2,7 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
-use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Support;
 use Statamic\Facades\Site;
 use Statamic\Fields\Fieldtype;

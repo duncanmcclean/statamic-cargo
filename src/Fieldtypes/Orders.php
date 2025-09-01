@@ -2,7 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
-use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Facades\Order;
 use Illuminate\Support\Str;
 use Statamic\CP\Column;

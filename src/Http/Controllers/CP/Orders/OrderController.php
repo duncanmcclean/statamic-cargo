@@ -2,7 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Http\Controllers\CP\Orders;
 
-use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Http\Resources\CP\Orders\Order as OrderResource;

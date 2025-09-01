@@ -2,7 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Http\Controllers\CP\Discounts;
 
-use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Contracts\Discounts\Discount as DiscountContract;
 use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Http\Resources\CP\Discounts\Discounts;
