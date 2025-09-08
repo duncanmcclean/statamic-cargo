@@ -63,13 +63,4 @@ class Customers extends Fieldtype
     {
         return $this->preProcess($data);
     }
-
-    public function augment($value)
-    {
-        if (! $value) {
-            return;
-        }
-
-        return $value;
-    }
 }
