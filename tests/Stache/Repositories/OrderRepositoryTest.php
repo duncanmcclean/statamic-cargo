@@ -61,8 +61,8 @@ class OrderRepositoryTest extends TestCase
         $this->assertEquals('default', $order->site()->handle());
         $this->assertEquals(1234, $order->orderNumber());
         $this->assertEquals(Carbon::parse('2025-01-01 12:00:00'), $order->date());
-        $this->assertEquals('CJ Cregg', $order->customer->name());
-        $this->assertEquals('cj.cregg@whitehouse.gov', $order->customer->email());
+        $this->assertEquals('CJ Cregg', $order->customer()->name());
+        $this->assertEquals('cj.cregg@whitehouse.gov', $order->customer()->email());
         $this->assertEquals(2500, $order->grandTotal());
         $this->assertEquals(2500, $order->subTotal());
         $this->assertEquals(0, $order->discountTotal());
