@@ -3,7 +3,7 @@
         {{ partial:checkout/components/input
             name="cardholder"
             label="Name on Card"
-            xBindValue="cart.customer?.first_name ? `$@{cart.customer?.first_name} $@{cart.customer?.last_name}` : cart.customer?.name"
+            xBindValue="cart.customer?.name"
             autocomplete="cc-name"
             required="true"
         }}
