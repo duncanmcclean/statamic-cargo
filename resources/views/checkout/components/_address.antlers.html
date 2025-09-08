@@ -25,7 +25,7 @@
         name="{type}_line_1"
         label="{type | ucfirst} Line 1"
         type="text"
-        xBindValue="cart.{type}_line_1"
+        xBindValue="cart.{type}_name || cart.customer?.name"
         autocomplete="{type} address-line1"
         required="true"
     }}
