@@ -49,6 +49,11 @@ class AugmentedCart extends AbstractAugmented
         ];
     }
 
+    public function customer()
+    {
+        return $this->data->customer()?->toAugmentedArray();
+    }
+
     public function discounts()
     {
         $moneyField = new Field('amount', [

@@ -54,8 +54,8 @@ class CartRepositoryTest extends TestCase
 
         $this->assertEquals('abc', $cart->id());
         $this->assertEquals('default', $cart->site()->handle());
-        $this->assertEquals('CJ Cregg', $cart->customer->name());
-        $this->assertEquals('cj.cregg@whitehouse.gov', $cart->customer->email());
+        $this->assertEquals('CJ Cregg', $cart->customer()->name());
+        $this->assertEquals('cj.cregg@whitehouse.gov', $cart->customer()->email());
         $this->assertEquals(2500, $cart->grandTotal());
         $this->assertEquals(2500, $cart->subTotal());
         $this->assertEquals(0, $cart->discountTotal());

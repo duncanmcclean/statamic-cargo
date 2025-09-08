@@ -81,8 +81,8 @@ class OrderRepositoryTest extends TestCase
         $this->assertEquals($model->site, $order->site()->handle());
         $this->assertEquals($model->cart, $order->cart());
         $this->assertEquals($model->status, $order->status());
-        $this->assertEquals(json_decode($model->customer, true)['name'], $order->customer->name());
-        $this->assertEquals(json_decode($model->customer, true)['email'], $order->customer->email());
+        $this->assertEquals(json_decode($model->customer, true)['name'], $order->customer()->name());
+        $this->assertEquals(json_decode($model->customer, true)['email'], $order->customer()->email());
         $this->assertEquals($model->grand_total, $order->grandTotal());
         $this->assertEquals($model->sub_total, $order->subTotal());
         $this->assertEquals($model->discount_total, $order->discountTotal());
