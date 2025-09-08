@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.0.0-alpha.4 (2025-09-08)
+
+### What's new
+- Pre-built Checkout: Names on addresses are now pre-filled with the customer's name by @duncanmcclean
+
+### What's fixed
+- Fixed type in disallowed keys array in `CartLineItemsController` by @duncanmcclean
+- Ensure that `first_name`, `last_name` and `email` keys aren't persisted in cart data by @duncanmcclean
+- Fixed issue where guest customers weren't being augmented properly in JSON API #33 by @duncanmcclean
+- Removed duplicate icons #32 by @duncanmcclean
+- Checkout views are now ignored when building CSS for the Control Panel by @duncanmcclean
+
+
+
 ## v1.0.0-alpha.3 (2025-08-22)
 
 ### What's fixed
