@@ -19,7 +19,7 @@ Most of the time, products will live in a "Products" collection, however, you're
 By default, Cargo assumes that all products are physical products. However, if you're planning to sell digital goods, like downloadable files, you should enable the `digital_products` option in the `cargo.php` config file:
 
 ```php
-// config/statamic/simple-commerce.php
+// config/statamic/cargo.php
 
 'products' => [
 	'digital_products' => true,
