@@ -1,7 +1,6 @@
 <script setup>
 import { Fieldtype } from '@statamic/cms';
-import SvgIcon from '../SvgIcon.vue';
-import { Heading, Description } from '@statamic/cms/ui';
+import { Heading, Description, Icon } from '@statamic/cms/ui';
 
 const emit = defineEmits(Fieldtype.emits);
 const props = defineProps(Fieldtype.props);
@@ -17,7 +16,7 @@ defineExpose(expose);
 
         <div v-else>
             <div class="flex items-center">
-                <SvgIcon v-if="value.shipping_method.logo" :name="value.shipping_method.logo" class="mr-4 h-8 w-8" />
+                <Icon v-if="value.shipping_method.logo" :name="value.shipping_method.logo" class="mr-4 h-8 w-8" />
 
                 <div class="flex flex-col space-y-1">
                     <Heading
