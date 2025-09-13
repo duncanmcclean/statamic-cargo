@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.0.0-alpha.5 (2025-09-13)
+
+### What's changed
+- Corrected path to `@statamic/cms` npm package by @duncanmcclean
+- Updated some imports & changed how CSS is built, after changes in Statamic #35 by @duncanmcclean
+
+### What's fixed
+- Fixed incorrect name for config file in docs #34 by @FR6
+
+
+
 ## v1.0.0-alpha.4 (2025-09-08)
 
 ### What's new
