@@ -37,7 +37,7 @@ class StoreTaxZonesTest extends TestCase
                 'countries' => ['GB'],
                 'rates' => [
                     'standard' => 20,
-                    'reduced' => 5,
+                    'reduced' => 5.5,
                 ],
             ])
             ->assertOk()
@@ -50,7 +50,7 @@ class StoreTaxZonesTest extends TestCase
         $this->assertEquals(['GB'], $taxZone->get('countries'));
         $this->assertEquals([
             'standard' => 20,
-            'reduced' => 5,
+            'reduced' => 5.5,
         ], $taxZone->get('rates'));
     }
 
@@ -67,7 +67,7 @@ class StoreTaxZonesTest extends TestCase
                 'countries' => ['GB'],
                 'rates' => [
                     'standard' => 20,
-                    'reduced' => 5,
+                    'reduced' => 5.5,
                 ],
             ])
             ->assertRedirect('/cp');
@@ -91,7 +91,7 @@ class StoreTaxZonesTest extends TestCase
                 'countries' => ['GB'],
                 'rates' => [
                     'standard' => 20,
-                    'reduced' => 5,
+                    'reduced' => 5.5,
                 ],
             ])
             ->assertSessionHasErrors('type');
@@ -116,7 +116,7 @@ class StoreTaxZonesTest extends TestCase
                 'states' => ['GLG', 'SLK'],
                 'rates' => [
                     'standard' => 20,
-                    'reduced' => 5,
+                    'reduced' => 5.5,
                 ],
             ])
             ->assertSessionHasErrors('type');
@@ -141,7 +141,7 @@ class StoreTaxZonesTest extends TestCase
                 'postcodes' => ['G*'],
                 'rates' => [
                     'standard' => 20,
-                    'reduced' => 5,
+                    'reduced' => 5.5,
                 ],
             ])
             ->assertSessionHasErrors('type');
