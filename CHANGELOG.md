@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.0.0-alpha.6 (2025-09-16)
+
+### What's fixed
+- Allow saving decimal tax rates #41 by @duncanmcclean
+
+
+
 ## v1.0.0-alpha.5 (2025-09-13)
 
 ### What's changed
