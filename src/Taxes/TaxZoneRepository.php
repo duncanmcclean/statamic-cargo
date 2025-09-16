@@ -145,7 +145,7 @@ class TaxZoneRepository implements Contract
                                         'fields' => TaxClass::all()->map(fn ($taxClass) => [
                                             'handle' => $taxClass->handle(),
                                             'field' => [
-                                                'type' => 'integer',
+                                                'type' => 'float',
                                                 'display' => $taxClass->get('title'),
                                                 'validate' => 'min:0',
                                                 'append' => '%',
