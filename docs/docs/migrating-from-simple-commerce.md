@@ -151,6 +151,8 @@ If you need to, you can migrate *just* orders using `php please cargo:migrate:or
 
 If you were previously storing orders in the database, Cargo will publish and run the relevant database migrations prior to migrating orders.
 
+After migrating, you may delete the Orders collection or drop the `orders` table used by Simple Commerce. 
+
 ### Blueprint
 Since orders are no longer stored in collections, Cargo provides its own "Order" blueprint, which can be edited via the Blueprints page in the Control Panel:
 
@@ -185,6 +187,8 @@ If you need to, you can migrate *just* customers using `php please cargo:migrate
 :::tip info
 You should still run the migration command if you were previously storing customers as users, as it'll remove the `orders` key from user data (it is now a computed field).
 :::
+
+After migrating, you may delete the Customers collection or drop the `customers` table used by Simple Commerce.
 
 ## Discounting
 Cargo builds on top of the coupons feature in Simple Commerce, allowing you to create site-wide discounts which are automatically applied to eligible carts.
