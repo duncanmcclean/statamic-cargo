@@ -119,7 +119,7 @@ class MigrateTaxes extends Command
                 });
 
             $this->components->info('Migrated tax configuration.');
-            $this->components->warn('Cargo includes tax in prices by default. If you want to change this, please update the [statamic/cargo.php] config file.');
+            $this->components->warn('Cargo includes tax in prices by default. If you want to change this, please update the [config/statamic/cargo.php] config file.');
         }
     }
 }
