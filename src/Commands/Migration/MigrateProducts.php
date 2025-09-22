@@ -58,6 +58,8 @@ class MigrateProducts extends Command
                 }
 
                 $blueprint->save();
+
+                $this->components->info("Updated [$blueprint->handle()] blueprint.");
             });
 
         // Update field handles in entries.
@@ -113,5 +115,7 @@ class MigrateProducts extends Command
                     }
                 });
             });
+
+        $this->components->info('Updated product entries');
     }
 }
