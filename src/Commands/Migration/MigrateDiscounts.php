@@ -21,15 +21,13 @@ class MigrateDiscounts extends Command
 
     public function handle(): void
     {
-        $couponsDirectory = base_path('content/simple-commerce/coupons');
+        $couponFiles = collect();
 
-        $directoryExists = File::isDirectory($couponsDirectory);
-        if ($directoryExists) {
-            $couponFiles = collect(File::allFiles($couponsDirectory))
-                ->filter(fn(SplFileInfo $file) => $file->getExtension() === 'yaml');
+        if (File::isDirectory($path = base_path('content/simple-commerce/coupons'))) {
+            collect(File::allFiles($path))->filter(fn (SplFileInfo $file) => $file->getExtension() === 'yaml');
         }
 
-        if (!$directoryExists || $couponFiles->isEmpty()) {
+        if ($couponFiles->isEmpty()) {
             $this->components->warn('No discounts found to migrate.');
 
             return;
