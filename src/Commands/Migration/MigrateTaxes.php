@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\File;
 use SplFileInfo;
 use Statamic\Console\RunsInPlease;
 use Statamic\Facades\Entry;
+use Statamic\Facades\Stache;
 use Statamic\Facades\YAML;
 use Stillat\Proteus\Support\Facades\ConfigWriter;
 
@@ -49,6 +50,8 @@ class MigrateTaxes extends Command
         }
 
         if ($taxEngine === 'DuncanMcClean\SimpleCommerce\Tax\Standard\TaxEngine') {
+            Migrate::bindMissingFieldtypes();
+
             collect(File::allFiles(base_path('content/simple-commerce/tax-categories')))
                 ->filter(fn (SplFileInfo $file) => $file->getExtension() === 'yaml')
                 ->each(function (SplFileInfo $file) {
