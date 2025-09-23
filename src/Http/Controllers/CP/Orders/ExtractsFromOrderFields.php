@@ -28,6 +28,7 @@ trait ExtractsFromOrderFields
 
         $extraValues = [
             'id' => $order->id(),
+            'has_physical_products' => $order->has_physical_products,
         ];
 
         return [$fields->values()->all(), $fields->meta()->all(), $extraValues];
