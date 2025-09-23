@@ -50,7 +50,7 @@ class Blueprint
                             'fields' => [
                                 [
                                     'handle' => 'shipping_details',
-                                    'field' => ['type' => 'shipping_details', 'hide_display' => true, 'listable' => false],
+                                    'field' => ['type' => 'shipping_details', 'hide_display' => true, 'listable' => false, 'unless' => ['has_physical_products' => false]],
                                 ],
                             ],
                         ],
@@ -59,31 +59,31 @@ class Blueprint
                             'fields' => [
                                 [
                                     'handle' => 'shipping_name',
-                                    'field' => ['type' => 'text', 'display' => __('Name'), 'listable' => false, 'width' => 50],
+                                    'field' => ['type' => 'text', 'display' => __('Name'), 'listable' => false, 'width' => 50, 'unless' => ['has_physical_products' => false]],
                                 ],
                                 [
                                     'handle' => 'shipping_line_1',
-                                    'field' => ['type' => 'text', 'display' => __('Address Line 1'), 'listable' => false, 'width' => 50],
+                                    'field' => ['type' => 'text', 'display' => __('Address Line 1'), 'listable' => false, 'width' => 50, 'unless' => ['has_physical_products' => false]],
                                 ],
                                 [
                                     'handle' => 'shipping_line_2',
-                                    'field' => ['type' => 'text', 'display' => __('Address Line 2'), 'listable' => false, 'width' => 50],
+                                    'field' => ['type' => 'text', 'display' => __('Address Line 2'), 'listable' => false, 'width' => 50, 'unless' => ['has_physical_products' => false]],
                                 ],
                                 [
                                     'handle' => 'shipping_city',
-                                    'field' => ['type' => 'text', 'display' => __('Town/City'), 'listable' => false, 'width' => 50],
+                                    'field' => ['type' => 'text', 'display' => __('Town/City'), 'listable' => false, 'width' => 50, 'unless' => ['has_physical_products' => false]],
                                 ],
                                 [
                                     'handle' => 'shipping_postcode',
-                                    'field' => ['type' => 'text', 'display' => __('Postcode'), 'listable' => false, 'width' => 50],
+                                    'field' => ['type' => 'text', 'display' => __('Postcode'), 'listable' => false, 'width' => 50, 'unless' => ['has_physical_products' => false]],
                                 ],
                                 [
                                     'handle' => 'shipping_country',
-                                    'field' => ['type' => 'dictionary', 'dictionary' => ['type' => 'countries', 'emojis' => false], 'max_items' => 1, 'display' => __('Country'), 'listable' => false, 'width' => 50],
+                                    'field' => ['type' => 'dictionary', 'dictionary' => ['type' => 'countries', 'emojis' => false], 'max_items' => 1, 'display' => __('Country'), 'listable' => false, 'width' => 50, 'unless' => ['has_physical_products' => false]],
                                 ],
                                 [
                                     'handle' => 'shipping_state',
-                                    'field' => ['type' => 'states', 'from' => 'shipping_country', 'display' => __('State/County'), 'listable' => false, 'max_items' => 1, 'width' => 50],
+                                    'field' => ['type' => 'states', 'from' => 'shipping_country', 'display' => __('State/County'), 'listable' => false, 'max_items' => 1, 'width' => 50, 'unless' => ['has_physical_products' => false]],
                                 ],
                             ],
                         ],
