@@ -163,6 +163,19 @@ When possible, Cargo will automatically inject a hidden `product` input when it 
 <input type="hidden" name="product" value="{{ page:id }}">
 ``` 
 
+### Parameters
+This tag supports the following parameters:
+
+@blade
+<x-tag-parameters
+	:parameters="[
+		['key' => 'redirect', 'type' => 'string', 'description' => 'The URL the user will be taken to after submitting the form. If left blank, the user will stay on the same page.'],
+		['key' => 'error_redirect', 'type' => 'string', 'description' => 'The URL the user will be taken to after a failed form submission. If left blank, the user will stay on the same page.'],
+		['key' => 'request', 'type' => 'string', 'description' => 'The name or fully qualified classname of the [form request](https://laravel.com/docs/master/validation#creating-form-requests) that should be used to validate the form submission. For example: `AddToCartRequest` will map to `App\Http\Requests\AddToCartRequest`.'],
+	]"
+/>
+@endblade
+
 ### Fields
 This form supports the following fields:
 
@@ -212,6 +225,21 @@ This tag allows you to update a line item in the customer's cart. You can either
 ::
 
 Inside the `{{ cart:update_line_item }}` tag, you have access to the line item's data, allowing you to pre-fill values.
+
+### Parameters
+This tag supports the following parameters:
+
+@blade
+<x-tag-parameters
+	:parameters="[
+		['key' => 'product', 'type' => 'string', 'required' => true, 'description' => 'The ID of the product you wish to update. Required when `line_item` isn\'t present.'],
+		['key' => 'line_item', 'type' => 'string', 'required' => true, 'description' => 'The ID of the line item you wish to update. Required when `product` isn\'t present.'],
+		['key' => 'redirect', 'type' => 'string', 'description' => 'The URL the user will be taken to after submitting the form. If left blank, the user will stay on the same page.'],
+		['key' => 'error_redirect', 'type' => 'string', 'description' => 'The URL the user will be taken to after a failed form submission. If left blank, the user will stay on the same page.'],
+		['key' => 'request', 'type' => 'string', 'description' => 'The name or fully qualified classname of the [form request](https://laravel.com/docs/master/validation#creating-form-requests) that should be used to validate the form submission. For example: `AddToCartRequest` will map to `App\Http\Requests\AddToCartRequest`.'],
+	]"
+/>
+@endblade
 
 ### Fields
 This form supports the following fields:
@@ -299,6 +327,19 @@ This tag allows you to update the customer's cart. Allowing you to update everyt
 ::
 
 Inside the `{{ cart:update }}` tag, you have access to the cart's data, allowing you to pre-fill values.
+
+### Parameters
+This tag supports the following parameters:
+
+@blade
+<x-tag-parameters
+	:parameters="[
+		['key' => 'redirect', 'type' => 'string', 'description' => 'The URL the user will be taken to after submitting the form. If left blank, the user will stay on the same page.'],
+		['key' => 'error_redirect', 'type' => 'string', 'description' => 'The URL the user will be taken to after a failed form submission. If left blank, the user will stay on the same page.'],
+		['key' => 'request', 'type' => 'string', 'description' => 'The name or fully qualified classname of the [form request](https://laravel.com/docs/master/validation#creating-form-requests) that should be used to validate the form submission. For example: `AddToCartRequest` will map to `App\Http\Requests\AddToCartRequest`.'],
+	]"
+/>
+@endblade
 
 ### Fields
 This form supports the following fields:
