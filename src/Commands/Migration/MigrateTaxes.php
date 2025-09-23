@@ -49,6 +49,8 @@ class MigrateTaxes extends Command
         }
 
         if ($taxEngine === 'DuncanMcClean\SimpleCommerce\Tax\Standard\TaxEngine') {
+            Migrate::bindMissingFieldtypes();
+
             collect(File::allFiles(base_path('content/simple-commerce/tax-categories')))
                 ->filter(fn (SplFileInfo $file) => $file->getExtension() === 'yaml')
                 ->each(function (SplFileInfo $file) {
