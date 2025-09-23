@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.0.0-alpha.7 (2025-09-23)
+
+### What's fixed
+- Bind missing fieldtypes to avoid errors during the migration process #49 by @duncanmcclean
+- Added note about deleting order and customer collections after migrating by @duncanmcclean
+- Don't assume the Simple Commerce `coupons` directory exists during migration #44 by @Jamesking56
+- Added output to `cargo:migrate:products` command #47 by @duncanmcclean
+- Fixed `undefined array key "title"` error when migrating taxes #43 by @duncanmcclean
+- Removed `tailwindcss` plugin from Vite config by @duncanmcclean
+
+
+
 ## v1.0.0-alpha.6 (2025-09-16)
 
 ### What's fixed
