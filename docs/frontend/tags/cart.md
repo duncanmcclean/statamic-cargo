@@ -15,7 +15,7 @@ In this example, you can use the `{{ cart }}` tag as a tag pair, meaning you can
   
     <ul>  
         {{ line_items }}  
-            <li><a href="{{ product:url }}">{{ product:title }}</a> ({{ total }})</li>  
+            <li>{{ quantity }}x <a href="{{ product:url }}">{{ product:title }}</a> ({{ total }})</li>
         {{ /line_items }}  
     </ul>  
   
