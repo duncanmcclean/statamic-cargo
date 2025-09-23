@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\File;
 use SplFileInfo;
 use Statamic\Console\RunsInPlease;
 use Statamic\Facades\Entry;
-use Statamic\Facades\Stache;
 use Statamic\Facades\YAML;
 use Stillat\Proteus\Support\Facades\ConfigWriter;
 
