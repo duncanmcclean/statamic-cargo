@@ -54,7 +54,7 @@ function convertToUser() {
     axios
         .post(props.meta.convertGuestToUserUrl, {
             email: props.value.email,
-            order_id: values.id,
+            order_id: values.value.id,
         })
         .then((response) => {
             emit('update:value', response.data);
