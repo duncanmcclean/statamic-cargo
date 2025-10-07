@@ -142,4 +142,4 @@ Finally, update the `checkout/layout.antlers.html` file to reference your own st
 {{ vite src="resources/css/site.css" }} {{# [tl! add] #}}
 ```
 
-To stay organised, you may now delete the `public/checkout` directory.
+To stay organised, you may now delete the `public/checkout-build` directory.
