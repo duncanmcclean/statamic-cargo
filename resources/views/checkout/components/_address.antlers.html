@@ -16,7 +16,7 @@
         name="{type}_name"
         label="{type | ucfirst} Name"
         type="text"
-        xBindValue="cart.{type}_name"
+        xBindValue="cart.{type}_name || cart.customer?.name"
         autocomplete="{type} name"
         required="true"
     }}
@@ -25,7 +25,7 @@
         name="{type}_line_1"
         label="{type | ucfirst} Line 1"
         type="text"
-        xBindValue="cart.{type}_name || cart.customer?.name"
+        xBindValue="cart.{type}_name"
         autocomplete="{type} address-line1"
         required="true"
     }}
