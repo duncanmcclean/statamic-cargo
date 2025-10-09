@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.0.0-alpha.8 (2025-10-09)
+
+### What's fixed
+- Fixed missing products in the packing slip by @duncanmcclean
+- Renamed `public/checkout` directory to avoid Apache conflicts #56 by @duncanmcclean
+- Fixed error when converting guest customer to user by @duncanmcclean
+- Pre-built checkout: Ensure address name field is pre-filled, not the line 1 field by @duncanmcclean
+- Only show shipping tab when order has physical products #52 by @duncanmcclean
+
+
+
 ## v1.0.0-alpha.7 (2025-09-23)
 
 ### What's fixed
