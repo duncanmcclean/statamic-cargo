@@ -5,6 +5,7 @@ namespace DuncanMcClean\Cargo\Http\Controllers\CP\Taxes;
 use DuncanMcClean\Cargo\Facades\TaxZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 use Statamic\CP\Column;
 use Statamic\CP\PublishForm;
 use Statamic\Http\Controllers\CP\CpController;
@@ -37,15 +38,18 @@ class TaxZoneController extends CpController
         }
 
         if ($taxZones->isEmpty()) {
-            return view('cargo::cp.tax-zones.empty');
+            return Inertia::render('cargo::TaxZones/Empty', [
+                'createUrl' => cp_route('cargo.tax-zones.create'),
+            ]);
         }
 
-        return view('cargo::cp.tax-zones.index', [
+        return Inertia::render('cargo::TaxZones/Index', [
             'taxZones' => $taxZones,
             'columns' => [
                 Column::make('title')->label(__('Title')),
                 Column::make('type')->label(__('Type'))->sortable(false),
             ],
+            'createUrl' => cp_route('cargo.tax-zones.create'),
         ]);
     }
 
