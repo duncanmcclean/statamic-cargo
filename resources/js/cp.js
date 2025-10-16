@@ -1,4 +1,5 @@
-import DiscountsListing from './components/discounts/Listing.vue';
+import DiscountsIndex from './pages/discounts/Index.vue';
+import DiscountsEmpty from './pages/discounts/Empty.vue';
 import CustomersFieldtype from './components/fieldtypes/CustomersFieldtype.vue';
 import CustomersFieldtypeIndex from './components/fieldtypes/CustomersFieldtypeIndex.vue';
 import DiscountCodeFieldtype from './components/fieldtypes/DiscountCodeFieldtype.vue';
@@ -18,7 +19,8 @@ import TaxZonesEmpty from './pages/tax-zones/Empty.vue';
 
 Statamic.booting(() => {
     // Discounts
-    Statamic.$components.register('discounts-listing', DiscountsListing);
+    Statamic.$inertia.register('cargo::Discounts/Index', DiscountsIndex);
+    Statamic.$inertia.register('cargo::Discounts/Empty', DiscountsEmpty);
 
     // Fieldtypes
     Statamic.$components.register('customers-fieldtype', CustomersFieldtype);
