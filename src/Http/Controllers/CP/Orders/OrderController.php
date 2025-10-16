@@ -8,6 +8,7 @@ use DuncanMcClean\Cargo\Http\Resources\CP\Orders\Order as OrderResource;
 use DuncanMcClean\Cargo\Http\Resources\CP\Orders\Orders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 use Statamic\Facades\Action;
 use Statamic\Facades\Scope;
 use Statamic\Facades\User;
@@ -57,10 +58,13 @@ class OrderController extends CpController
             ->rejectUnlisted()
             ->values();
 
-        return view('cargo::cp.orders.index', [
+        return Inertia::render('cargo::Orders/Index', [
             'blueprint' => $blueprint,
             'columns' => $columns,
             'filters' => Scope::filters('orders'),
+            'actionUrl' => cp_route('cargo.orders.actions.run'),
+            'editBlueprintUrl' => cp_route('blueprints.additional.edit', ['cargo', 'order']),
+            'canEditBlueprint' => User::current()->can('configure fields'),
         ]);
     }
 
