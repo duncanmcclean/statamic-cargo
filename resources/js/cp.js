@@ -12,7 +12,8 @@ import StatesFieldtype from './components/fieldtypes/StatesFieldtype.vue';
 import OrdersListing from './components/orders/Listing.vue';
 import OrderPublishForm from './components/orders/PublishForm.vue';
 import TaxClassListing from './components/tax-classes/Listing.vue';
-import TaxZoneListing from './components/tax-zones/Listing.vue';
+import TaxZonesIndex from './pages/tax-zones/Index.vue';
+import TaxZonesEmpty from './pages/tax-zones/Empty.vue';
 
 Statamic.booting(() => {
     // Discounts
@@ -26,6 +27,7 @@ Statamic.booting(() => {
     Statamic.$components.register('order_receipt-fieldtype', OrderReceiptFieldtype);
     Statamic.$components.register('product_variants-fieldtype', ProductVariantsFieldtype);
     Statamic.$components.register('order_status-fieldtype-index', OrderStatusFieldtypeIndex);
+    
     Statamic.$components.register('payment_details-fieldtype', PaymentDetailsFieldtype);
     Statamic.$components.register('shipping_details-fieldtype', ShippingDetailsFieldtype);
     Statamic.$components.register('states-fieldtype', StatesFieldtype);
@@ -38,5 +40,6 @@ Statamic.booting(() => {
     Statamic.$components.register('tax-class-listing', TaxClassListing);
 
     // Tax Zones
-    Statamic.$components.register('tax-zone-listing', TaxZoneListing);
+    Statamic.$inertia.register('cargo::TaxZones/Index', TaxZonesIndex);
+    Statamic.$inertia.register('cargo::TaxZones/Empty', TaxZonesEmpty);
 });
