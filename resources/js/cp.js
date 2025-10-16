@@ -11,7 +11,7 @@ import PaymentDetailsFieldtype from './components/fieldtypes/PaymentDetailsField
 import ShippingDetailsFieldtype from './components/fieldtypes/ShippingDetailsFieldtype.vue';
 import StatesFieldtype from './components/fieldtypes/StatesFieldtype.vue';
 import OrdersIndex from './pages/orders/Index.vue';
-import OrderPublishForm from './components/orders/PublishForm.vue';
+import OrdersEdit from './pages/orders/Edit.vue';
 import TaxClassesIndex from './pages/tax-classes/Index.vue';
 import TaxClassesEmpty from './pages/tax-classes/Empty.vue';
 import TaxZonesIndex from './pages/tax-zones/Index.vue';
@@ -37,7 +37,7 @@ Statamic.booting(() => {
 
     // Orders
     Statamic.$inertia.register('cargo::Orders/Index', OrdersIndex);
-    Statamic.$components.register('order-publish-form', OrderPublishForm);
+    Statamic.$inertia.register('cargo::Orders/Edit', OrdersEdit);
 
     // Tax Classes
     Statamic.$inertia.register('cargo::TaxClasses/Index', TaxClassesIndex);

@@ -126,9 +126,7 @@ class OrderController extends CpController
             return $viewData;
         }
 
-        return view('cargo::cp.orders.edit', array_merge($viewData, [
-            'order' => $order,
-        ]));
+        return Inertia::render('cargo::Orders/Edit', $viewData);
     }
 
     public function update(Request $request, $order)
