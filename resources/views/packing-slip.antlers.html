@@ -4,91 +4,212 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{{ trans key="Packing Slip for Order #:orderNumber" :orderNumber="order:order_number" }}</title>
-        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+                font-size: 14px;
+                line-height: 1.5;
+                color: #000;
+                background: #fff;
+                padding: 40px 20px 20px 20px;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 40px;
+                border-bottom: 2px solid #000;
+                padding-bottom: 20px;
+            }
+            
+            .header .company-name {
+                font-size: 28px;
+                font-weight: 600;
+            }
+            
+            .header .order-info {
+                text-align: right;
+                font-size: 16px;
+            }
+            
+            .header .order-info .order-number {
+                font-weight: 600;
+                margin-bottom: 4px;
+            }
+            
+            .header .order-info .order-date {
+                color: #666;
+            }
+            
+            .addresses {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+                margin-bottom: 40px;
+            }
+            
+            .address-section h2 {
+                font-size: 16px;
+                font-weight: 600;
+                margin-bottom: 12px;
+            }
+            
+            .address-section p {
+                margin-bottom: 3px;
+                font-size: 14px;
+            }
+            
+
+            
+            .items-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 40px;
+            }
+            
+            .items-table th {
+                border-top: 2px solid #000;
+                border-bottom: 2px solid #000;
+                padding: 14px 8px;
+                text-align: left;
+                font-weight: 600;
+                font-size: 15px;
+            }
+            
+            .items-table td {
+                border-bottom: 1px solid #000;
+                padding: 12px 8px;
+                font-size: 14px;
+            }
+            
+            .items-table .qty-col {
+                width: 80px;
+                text-align: right;
+            }
+            
+            .items-table tbody tr:last-child td {
+                border-bottom: 2px solid #000;
+            }
+            
+            .footer {
+                text-align: center;
+                margin-top: 40px;
+                font-size: 11px;
+                color: #666;
+            }
+            
+            .footer .thank-you {
+                font-size: 16px;
+                font-weight: 500;
+                color: #000;
+                margin-bottom: 5px;
+            }
+            
+            .footer .website {
+                font-size: 14px;
+                color: #000;
+            }
+            
+            @media print {
+                body {
+                    padding: 0;
+                    font-size: 11px;
+                }
+                
+                .header h1 {
+                    font-size: 20px;
+                }
+                
+                .header .company-name {
+                    font-size: 14px;
+                }
+                
+                .header .order-info {
+                    font-size: 12px;
+                }
+                
+                .footer {
+                    margin-top: 30px;
+                }
+            }
+        </style>
         <script>
             window.addEventListener('load', () => window.print());
         </script>
     </head>
     <body>
-        <main class="mx-auto flex max-w-4xl flex-col gap-y-10 px-2 py-12">
-            <header>
-                <h1 class="mb-3 text-4xl font-bold">{{ trans key="Packing Slip" }}</h1>
-                <h3 class="text-xl font-semibold text-[#00A63E]">
-                    {{ config:app:name }}
-                    - {{ trans key="Order #:orderNumber" :orderNumber="order:order_number" }}
-                </h3>
-            </header>
+        <div class="header">
+            <div class="company-name">{{ config:app:name }}</div>
+            <div class="order-info">
+                <div class="order-number">{{ trans key="Order #:orderNumber" :orderNumber="order:order_number" }}</div>
+                <div class="order-date">{{ order:date format="F j, Y" }}</div>
+            </div>
+        </div>
 
-            <div class="grid grid-cols-2">
-                {{# Billing Address #}}
-                <div class="py-2">
-                    <h2 class="mb-1 text-lg font-bold text-[#00A63E]">{{ trans key="Bill to:" }}</h2>
-                    <div>
-                        <p>{{ order:customer:name }}</p>
-                        <p>{{ order:billing_line_1 }}</p>
-                        <p>{{ order:billing_line_2 }}</p>
-                        <p>{{ order:billing_city }}</p>
-                        <p>{{ order:billing_state:name }}</p>
-                        <p>{{ order:billing_postcode }}</p>
-                        <p>{{ order:billing_country:label }}</p>
-                    </div>
-                </div>
-
-                {{# Shipping Address #}}
-                <div class="py-2">
-                    <h2 class="mb-1 text-lg font-bold text-[#00A63E]">{{ trans key="Ship to:" }}</h2>
-                    <div>
-                        <p>{{ order:customer:name }}</p>
-                        <p>{{ order:shipping_line_1 }}</p>
-                        <p>{{ order:shipping_line_2 }}</p>
-                        <p>{{ order:shipping_city }}</p>
-                        <p>{{ order:shipping_state:name }}</p>
-                        <p>{{ order:shipping_postcode }}</p>
-                        <p>{{ order:shipping_country:label }}</p>
-                    </div>
+        <div class="addresses">
+            {{# Billing Address #}}
+            <div class="address-section">
+                <h2>{{ trans key="Bill to:" }}</h2>
+                <div>
+                    <p>{{ order:customer:name }}</p>
+                    {{ if order:billing_line_1 }}<p>{{ order:billing_line_1 }}</p>{{ /if }}
+                    {{ if order:billing_line_2 }}<p>{{ order:billing_line_2 }}</p>{{ /if }}
+                    {{ if order:billing_city }}<p>{{ order:billing_city }}</p>{{ /if }}
+                    {{ if order:billing_state:name }}<p>{{ order:billing_state:name }}</p>{{ /if }}
+                    {{ if order:billing_postcode }}<p>{{ order:billing_postcode }}</p>{{ /if }}
+                    {{ if order:billing_country:label }}<p>{{ order:billing_country:label }}</p>{{ /if }}
                 </div>
             </div>
 
-            {{# Order Details #}}
-            <div
-                class="{{ ['grid-cols-3' => order:shipping_method, 'grid-cols-1' => !order_shipping_method] | classes }} grid divide-x-2 divide-zinc-300 rounded-lg border border-zinc-300"
-            >
-                <div class="flex flex-col items-center justify-center space-y-1 px-6 py-4">
-                    <span class="text-sm">{{ trans key="Order Date" }}</span>
-                    <h3 class="text-lg font-bold">{{ order:date format="Y-m-d" }}</h3>
+            {{# Shipping Address #}}
+            <div class="address-section">
+                <h2>{{ trans key="Ship to:" }}</h2>
+                <div>
+                    <p>{{ order:customer:name }}</p>
+                    {{ if order:shipping_line_1 }}<p>{{ order:shipping_line_1 }}</p>{{ /if }}
+                    {{ if order:shipping_line_2 }}<p>{{ order:shipping_line_2 }}</p>{{ /if }}
+                    {{ if order:shipping_city }}<p>{{ order:shipping_city }}</p>{{ /if }}
+                    {{ if order:shipping_state:name }}<p>{{ order:shipping_state:name }}</p>{{ /if }}
+                    {{ if order:shipping_postcode }}<p>{{ order:shipping_postcode }}</p>{{ /if }}
+                    {{ if order:shipping_country:label }}<p>{{ order:shipping_country:label }}</p>{{ /if }}
                 </div>
-                {{ if order:shipping_option }}
-                    <div class="flex flex-col items-center justify-center space-y-1 px-6">
-                        <span class="text-sm">{{ trans key="Shipping Option" }}</span>
-                        <h3 class="text-lg font-bold">{{ order:shipping_option:name }}</h3>
-                    </div>
-
-                    <div class="flex flex-col items-center justify-center space-y-1 px-6">
-                        <span class="text-sm">{{ trans key="Shipping Cost" }}</span>
-                        <h3 class="text-lg font-bold">{{ order:shipping_total }}</h3>
-                    </div>
-                {{ /if }}
             </div>
+        </div>
 
-            {{# Line Items #}}
-            <table class="w-full rounded-t-lg border border-zinc-300">
-                <thead class="border-b border-zinc-300 text-lg font-bold">
-                    <tr class="divide-x divide-zinc-300">
-                        <th class="w-[10%] px-3 py-3 text-center text-sm">{{ trans key="Qty" }}</th>
-                        <th class="px-3 py-3 text-left text-sm">{{ trans key="Description" }}</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-zinc-300">
-                    {{ order:line_items }}
-                        {{ if product:type !== 'digital' }}
-                            <tr class="divide-x divide-zinc-300">
-                                <td class="px-3 py-3 text-center">{{ quantity }}</td>
-                                <td class="px-3 py-3">{{ product:title }}</td>
-                            </tr>
-                        {{ /if }}
-                    {{ /order:line_items }}
-                </tbody>
-            </table>
-        </main>
+        {{# Line Items #}}
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th>{{ trans key="Item" }}</th>
+                    <th class="qty-col">{{ trans key="Quantity" }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ order:line_items }}
+                    {{ if product:type !== 'digital' }}
+                        <tr>
+                            <td>{{ product:title }}</td>
+                            <td class="qty-col">{{ quantity }}</td>
+                        </tr>
+                    {{ /if }}
+                {{ /order:line_items }}
+            </tbody>
+        </table>
+
+        <div class="footer">
+            <div class="thank-you">Thanks for shopping with us!</div>
+            <div class="website">www.yourstore.com</div>
+        </div>
     </body>
 </html>
