@@ -29,8 +29,6 @@
                 justify-content: space-between;
                 align-items: flex-start;
                 margin-bottom: 40px;
-                border-bottom: 2px solid #000;
-                padding-bottom: 20px;
             }
             
             .header .company-name {
@@ -80,8 +78,7 @@
             
             .items-table th {
                 border-top: 2px solid #000;
-                border-bottom: 2px solid #000;
-                padding: 14px 8px;
+                padding: 10px 8px 5px 8px;
                 text-align: left;
                 font-weight: 600;
                 font-size: 15px;
@@ -209,7 +206,7 @@
 
         <div class="footer">
             <div class="thank-you">Thanks for shopping with us!</div>
-            <div class="website">www.yourstore.com</div>
+            <div class="website">{{ order:site:permalink | parse_url('host') }}</div>
         </div>
     </body>
 </html>

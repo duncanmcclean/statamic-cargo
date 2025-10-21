@@ -4,6 +4,7 @@ namespace DuncanMcClean\Cargo\Orders;
 
 use DuncanMcClean\Cargo\Cart\AugmentedCart;
 use Illuminate\Support\Facades\URL;
+use Statamic\Facades\Site;
 
 class AugmentedOrder extends AugmentedCart
 {
@@ -44,6 +45,7 @@ class AugmentedOrder extends AugmentedCart
             'has_physical_products',
             'has_digital_products',
             'downloads',
+            'site',
         ];
     }
 
