@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.0.0-alpha.9 (2025-10-21)
+
+### What's new
+- All pages have been converted to Inertia #57 by @duncanmcclean
+
+### What's improved
+- Packing Slip Improvements #58 by @duncanmcclean
+- `site` is now returned when augmenting carts & orders #59 by @duncanmcclean
+
+
+
 ## v1.0.0-alpha.8 (2025-10-09)
 
 ### What's fixed
