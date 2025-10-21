@@ -37,6 +37,7 @@ class AugmentedCart extends AbstractAugmented
     {
         return [
             'id',
+            'site',
             'is_free',
             'customer',
             'discounts',

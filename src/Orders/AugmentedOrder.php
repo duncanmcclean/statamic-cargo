@@ -34,6 +34,7 @@ class AugmentedOrder extends AugmentedCart
             'order_number',
             'date',
             'status',
+            'site',
             'is_free',
             'customer',
             'discounts',
@@ -44,7 +45,6 @@ class AugmentedOrder extends AugmentedCart
             'has_physical_products',
             'has_digital_products',
             'downloads',
-            'site',
         ];
     }
 
