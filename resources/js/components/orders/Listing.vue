@@ -1,4 +1,5 @@
 <script setup>
+import { Link } from '@statamic/cms/inertia';
 import { DropdownItem, Listing } from '@statamic/cms/ui';
 import { ref } from 'vue';
 
@@ -35,10 +36,10 @@ function requestComplete({ items: newItems, parameters }) {
         push-query
         @request-completed="requestComplete"
     >
-        <template #cell-order_number="{ row: order, isColumnVisible }">
-            <a class="order-number-index-field" :href="order.edit_url" @click.stop>
+        <template #cell-order_number="{ row: order }">
+            <Link class="order-number-index-field" :href="order.edit_url">
                 <span v-text="`#${order.order_number}`" />
-            </a>
+            </Link>
         </template>
         <template #prepended-row-actions="{ row: order }">
             <DropdownItem :text="__('Edit')" :href="order.edit_url" icon="edit" v-if="order.editable" />

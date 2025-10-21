@@ -6,6 +6,7 @@ use DuncanMcClean\Cargo\Contracts\Discounts\Discount as DiscountContract;
 use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Http\Resources\CP\Discounts\Discounts;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Statamic\CP\Column;
 use Statamic\CP\PublishForm;
 use Statamic\Facades\Scope;
@@ -63,13 +64,17 @@ class DiscountController extends CpController
             ->values();
 
         if (Discount::query()->count() === 0) {
-            return view('cargo::cp.discounts.empty');
+            return Inertia::render('cargo::Discounts/Empty', [
+                'createUrl' => cp_route('cargo.discounts.create'),
+            ]);
         }
 
-        return view('cargo::cp.discounts.index', [
+        return Inertia::render('cargo::Discounts/Index', [
             'blueprint' => $blueprint,
             'columns' => $columns,
             'filters' => Scope::filters('discounts'),
+            'createUrl' => cp_route('cargo.discounts.create'),
+            'actionUrl' => cp_route('cargo.discounts.actions.run'),
         ]);
     }
 

@@ -70,11 +70,7 @@ class Blueprint
                                         'width' => 33,
                                         'validate' => [
                                             'uppercase',
-                                            function ($attribute, $value, $fail) {
-                                                if (! preg_match('/^[a-zA-Z][a-zA-Z0-9]*(?:_{0,1}[a-zA-Z0-9])*$/', $value)) {
-                                                    $fail('statamic::validation.handle')->translate();
-                                                }
-                                            },
+                                            'regex:/^[a-zA-Z][a-zA-Z0-9]*(?:_{0,1}[a-zA-Z0-9])*$/',
                                             'new \DuncanMcClean\Cargo\Rules\UniqueDiscountValue({handle})',
                                         ],
                                     ],

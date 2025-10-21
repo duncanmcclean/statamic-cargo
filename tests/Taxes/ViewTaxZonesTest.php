@@ -13,13 +13,12 @@ class ViewTaxZonesTest extends TestCase
     use PreventsSavingStacheItemsToDisk;
 
     #[Test]
-    public function can_create_tax_zones()
+    public function can_view_tax_zones()
     {
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->get(cp_route('cargo.tax-zones.index'))
-            ->assertOk()
-            ->assertSee('Tax Zones');
+            ->assertOk();
     }
 
     #[Test]

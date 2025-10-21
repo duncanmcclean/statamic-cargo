@@ -1,4 +1,5 @@
 <script setup>
+import { Link } from '@statamic/cms/inertia';
 import { DropdownItem, Listing } from '@statamic/cms/ui';
 import DiscountStatusIndicator from './DiscountStatusIndicator.vue';
 import { ref } from 'vue';
@@ -38,10 +39,10 @@ function requestComplete({ items: newItems, parameters }) {
         @request-completed="requestComplete"
     >
         <template #cell-title="{ row: discount, isColumnVisible }">
-            <a class="title-index-field" :href="discount.edit_url" @click.stop>
+            <Link class="title-index-field" :href="discount.edit_url">
                 <DiscountStatusIndicator v-if="!isColumnVisible('status')" :status="discount.status" />
                 <span v-text="discount.title" />
-            </a>
+            </Link>
         </template>
         <template #cell-status="{ row: discount }">
             <DiscountStatusIndicator :status="discount.status" show-label :show-dot="false" />
