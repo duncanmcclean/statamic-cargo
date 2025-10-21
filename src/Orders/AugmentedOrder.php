@@ -44,6 +44,7 @@ class AugmentedOrder extends AugmentedCart
             'has_physical_products',
             'has_digital_products',
             'downloads',
+            'site',
         ];
     }
 
