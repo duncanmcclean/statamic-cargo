@@ -9,7 +9,6 @@ use DuncanMcClean\Cargo\Contracts\Orders\QueryBuilder;
 use DuncanMcClean\Cargo\Customers\GuestCustomer;
 use DuncanMcClean\Cargo\Exceptions\OrderNotFound;
 use DuncanMcClean\Cargo\Orders\Blueprint;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Statamic\Fields\Blueprint as StatamicBlueprint;
