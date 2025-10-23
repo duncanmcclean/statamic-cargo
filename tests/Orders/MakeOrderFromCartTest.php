@@ -7,6 +7,7 @@ use DuncanMcClean\Cargo\Facades\Order;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
+use Statamic\Facades\User;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
 
@@ -67,5 +68,32 @@ class MakeOrderFromCartTest extends TestCase
             'shuffling' => 'is fun',
             'status' => 'payment_pending',
         ], $order->fileData());
+    }
+
+    #[Test]
+    public function it_adds_the_new_customer_flag_when_its_the_customers_first_order()
+    {
+        $user = User::make()->id('user-123')->email('first.time@example.com')->save();
+
+        $cart = Cart::make()->customer($user);
+
+        $order = Order::makeFromCart($cart);
+
+        $this->assertEquals('user-123', $order->customer()->id());
+        $this->assertEquals(true, $order->get('new_customer'));
+    }
+
+    #[Test]
+    public function it_doesnt_add_the_new_customer_flag_when_the_customer_has_past_orders()
+    {
+        $user = User::make()->id('user-123')->email('first.time@example.com')->save();
+        Order::make()->customer($user)->save();
+
+        $cart = Cart::make()->customer($user);
+
+        $order = Order::makeFromCart($cart);
+
+        $this->assertEquals('user-123', $order->customer()->id());
+        $this->assertNull($order->get('new_customer'));
     }
 }
