@@ -6,8 +6,10 @@ use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Orders\Order;
 use DuncanMcClean\Cargo\Contracts\Orders\OrderRepository as RepositoryContract;
 use DuncanMcClean\Cargo\Contracts\Orders\QueryBuilder;
+use DuncanMcClean\Cargo\Customers\GuestCustomer;
 use DuncanMcClean\Cargo\Exceptions\OrderNotFound;
 use DuncanMcClean\Cargo\Orders\Blueprint;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Statamic\Fields\Blueprint as StatamicBlueprint;
@@ -57,6 +59,18 @@ class OrderRepository implements RepositoryContract
 
     public function makeFromCart(Cart $cart): Order
     {
+        $data = $cart->data();
+
+        if (! $cart->customer() instanceof GuestCustomer) {
+            $hasExistingOrders = $this->query()
+                ->where('customer', $cart->customer()->getKey())
+                ->exists();
+
+            if (! $hasExistingOrders) {
+                $data->put('new_customer', true);
+            }
+        }
+
         return self::make()
             ->cart($cart->id())
             ->site($cart->site())
@@ -67,7 +81,7 @@ class OrderRepository implements RepositoryContract
             ->discountTotal($cart->discountTotal())
             ->taxTotal($cart->taxTotal())
             ->shippingTotal($cart->shippingTotal())
-            ->data($cart->data()->toArray());
+            ->data($data->toArray());
     }
 
     public function save(Order $order): void
