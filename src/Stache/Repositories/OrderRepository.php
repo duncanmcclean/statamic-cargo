@@ -60,7 +60,7 @@ class OrderRepository implements RepositoryContract
     {
         $data = $cart->data();
 
-        if (! $cart->customer() instanceof GuestCustomer) {
+        if ($cart->customer() && ! $cart->customer() instanceof GuestCustomer) {
             $hasExistingOrders = $this->query()
                 ->where('customer', $cart->customer()->getKey())
                 ->exists();
