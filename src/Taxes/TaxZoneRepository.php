@@ -4,7 +4,6 @@ namespace DuncanMcClean\Cargo\Taxes;
 
 use DuncanMcClean\Cargo\Contracts\Taxes\TaxZone;
 use DuncanMcClean\Cargo\Contracts\Taxes\TaxZoneRepository as Contract;
-use DuncanMcClean\Cargo\Facades\TaxClass;
 use DuncanMcClean\Cargo\Rules\UniqueTaxZone;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
@@ -138,20 +137,9 @@ class TaxZoneRepository implements Contract
                                 [
                                     'handle' => 'rates',
                                     'field' => [
-                                        'type' => 'group',
+                                        'type' => 'tax_rates',
                                         'hide_display' => true,
-                                        'fullscreen' => false,
-                                        'border' => false,
-                                        'fields' => TaxClass::all()->map(fn ($taxClass) => [
-                                            'handle' => $taxClass->handle(),
-                                            'field' => [
-                                                'type' => 'float',
-                                                'display' => $taxClass->get('title'),
-                                                'validate' => 'min:0',
-                                                'append' => '%',
-                                                'width' => 50,
-                                            ],
-                                        ])->values()->all(),
+                                        'full_width_setting' => true,
                                     ],
                                 ],
                             ],
