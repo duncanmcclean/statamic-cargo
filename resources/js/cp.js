@@ -10,6 +10,7 @@ import OrderStatusFieldtypeIndex from './components/fieldtypes/OrderStatusFieldt
 import PaymentDetailsFieldtype from './components/fieldtypes/PaymentDetailsFieldtype.vue';
 import ShippingDetailsFieldtype from './components/fieldtypes/ShippingDetailsFieldtype.vue';
 import StatesFieldtype from './components/fieldtypes/StatesFieldtype.vue';
+import TaxRatesFieldtype from './components/fieldtypes/TaxRatesFieldtype.vue';
 import OrdersIndex from './pages/orders/Index.vue';
 import OrdersEdit from './pages/orders/Edit.vue';
 import TaxClassesIndex from './pages/tax-classes/Index.vue';
@@ -34,6 +35,7 @@ Statamic.booting(() => {
     Statamic.$components.register('payment_details-fieldtype', PaymentDetailsFieldtype);
     Statamic.$components.register('shipping_details-fieldtype', ShippingDetailsFieldtype);
     Statamic.$components.register('states-fieldtype', StatesFieldtype);
+    Statamic.$components.register('tax_rates-fieldtype', TaxRatesFieldtype);
 
     // Orders
     Statamic.$inertia.register('cargo::Orders/Index', OrdersIndex);
