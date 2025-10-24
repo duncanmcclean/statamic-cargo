@@ -69,7 +69,10 @@ class TaxRates extends Fieldtype
 
     public function preload()
     {
-        return $this->fields()->addValues($this->field->value() ?? $this->defaultGroupData())->meta()->toArray();
+        return [
+            'fields' => $this->fields()->all(),
+            'meta' => $this->fields()->addValues($this->field->value() ?? $this->defaultGroupData())->meta()->toArray(),
+        ];
     }
 
     protected function defaultGroupData()
