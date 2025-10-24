@@ -141,16 +141,6 @@ class TaxZoneRepository implements Contract
                                         'type' => 'tax_rates',
                                         'hide_display' => true,
                                         'full_width_setting' => true,
-                                        'fields' => TaxClass::all()->map(fn ($taxClass) => [
-                                            'handle' => $taxClass->handle(),
-                                            'field' => [
-                                                'type' => 'float',
-                                                'display' => $taxClass->get('title'),
-                                                'validate' => 'min:0',
-                                                'append' => '%',
-                                                'width' => 50,
-                                            ],
-                                        ])->values()->all(),
                                     ],
                                 ],
                             ],

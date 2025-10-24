@@ -2,32 +2,14 @@
 
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
+use DuncanMcClean\Cargo\Facades\TaxClass;
 use Statamic\Fields\Fields;
 use Statamic\Fields\Fieldtype;
 use Statamic\Support\Arr;
 
 class TaxRates extends Fieldtype
 {
-    protected $categories = ['structured'];
-    protected $defaultable = false;
-    protected $selectableInForms = true;
-
-    protected function configFieldItems(): array
-    {
-        return [
-            [
-                'display' => __('Fields'),
-                'fields' => [
-                    'fields' => [
-                        'display' => __('Fields'),
-                        'instructions' => __('statamic::fieldtypes.group.config.fields'),
-                        'type' => 'fields',
-                        'full_width_setting' => true,
-                    ],
-                ],
-            ],
-        ];
-    }
+    protected $selectable = false;
 
     public function process($data)
     {
@@ -41,9 +23,20 @@ class TaxRates extends Fieldtype
         return $this->fields()->addValues($data ?? [])->preProcess()->values()->all();
     }
 
-    public function fields()
+    private function fields(): Fields
     {
-        return new Fields($this->config('fields'), $this->field()->parent(), $this->field());
+        $fields = TaxClass::all()->map(fn ($taxClass) => [
+            'handle' => $taxClass->handle(),
+            'field' => [
+                'type' => 'float',
+                'display' => $taxClass->get('title'),
+                'validate' => 'min:0',
+                'append' => '%',
+                'width' => 50,
+            ],
+        ])->values()->all();
+
+        return new Fields($fields, $this->field()->parent(), $this->field());
     }
 
     public function rules(): array
@@ -96,10 +89,5 @@ class TaxRates extends Fieldtype
                 ->values()
                 ->all(),
         );
-    }
-
-    public function hasJsDriverDataBinding(): bool
-    {
-        return false;
     }
 }
