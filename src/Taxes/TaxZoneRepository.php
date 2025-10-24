@@ -4,7 +4,6 @@ namespace DuncanMcClean\Cargo\Taxes;
 
 use DuncanMcClean\Cargo\Contracts\Taxes\TaxZone;
 use DuncanMcClean\Cargo\Contracts\Taxes\TaxZoneRepository as Contract;
-use DuncanMcClean\Cargo\Facades\TaxClass;
 use DuncanMcClean\Cargo\Rules\UniqueTaxZone;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
