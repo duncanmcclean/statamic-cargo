@@ -57,7 +57,10 @@
 
     {{ if shipping_option }}
         <div class="flex items-center justify-between">
-            <span>{{ 'Shipping' | trans }}</span>
+            <div class="flex items-center space-x-1">
+                <span>{{ 'Shipping' | trans }}</span>
+                <span class="text-xs text-gray-500">({{ shipping_option:name }})</span>
+            </div>
             <span>{{ shipping_option:price }}</span>
         </div>
     {{ /if }}
