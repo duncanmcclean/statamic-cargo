@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.0.0-alpha.10 (2025-11-01)
+
+### What's new
+- Added `new_customer` flag to orders #60 by @duncanmcclean
+
+### What's improved
+- Minor tweaks to cart and order summaries in pre-built checkout flow #63 by @duncanmcclean
+- Improved UI of tax rate fields #61 #66 by @duncanmcclean
+- Moved listings into page components #65 by @duncanmcclean
+
+### What's fixed
+- Fixed TailwindCSS not being generated in `cp.css` #62 by @duncanmcclean
+- Fixed path to pre-built checkout Vite hot file #64 by @duncanmcclean
+
+
+
 ## v1.0.0-alpha.9 (2025-10-21)
 
 ### What's new
