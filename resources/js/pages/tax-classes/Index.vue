@@ -1,14 +1,20 @@
 <script setup>
-import { Head } from '@statamic/cms/inertia';
-import { Header, Button, DocsCallout } from '@statamic/cms/ui';
-import TaxClassListing from '../../components/tax-classes/Listing.vue';
+import { Head, Link } from '@statamic/cms/inertia';
+import { Header, Button, Listing, DropdownItem, DocsCallout } from '@statamic/cms/ui';
+import { ref } from 'vue';
 
-defineProps({
+const props = defineProps({
     taxClasses: Array,
     columns: Array,
     createUrl: String,
     icon: String,
 });
+
+const items = ref(props.taxClasses);
+
+const deleted = (item) => {
+    items.value = items.value.filter(i => i.id !== item.id);
+};
 </script>
 
 <template>
@@ -19,7 +25,24 @@ defineProps({
             <Button :href="createUrl" :text="__('Create Tax Class')" variant="primary" />
         </Header>
 
-        <TaxClassListing :initial-items="taxClasses" :initial-columns="columns" />
+        <Listing :items :columns :allow-customizing-columns="false" :allow-search="false">
+            <template #cell-title="{ row: taxClass }">
+                <Link class="title-index-field" :href="taxClass.edit_url">
+                    <span v-text="taxClass.title" />
+                </Link>
+
+                <resource-deleter :ref="`deleter_${taxClass.id}`" :resource="taxClass" @deleted="deleted(taxClass)" />
+            </template>
+            <template #prepended-row-actions="{ row: taxClass }">
+                <DropdownItem :text="__('Edit')" icon="edit" :href="taxClass.edit_url" />
+                <DropdownItem
+                    :text="__('Delete')"
+                    icon="trash"
+                    variant="destructive"
+                    @click="$refs[`deleter_${taxClass.id}`].confirm()"
+                />
+            </template>
+        </Listing>
 
         <DocsCallout :topic="__('Tax Classes')" url="https://builtwithcargo.dev/docs/taxes#tax-classes" />
     </div>
