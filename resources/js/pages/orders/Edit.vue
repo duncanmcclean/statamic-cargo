@@ -20,19 +20,17 @@ defineProps({
 <template>
     <Head :title />
 
-    <div class="max-w-3xl mx-auto">
-        <OrderPublishForm
-            :blueprint
-            :reference
-            :initial-title="title"
-            :initial-values="values"
-            :initial-extra-values="extraValues"
-            :initial-meta="meta"
-            :initial-read-only="readOnly"
-            :actions
-            :item-actions
-            :item-action-url
-            :can-edit-blueprint
-        />
-    </div>
+    <OrderPublishForm
+        :blueprint
+        :reference
+        :initial-title="title"
+        :initial-values="values"
+        :initial-extra-values="extraValues"
+        :initial-meta="meta"
+        :initial-read-only="readOnly"
+        :actions
+        :item-actions
+        :item-action-url
+        :can-edit-blueprint
+    />
 </template>
