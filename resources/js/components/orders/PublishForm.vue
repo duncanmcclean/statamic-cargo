@@ -98,7 +98,7 @@ function actionCompleted(successful = null, response) {
         >
             <Dropdown>
                 <template #trigger>
-                    <Button icon="ui/dots" variant="ghost" />
+                    <Button icon="dots" variant="ghost" :aria-label="__('Open dropdown menu')" />
                 </template>
                 <DropdownMenu>
                     <DropdownItem
