@@ -1,6 +1,5 @@
 <script setup>
 import { computed, ref, useTemplateRef } from 'vue';
-import { SavePipeline } from 'statamic';
 import {
     Header,
     Button,
@@ -14,15 +13,14 @@ import {
     DropdownMenu,
     DropdownItem,
     DropdownSeparator,
-} from '@statamic/ui';
+} from '@statamic/cms/ui';
 import OrderStatus from './OrderStatus.vue';
-const { Pipeline, Request, BeforeSaveHooks, AfterSaveHooks } = SavePipeline;
-import ItemActions from '@statamic/components/actions/ItemActions.vue';
-import resetValuesFromResponse from '@statamic/util/resetValuesFromResponse.js';
+import { Pipeline, Request, BeforeSaveHooks, AfterSaveHooks } from '@statamic/cms/save-pipeline';
+import { ItemActions } from '@statamic/cms';
+import { resetValuesFromResponse } from '@statamic/cms/temporary';
 
 const props = defineProps({
     blueprint: Object,
-    icon: String,
     reference: String,
     initialTitle: String,
     initialValues: Object,
@@ -87,7 +85,7 @@ function actionCompleted(successful = null, response) {
 </script>
 
 <template>
-    <Header :title :icon>
+    <Header :title icon="shopping-cart">
         <ItemActions
             v-if="canEditBlueprint || hasItemActions"
             :item="values.id"
@@ -100,7 +98,7 @@ function actionCompleted(successful = null, response) {
         >
             <Dropdown>
                 <template #trigger>
-                    <Button icon="ui/dots" variant="ghost" />
+                    <Button icon="dots" variant="ghost" :aria-label="__('Open dropdown menu')" />
                 </template>
                 <DropdownMenu>
                     <DropdownItem

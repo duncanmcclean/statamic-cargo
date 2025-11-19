@@ -27,12 +27,13 @@ class UpdateTaxZonesTest extends TestCase
     public function can_update_tax_zone()
     {
         TaxClass::make()->handle('standard')->set('title', 'Standard')->save();
+        TaxClass::make()->handle('reduced')->set('title', 'Reduced')->save();
 
         $taxZone = tap(TaxZone::make()->handle('united-kingdom')->data([
             'title' => 'United Kingdom',
             'type' => 'countries',
             'countries' => ['GB'],
-            'rates' => ['standard' => 20],
+            'rates' => ['standard' => 20, 'reduced' => 5],
         ]))->save();
 
         $this
@@ -43,12 +44,13 @@ class UpdateTaxZonesTest extends TestCase
                 'countries' => ['GB'],
                 'rates' => [
                     'standard' => 25,
+                    'reduced' => 5.5,
                 ],
             ])
             ->assertOk();
 
         $taxZone = TaxZone::find('united-kingdom');
-        $this->assertEquals(['standard' => 25], $taxZone->get('rates'));
+        $this->assertEquals(['standard' => 25, 'reduced' => 5.5], $taxZone->get('rates'));
     }
 
     #[Test]
@@ -57,12 +59,13 @@ class UpdateTaxZonesTest extends TestCase
         Role::make('test')->addPermission('access cp')->save();
 
         TaxClass::make()->handle('standard')->set('title', 'Standard')->save();
+        TaxClass::make()->handle('reduced')->set('title', 'Reduced')->save();
 
         $taxZone = tap(TaxZone::make()->handle('united-kingdom')->data([
             'title' => 'United Kingdom',
             'type' => 'countries',
             'countries' => ['GB'],
-            'rates' => ['standard' => 20],
+            'rates' => ['standard' => 20, 'reduced' => 5],
         ]))->save();
 
         $this
@@ -73,11 +76,12 @@ class UpdateTaxZonesTest extends TestCase
                 'countries' => ['GB'],
                 'rates' => [
                     'standard' => 25,
+                    'reduced' => 5.5,
                 ],
             ])
             ->assertRedirect('/cp');
 
         $taxZone = TaxZone::find('united-kingdom');
-        $this->assertEquals(['standard' => 20], $taxZone->get('rates'));
+        $this->assertEquals(['standard' => 20, 'reduced' => 5], $taxZone->get('rates'));
     }
 }

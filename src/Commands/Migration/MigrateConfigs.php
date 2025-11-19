@@ -23,6 +23,8 @@ class MigrateConfigs extends Command
 
     public function handle(): void
     {
+        Migrate::bindMissingFieldtypes();
+
         try {
             $this
                 ->migrateConfigOptions()

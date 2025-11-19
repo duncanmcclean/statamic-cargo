@@ -21,7 +21,7 @@ class CartLineItemsController
         $product = Product::find($request->product);
 
         $data = $request->collect()->except([
-            '_token', '_method', '_redirect', '_error_redirect', 'product', 'variant', 'quantity', 'first_name', 'last_name'.'email', 'customer',
+            '_token', '_method', '_redirect', '_error_redirect', 'product', 'variant', 'quantity', 'first_name', 'last_name', 'email', 'customer',
         ]);
 
         $this->validateStock($request, $cart);

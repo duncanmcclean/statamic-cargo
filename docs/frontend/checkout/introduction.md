@@ -1,5 +1,6 @@
 ---
 title: "Checkout: Introduction"
+description: "Cargo's checkout flow is designed to be flexible and easy to use, with both pre-built and custom options available."
 ---
 It's all well and good having a website listing your products, but if your customers can't actually buy anything, then what's the point?
 

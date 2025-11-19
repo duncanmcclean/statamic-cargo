@@ -67,7 +67,6 @@ class TaxClassRepository implements Contract
                 'main' => [
                     'sections' => [
                         [
-                            'display' => 'Tax Class Details',
                             'fields' => [
                                 [
                                     'handle' => 'title',

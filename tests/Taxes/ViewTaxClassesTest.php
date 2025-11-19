@@ -13,7 +13,7 @@ class ViewTaxClassesTest extends TestCase
     use PreventsSavingStacheItemsToDisk;
 
     #[Test]
-    public function can_create_tax_classes()
+    public function can_view_tax_classes()
     {
         $this
             ->actingAs(User::make()->makeSuper()->save())

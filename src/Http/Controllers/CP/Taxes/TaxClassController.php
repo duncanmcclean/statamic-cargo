@@ -6,6 +6,7 @@ use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 use Statamic\CP\Column;
 use Statamic\CP\PublishForm;
 use Statamic\Http\Controllers\CP\CpController;
@@ -32,14 +33,19 @@ class TaxClassController extends CpController
         }
 
         if ($taxClasses->isEmpty()) {
-            return view('cargo::cp.tax-classes.empty');
+            return Inertia::render('cargo::TaxClasses/Empty', [
+                'icon' => Cargo::svg('tax-classes'),
+                'createUrl' => cp_route('cargo.tax-classes.create'),
+            ]);
         }
 
-        return view('cargo::cp.tax-classes.index', [
+        return Inertia::render('cargo::TaxClasses/Index', [
             'taxClasses' => $taxClasses,
             'columns' => [
                 Column::make('title')->label(__('Title')),
             ],
+            'icon' => Cargo::svg('tax-classes'),
+            'createUrl' => cp_route('cargo.tax-classes.create'),
         ]);
     }
 

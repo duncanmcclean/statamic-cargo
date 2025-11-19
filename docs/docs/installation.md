@@ -1,5 +1,6 @@
 ---
 title: Installation
+description: "Cargo is a comprehensive e-commerce addon for Statamic. This page explains how to install Cargo, including prerequisites and next steps."
 ---
 
 ## Prerequisites
@@ -10,10 +11,6 @@ title: Installation
 * [PHP's `zip` extension](https://www.php.net/manual/en/book.zip.php)
 
 ## Install
-
-:::tip info
-For now, please follow the installation steps in [Alpha Notes](/docs/alpha-notes). These steps are intended for when Cargo is publicly available.
-:::
 
 First, install Cargo using Composer:
 

@@ -1,5 +1,6 @@
 ---
 title: Products
+description: "Cargo's products are just entries, with a few extra fields. This page explains how to set up products, including digital products, inventory tracking, and product variants."
 ---
 
 Products are just entries, with a few additional fields (Price / Type / Tax Class). 
@@ -18,7 +19,7 @@ Most of the time, products will live in a "Products" collection, however, you're
 By default, Cargo assumes that all products are physical products. However, if you're planning to sell digital goods, like downloadable files, you should enable the `digital_products` option in the `cargo.php` config file:
 
 ```php
-// config/statamic/simple-commerce.php
+// config/statamic/cargo.php
 
 'products' => [
 	'digital_products' => true,
@@ -34,6 +35,23 @@ When you mark a product as digital, a "Downloads" field will appear on the produ
 You can also specify a limit on how many times a customer can download the files.
 
 ![Download fields on the product publish form](/images/product-downloads.png)
+
+After an order has been created, you may loop through the order's downloads like this:
+
+::tabs
+::tab antlers
+```antlers
+{{ downloads }}
+	<a href="{{ download_url }}">Download {{ product:title }}</a>
+{{ /downloads }}
+```
+::tab blade
+```blade
+@foreach($downloads as $download)
+	<a href="{{ $download['download_url'] }}">Download {{ $download['product']['title'] }}</a>
+@endforeach
+```
+::
 
 ## Inventory / Stock Tracking
 If you want to keep track of inventory, add a "Stock" field to your collection blueprint and specify a stock count on each product.

@@ -1,10 +1,10 @@
 <script setup>
-import { Fieldtype } from 'statamic';
 import axios from 'axios';
-import InlineEditForm from '@statamic/components/inputs/relationship/InlineEditForm.vue';
-import { Dropdown, DropdownMenu, DropdownItem, Heading, Description, Badge, Tooltip } from '@statamic/ui';
+import { Fieldtype, requireElevatedSession } from '@statamic/cms';
+import { InlineEditForm } from '@statamic/cms/temporary';
+import { Dropdown, DropdownMenu, DropdownItem, Heading, Description, Badge, Tooltip, injectPublishContext } from '@statamic/cms/ui';
 import { computed, ref } from 'vue';
-import { injectPublishContext } from '@statamic/ui';
+
 const { values, parentContainer: initialParentContainer } = injectPublishContext();
 
 const emit = defineEmits(Fieldtype.emits);
@@ -38,7 +38,9 @@ function edit() {
         }
     }
 
-    isEditingUser.value = true;
+    requireElevatedSession()
+        .then(() => (isEditingUser.value = true))
+        .catch(() => {});
 }
 
 function itemUpdated(responseData) {
@@ -52,7 +54,7 @@ function convertToUser() {
     axios
         .post(props.meta.convertGuestToUserUrl, {
             email: props.value.email,
-            order_id: values.id,
+            order_id: values.value.id,
         })
         .then((response) => {
             emit('update:value', response.data);
@@ -92,7 +94,7 @@ function convertToUser() {
                         <Description v-if="value.email" :text="value.email" />
                     </div>
 
-                    <inline-edit-form
+                    <InlineEditForm
                         v-if="isEditingUser"
                         :item="value"
                         :component="meta.user.formComponent"

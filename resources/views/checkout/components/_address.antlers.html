@@ -16,7 +16,7 @@
         name="{type}_name"
         label="{type | ucfirst} Name"
         type="text"
-        xBindValue="cart.{type}_name"
+        xBindValue="cart.{type}_name || cart.customer?.name"
         autocomplete="{type} name"
         required="true"
     }}

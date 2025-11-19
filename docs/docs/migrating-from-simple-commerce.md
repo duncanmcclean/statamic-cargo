@@ -1,12 +1,13 @@
 ---
 title: Migration from Simple Commerce
+description: "Cargo is the natural evolution of Simple Commerce. This page explains how to migrate from Simple Commerce to Cargo, including installation, configuration, and code changes."
 ---
 :::tip info
 This migration guide is still a work in progress - there's bound to be things missing. If you come across something which hasn't been covered here, please [open an issue](https://github.com/duncanmcclean/cargo/issues/new) or a [pull request](https://github.com/duncanmcclean/statamic-cargo/pulls).
 :::
 
 ## Overview
-Cargo is the natural evolution of [Simple Commerce](https://github.com/duncanmcclean/cargo). 
+Cargo is the natural evolution of [Simple Commerce](https://github.com/duncanmcclean/simple-commerce). 
 
 What started out as a hobby project for me to learn the internals of Statamic turned into *the way* to build e-commerce sites with Statamic.
 
@@ -150,6 +151,8 @@ If you need to, you can migrate *just* orders using `php please cargo:migrate:or
 
 If you were previously storing orders in the database, Cargo will publish and run the relevant database migrations prior to migrating orders.
 
+After migrating, you may delete the Orders collection or drop the `orders` table used by Simple Commerce. 
+
 ### Blueprint
 Since orders are no longer stored in collections, Cargo provides its own "Order" blueprint, which can be edited via the Blueprints page in the Control Panel:
 
@@ -184,6 +187,8 @@ If you need to, you can migrate *just* customers using `php please cargo:migrate
 :::tip info
 You should still run the migration command if you were previously storing customers as users, as it'll remove the `orders` key from user data (it is now a computed field).
 :::
+
+After migrating, you may delete the Customers collection or drop the `customers` table used by Simple Commerce.
 
 ## Discounting
 Cargo builds on top of the coupons feature in Simple Commerce, allowing you to create site-wide discounts which are automatically applied to eligible carts.
@@ -573,8 +578,8 @@ While most things are in roughly the same place as they used to be in Simple Com
 The most obvious change is that you'll need to reference `Cargo` in any imports instead of `SimpleCommerce`. 
 
 It's a pretty easy find & replace:
-* ***Before:** `DuncanMcClean\SimpleCommerce`
-* ***After:** `DuncanMcClean\Cargo`
+* **Before:** `DuncanMcClean\SimpleCommerce`
+* **After:** `DuncanMcClean\Cargo`
 
 ### Events
 If you're listening to any of Simple Commerce's events, you will need to listen for Cargo's equivalent events.

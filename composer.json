@@ -14,10 +14,16 @@
         }
     },
     "extra": {
-        "download-dist": {
-            "url": "https://github.com/duncanmcclean/statamic-cargo/releases/download/{$version}/dist.tar.gz",
-            "path": "resources/dist"
-        },
+        "download-dist": [
+            {
+                "url": "https://github.com/duncanmcclean/statamic-cargo/releases/download/{$version}/dist.tar.gz",
+                "path": "resources/dist"
+            },
+            {
+                "url": "https://github.com/duncanmcclean/statamic-cargo/releases/download/{$version}/dist-checkout.tar.gz",
+                "path": "resources/dist-checkout"
+            }
+        ],
         "statamic": {
             "name": "Cargo",
             "slug": "cargo",
@@ -39,7 +45,7 @@
         "mollie/mollie-api-php": "^2.73.0",
         "moneyphp/money": "^4.5",
         "pixelfear/composer-dist-plugin": "^0.1.0",
-        "statamic/cms": "dev-master",
+        "statamic/cms": "^6.0.0-alpha.14",
         "stillat/proteus": "^4.0",
         "stripe/stripe-php": "^16.4",
         "ext-zip": "*"

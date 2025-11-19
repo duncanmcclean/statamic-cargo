@@ -1,5 +1,6 @@
 ---
 title: Orders
+description: "Orders are created at the end of the Checkout process, just before the payment is confirmed. This page explains how to manage orders, including blueprints, statuses, and storage options."
 ---
 Orders are created at the end of the [Checkout](/frontend/checkout/introduction) process, just before the payment is confirmed.
 

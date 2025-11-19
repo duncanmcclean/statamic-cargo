@@ -1,5 +1,6 @@
 name: Bug report
 description: Fill out a bug report to help improve Cargo.
+labels: [bug]
 body:
   - type: textarea
     attributes:

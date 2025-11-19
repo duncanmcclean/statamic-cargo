@@ -1,5 +1,6 @@
 ---
 title: Customers
+description: Carts and Orders are associated with customers - representing the customer who purchased something from your store.
 ---
 
 Carts and orders are associated with customers - representing the customer who purchased something from your store.

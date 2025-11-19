@@ -1,7 +1,8 @@
 ---
 title: Custom checkout flow
+description: "Learn how to build a custom checkout flow using Cargo's Antlers tags and JSON API endpoints."
 ---
-We recommend splitting your checkout flow into multiple steps, to allow for totals to be recalculated when the customer's cart is updated.
+We recommend splitting your checkout flow into multiple steps to allow for totals to be recalculated when the customer's cart is updated.
 
 Most stores split their checkout flow into the following steps:
 * Customer information

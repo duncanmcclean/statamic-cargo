@@ -18,6 +18,8 @@ class MigrateProducts extends Command
 
     public function handle(): void
     {
+        Migrate::bindMissingFieldtypes();
+
         $collectionHandle = config('simple-commerce.content.products.collection');
 
         // Remove Simple Commerce's ensured fields from the product blueprint(s).
@@ -58,6 +60,8 @@ class MigrateProducts extends Command
                 }
 
                 $blueprint->save();
+
+                $this->components->info("Updated [$blueprint->handle] blueprint.");
             });
 
         // Update field handles in entries.
@@ -113,5 +117,7 @@ class MigrateProducts extends Command
                     }
                 });
             });
+
+        $this->components->info('Updated product entries');
     }
 }

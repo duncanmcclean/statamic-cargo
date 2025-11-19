@@ -37,6 +37,7 @@ class AugmentedCart extends AbstractAugmented
     {
         return [
             'id',
+            'site',
             'is_free',
             'customer',
             'discounts',
@@ -47,6 +48,11 @@ class AugmentedCart extends AbstractAugmented
             'has_physical_products',
             'has_digital_products',
         ];
+    }
+
+    public function customer()
+    {
+        return $this->data->customer()?->toAugmentedArray();
     }
 
     public function discounts()

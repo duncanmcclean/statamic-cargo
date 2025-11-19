@@ -1,5 +1,6 @@
 ---
 title: Orders Tag
+description: "The `{{ orders }}` tag allows you to loop through your orders on the frontend. Useful for display a customer's order history."
 ---
 
 The `{{ orders }}` tag allows you to loop through your orders on the frontend. Useful for display a customer's order history.

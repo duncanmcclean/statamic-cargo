@@ -2,7 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
-use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Support;
 use Statamic\Facades\Site;
 use Statamic\Fields\Fieldtype;
@@ -23,7 +22,7 @@ class Money extends Fieldtype
 
     public function icon()
     {
-        return Cargo::svg('money');
+        return Statamic::svg('icons/money-cash-bill');
     }
 
     public function preload()

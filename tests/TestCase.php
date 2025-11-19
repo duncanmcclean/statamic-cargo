@@ -7,6 +7,7 @@ use DuncanMcClean\Cargo\Payments\PaymentServiceProvider;
 use DuncanMcClean\Cargo\ServiceProvider;
 use DuncanMcClean\Cargo\Shipping\ShippingServiceProvider;
 use Illuminate\Support\Facades\Route;
+use ReflectionClass;
 use Statamic\Facades\Config;
 use Statamic\Facades\Site;
 use Statamic\Testing\AddonTestCase;
@@ -67,5 +68,17 @@ abstract class TestCase extends AddonTestCase
         Site::setSites($sites);
 
         Config::set('statamic.system.multisite', Site::hasMultiple());
+    }
+
+    protected function getEnvironmentSetUp($app)
+    {
+        parent::getEnvironmentSetUp($app);
+
+        $reflector = new ReflectionClass($this->addonServiceProvider);
+        $directory = dirname($reflector->getFileName());
+
+        $app['config']->set('statamic.cargo.carts.directory', $directory.'/../tests/__fixtures__/content/cargo/carts');
+        $app['config']->set('statamic.cargo.discounts.directory', $directory.'/../tests/__fixtures__/content/cargo/discounts');
+        $app['config']->set('statamic.cargo.orders.directory', $directory.'/../tests/__fixtures__/content/cargo/orders');
     }
 }

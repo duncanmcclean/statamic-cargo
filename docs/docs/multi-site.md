@@ -1,8 +1,9 @@
 ---
 title: Multi-site
+description: "Cargo supports Statamic's multi-site feature, enabling you to sell goods internationally in different currencies or use the same Statamic instance to power multiple brands."
 ---
 
-Cargo supports Statamic's [multi-site](https://statamic.dev/multi-site) feature, enabling you to sell goods internationally in different currencies, or use the same Statamic instance to power multiple brands.
+Cargo supports Statamic's [multi-site](https://statamic.dev/multi-site) feature, enabling you to sell goods internationally in different currencies or use the same Statamic instance to power multiple brands.
 
 Carts and Orders are separate for each site - and can be viewed separately in the Control Panel.
 

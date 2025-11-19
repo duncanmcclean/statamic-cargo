@@ -1,5 +1,6 @@
 ---
 title: Static Caching
+description: "Static Caching is a must-have for Statamic sites. This page explains how to configure static caching with Cargo, including dynamic content and cart/checkout pages."
 ---
 
 Static Caching is a must-have for Statamic sites. It helps to make your website blazing fast, which is important for e-commerce sites, where every second counts.
@@ -24,13 +25,13 @@ This could be a counter in your nav, or a dynamic section on a product page that
 ``` 
 ::tab blade
 ```blade
-<statamic:nocache>
+<statamic:nocache> {{-- [tl! add] --}}
 	@if(! Statamic::tag('cart:is_empty'))
 		<a href="/cart">
 			{{ count(Statamic::tag('cart:line_items')) }} items
 		</a>  
 	@endif
-</statamic:nocache>
+</statamic:nocache> {{-- [tl! add] --}}
 ``` 
 ::
 

@@ -49,6 +49,8 @@ class MigrateTaxes extends Command
         }
 
         if ($taxEngine === 'DuncanMcClean\SimpleCommerce\Tax\Standard\TaxEngine') {
+            Migrate::bindMissingFieldtypes();
+
             collect(File::allFiles(base_path('content/simple-commerce/tax-categories')))
                 ->filter(fn (SplFileInfo $file) => $file->getExtension() === 'yaml')
                 ->each(function (SplFileInfo $file) {
@@ -60,7 +62,7 @@ class MigrateTaxes extends Command
 
                     TaxClass::make()
                         ->handle($data['id'])
-                        ->set('title', $data['title'])
+                        ->set('title', $data['name'])
                         ->set('description', $data['description'] ?? '')
                         ->save();
 
@@ -94,7 +96,7 @@ class MigrateTaxes extends Command
 
                     TaxZone::make()
                         ->handle($data['id'])
-                        ->set('title', $data['title'])
+                        ->set('title', $data['name'])
                         ->set('type', $type)
                         ->set('countries', isset($data['country']) ? [$data['country']] : null)
                         ->set('states', isset($data['region']) ? [$data['region']] : null)
@@ -119,7 +121,7 @@ class MigrateTaxes extends Command
                 });
 
             $this->components->info('Migrated tax configuration.');
-            $this->components->warn('Cargo includes tax in prices by default. If you want to change this, please update the [statamic/cargo.php] config file.');
+            $this->components->warn('Cargo includes tax in prices by default. If you want to change this, please update the [config/statamic/cargo.php] config file.');
         }
     }
 }

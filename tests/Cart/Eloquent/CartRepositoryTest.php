@@ -76,8 +76,8 @@ class CartRepositoryTest extends TestCase
 
         $this->assertEquals($model->id, $cart->id());
         $this->assertEquals($model->site, $cart->site()->handle());
-        $this->assertEquals(json_decode($model->customer, true)['name'], $cart->customer->name());
-        $this->assertEquals(json_decode($model->customer, true)['email'], $cart->customer->email());
+        $this->assertEquals(json_decode($model->customer, true)['name'], $cart->customer()->name());
+        $this->assertEquals(json_decode($model->customer, true)['email'], $cart->customer()->email());
         $this->assertEquals($model->grand_total, $cart->grandTotal());
         $this->assertEquals($model->sub_total, $cart->subTotal());
         $this->assertEquals($model->discount_total, $cart->discountTotal());

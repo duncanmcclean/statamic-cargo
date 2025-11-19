@@ -60,10 +60,9 @@
 </template>
 
 <script>
-import { FieldtypeMixin } from 'statamic';
-import HasInputOptions from '@statamic/components/fieldtypes/HasInputOptions.js';
-import SortableList from '@statamic/components/sortable/SortableList.vue';
-import { Badge, Combobox } from '@statamic/ui';
+import { FieldtypeMixin } from '@statamic/cms';
+import { HasInputOptions, SortableList } from '@statamic/cms/temporary';
+import { Badge, Combobox } from '@statamic/cms/ui';
 
 export default {
     mixins: [FieldtypeMixin, HasInputOptions],

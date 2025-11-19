@@ -29,7 +29,7 @@ class CartController
 
         $cart = $this->handleCustomerInformation($request, $cart);
 
-        $cart->merge(Arr::except($validated, ['customer']));
+        $cart->merge(Arr::except($validated, ['first_name', 'last_name', 'email', 'customer']));
         $cart->save();
 
         if ($request->ajax() || $request->wantsJson()) {

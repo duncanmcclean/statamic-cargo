@@ -1,7 +1,6 @@
 <script setup>
-import { Fieldtype } from 'statamic';
-import SvgIcon from '../SvgIcon.vue';
-import { Heading, Description } from '@statamic/ui';
+import { Fieldtype } from '@statamic/cms';
+import { Heading, Description, Icon } from '@statamic/cms/ui';
 
 const emit = defineEmits(Fieldtype.emits);
 const props = defineProps(Fieldtype.props);
@@ -17,7 +16,7 @@ defineExpose(expose);
 
         <div v-else>
             <div class="flex items-center">
-                <SvgIcon v-if="value.logo" :name="value.logo" class="mr-4 h-8 w-8" />
+                <Icon v-if="value.logo" :name="value.logo" class="mr-4 h-8 w-8" />
 
                 <div class="flex flex-col space-y-1">
                     <Heading
@@ -28,13 +27,13 @@ defineExpose(expose);
                 </div>
             </div>
 
-            <hr v-if="value.details" class="my-4" />
+            <hr v-if="value.details" class="my-4 border-gray-300 dark:border-gray-700" />
 
             <div v-if="value.details">
                 <ul class="list-none space-y-2">
                     <li v-for="(value, label) in value.details" :key="label">
                         <Description>
-                            <strong>{{ label }}:</strong> {{ value }}
+                            <strong>{{ label }}:</strong> <span v-html="value" />
                         </Description>
                     </li>
                 </ul>

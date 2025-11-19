@@ -51,4 +51,9 @@ class Migrate extends Command
         $this->call('statamic:cargo:migrate:products');
         $this->newLine();
     }
+
+    public static function bindMissingFieldtypes(): void
+    {
+        app('statamic.fieldtypes')->put('tax_category', \Statamic\Fieldtypes\Text::class);
+    }
 }

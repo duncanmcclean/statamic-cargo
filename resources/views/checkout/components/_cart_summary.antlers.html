@@ -95,7 +95,12 @@
 
         {{ if {cart:has_physical_products} }}
             <div class="flex items-center justify-between">
-                <span>{{ 'Shipping' | trans }}</span>
+                <div class="flex items-center space-x-1">
+                    <span>{{ 'Shipping' | trans }}</span>
+                    <template x-if="cart.shipping_option">
+                        <span class="text-xs text-gray-500" x-text="`(${cart.shipping_option.name})`"></span>
+                    </template>
+                </div>
 
                 <template x-if="cart.shipping_option">
                     <span x-text="cart.shipping_option.price"></span>

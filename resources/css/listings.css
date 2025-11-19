@@ -2,8 +2,8 @@
   ========================================================================== */
 
 /* Basically .title-index-field without the min/max width */
-.order-number-index-field {
-    @apply line-clamp-2 flex items-center gap-2 text-sm font-medium hover:text-black dark:hover:text-white;
+.title-index-field {
+    @apply text-sm line-clamp-2 inline-flex items-center gap-2 hover:text-black dark:hover:text-white;
 }
 
 .discount-status-index-field {

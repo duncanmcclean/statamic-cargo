@@ -1,5 +1,6 @@
 ---
 title: Help
+description: "If you're having trouble with Cargo, please reach out for help. This page explains how to submit a bug report, feature request, or get general support."
 ---
 
 If you're having trouble with Cargo, please reach out for help.

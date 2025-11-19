@@ -1,5 +1,6 @@
 ---
 title: Shipping
+description: "Cargo allows you to define shipping methods and options, which can be selected by customers during checkout. This page explains how to create and configure shipping methods."
 ---
 
 When you're selling physical products, you need a way to ship those products out to your customers.

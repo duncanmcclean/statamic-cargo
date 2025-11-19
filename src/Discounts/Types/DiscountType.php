@@ -40,8 +40,8 @@ abstract class DiscountType
             }
         }
 
-        if ($this->discount->has('minimum_order_value') && $cart->itemsTotal()) {
-            if ($cart->itemsTotal() < $this->discount->get('minimum_order_value')) {
+        if ($this->discount->has('minimum_order_value') && $cart->subTotal()) {
+            if ($cart->subTotal() < $this->discount->get('minimum_order_value')) {
                 return false;
             }
         }

@@ -10,6 +10,7 @@ use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Support\Money;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Statamic\Contracts\Auth\User;
 use Stripe\Customer;
@@ -194,7 +195,7 @@ class Stripe extends PaymentGateway
 
     public function logo(): ?string
     {
-        return 'stripe';
+        return File::get(__DIR__.'/../../../resources/svg/stripe.svg');
     }
 
     public function fieldtypeDetails(Order $order): array

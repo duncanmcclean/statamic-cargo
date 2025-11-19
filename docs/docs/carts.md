@@ -1,10 +1,11 @@
 ---
 title: Carts
+description: "Cargo revolves around two main concepts: carts and orders. This page explains the differences between them, how to add products to a cart, and how to store carts."
 ---
 ## Overview
 Cargo revolves around two main concepts: carts and orders.
 
-**Carts** are created when customers add products to their, well, cart. They're essentially a collection of products the customer wishes to purchase. 
+**Carts** are created when customers add products to their, well, cart. They are essentially a collection of products the customer wishes to purchase. 
 
 **Orders** are then created when the customer completes the checkout process. They are visible in the Control Panel.
 

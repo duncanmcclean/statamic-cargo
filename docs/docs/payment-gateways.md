@@ -1,5 +1,6 @@
 ---
 title: Payment Gateways
+description: "Cargo supports multiple payment gateways, including Stripe, Mollie, and a Dummy gateway for testing. This page explains how to configure and use these gateways."
 ---
 
 ## Configuration

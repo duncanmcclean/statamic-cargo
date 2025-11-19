@@ -1,14 +1,8 @@
-@layer theme, base, components, utilities;
+@import "@statamic/cms/tailwind.css";
 
-@import 'tailwindcss/theme.css' layer(theme);
 @import './listings.css';
 @import "./product-variants.css";
 
 @source "../js";
 @source "../views";
-
-@theme {
-    --color-dark-150: #bbbdc0;
-}
-
-@custom-variant dark (&:where(.dark, .dark *));
+@source not "../views/checkout";

@@ -1,8 +1,9 @@
 ---
 title: Pre-built checkout flow
+description: "Cargo comes with a pre-built checkout flow, which you can publish and customise to suit your needs. This page explains how to install and use the pre-built checkout flow."
 ---
 ## Publishing
-You may have published the pre-built checkout flow during the install process, if so you can skip this step.
+You may have published the pre-built checkout flow during the install process, if so, you can skip this step.
 
 To publish the pre-built checkout flow into your project, run this command:
 
@@ -137,8 +138,8 @@ module.exports = {
 Finally, update the `checkout/layout.antlers.html` file to reference your own stylesheet:
 
 ```antlers
-{{ vite directory="checkout" src="resources/css/checkout.css" }} {{# [tl! remove] #}}
+{{ vite directory="checkout" hot="checkout" src="resources/css/checkout.css" }} {{# [tl! remove] #}}
 {{ vite src="resources/css/site.css" }} {{# [tl! add] #}}
 ```
 
-To stay organised, you may now delete the `public/checkout` directory.
+To stay organised, you may now delete the `public/checkout-build` directory.

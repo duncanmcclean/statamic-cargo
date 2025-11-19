@@ -90,7 +90,6 @@ class InstallCommand extends Command
                     ->when(strlen($value) > 0, fn ($currencies) => $currencies->filter(fn ($name) => Str::contains($name, $value, ignoreCase: true)))
                     ->when(strlen($value) === 0 && $site->attribute('currency'), fn ($currencies) => $currencies->sortBy(fn ($name, $code) => $code === $site->attribute('currency') ? 0 : 1))
                     ->all(),
-
             );
 
             return array_merge($site->rawConfig(), [
@@ -165,12 +164,15 @@ class InstallCommand extends Command
         File::ensureDirectoryExists(resource_path('views/emails'));
         File::put($mailableViewPath, File::get(__DIR__.'/stubs/install/order-confirmation.blade.php.stub'));
 
-        CodeInjection::injectImportsIntoAppServiceProvider([
-            'Illuminate\Support\Facades\Event',
-            'Illuminate\Support\Facades\Mail',
-            'App\Mail\OrderConfirmation',
-            'DuncanMcClean\Cargo\Events\OrderPaymentReceived',
-        ]);
+        CodeInjection::injectImports(
+            file: app_path('Providers/AppServiceProvider.php'),
+            imports: [
+                'Illuminate\Support\Facades\Event',
+                'Illuminate\Support\Facades\Mail',
+                'App\Mail\OrderConfirmation',
+                'DuncanMcClean\Cargo\Events\OrderPaymentReceived',
+            ],
+        );
 
         try {
             CodeInjection::injectIntoAppServiceProviderBoot($code = <<<'PHP'
@@ -241,10 +243,16 @@ PHP;
 
         $consoleRoutes .= <<<'PHP'
 
+
 Schedule::command('statamic:cargo:purge-abandoned-carts')->daily();
 PHP;
 
         File::put(base_path('routes/console.php'), $consoleRoutes);
+
+        CodeInjection::injectImports(
+            file: base_path('routes/console.php'),
+            imports: ['Illuminate\Support\Facades\Schedule'],
+        );
 
         $this->components->info('Command [cargo:purge-abandoned-carts] has been scheduled to run daily.');
 
@@ -253,7 +261,7 @@ PHP;
 
     private function createGeneralTaxClass(): self
     {
-        TaxClass::make()->handle('general')->set('name', __('General'))->save();
+        TaxClass::make()->handle('general')->set('title', __('General'))->save();
 
         return $this;
     }
