@@ -5,7 +5,6 @@ namespace DuncanMcClean\Cargo\Search;
 use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
 use DuncanMcClean\Cargo\Facades\Order;
 use Illuminate\Support\Collection;
-use Illuminate\Support\LazyCollection;
 use Statamic\Search\Searchables\Provider;
 
 class OrdersProvider extends Provider
@@ -19,7 +18,7 @@ class OrdersProvider extends Provider
         return Order::query()->whereIn('id', $keys)->get();
     }
 
-    public function provide(): LazyCollection
+    public function provide(): Collection
     {
         return Order::query()
             ->pluck('id')

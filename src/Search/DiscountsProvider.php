@@ -5,7 +5,6 @@ namespace DuncanMcClean\Cargo\Search;
 use DuncanMcClean\Cargo\Contracts\Discounts\Discount as DiscountContract;
 use DuncanMcClean\Cargo\Facades\Discount;
 use Illuminate\Support\Collection;
-use Illuminate\Support\LazyCollection;
 use Statamic\Search\Searchables\Provider;
 
 class DiscountsProvider extends Provider
@@ -19,7 +18,7 @@ class DiscountsProvider extends Provider
         return Discount::query()->whereIn('handle', $keys)->get();
     }
 
-    public function provide(): LazyCollection
+    public function provide(): Collection
     {
         return Discount::query()
             ->pluck('handle')
