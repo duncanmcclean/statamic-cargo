@@ -21,7 +21,9 @@ class DiscountProvider extends Provider
 
     public function provide(): LazyCollection
     {
-        return Discount::query()->lazy();
+        return Discount::query()
+            ->pluck('handle')
+            ->map(fn ($handle) => "discount::{$handle}");
     }
 
     public function contains($searchable): bool

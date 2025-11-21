@@ -21,7 +21,9 @@ class OrderProvider extends Provider
 
     public function provide(): LazyCollection
     {
-        return Order::query()->lazy();
+        return Order::query()
+            ->pluck('id')
+            ->map(fn ($id) => "order::{$id}");
     }
 
     public function contains($searchable): bool
