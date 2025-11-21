@@ -22,6 +22,7 @@ use Illuminate\Support\Carbon;
 use Statamic\Contracts\Data\Augmentable;
 use Statamic\Contracts\Data\Augmented;
 use Statamic\Contracts\Query\ContainsQueryableValues;
+use Statamic\Contracts\Search\Searchable as SearchableContract;
 use Statamic\Data\ContainsData;
 use Statamic\Data\ExistsAsFile;
 use Statamic\Data\HasAugmentedInstance;
@@ -32,12 +33,13 @@ use Statamic\Facades\Site;
 use Statamic\Facades\Stache;
 use Statamic\Facades\User;
 use Statamic\Fields\Blueprint as StatamicBlueprint;
+use Statamic\Search\Searchable;
 use Statamic\Support\Str;
 use Statamic\Support\Traits\FluentlyGetsAndSets;
 
-class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValues, Contract
+class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValues, Contract, SearchableContract
 {
-    use ContainsData, ExistsAsFile, FluentlyGetsAndSets, HasAddresses, HasAugmentedInstance, HasDirtyState, HasTotals, TracksQueriedColumns, TracksQueriedRelations;
+    use ContainsData, ExistsAsFile, FluentlyGetsAndSets, HasAddresses, HasAugmentedInstance, HasDirtyState, HasTotals, Searchable, TracksQueriedColumns, TracksQueriedRelations;
 
     protected $id;
     protected $orderNumber;
@@ -421,6 +423,11 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
     public function reference(): string
     {
         return "order::{$this->id()}";
+    }
+
+    public function getCpSearchResultBadge(): string
+    {
+        return __('Orders');
     }
 
     public function getQueryableValue(string $field)
