@@ -337,6 +337,9 @@ class ServiceProvider extends AddonServiceProvider
         OrderProvider::register();
         DiscountProvider::register();
 
+        Search::addCpSearchable(OrderProvider::class);
+        Search::addCpSearchable(DiscountProvider::class);
+
         Event::listen(OrderSaved::class, fn ($event) => Search::updateWithinIndexes($event->order));
         Event::listen(OrderDeleted::class, fn ($event) => Search::deleteFromIndexes($event->order));
 
