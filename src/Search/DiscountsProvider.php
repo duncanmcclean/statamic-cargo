@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
 use Statamic\Search\Searchables\Provider;
 
-class DiscountProvider extends Provider
+class DiscountsProvider extends Provider
 {
     protected static $handle = 'discounts';
 
