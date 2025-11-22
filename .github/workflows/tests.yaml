@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        php: [8.3, 8.4]
+        php: [8.3, 8.4, 8.5]
         laravel: [12.*]
         stability: [prefer-lowest, prefer-stable]
         os: [ubuntu-latest]
@@ -57,7 +57,7 @@ jobs:
 
       - name: Execute tests (Payments)
         run: vendor/bin/phpunit --group=payments
-        if: steps.should-run-payment-tests.outputs.result == 'true' && matrix.php == 8.4 && matrix.laravel == '12.*' && matrix.stability == 'prefer-stable'
+        if: steps.should-run-payment-tests.outputs.result == 'true' && matrix.php == 8.5 && matrix.laravel == '12.*' && matrix.stability == 'prefer-stable'
         env:
           STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
           STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
