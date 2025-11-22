@@ -32,9 +32,9 @@ defineExpose(expose);
                 </div>
             </div>
 
-            <hr v-if="value.details" class="my-4 border-gray-300 dark:border-gray-700" />
+            <hr v-if="value.details.length" class="my-4 border-gray-300 dark:border-gray-700" />
 
-            <div v-if="value.details">
+            <div v-if="value.details.length">
                 <ul class="list-none space-y-2">
                     <li v-for="(value, label) in value.details" :key="label">
                         <Description>
