@@ -1,9 +1,11 @@
 <script setup>
-import axios from 'axios';
 import { Fieldtype, requireElevatedSession } from '@statamic/cms';
 import { InlineEditForm } from '@statamic/cms/temporary';
 import { Dropdown, DropdownMenu, DropdownItem, Heading, Description, Badge, injectPublishContext } from '@statamic/cms/ui';
-import { computed, ref } from 'vue';
+import { getCurrentInstance, computed, ref } from 'vue';
+
+const instance = getCurrentInstance();
+const { $axios } = instance.appContext.config.globalProperties;
 
 const { values, parentContainer: initialParentContainer } = injectPublishContext();
 
@@ -51,7 +53,7 @@ function itemUpdated(responseData) {
 }
 
 function convertToUser() {
-    axios
+    $axios
         .post(props.meta.convertGuestToUserUrl, {
             email: props.value.email,
             order_id: values.value.id,
