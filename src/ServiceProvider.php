@@ -2,11 +2,17 @@
 
 namespace DuncanMcClean\Cargo;
 
+use DuncanMcClean\Cargo\Events\DiscountDeleted;
+use DuncanMcClean\Cargo\Events\DiscountSaved;
+use DuncanMcClean\Cargo\Events\OrderDeleted;
+use DuncanMcClean\Cargo\Events\OrderSaved;
 use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Facades\PaymentGateway;
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use DuncanMcClean\Cargo\Facades\TaxZone;
+use DuncanMcClean\Cargo\Search\DiscountsProvider;
+use DuncanMcClean\Cargo\Search\OrdersProvider;
 use DuncanMcClean\Cargo\Stache\Query\CartQueryBuilder;
 use DuncanMcClean\Cargo\Stache\Query\DiscountQueryBuilder;
 use DuncanMcClean\Cargo\Stache\Query\OrderQueryBuilder;
@@ -14,6 +20,7 @@ use DuncanMcClean\Cargo\Stache\Stores\CartsStore;
 use DuncanMcClean\Cargo\Stache\Stores\DiscountsStore;
 use DuncanMcClean\Cargo\Stache\Stores\OrdersStore;
 use Illuminate\Foundation\Console\AboutCommand;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Statamic\Console\Commands\Multisite as MultisiteCommand;
@@ -23,6 +30,7 @@ use Statamic\Facades\CP\Nav;
 use Statamic\Facades\File;
 use Statamic\Facades\Git;
 use Statamic\Facades\Permission;
+use Statamic\Facades\Search;
 use Statamic\Facades\User;
 use Statamic\Providers\AddonServiceProvider;
 use Statamic\Stache\Stache;
@@ -91,6 +99,7 @@ class ServiceProvider extends AddonServiceProvider
             ->bootRouteBindings()
             ->bootGit()
             ->registerBlueprintNamespace()
+            ->registerSearchables()
             ->addAboutCommandInfo()
             ->addMultisiteCommandHook();
     }
@@ -319,6 +328,23 @@ class ServiceProvider extends AddonServiceProvider
         if (! Blueprint::find('cargo::order')) {
             Blueprint::make('order')->setNamespace('cargo')->save();
         }
+
+        return $this;
+    }
+
+    protected function registerSearchables(): self
+    {
+        OrdersProvider::register();
+        DiscountsProvider::register();
+
+        Search::addCpSearchable(OrdersProvider::class);
+        Search::addCpSearchable(DiscountsProvider::class);
+
+        Event::listen(OrderSaved::class, fn ($event) => Search::updateWithinIndexes($event->order));
+        Event::listen(OrderDeleted::class, fn ($event) => Search::deleteFromIndexes($event->order));
+
+        Event::listen(DiscountSaved::class, fn ($event) => Search::updateWithinIndexes($event->discount));
+        Event::listen(DiscountDeleted::class, fn ($event) => Search::deleteFromIndexes($event->discount));
 
         return $this;
     }
