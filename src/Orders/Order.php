@@ -241,6 +241,33 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
         return Facades\PaymentGateway::find($this->get('payment_gateway'));
     }
 
+    public function timelineEvents()
+    {
+        $events = $this->get('timeline_events', []);
+
+        return collect($events)->map(fn (array $event) => TimelineEvent::make($event));
+    }
+
+    public function appendTimelineEvent(string|TimelineEventType $eventType, array $metadata = []): self
+    {
+        if (is_subclass_of($eventType, TimelineEventType::class)) {
+            $eventType = $eventType::handle();
+        }
+
+        $events = $this->get('timeline_events', []);
+
+        $events[] = [
+            'timestamp' => now()->timestamp,
+            'event' => $eventType,
+            'user' => auth()->check() ? auth()->id() : null,
+            'metadata' => $metadata,
+        ];
+
+        $this->set('timeline_events', $events);
+
+        return $this;
+    }
+
     public function site($site = null)
     {
         return $this

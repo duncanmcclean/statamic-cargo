@@ -24,7 +24,7 @@ use function Laravel\Prompts\progress;
 
 class MigrateOrders extends Command
 {
-    use \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsAddresses, \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsCustomData, \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsLineItems, \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsOrderDates, RunsInPlease;
+    use \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsAddresses, \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsCustomData, \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsLineItems, \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsOrderDates, \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsTimelineEvents, RunsInPlease;
 
     protected $signature = 'statamic:cargo:migrate:orders';
 
@@ -262,6 +262,7 @@ class MigrateOrders extends Command
                     ],
                 ] : null,
                 'discount_code' => $discount?->get('discount_code'),
+                'timeline_events' => $this->mapTimelineEvents($data),
             ]));
     }
 }

@@ -49,6 +49,10 @@ class ServiceProvider extends AddonServiceProvider
         Contracts\Orders\Order::class => Policies\OrderPolicy::class,
     ];
 
+    protected $subscribe = [
+        Listeners\RecordTimelineEvents::class,
+    ];
+
     public $singletons = [
         Contracts\Taxes\Driver::class => Taxes\DefaultTaxDriver::class,
     ];
