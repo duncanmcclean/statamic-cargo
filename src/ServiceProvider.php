@@ -245,7 +245,7 @@ class ServiceProvider extends AddonServiceProvider
     {
         Route::bind('discount', function ($handle, $route = null) {
             if (! $route || (! $this->isCpRoute($route) && ! $this->isFrontendBindingEnabled())) {
-                return false;
+                return $handle;
             }
 
             $field = $route->bindingFieldFor('discount') ?? 'handle';
@@ -257,7 +257,7 @@ class ServiceProvider extends AddonServiceProvider
 
         Route::bind('order', function ($id, $route = null) {
             if (! $route || (! $this->isCpRoute($route) && ! $this->isFrontendBindingEnabled())) {
-                return false;
+                return $handle;
             }
 
             $field = $route->bindingFieldFor('order') ?? 'id';
@@ -269,7 +269,7 @@ class ServiceProvider extends AddonServiceProvider
 
         Route::bind('tax-class', function ($handle, $route = null) {
             if (! $route || (! $this->isCpRoute($route) && ! $this->isFrontendBindingEnabled())) {
-                return false;
+                return $handle;
             }
 
             return TaxClass::find($handle);
@@ -277,7 +277,7 @@ class ServiceProvider extends AddonServiceProvider
 
         Route::bind('tax-zone', function ($handle, $route = null) {
             if (! $route || (! $this->isCpRoute($route) && ! $this->isFrontendBindingEnabled())) {
-                return false;
+                return $handle;
             }
 
             return TaxZone::find($handle);
