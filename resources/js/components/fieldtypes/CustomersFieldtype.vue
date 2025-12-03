@@ -1,9 +1,11 @@
 <script setup>
-import axios from 'axios';
 import { Fieldtype, requireElevatedSession } from '@statamic/cms';
 import { InlineEditForm } from '@statamic/cms/temporary';
-import { Dropdown, DropdownMenu, DropdownItem, Heading, Description, Badge, Tooltip, injectPublishContext } from '@statamic/cms/ui';
-import { computed, ref } from 'vue';
+import { Dropdown, DropdownMenu, DropdownItem, Heading, Description, Badge, injectPublishContext } from '@statamic/cms/ui';
+import { getCurrentInstance, computed, ref } from 'vue';
+
+const instance = getCurrentInstance();
+const { $axios } = instance.appContext.config.globalProperties;
 
 const { values, parentContainer: initialParentContainer } = injectPublishContext();
 
@@ -51,7 +53,7 @@ function itemUpdated(responseData) {
 }
 
 function convertToUser() {
-    axios
+    $axios
         .post(props.meta.convertGuestToUserUrl, {
             email: props.value.email,
             order_id: values.value.id,
@@ -73,11 +75,9 @@ function convertToUser() {
                 class="shadow-ui-sm related-item relative z-2 mb-1.5 flex h-full w-full items-center gap-2 rounded-lg border border-gray-200 bg-white px-1.5 py-1.5 text-base last:mb-0 dark:border-x-0 dark:border-t-0 dark:border-white/15 dark:bg-gray-900 dark:inset-shadow-2xs dark:inset-shadow-black"
             >
                 <div class="flex flex-1 items-center p-1">
-                    <Heading v-if="value.invalid">
-                        <Tooltip :text="__('An item with this ID could not be found')" :delay="1000">
-                            {{ value.id }}
-                            <Badge pill color="red" :text="__('Invalid')" />
-                        </Tooltip>
+                    <Heading v-if="value.invalid" v-tooltip="__('An item with this ID could not be found')">
+                        {{ value.id }}
+                        <Badge pill color="red" :text="__('Invalid')" />
                     </Heading>
 
                     <div v-else>
