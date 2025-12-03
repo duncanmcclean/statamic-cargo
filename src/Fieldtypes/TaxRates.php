@@ -29,7 +29,7 @@ class TaxRates extends GroupFieldtype
     public function preload()
     {
         return [
-            'fields' => $this->fields()->all(),
+            'fields' => $this->fields()->toPublishArray(),
             'meta' => $this->fields()->addValues($this->field->value() ?? $this->defaultGroupData())->meta()->toArray(),
         ];
     }
