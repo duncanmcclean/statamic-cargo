@@ -244,8 +244,8 @@ class ServiceProvider extends AddonServiceProvider
     protected function bootRouteBindings(): self
     {
         Route::bind('discount', function ($handle, $route = null) {
-            if (! $route || ! $this->isCpRoute($route)) {
-                return false;
+            if (! $route || (! $this->isCpRoute($route) && ! $this->isFrontendBindingEnabled())) {
+                return $handle;
             }
 
             $field = $route->bindingFieldFor('discount') ?? 'handle';
@@ -256,8 +256,8 @@ class ServiceProvider extends AddonServiceProvider
         });
 
         Route::bind('order', function ($id, $route = null) {
-            if (! $route || ! $this->isCpRoute($route)) {
-                return false;
+            if (! $route || (! $this->isCpRoute($route) && ! $this->isFrontendBindingEnabled())) {
+                return $handle;
             }
 
             $field = $route->bindingFieldFor('order') ?? 'id';
@@ -268,16 +268,16 @@ class ServiceProvider extends AddonServiceProvider
         });
 
         Route::bind('tax-class', function ($handle, $route = null) {
-            if (! $route || ! $this->isCpRoute($route)) {
-                return false;
+            if (! $route || (! $this->isCpRoute($route) && ! $this->isFrontendBindingEnabled())) {
+                return $handle;
             }
 
             return TaxClass::find($handle);
         });
 
         Route::bind('tax-zone', function ($handle, $route = null) {
-            if (! $route || ! $this->isCpRoute($route)) {
-                return false;
+            if (! $route || (! $this->isCpRoute($route) && ! $this->isFrontendBindingEnabled())) {
+                return $handle;
             }
 
             return TaxZone::find($handle);
@@ -286,7 +286,7 @@ class ServiceProvider extends AddonServiceProvider
         return $this;
     }
 
-    protected function isCpRoute(\Illuminate\Routing\Route $route)
+    private function isCpRoute(\Illuminate\Routing\Route $route): bool
     {
         $cp = \Statamic\Support\Str::ensureRight(config('statamic.cp.route'), '/');
 
@@ -295,6 +295,11 @@ class ServiceProvider extends AddonServiceProvider
         }
 
         return Str::startsWith($route->uri(), $cp);
+    }
+
+    private function isFrontendBindingEnabled(): bool
+    {
+        return config('statamic.routes.bindings', false);
     }
 
     protected function bootGit(): self
