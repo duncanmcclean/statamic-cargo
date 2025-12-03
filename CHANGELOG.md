@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.0.0-alpha.11 (2025-12-03)
+
+### What's new
+- Discounts & Orders can now be searched via the Command Palette! #27 by @duncanmcclean
+
+### What's improved
+- Dropped `axios` dependency #69 by @duncanmcclean
+- PHP 8.5 compatibility #68 by @duncanmcclean
+- Dropped support for Laravel 11 #67 by @duncanmcclean
+
+### What's fixed
+- Fixed tax rates fieldtype #72 by @duncanmcclean
+- Allow using route bindings on frontend #71 by @duncanmcclean
+- Payment & Shipping Details: Border shouldn't be visible unless there are details
+- Replaced usage of `Tooltip` component with `v-tooltip`
+- Fixed icon for action dropdown on the order details page
+
+
+
 ## v1.0.0-alpha.10 (2025-11-01)
 
 ### What's new
