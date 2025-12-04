@@ -210,7 +210,7 @@ class Stripe extends PaymentGateway
     {
         $chargeId = PaymentIntent::retrieve($order->get('stripe_payment_intent'))->latest_charge;
 
-        if (null === $chargeId) {
+        if ($chargeId === null) {
             return null;
         }
 
