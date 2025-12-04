@@ -158,6 +158,22 @@ class CartControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_throws_validation_error_when_customer_email_is_invalid()
+    {
+        $cart = $this->makeCart();
+        $cart->customer(null)->save();
+
+        $this
+            ->from('/cart')
+            ->patch('/!/cargo/cart', [
+                'customer' => ['email' => 'name@domain'],
+            ])
+            ->assertSessionHasErrors('customer.email');
+
+        $this->assertNull($cart->fresh()->customer());
+    }
+
+    #[Test]
     public function it_deletes_the_cart()
     {
         $cart = $this->makeCart();
