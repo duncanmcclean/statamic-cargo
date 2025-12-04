@@ -23,6 +23,7 @@ class ResetTotals
             $lineItem->unitPrice(0);
             $lineItem->taxTotal(0);
             $lineItem->subTotal(0);
+            $lineItem->discountTotal(0);
             $lineItem->total(0);
 
             $lineItem->remove('tax_breakdown');
