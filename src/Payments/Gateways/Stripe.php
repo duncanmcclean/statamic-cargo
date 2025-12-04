@@ -205,4 +205,15 @@ class Stripe extends PaymentGateway
             __('Amount') => Money::format($order->grandTotal(), $order->site()),
         ];
     }
+
+    public function charge(Order $order): ?Charge
+    {
+        $chargeId = PaymentIntent::retrieve($order->get('stripe_payment_intent'))->latest_charge;
+
+        if (null === $chargeId) {
+            return null;
+        }
+
+        return Charge::retrieve($chargeId);
+    }
 }
