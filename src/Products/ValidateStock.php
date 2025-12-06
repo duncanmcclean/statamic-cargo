@@ -1,20 +1,21 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Http\Controllers\Concerns;
+namespace DuncanMcClean\Cargo\Products;
 
-use DuncanMcClean\Cargo\Contracts\Cart\Cart;
-use DuncanMcClean\Cargo\Facades\Product;
+use DuncanMcClean\Cargo\Contracts\Products\Product;
 use DuncanMcClean\Cargo\Orders\LineItem;
-use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
-trait ValidatesStock
+class ValidateStock
 {
-    /** @deprecated */
-    protected function validateStock(Request $request, Cart $cart, ?LineItem $lineItem = null): void
-    {
-        $product = Product::find($request->product ?? $lineItem->product);
-        $quantity = (int) ($request->quantity ?? $lineItem?->quantity() ?? 1);
+    public static function validate(
+        ?LineItem $lineItem = null,
+        ?Product $product = null,
+        ?ProductVariant $variant = null,
+        ?int $quantity = null
+    ): void {
+        $product = $product ?? $lineItem?->product();
+        $quantity = (int) ($quantity ?? $lineItem?->quantity() ?? 1);
 
         if (
             $product->isStandardProduct()
@@ -27,7 +28,7 @@ trait ValidatesStock
         }
 
         if ($product->isVariantProduct()) {
-            $variant = $product->variant($request->variant ?? $lineItem->variant);
+            $variant = $variant ?? $lineItem?->variant();
 
             if ($variant->isStockEnabled() && $quantity > $variant->stock()) {
                 throw ValidationException::withMessages([

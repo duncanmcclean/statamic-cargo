@@ -13,9 +13,9 @@ use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Facades\PaymentGateway;
 use DuncanMcClean\Cargo\Facades\Product;
-use DuncanMcClean\Cargo\Http\Controllers\Concerns\ValidatesStock;
 use DuncanMcClean\Cargo\Orders\LineItem;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
+use DuncanMcClean\Cargo\Products\ValidateStock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
@@ -24,8 +24,6 @@ use Statamic\Sites\Site;
 
 class CheckoutController
 {
-    use ValidatesStock;
-
     public function __invoke(Request $request, ?string $paymentGateway = null)
     {
         $cart = Cart::current();
@@ -82,9 +80,9 @@ class CheckoutController
 
     private function ensureProductsAreAvailable(CartContract $cart, Request $request): void
     {
-        $cart->lineItems()->each(function (LineItem $lineItem) use ($request, $cart) {
+        $cart->lineItems()->each(function (LineItem $lineItem) {
             try {
-                $this->validateStock($request, $cart, $lineItem);
+                ValidateStock::validate($lineItem);
             } catch (ValidationException) {
                 throw new PreventCheckout(__('cargo::validation.products_no_longer_available'));
             }
