@@ -6,6 +6,7 @@ use Closure;
 use DuncanMcClean\Cargo\Contracts\Orders\QueryBuilder;
 use DuncanMcClean\Cargo\Query\Eloquent\QueriesCustomers;
 use Illuminate\Support\Collection;
+use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
 use Statamic\Query\EloquentQueryBuilder;
 
@@ -41,6 +42,12 @@ class OrderQueryBuilder extends EloquentQueryBuilder implements QueryBuilder
         $this->builder->whereHas('lineItems', $callback);
 
         return $this;
+    }
+
+    public function getByCustomer(): LazyCollection
+    {
+        // TODO
+        // customer-id => [order-a, order-b.... mapped to Order objects],
     }
 
     public function pluck($column, $key = null)

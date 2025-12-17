@@ -3,7 +3,6 @@ import { computed } from 'vue';
 import { DateFormatter } from '@statamic/cms';
 import {
 	Widget,
-	StatusIndicator,
 	Listing,
 	ListingTableHead as TableHead,
 	ListingTableBody as TableBody,
