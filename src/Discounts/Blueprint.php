@@ -8,6 +8,8 @@ use Statamic\Fields\Blueprint as FieldsBlueprint;
 
 class Blueprint
 {
+    //
+
     public function __invoke(): FieldsBlueprint
     {
         return \Statamic\Facades\Blueprint::make()->setContents([
