@@ -3,23 +3,16 @@
 namespace DuncanMcClean\Cargo\Http\Controllers\Payments;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart as CartContract;
-use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
 use DuncanMcClean\Cargo\Discounts\Actions\UpdateDiscounts;
-use DuncanMcClean\Cargo\Events\DiscountRedeemed;
-use DuncanMcClean\Cargo\Events\ProductNoStockRemaining;
-use DuncanMcClean\Cargo\Events\ProductStockLow;
 use DuncanMcClean\Cargo\Exceptions\PreventCheckout;
 use DuncanMcClean\Cargo\Facades\Cart;
-use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Facades\PaymentGateway;
-use DuncanMcClean\Cargo\Facades\Product;
 use DuncanMcClean\Cargo\Orders\LineItem;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Products\Actions\UpdateStock;
 use DuncanMcClean\Cargo\Products\Actions\ValidateStock;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Statamic\Exceptions\NotFoundHttpException;
 use Statamic\Sites\Site;
