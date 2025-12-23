@@ -27,11 +27,11 @@ class CartLineItemsController
         ]);
 
         app(AddToCart::class)->handle(
-            cart: $cart,
-            product: $product,
-            variant: $variant,
-            quantity: $request->quantity,
-            data: $data,
+            $cart,
+            $product,
+            $variant,
+            $request->quantity,
+            $data
         );
 
         // todo: consider refactoring into an action
