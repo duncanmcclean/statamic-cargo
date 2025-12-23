@@ -2,64 +2,39 @@
 
 namespace DuncanMcClean\Cargo\Http\Controllers;
 
+use DuncanMcClean\Cargo\Cart\Actions\AddToCart;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Product;
 use DuncanMcClean\Cargo\Http\Requests\Cart\AddLineItemRequest;
 use DuncanMcClean\Cargo\Http\Requests\Cart\UpdateLineItemRequest;
 use DuncanMcClean\Cargo\Http\Resources\API\CartResource;
-use DuncanMcClean\Cargo\Orders\LineItem;
+use DuncanMcClean\Cargo\Products\Actions\ValidateStock;
 use Illuminate\Http\Request;
 use Statamic\Exceptions\NotFoundHttpException;
 
 class CartLineItemsController
 {
-    use Concerns\HandlePrerequisiteProducts, Concerns\HandlesCustomerInformation, Concerns\ValidatesStock;
+    use Concerns\HandlesCustomerInformation;
 
     public function store(AddLineItemRequest $request)
     {
         $cart = Cart::current();
         $product = Product::find($request->product);
+        $variant = $request->variant ? $product->variant($request->variant) : null;
 
         $data = $request->collect()->except([
             '_token', '_method', '_redirect', '_error_redirect', 'product', 'variant', 'quantity', 'first_name', 'last_name', 'email', 'customer',
         ]);
 
-        $this->validateStock($request, $cart);
+        app(AddToCart::class)->handle(
+            $cart,
+            $product,
+            $variant,
+            $request->quantity,
+            $data
+        );
 
         $cart = $this->handleCustomerInformation($request, $cart);
-        $cart = $this->handlePrerequisiteProducts($request, $cart, $product);
-
-        $productIsAlreadyInCart = $cart->lineItems()
-            ->where('product', $product->id())
-            ->when($request->get('variant'), function ($collection) use ($request) {
-                return $collection->where('variant', $request->get('variant'));
-            })
-            ->when(config('statamic.cargo.carts.unique_metadata', false), function ($collection) use ($data) {
-                return $collection->filter(function (LineItem $lineItem) use ($data) {
-                    foreach ($data as $key => $value) {
-                        if ($lineItem->get($key) !== $value) {
-                            return false;
-                        }
-                    }
-                });
-            });
-
-        if ($productIsAlreadyInCart->count() > 0) {
-            $lineItem = $productIsAlreadyInCart->first();
-
-            $cart->lineItems()->update(
-                id: $lineItem->id(),
-                data: $lineItem->data()->merge($data)->merge([
-                    'quantity' => (int) $lineItem->quantity() + ($request->quantity ?? 1),
-                ])->all()
-            );
-        } else {
-            $cart->lineItems()->create($data->merge([
-                'product' => $request->product,
-                'variant' => $request->variant,
-                'quantity' => $request->quantity ?? 1,
-            ])->all());
-        }
 
         $cart->save();
 
@@ -81,7 +56,17 @@ class CartLineItemsController
             '_token', '_method', '_redirect', '_error_redirect', 'product', 'variant', 'quantity', 'first_name', 'last_name'.'email', 'customer',
         ]);
 
-        $this->validateStock($request, $cart, $lineItem);
+        $variant = $lineItem->variant();
+
+        if ($request->variant) {
+            $variant = $lineItem->product()->variant($request->variant);
+        }
+
+        app(ValidateStock::class)->handle(
+            lineItem: $lineItem,
+            variant: $variant,
+            quantity: $request->quantity ?? $lineItem->quantity,
+        );
 
         $cart->lineItems()->update(
             id: $lineItem->id(),
