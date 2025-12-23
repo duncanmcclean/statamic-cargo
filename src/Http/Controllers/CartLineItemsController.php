@@ -34,7 +34,6 @@ class CartLineItemsController
             $data
         );
 
-        // todo: consider refactoring into an action
         $cart = $this->handleCustomerInformation($request, $cart);
 
         $cart->save();
