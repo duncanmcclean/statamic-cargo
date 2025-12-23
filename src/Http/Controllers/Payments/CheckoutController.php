@@ -82,7 +82,7 @@ class CheckoutController
     {
         $cart->lineItems()->each(function (LineItem $lineItem) {
             try {
-                ValidateStock::validate($lineItem);
+                app(ValidateStock::class)->handle($lineItem);
             } catch (ValidationException) {
                 throw new PreventCheckout(__('cargo::validation.products_no_longer_available'));
             }

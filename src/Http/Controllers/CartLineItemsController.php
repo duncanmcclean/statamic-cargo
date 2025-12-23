@@ -63,7 +63,7 @@ class CartLineItemsController
             $variant = $lineItem->product()->variant($request->variant);
         }
 
-        ValidateStock::validate(
+        app(ValidateStock::class)->handle(
             lineItem: $lineItem,
             variant: $variant,
             quantity: $request->quantity ?? $lineItem->quantity,
