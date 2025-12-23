@@ -1,6 +1,6 @@
 <script setup>
 import { Icon, EmptyStateMenu, EmptyStateItem, DocsCallout } from '@statamic/cms/ui';
-import { useArchitecturalBackground } from '@statamic/cms/interia';
+import { useArchitecturalBackground } from '@statamic/cms/inertia';
 
 useArchitecturalBackground();
 
