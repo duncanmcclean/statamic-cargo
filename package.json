@@ -1,7 +1,7 @@
 {
     "type": "module",
     "scripts": {
-        "dev": "vite build --watch",
+        "dev": "rm -rf resources/dist/build && vite",
         "build": "vite build",
         "checkout-dev": "vite -c vite-checkout.config.js",
         "checkout-build": "vite build -c vite-checkout.config.js"
