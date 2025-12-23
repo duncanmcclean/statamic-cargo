@@ -1,7 +1,5 @@
 # Changelog
 
-
-
 ## v1.0.0-alpha.11 (2025-12-03)
 
 ### What's new
