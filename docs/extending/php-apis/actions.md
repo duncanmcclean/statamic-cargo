@@ -2,9 +2,9 @@
 title: Actions
 ---
 
-Cargo ships with various PHP actions, allowing you to do things like add products to the cart outside of the traditional cart tag context (eg. via Livewire).
+Cargo provides PHP actions for performing cart operations outside of Antlers tags - useful when working with Livewire components, custom controllers, or event listeners.
 
-This page documents the available actions and the parameters they accept.
+This page documents the available actions along with their parameters.
 
 ## AddToCart
 
