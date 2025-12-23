@@ -28,6 +28,11 @@ abstract class TestCase extends AddonTestCase
                 'attributes' => ['currency' => 'GBP'],
             ],
         ])->save();
+
+        // We need to do this until https://github.com/statamic/cms/pull/13396
+        // has been merged and tagged.
+        \Statamic\Facades\CP\Nav::shouldReceive('clearCachedUrls')->zeroOrMoreTimes();
+        $this->addToAssertionCount(-1); // Dont want to assert this
     }
 
     protected function resolveApplicationConfiguration($app)
