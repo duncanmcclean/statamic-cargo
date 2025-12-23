@@ -1,15 +1,22 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Listeners;
+namespace DuncanMcClean\Cargo\Subscribers;
 
 use DuncanMcClean\Cargo\Events\OrderCreated;
 use DuncanMcClean\Cargo\Events\OrderRefunded;
 use DuncanMcClean\Cargo\Events\OrderSaved;
 use DuncanMcClean\Cargo\Orders\TimelineEventTypes\OrderStatusChanged;
 use Illuminate\Support\Arr;
+use Statamic\Events\Subscriber;
 
-class RecordTimelineEvents
+class RecordTimelineEvents extends Subscriber
 {
+    protected $listeners = [
+        OrderCreated::class => 'handleOrderCreated',
+        OrderSaved::class => 'handleOrderSaved',
+        OrderRefunded::class => 'handleOrderRefunded',
+    ];
+
     public function handleOrderCreated(OrderCreated $event): void
     {
         $event->order->appendTimelineEvent('order_created');
@@ -42,14 +49,5 @@ class RecordTimelineEvents
         $event->order->appendTimelineEvent('order_refunded', [
             'amount' => $event->refundAmount,
         ]);
-    }
-
-    public function subscribe($events): array
-    {
-        return [
-            OrderCreated::class => 'handleOrderCreated',
-            OrderSaved::class => 'handleOrderSaved',
-            OrderRefunded::class => 'handleOrderRefunded',
-        ];
     }
 }

@@ -15,8 +15,8 @@ trait MapsTimelineEvents
             return [];
         }
 
-        $timelineEvents = collect($statusLog)->map(function ($log) {
-            $timestamp = $this->parseStatusLogTimestamp($log->timestamp ?? $log['timestamp'] ?? null);
+        return collect($statusLog)->map(function ($log) {
+            $timestamp = $log->timestamp ?? $log['timestamp'];
             $status = $log->status ?? $log['status'] ?? null;
 
             if (! $timestamp || ! $status) {
@@ -29,31 +29,11 @@ trait MapsTimelineEvents
                 'timestamp' => $timestamp,
                 'event' => 'order_status_changed',
                 'metadata' => [
+                    // todo: original status?
                     'new' => $mappedStatus,
                 ],
             ];
         })->filter()->values()->all();
-
-        return $timelineEvents;
-    }
-
-    private function parseStatusLogTimestamp(mixed $timestamp): ?int
-    {
-        if (! $timestamp) {
-            return null;
-        }
-
-        try {
-            // If it's already a timestamp, return it
-            if (is_numeric($timestamp)) {
-                return (int) $timestamp;
-            }
-
-            // Parse the datetime string and convert to timestamp
-            return Carbon::parse($timestamp)->timestamp;
-        } catch (\Exception $e) {
-            return null;
-        }
     }
 
     private function mapStatusLogStatus(string $status): string

@@ -19,6 +19,8 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Statamic\Contracts\Data\Augmentable;
 use Statamic\Contracts\Data\Augmented;
 use Statamic\Contracts\Query\ContainsQueryableValues;
@@ -243,11 +245,10 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
         return Facades\PaymentGateway::find($this->get('payment_gateway'));
     }
 
-    public function timelineEvents()
+    public function timelineEvents(): Collection
     {
-        $events = $this->get('timeline_events', []);
-
-        return collect($events)->map(fn (array $event) => TimelineEvent::make($event));
+        return collect($this->get('timeline_events', []))
+            ->map(fn (array $event) => TimelineEvent::make($event));
     }
 
     public function appendTimelineEvent(string|TimelineEventType $eventType, array $metadata = []): self
@@ -260,8 +261,8 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
 
         $events[] = [
             'timestamp' => now()->timestamp,
-            'event' => $eventType,
-            'user' => auth()->check() ? auth()->id() : null,
+            'event' => $eventType, // todo: call this 'type'
+            'user' => Auth::id(),
             'metadata' => $metadata,
         ];
 

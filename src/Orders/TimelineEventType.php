@@ -6,14 +6,8 @@ use Illuminate\Support\Str;
 
 abstract class TimelineEventType
 {
-    protected TimelineEvent $event;
-
-    protected Order $order;
-
-    public function __construct(TimelineEvent $event, Order $order)
+    public function __construct(protected TimelineEvent $event, protected Order $order)
     {
-        $this->event = $event;
-        $this->order = $order;
     }
 
     public static function make(TimelineEvent $event, Order $order): static
