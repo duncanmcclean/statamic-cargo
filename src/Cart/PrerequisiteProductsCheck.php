@@ -8,12 +8,10 @@ use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Contracts\Products\Product;
 use Illuminate\Validation\ValidationException;
 
-class HandlePrerequisiteProducts
+class PrerequisiteProductsCheck
 {
-    public static function handle(
-        Cart $cart,
-        Product $product
-    ): void {
+    public function handle(Cart $cart, Product $product): void
+    {
         if ($prerequisiteProduct = $product->prerequisite_product) {
             if (! $cart->customer() || $cart->customer() instanceof GuestCustomer) {
                 throw ValidationException::withMessages([

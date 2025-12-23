@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 
 class AddToCart
 {
-    public static function add(
+    public function handle(
         Cart $cart,
         Product $product,
         ?ProductVariant $variant = null,
@@ -22,11 +22,15 @@ class AddToCart
             $data = collect();
         }
 
-        ValidateStock::validate(product: $product, variant: $variant, quantity: $quantity);
+        app(ValidateStock::class)->handle(
+            product: $product,
+            variant: $variant,
+            quantity: $quantity
+        );
 
-        HandlePrerequisiteProducts::handle($cart, $product);
+        app(PrerequisiteProductsCheck::class)->handle($cart, $product);
 
-        $productAlreadyInCart = self::isProductAlreadyInCart($cart, $product, $variant, $data);
+        $productAlreadyInCart = $this->isProductAlreadyInCart($cart, $product, $variant, $data);
 
         if ($productAlreadyInCart->count() > 0) {
             $lineItem = $productAlreadyInCart->first();
@@ -46,7 +50,7 @@ class AddToCart
         }
     }
 
-    private static function isProductAlreadyInCart(Cart $cart, Product $product, ?ProductVariant $variant, Collection $data): Collection
+    private function isProductAlreadyInCart(Cart $cart, Product $product, ?ProductVariant $variant, Collection $data): Collection
     {
         return $cart->lineItems()
             ->where('product', $product->id())

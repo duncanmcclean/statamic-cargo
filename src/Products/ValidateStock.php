@@ -8,7 +8,7 @@ use Illuminate\Validation\ValidationException;
 
 class ValidateStock
 {
-    public static function validate(
+    public function handle(
         ?LineItem $lineItem = null,
         ?Product $product = null,
         ?ProductVariant $variant = null,

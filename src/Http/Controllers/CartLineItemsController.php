@@ -26,7 +26,7 @@ class CartLineItemsController
             '_token', '_method', '_redirect', '_error_redirect', 'product', 'variant', 'quantity', 'first_name', 'last_name', 'email', 'customer',
         ]);
 
-        AddToCart::add(
+        app(AddToCart::class)->handle(
             cart: $cart,
             product: $product,
             variant: $variant,
