@@ -17,7 +17,6 @@ use DuncanMcClean\Cargo\Shipping\ShippingMethod;
 use DuncanMcClean\Cargo\Shipping\ShippingOption;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -36,6 +35,7 @@ use Statamic\Facades\Stache;
 use Statamic\Facades\User;
 use Statamic\Fields\Blueprint as StatamicBlueprint;
 use Statamic\Search\Searchable;
+use Statamic\Support\Arr;
 use Statamic\Support\Str;
 use Statamic\Support\Traits\FluentlyGetsAndSets;
 
@@ -259,12 +259,12 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
 
         $events = $this->get('timeline_events', []);
 
-        $events[] = [
+        $events[] = Arr::removeNullValues([
             'timestamp' => now()->timestamp,
             'event' => $eventType, // todo: call this 'type'
             'user' => Auth::id(),
             'metadata' => $metadata,
-        ];
+        ]);
 
         $this->set('timeline_events', $events);
 
