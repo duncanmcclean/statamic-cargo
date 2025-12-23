@@ -9,13 +9,8 @@ class OrderRefunded extends TimelineEventType
     public function message(): string
     {
         $amount = $this->event->metadata('amount');
+        $formattedAmount = number_format($amount / 100, 2);
 
-        if ($amount) {
-            $formattedAmount = number_format($amount / 100, 2);
-
-            return "Order was refunded for {$formattedAmount}";
-        }
-
-        return 'Order was refunded';
+        return __('cargo::messages.timeline_events.order_refunded', ['amount' => $formattedAmount]);
     }
 }

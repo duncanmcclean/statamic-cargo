@@ -12,19 +12,17 @@ class OrderStatusChanged extends TimelineEventType
         $newStatus = $this->event->metadata('new');
         $originalStatus = $this->event->metadata('original');
 
-        if ($newStatus && $originalStatus) {
-            $newStatusLabel = OrderStatus::label(OrderStatus::from($newStatus));
+        $newStatusLabel = OrderStatus::label(OrderStatus::from($newStatus));
+
+        if ($originalStatus) {
             $originalStatusLabel = OrderStatus::label(OrderStatus::from($originalStatus));
 
-            return "Order status changed from {$originalStatusLabel} to {$newStatusLabel}";
+            return __('cargo::messages.timeline_events.order_status_changed_from_to', [
+                'original' => $originalStatusLabel,
+                'new' => $newStatusLabel,
+            ]);
         }
 
-        if ($newStatus) {
-            $newStatusLabel = OrderStatus::label(OrderStatus::from($newStatus));
-
-            return "Order status changed to {$newStatusLabel}";
-        }
-
-        return 'Order status changed';
+        return __('cargo::messages.timeline_events.order_status_changed_to', ['status' => $newStatusLabel]);
     }
 }

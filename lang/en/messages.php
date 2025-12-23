@@ -24,4 +24,11 @@ return [
     'tax_zones_intro' => 'Tax Rates allow you to define the tax rates for each tax class, with different rates per country, state or postal code.',
     'tax_zones_rates_instructions' => 'Define the tax rates available for this zone, per tax class.',
     'tax_zones_type_instructions' => 'Where should this tax zone apply?',
+    'timeline_events' => [
+        'order_created' => 'Order was created',
+        'order_updated' => 'Order was updated',
+        'order_refunded' => 'Order was refunded for :amount',
+        'order_status_changed_to' => 'Order status changed to :status',
+        'order_status_changed_from_to' => 'Order status changed from :original to :new',
+    ],
 ];

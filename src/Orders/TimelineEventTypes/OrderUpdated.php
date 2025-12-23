@@ -8,6 +8,6 @@ class OrderUpdated extends TimelineEventType
 {
     public function message(): string
     {
-        return 'Order was updated';
+        return __('cargo::messages.timeline_events.order_updated');
     }
 }

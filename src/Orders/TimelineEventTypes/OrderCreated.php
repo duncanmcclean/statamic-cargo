@@ -8,6 +8,6 @@ class OrderCreated extends TimelineEventType
 {
     public function message(): string
     {
-        return 'Order was created';
+        return __('cargo::messages.timeline_events.order_created');
     }
 }
