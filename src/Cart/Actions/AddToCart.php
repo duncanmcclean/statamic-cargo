@@ -1,12 +1,12 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Cart;
+namespace DuncanMcClean\Cargo\Cart\Actions;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Products\Product;
 use DuncanMcClean\Cargo\Orders\LineItem;
+use DuncanMcClean\Cargo\Products\Actions\ValidateStock;
 use DuncanMcClean\Cargo\Products\ProductVariant;
-use DuncanMcClean\Cargo\Products\ValidateStock;
 use Illuminate\Support\Collection;
 
 class AddToCart

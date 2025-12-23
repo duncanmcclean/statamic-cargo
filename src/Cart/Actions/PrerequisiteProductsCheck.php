@@ -1,11 +1,11 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Cart;
+namespace DuncanMcClean\Cargo\Cart\Actions;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
+use DuncanMcClean\Cargo\Contracts\Products\Product;
 use DuncanMcClean\Cargo\Customers\GuestCustomer;
 use DuncanMcClean\Cargo\Facades\Order;
-use DuncanMcClean\Cargo\Contracts\Products\Product;
 use Illuminate\Validation\ValidationException;
 
 class PrerequisiteProductsCheck

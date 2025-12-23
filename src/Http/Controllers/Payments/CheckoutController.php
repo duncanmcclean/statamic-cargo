@@ -15,7 +15,7 @@ use DuncanMcClean\Cargo\Facades\PaymentGateway;
 use DuncanMcClean\Cargo\Facades\Product;
 use DuncanMcClean\Cargo\Orders\LineItem;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
-use DuncanMcClean\Cargo\Products\ValidateStock;
+use DuncanMcClean\Cargo\Products\Actions\ValidateStock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;

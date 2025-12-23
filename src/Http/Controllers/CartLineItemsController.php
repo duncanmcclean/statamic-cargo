@@ -2,13 +2,13 @@
 
 namespace DuncanMcClean\Cargo\Http\Controllers;
 
-use DuncanMcClean\Cargo\Cart\AddToCart;
+use DuncanMcClean\Cargo\Cart\Actions\AddToCart;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Product;
 use DuncanMcClean\Cargo\Http\Requests\Cart\AddLineItemRequest;
 use DuncanMcClean\Cargo\Http\Requests\Cart\UpdateLineItemRequest;
 use DuncanMcClean\Cargo\Http\Resources\API\CartResource;
-use DuncanMcClean\Cargo\Products\ValidateStock;
+use DuncanMcClean\Cargo\Products\Actions\ValidateStock;
 use Illuminate\Http\Request;
 use Statamic\Exceptions\NotFoundHttpException;
 

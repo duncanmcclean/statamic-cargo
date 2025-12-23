@@ -1,9 +1,10 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Products;
+namespace DuncanMcClean\Cargo\Products\Actions;
 
 use DuncanMcClean\Cargo\Contracts\Products\Product;
 use DuncanMcClean\Cargo\Orders\LineItem;
+use DuncanMcClean\Cargo\Products\ProductVariant;
 use Illuminate\Validation\ValidationException;
 
 class ValidateStock
