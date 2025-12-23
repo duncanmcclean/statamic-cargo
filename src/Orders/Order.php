@@ -261,7 +261,7 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
 
         $events[] = Arr::removeNullValues([
             'timestamp' => now()->timestamp,
-            'event' => $eventType, // todo: call this 'type'
+            'type' => $eventType,
             'user' => Auth::id(),
             'metadata' => $metadata,
         ]);

@@ -124,7 +124,7 @@ class TimelineEventsTest extends TestCase
 
         $this->assertEquals([
             'timestamp' => Carbon::parse('2025-01-15 12:00:00')->timestamp,
-            'event' => 'order_created',
+            'type' => 'order_created',
             'user' => 'test-user',
             'metadata' => [
                 'foo' => 'bar',

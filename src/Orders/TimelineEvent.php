@@ -4,52 +4,39 @@ namespace DuncanMcClean\Cargo\Orders;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Carbon;
+use Statamic\Contracts\Auth\User as UserContract;
 use Statamic\Facades\User;
 
 class TimelineEvent implements Arrayable
 {
-    protected int $timestamp;
-
-    protected string $event;
-
-    protected ?string $user = null;
-
-    protected array $metadata = [];
-
-    public function __construct(array $data)
-    {
-        $this->timestamp = $data['timestamp'];
-        $this->event = $data['event'];
-        $this->user = $data['user'] ?? null;
-        $this->metadata = $data['metadata'] ?? [];
-    }
+    public function __construct(
+        protected int $timestamp,
+        protected string $type,
+        protected $user,
+        protected array $metadata = []
+    ) {}
 
     public static function make(array $data): self
     {
-        return new static($data);
+        return new static(
+            timestamp: $data['timestamp'],
+            type: $data['type'],
+            user: $data['user'],
+            metadata: $data['metadata']
+        );
     }
 
-    public function timestamp(): int
-    {
-        return $this->timestamp;
-    }
-
-    public function date(): Carbon
+    public function timestamp(): Carbon
     {
         return Carbon::createFromTimestamp($this->timestamp);
     }
 
-    public function event(): string
+    public function type(): string
     {
-        return $this->event;
+        return $this->type;
     }
 
-    public function user(): ?string
-    {
-        return $this->user;
-    }
-
-    public function userObject()
+    public function user(): ?UserContract
     {
         if (! $this->user) {
             return null;
@@ -60,8 +47,8 @@ class TimelineEvent implements Arrayable
 
     public function metadata(?string $key = null)
     {
-        if ($key === null) {
-            return $this->metadata;
+        if (func_num_args() === 0) {
+            return collect($this->metadata);
         }
 
         return $this->metadata[$key] ?? null;
@@ -69,19 +56,11 @@ class TimelineEvent implements Arrayable
 
     public function toArray(): array
     {
-        $data = [
+        return [
             'timestamp' => $this->timestamp,
-            'event' => $this->event,
+            'type' => $this->type,
+            'user' => $this->user,
+            'metadata' => $this->metadata,
         ];
-
-        if ($this->user) {
-            $data['user'] = $this->user;
-        }
-
-        if (! empty($this->metadata)) {
-            $data['metadata'] = $this->metadata;
-        }
-
-        return $data;
     }
 }

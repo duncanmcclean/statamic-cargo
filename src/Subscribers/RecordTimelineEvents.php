@@ -27,19 +27,17 @@ class RecordTimelineEvents extends Subscriber
         $original = $event->order->getOriginal();
         $current = $event->order->getCurrentDirtyStateAttributes();
 
-        // Don't record updates if this is a new order (OrderCreated handles that)
-        if (empty($original)) {
-            return;
+        if (
+            ($originalStatus = Arr::pull($original, 'status'))
+            !== ($newStatus = Arr::get($current, 'status'))
+        ) {
+            $event->order->appendTimelineEvent(OrderStatusChanged::class, [
+                'original' => $originalStatus,
+                'new' => $newStatus,
+            ]);
         }
 
-        // Check if status has changed
-        if (Arr::get($original, 'status') !== Arr::get($current, 'status')) {
-            $event->order->appendTimelineEvent(OrderStatusChanged::class, [
-                'original' => Arr::get($original, 'status'),
-                'new' => Arr::get($current, 'status'),
-            ]);
-        } else {
-            // If status hasn't changed, it's just a general update
+        if (! empty($original)) {
             $event->order->appendTimelineEvent('order_updated');
         }
     }
@@ -47,7 +45,7 @@ class RecordTimelineEvents extends Subscriber
     public function handleOrderRefunded(OrderRefunded $event): void
     {
         $event->order->appendTimelineEvent('order_refunded', [
-            'amount' => $event->refundAmount,
+            'amount' => $event->amount,
         ]);
     }
 }

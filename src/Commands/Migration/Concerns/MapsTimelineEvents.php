@@ -15,25 +15,36 @@ trait MapsTimelineEvents
             return [];
         }
 
-        return collect($statusLog)->map(function ($log) {
-            $timestamp = $log->timestamp ?? $log['timestamp'];
-            $status = $log->status ?? $log['status'] ?? null;
+        $previousStatus = null;
 
-            if (! $timestamp || ! $status) {
-                return null;
-            }
+        return collect($statusLog)
+            ->map(function ($log) use (&$previousStatus): ?array {
+                $timestamp = $log->timestamp ?? $log['timestamp'];
+                $status = $log->status ?? $log['status'] ?? null;
 
-            $mappedStatus = $this->mapStatusLogStatus($status);
+                if (! $timestamp || ! $status) {
+                    return null;
+                }
 
-            return [
-                'timestamp' => $timestamp,
-                'event' => 'order_status_changed',
-                'metadata' => [
-                    // todo: original status?
-                    'new' => $mappedStatus,
-                ],
-            ];
-        })->filter()->values()->all();
+                $mappedStatus = $this->mapStatusLogStatus($status);
+
+                $event = [
+                    'timestamp' => $timestamp,
+                    'type' => 'order_status_changed',
+                    'metadata' => ['new' => $mappedStatus],
+                ];
+
+                if ($previousStatus !== null) {
+                    $event['metadata']['original'] = $previousStatus;
+                }
+
+                $previousStatus = $mappedStatus;
+
+                return $event;
+            })
+            ->filter()
+            ->values()
+            ->all();
     }
 
     private function mapStatusLogStatus(string $status): string
