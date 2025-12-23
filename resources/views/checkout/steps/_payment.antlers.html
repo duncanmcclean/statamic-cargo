@@ -54,6 +54,11 @@
                     this.fetchPaymentGateways();
 
                     this.selectedPaymentGateway = this.cart.payment_gateway;
+
+                    this.$watch('cart.grand_total', () => {
+                        this.isFetchingPaymentGateways = true;
+                        this.fetchPaymentGateways();
+                    });
                 },
 
                 fetchPaymentGateways() {
