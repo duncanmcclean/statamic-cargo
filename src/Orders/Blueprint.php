@@ -40,6 +40,15 @@ class Blueprint
                                 ],
                             ],
                         ],
+                        [
+                            'display' => __('Timeline'),
+                            'fields' => [
+                                [
+                                    'handle' => 'timeline',
+                                    'field' => ['type' => 'order_timeline', 'hide_display' => true, 'listable' => false],
+                                ],
+                            ],
+                        ],
                     ],
                 ],
                 'shipping' => [
