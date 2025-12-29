@@ -9,40 +9,32 @@ trait MapsTimelineEvents
 {
     private function mapTimelineEvents(Collection $data): array
     {
-        $statusLog = $data->get('status_log', []);
-
-        if (empty($statusLog)) {
-            return [];
-        }
-
         $previousStatus = null;
 
-        return collect($statusLog)
-            ->map(function ($log) use (&$previousStatus): ?array {
-                $timestamp = $log->timestamp ?? $log['timestamp'];
-                $status = $log->status ?? $log['status'] ?? null;
-
-                if (! $timestamp || ! $status) {
-                    return null;
-                }
+        return collect($data->get('status_log'))
+            ->map(function (array $statusLogEvent) use (&$previousStatus): ?array {
+                $status = $statusLogEvent['status'];
+                $timestamp = Carbon::parse($statusLogEvent['timestamp'])->timestamp;
 
                 $mappedStatus = $this->mapStatusLogStatus($status);
-
-                $event = [
-                    'timestamp' => $timestamp,
-                    'type' => 'order_status_changed',
-                    'metadata' => ['new' => $mappedStatus],
-                ];
-
-                if ($previousStatus !== null) {
-                    $event['metadata']['original'] = $previousStatus;
-                }
-
                 $previousStatus = $mappedStatus;
 
-                return $event;
+                if ($status === 'placed') {
+                    return [
+                        'timestamp' => $timestamp,
+                        'type' => 'order_created',
+                    ];
+                }
+
+                return [
+                    'timestamp' => $timestamp,
+                    'type' => 'order_status_changed',
+                    'metadata' => array_filter([
+                        'original' => $previousStatus,
+                        'new' => $status,
+                    ]),
+                ];
             })
-            ->filter()
             ->values()
             ->all();
     }
