@@ -248,8 +248,7 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
 
     public function timelineEvents(): Collection
     {
-        return collect($this->get('timeline_events', []))
-            ->map(fn (array $event) => TimelineEvent::make($event));
+        return collect($this->get('timeline_events'))->map(fn (array $event) => TimelineEvent::make($event));
     }
 
     public function appendTimelineEvent(string|TimelineEventType $eventType, array $metadata = []): self

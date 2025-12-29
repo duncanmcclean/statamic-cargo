@@ -30,18 +30,14 @@ class RecordTimelineEvents extends Subscriber
             return;
         }
 
-        $currentAttributes = $event->order->getCurrentDirtyStateAttributes();
-
-        $updatedAttributes = collect($currentAttributes)
+        $updatedAttributes = collect($event->order->getCurrentDirtyStateAttributes())
             ->filter(fn ($value, $key) => $event->order->isDirty($key))
-            ->except('status')
-            ->all();
+            ->map(fn ($value, $key) => is_array($value) ? json_encode($value) : $value)
+            ->except('status');
 
-        if (empty($updatedAttributes)) {
-            return;
+        if ($updatedAttributes->isNotEmpty()) {
+            $event->order->appendTimelineEvent(TimelineEventTypes\OrderUpdated::class, $updatedAttributes->toArray());
         }
-
-        $event->order->appendTimelineEvent(TimelineEventTypes\OrderUpdated::class);
     }
 
     public function handleOrderStatusUpdated(OrderStatusUpdated $event): void

@@ -17,9 +17,6 @@ class RecordTimelineEventsTest extends TestCase
 {
     use PreventsSavingStacheItemsToDisk;
 
-    // todo: consider storing user-readable timestamps instead of unix? (maybe we call it datetime instead???)
-    // todo: ensure user:null and metadata:{} are filtered out before being saved
-
     #[Test]
     public function order_created_event_is_recorded()
     {
@@ -49,7 +46,9 @@ class RecordTimelineEventsTest extends TestCase
 
         $this->assertEquals([
             ['timestamp' => 1736942400, 'type' => 'order_created', 'user' => null, 'metadata' => []],
-            ['timestamp' => 1736942400, 'type' => 'order_updated', 'user' => null, 'metadata' => []],
+            ['timestamp' => 1736942400, 'type' => 'order_updated', 'user' => null, 'metadata' => [
+                'notes' => 'Test notes',
+            ]],
         ], $order->timelineEvents()->toArray());
     }
 
