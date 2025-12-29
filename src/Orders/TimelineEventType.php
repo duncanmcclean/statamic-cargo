@@ -2,22 +2,21 @@
 
 namespace DuncanMcClean\Cargo\Orders;
 
-use Illuminate\Support\Str;
+use DuncanMcClean\Cargo\Contracts\Orders\Order;
+use Statamic\Extend\HasHandle;
+use Statamic\Extend\RegistersItself;
 
 abstract class TimelineEventType
 {
-    public function __construct(protected TimelineEvent $event, protected Order $order)
-    {
-    }
+    use HasHandle, RegistersItself;
 
-    public static function make(TimelineEvent $event, Order $order): static
-    {
-        return new static($event, $order);
-    }
+    protected TimelineEvent $timelineEvent;
 
-    public static function handle(): string
+    public function setTimelineEvent(TimelineEvent $timelineEvent): self
     {
-        return Str::snake(class_basename(static::class));
+        $this->timelineEvent = $timelineEvent;
+
+        return $this;
     }
 
     abstract public function message(): string;

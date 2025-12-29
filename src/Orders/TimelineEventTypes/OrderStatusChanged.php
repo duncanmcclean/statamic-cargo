@@ -9,8 +9,8 @@ class OrderStatusChanged extends TimelineEventType
 {
     public function message(): string
     {
-        $newStatus = $this->event->metadata('new');
-        $originalStatus = $this->event->metadata('original');
+        $newStatus = $this->timelineEvent->metadata('new');
+        $originalStatus = $this->timelineEvent->metadata('original');
 
         $newStatusLabel = OrderStatus::label(OrderStatus::from($newStatus));
 

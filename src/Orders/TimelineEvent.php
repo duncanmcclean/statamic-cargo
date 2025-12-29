@@ -31,9 +31,15 @@ class TimelineEvent implements Arrayable
         return Carbon::createFromTimestamp($this->timestamp);
     }
 
-    public function type(): string
+    public function type(): TimelineEventType
     {
-        return $this->type;
+        $timelineEventTypes = app('statamic.extensions')[TimelineEventType::class];
+
+        if (! $timelineEventTypes->has($this->type)) {
+            throw new \Exception("Timeline Event Type [{$this->type}] does not exist.");
+        }
+
+        return app($timelineEventTypes->get($this->type))->setTimelineEvent($this);
     }
 
     public function user(): ?UserContract
@@ -52,6 +58,11 @@ class TimelineEvent implements Arrayable
         }
 
         return $this->metadata[$key] ?? null;
+    }
+
+    public function message(): string
+    {
+        return $this->type()->message();
     }
 
     public function toArray(): array
