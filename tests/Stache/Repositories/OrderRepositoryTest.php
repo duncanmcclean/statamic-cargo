@@ -68,7 +68,7 @@ class OrderRepositoryTest extends TestCase
         $this->assertEquals(0, $order->discountTotal());
         $this->assertEquals(0, $order->taxTotal());
         $this->assertEquals(0, $order->shippingTotal());
-        $this->assertEquals(['foo' => 'bar'], $order->data()->except('updated_at', 'fingerprint')->all());
+        $this->assertEquals(['foo' => 'bar'], $order->data()->except('updated_at', 'fingerprint', 'timeline_events')->all());
 
         $this->assertEquals('123', $order->lineItems()->first()->id());
         $this->assertEquals(2500, $order->lineItems()->first()->total());
