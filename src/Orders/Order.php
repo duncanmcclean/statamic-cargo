@@ -433,13 +433,13 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
             'cart' => $this->cart(),
             'status' => $this->status()?->value,
             'customer' => $this->customer(),
-            'line_items' => $this->lineItems(),
+            'line_items' => $this->lineItems()->toArray(),
             'grand_total' => $this->grandTotal(),
             'sub_total' => $this->subTotal(),
             'discount_total' => $this->discountTotal(),
             'tax_total' => $this->taxTotal(),
             'shipping_total' => $this->shippingTotal(),
-        ], $this->data()->toArray());
+        ], $this->data()->except(['updated_at'])->toArray());
     }
 
     public function editUrl(): string
