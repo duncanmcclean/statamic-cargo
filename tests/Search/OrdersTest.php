@@ -1,6 +1,6 @@
 <?php
 
-namespace Search;
+namespace Tests\Search;
 
 use DuncanMcClean\Cargo\Facades\Discount;
 use DuncanMcClean\Cargo\Facades\Order;

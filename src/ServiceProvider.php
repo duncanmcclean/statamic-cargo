@@ -257,7 +257,7 @@ class ServiceProvider extends AddonServiceProvider
 
         Route::bind('order', function ($id, $route = null) {
             if (! $route || (! $this->isCpRoute($route) && ! $this->isFrontendBindingEnabled())) {
-                return $handle;
+                return $id;
             }
 
             $field = $route->bindingFieldFor('order') ?? 'id';

@@ -116,14 +116,14 @@ class AugmentedCart extends AbstractAugmented
     public function hasPhysicalProducts(): bool
     {
         return $this->data->lineItems()
-            ->filter(fn (LineItem $lineItem) => $lineItem->product()->get('type', 'physical') === 'physical')
+            ->filter(fn (LineItem $lineItem) => $lineItem->product()?->get('type', 'physical') === 'physical')
             ->isNotEmpty();
     }
 
     public function hasDigitalProducts(): bool
     {
         return $this->data->lineItems()
-            ->filter(fn (LineItem $lineItem) => $lineItem->product()->get('type', 'physical') === 'digital')
+            ->filter(fn (LineItem $lineItem) => $lineItem->product()?->get('type', 'physical') === 'digital')
             ->isNotEmpty();
     }
 }
