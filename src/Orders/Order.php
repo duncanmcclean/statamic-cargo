@@ -10,7 +10,7 @@ use DuncanMcClean\Cargo\Data\HasAddresses;
 use DuncanMcClean\Cargo\Events\OrderCreated;
 use DuncanMcClean\Cargo\Events\OrderDeleted;
 use DuncanMcClean\Cargo\Events\OrderSaved;
-use DuncanMcClean\Cargo\Orders\TimelineEventTypes\OrderStatusChanged;
+use DuncanMcClean\Cargo\Events\OrderStatusUpdated;
 use DuncanMcClean\Cargo\Facades;
 use DuncanMcClean\Cargo\Facades\Order as OrderFacade;
 use DuncanMcClean\Cargo\Payments\Gateways\PaymentGateway;
@@ -313,23 +313,18 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
         if ($withEvents) {
             if ($isNew) {
                 OrderCreated::dispatch($this);
-            } else {
-                // Check if status has changed
-                if ($this->status()->value !== Arr::get($original, 'status')) {
-                    $this->appendTimelineEvent(OrderStatusChanged::class, [
-                        'original' => Arr::get($original, 'status'),
-                        'new' => $this->status()->value,
-                    ]);
-                    
-                    $event = OrderStatus::event($this->status());
-                    $event::dispatch($this);
-                } else {
-                    // If status hasn't changed, it's just a general update
-                    $this->appendTimelineEvent('order_updated');
-                }
             }
 
             OrderSaved::dispatch($this);
+
+            if ($this->status()->value !== Arr::get($original, 'status')) {
+                if ($originalStatus = Arr::get($original, 'status')) {
+                    OrderStatusUpdated::dispatch($this, OrderStatus::from($originalStatus), $this->status());
+                }
+
+                $event = OrderStatus::event($this->status());
+                $event::dispatch($this);
+            }
         }
 
         $this->syncOriginal();
