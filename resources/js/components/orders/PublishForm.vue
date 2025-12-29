@@ -138,7 +138,7 @@ function actionCompleted(successful = null, response) {
             <template #actions>
                 <Panel>
                     <PanelHeader>
-                        <Heading :text="__('Order Status')" />
+                        <Heading :text="__('Status')" />
                     </PanelHeader>
                     <Card>
                         <OrderStatus
