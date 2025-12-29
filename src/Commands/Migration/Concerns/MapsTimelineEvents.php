@@ -17,7 +17,6 @@ trait MapsTimelineEvents
                 $timestamp = Carbon::parse($statusLogEvent['timestamp'])->timestamp;
 
                 $mappedStatus = $this->mapStatusLogStatus($status);
-                $previousStatus = $mappedStatus;
 
                 if ($status === 'placed') {
                     return [
@@ -26,14 +25,18 @@ trait MapsTimelineEvents
                     ];
                 }
 
-                return [
+                $event = [
                     'timestamp' => $timestamp,
                     'type' => 'order_status_changed',
                     'metadata' => array_filter([
-                        'original' => $previousStatus,
-                        'new' => $status,
+                        'Original Status' => $previousStatus,
+                        'New Status' => $mappedStatus,
                     ]),
                 ];
+
+                $previousStatus = $mappedStatus;
+
+                return $event;
             })
             ->values()
             ->all();

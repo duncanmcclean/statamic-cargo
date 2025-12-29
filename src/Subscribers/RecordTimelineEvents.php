@@ -32,7 +32,7 @@ class RecordTimelineEvents extends Subscriber
 
         $updatedAttributes = collect($event->order->getCurrentDirtyStateAttributes())
             ->filter(fn ($value, $key) => $event->order->isDirty($key))
-            ->map(fn ($value, $key) => is_array($value) ? json_encode($value) : $value)
+            ->map(fn ($value, $key) => is_array($value) || is_object($value) ? json_encode($value) : $value)
             ->except('status');
 
         if ($updatedAttributes->isNotEmpty()) {
@@ -43,15 +43,15 @@ class RecordTimelineEvents extends Subscriber
     public function handleOrderStatusUpdated(OrderStatusUpdated $event): void
     {
         $event->order->appendTimelineEvent(TimelineEventTypes\OrderStatusChanged::class, [
-            'original' => $event->originalStatus?->value,
-            'new' => $event->updatedStatus->value,
+            'Original Status' => $event->originalStatus?->value,
+            'New Status' => $event->updatedStatus->value,
         ]);
     }
 
     public function handleOrderRefunded(OrderRefunded $event): void
     {
         $event->order->appendTimelineEvent(TimelineEventTypes\OrderRefunded::class, [
-            'amount' => $event->amount,
+            'Amount' => $event->amount,
         ]);
     }
 }

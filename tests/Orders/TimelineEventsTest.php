@@ -42,8 +42,8 @@ class TimelineEventsTest extends TestCase
                 'type' => 'order_status_changed',
                 'user' => $user->id(),
                 'metadata' => [
-                    'original' => 'payment_pending',
-                    'new' => 'payment_received',
+                    'Original Status' => 'payment_pending',
+                    'New Status' => 'payment_received',
                 ],
             ],
         ]);
@@ -70,8 +70,8 @@ class TimelineEventsTest extends TestCase
         $this->assertInstanceOf(TimelineEventTypes\OrderStatusChanged::class, $timelineEvents->get(2)->type());
         $this->assertEquals($user, $timelineEvents->get(2)->user());
         $this->assertEquals([
-            'original' => 'payment_pending',
-            'new' => 'payment_received',
+            'Original Status' => 'payment_pending',
+            'New Status' => 'payment_received',
         ], $timelineEvents->get(2)->metadata()->all());
     }
 
@@ -172,8 +172,8 @@ class TimelineEventsTest extends TestCase
         $this->assertEquals([
             ['timestamp' => 1736942400, 'type' => 'order_created', 'user' => null, 'metadata' => []],
             ['timestamp' => 1736949600, 'type' => 'order_status_changed', 'user' => null, 'metadata' => [
-                'original' => 'payment_pending',
-                'new' => 'shipped',
+                'Original Status' => 'payment_pending',
+                'New Status' => 'shipped',
             ]],
         ], $order->fresh()->timelineEvents()->toArray());
     }
@@ -196,8 +196,8 @@ class TimelineEventsTest extends TestCase
         $this->assertEquals([
             ['timestamp' => 1736942400, 'type' => 'order_created', 'user' => null, 'metadata' => []],
             ['timestamp' => 1736949600, 'type' => 'order_status_changed', 'user' => null, 'metadata' => [
-                'original' => 'payment_pending',
-                'new' => 'shipped',
+                'Original Status' => 'payment_pending',
+                'New Status' => 'shipped',
             ]],
         ], $order->timelineEvents()->toArray());
     }
@@ -216,7 +216,7 @@ class TimelineEventsTest extends TestCase
         $this->assertEquals([
             ['timestamp' => 1736942400, 'type' => 'order_created', 'user' => null, 'metadata' => []],
             ['timestamp' => 1736949600, 'type' => 'order_refunded', 'user' => null, 'metadata' => [
-                'amount' => 1500,
+                'Amount' => 1500,
             ]],
         ], $order->timelineEvents()->toArray());
     }

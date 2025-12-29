@@ -28,7 +28,6 @@ return [
         'order_created' => 'Order was created',
         'order_updated' => 'Order was updated',
         'order_refunded' => 'Order was refunded for :amount',
-        'order_status_changed_to' => 'Order status changed to :status',
-        'order_status_changed_from_to' => 'Order status changed from :original to :new',
+        'order_status_changed' => 'Status changed to :status',
     ],
 ];
