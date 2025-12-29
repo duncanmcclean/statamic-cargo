@@ -38,8 +38,8 @@ class TimelineEventsTest extends TestCase
         $events = $order->timelineEvents();
 
         $this->assertCount(1, $events);
-        $this->assertEquals('order_created', $events->first()->event());
-        $this->assertEquals(Carbon::parse('2025-01-15 12:00:00')->timestamp, $events->first()->timestamp());
+        $this->assertEquals('order_created', $events->first()->type());
+        $this->assertEquals(Carbon::parse('2025-01-15 12:00:00'), $events->first()->timestamp());
         $this->assertEquals('bar', $events->first()->metadata('foo'));
         $this->assertNull($events->first()->user());
     }
@@ -61,8 +61,7 @@ class TimelineEventsTest extends TestCase
         $events = $order->timelineEvents();
 
         $this->assertCount(1, $events);
-        $this->assertEquals('test-user', $events->first()->user());
-        $this->assertEquals($user, $events->first()->userObject());
+        $this->assertEquals($user, $events->first()->user());
     }
 
     #[Test]
@@ -82,7 +81,7 @@ class TimelineEventsTest extends TestCase
         $events = $order->timelineEvents();
 
         $this->assertCount(1, $events);
-        $this->assertEquals('order_status_changed', $events->first()->event());
+        $this->assertEquals('order_status_changed', $events->first()->type());
         $this->assertEquals('payment_pending', $events->first()->metadata('original'));
         $this->assertEquals('shipped', $events->first()->metadata('new'));
     }
@@ -100,8 +99,8 @@ class TimelineEventsTest extends TestCase
 
         $event = $order->timelineEvents()->first();
 
-        $this->assertInstanceOf(Carbon::class, $event->date());
-        $this->assertEquals('2025-01-15 12:00:00', $event->date()->format('Y-m-d H:i:s'));
+        $this->assertInstanceOf(Carbon::class, $event->timestamp());
+        $this->assertEquals('2025-01-15 12:00:00', $event->timestamp()->format('Y-m-d H:i:s'));
     }
 
     #[Test]
@@ -135,67 +134,58 @@ class TimelineEventsTest extends TestCase
     #[Test]
     public function timeline_event_is_created_when_order_is_created()
     {
-        Event::fake();
-
         Carbon::setTestNow(Carbon::parse('2025-01-15 12:00:00'));
 
         $order = Order::make()
             ->orderNumber('1234')
-            ->status(OrderStatus::PaymentPending)
-            ->save();
-
-        Event::assertDispatched(OrderCreated::class);
+            ->status(OrderStatus::PaymentPending);
+        
+        $order->save();
 
         $order = $order->fresh();
 
         $this->assertCount(1, $order->timelineEvents());
-        $this->assertEquals('order_created', $order->timelineEvents()->first()->event());
+        $this->assertEquals('order_created', $order->timelineEvents()->first()->type());
     }
 
     #[Test]
     public function timeline_event_is_created_when_order_is_updated()
     {
-        Event::fake();
-
         Carbon::setTestNow(Carbon::parse('2025-01-15 12:00:00'));
 
         $order = Order::make()
             ->orderNumber('1234')
-            ->status(OrderStatus::PaymentPending)
-            ->save();
+            ->status(OrderStatus::PaymentPending);
+        
+        $order->save();
 
         $order->set('notes', 'Test notes')->save();
-
-        Event::assertDispatched(OrderSaved::class);
 
         $order = $order->fresh();
 
         $this->assertCount(2, $order->timelineEvents());
-        $this->assertEquals('order_created', $order->timelineEvents()->get(0)->event());
-        $this->assertEquals('order_updated', $order->timelineEvents()->get(1)->event());
+        $this->assertEquals('order_created', $order->timelineEvents()->get(0)->type());
+        $this->assertEquals('order_updated', $order->timelineEvents()->get(1)->type());
     }
 
     #[Test]
     public function timeline_event_is_created_when_order_status_changes()
     {
-        Event::fake();
-
         Carbon::setTestNow(Carbon::parse('2025-01-15 12:00:00'));
 
         $order = Order::make()
             ->orderNumber('1234')
-            ->status(OrderStatus::PaymentPending)
-            ->save();
+            ->status(OrderStatus::PaymentPending);
+        
+        $order->save();
 
         $order->status(OrderStatus::Shipped)->save();
-
-        Event::assertDispatched(OrderSaved::class);
 
         $order = $order->fresh();
 
         $this->assertCount(2, $order->timelineEvents());
-        $this->assertEquals('order_created', $order->timelineEvents()->get(0)->event());
-        $this->assertEquals('order_status_changed', $order->timelineEvents()->get(1)->event());
+        $this->assertEquals('order_created', $order->timelineEvents()->get(0)->type());
+        $this->assertEquals('order_status_changed', $order->timelineEvents()->get(1)->type());
         $this->assertEquals('payment_pending', $order->timelineEvents()->get(1)->metadata('original'));
         $this->assertEquals('shipped', $order->timelineEvents()->get(1)->metadata('new'));
     }
@@ -203,24 +193,21 @@ class TimelineEventsTest extends TestCase
     #[Test]
     public function timeline_event_is_created_when_order_is_refunded()
     {
-        Event::fake();
-
         Carbon::setTestNow(Carbon::parse('2025-01-15 12:00:00'));
 
         $order = Order::make()
             ->orderNumber('1234')
-            ->status(OrderStatus::PaymentReceived)
-            ->save();
+            ->status(OrderStatus::PaymentReceived);
+        
+        $order->save();
 
         OrderRefunded::dispatch($order, 1000);
-
-        Event::assertDispatched(OrderRefunded::class);
 
         $order = $order->fresh();
 
         $this->assertCount(2, $order->timelineEvents());
-        $this->assertEquals('order_created', $order->timelineEvents()->get(0)->event());
-        $this->assertEquals('order_refunded', $order->timelineEvents()->get(1)->event());
+        $this->assertEquals('order_created', $order->timelineEvents()->get(0)->type());
+        $this->assertEquals('order_refunded', $order->timelineEvents()->get(1)->type());
         $this->assertEquals(1000, $order->timelineEvents()->get(1)->metadata('amount'));
     }
 
@@ -229,14 +216,14 @@ class TimelineEventsTest extends TestCase
     {
         $event = TimelineEvent::make([
             'timestamp' => now()->timestamp,
-            'event' => 'order_created',
+            'type' => 'order_created',
         ]);
 
         $order = Order::make();
 
         $eventType = OrderCreatedEventType::make($event, $order);
 
-        $this->assertEquals('Order was created', $eventType->message());
+        $this->assertEquals(__('cargo::messages.timeline_events.order_created'), $eventType->message());
     }
 
     #[Test]
@@ -244,7 +231,7 @@ class TimelineEventsTest extends TestCase
     {
         $event = TimelineEvent::make([
             'timestamp' => now()->timestamp,
-            'event' => 'order_status_changed',
+            'type' => 'order_status_changed',
             'metadata' => [
                 'original' => 'payment_pending',
                 'new' => 'shipped',
@@ -255,7 +242,10 @@ class TimelineEventsTest extends TestCase
 
         $eventType = OrderStatusChanged::make($event, $order);
 
-        $this->assertEquals('Order status changed from Payment Pending to Shipped', $eventType->message());
+        $this->assertEquals(__('cargo::messages.timeline_events.order_status_changed_from_to', [
+            'original' => 'Payment Pending',
+            'new' => 'Shipped',
+        ]), $eventType->message());
     }
 
     #[Test]
@@ -263,14 +253,14 @@ class TimelineEventsTest extends TestCase
     {
         $event = TimelineEvent::make([
             'timestamp' => now()->timestamp,
-            'event' => 'order_updated',
+            'type' => 'order_updated',
         ]);
 
         $order = Order::make();
 
         $eventType = OrderUpdated::make($event, $order);
 
-        $this->assertEquals('Order was updated', $eventType->message());
+        $this->assertEquals(__('cargo::messages.timeline_events.order_updated'), $eventType->message());
     }
 
     #[Test]

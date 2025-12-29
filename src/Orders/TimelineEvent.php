@@ -21,8 +21,8 @@ class TimelineEvent implements Arrayable
         return new static(
             timestamp: $data['timestamp'],
             type: $data['type'],
-            user: $data['user'],
-            metadata: $data['metadata']
+            user: $data['user'] ?? null,
+            metadata: $data['metadata'] ?? []
         );
     }
 
