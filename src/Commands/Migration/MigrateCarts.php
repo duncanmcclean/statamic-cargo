@@ -22,7 +22,11 @@ use function Laravel\Prompts\progress;
 
 class MigrateCarts extends Command
 {
-    use \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsAddresses, \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsCustomData, \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsLineItems, \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsOrderDates, RunsInPlease;
+    use Concerns\MapsAddresses,
+        Concerns\MapsCustomData,
+        Concerns\MapsLineItems,
+        Concerns\MapsOrderDates,
+        RunsInPlease;
 
     protected $signature = 'statamic:cargo:migrate:carts';
 

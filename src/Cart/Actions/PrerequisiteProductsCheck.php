@@ -1,17 +1,16 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Http\Controllers\Concerns;
+namespace DuncanMcClean\Cargo\Cart\Actions;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
+use DuncanMcClean\Cargo\Contracts\Products\Product;
 use DuncanMcClean\Cargo\Customers\GuestCustomer;
 use DuncanMcClean\Cargo\Facades\Order;
-use DuncanMcClean\Cargo\Products\Product;
-use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
-trait HandlePrerequisiteProducts
+class PrerequisiteProductsCheck
 {
-    protected function handlePrerequisiteProducts(Request $request, Cart $cart, Product $product): Cart
+    public function handle(Cart $cart, Product $product): void
     {
         if ($prerequisiteProduct = $product->prerequisite_product) {
             if (! $cart->customer() || $cart->customer() instanceof GuestCustomer) {
@@ -37,7 +36,5 @@ trait HandlePrerequisiteProducts
                 ]);
             }
         }
-
-        return $cart;
     }
 }

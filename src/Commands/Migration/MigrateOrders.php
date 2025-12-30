@@ -24,7 +24,12 @@ use function Laravel\Prompts\progress;
 
 class MigrateOrders extends Command
 {
-    use \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsAddresses, \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsCustomData, \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsLineItems, \DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsOrderDates, RunsInPlease;
+    use Concerns\MapsAddresses,
+        Concerns\MapsCustomData,
+        Concerns\MapsLineItems,
+        Concerns\MapsOrderDates,
+        Concerns\MapsTimelineEvents,
+        RunsInPlease;
 
     protected $signature = 'statamic:cargo:migrate:orders';
 
@@ -104,7 +109,7 @@ class MigrateOrders extends Command
                     'site' => $entry->site()->handle(),
                 ]);
 
-                $this->createOrderFromData($data)->save();
+                $this->createOrderFromData($data)->saveQuietly();
             },
             hint: 'This may take some time.'
         );
@@ -182,7 +187,7 @@ class MigrateOrders extends Command
                         'status_log' => $statusLogs->where('order_id', $row->id)->toArray(),
                     ]);
 
-                $this->createOrderFromData($data)->save();
+                $this->createOrderFromData($data)->saveQuietly();
             },
             hint: 'This may take some time.'
         );
@@ -262,6 +267,7 @@ class MigrateOrders extends Command
                     ],
                 ] : null,
                 'discount_code' => $discount?->get('discount_code'),
+                'timeline_events' => $this->mapTimelineEvents($data),
             ]));
     }
 }

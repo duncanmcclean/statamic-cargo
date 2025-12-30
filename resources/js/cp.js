@@ -7,6 +7,7 @@ import MoneyFieldtype from './components/fieldtypes/MoneyFieldtype.vue';
 import OrderReceiptFieldtype from './components/fieldtypes/OrderReceiptFieldtype.vue';
 import ProductVariantsFieldtype from './components/fieldtypes/ProductVariantsFieldtype.vue';
 import OrderStatusFieldtypeIndex from './components/fieldtypes/OrderStatusFieldtypeIndex.vue';
+import OrderTimelineFieldtype from './components/fieldtypes/OrderTimelineFieldtype.vue';
 import PaymentDetailsFieldtype from './components/fieldtypes/PaymentDetailsFieldtype.vue';
 import ShippingDetailsFieldtype from './components/fieldtypes/ShippingDetailsFieldtype.vue';
 import StatesFieldtype from './components/fieldtypes/StatesFieldtype.vue';
@@ -33,7 +34,7 @@ Statamic.booting(() => {
     Statamic.$components.register('order_receipt-fieldtype', OrderReceiptFieldtype);
     Statamic.$components.register('product_variants-fieldtype', ProductVariantsFieldtype);
     Statamic.$components.register('order_status-fieldtype-index', OrderStatusFieldtypeIndex);
-    
+    Statamic.$components.register('order_timeline-fieldtype', OrderTimelineFieldtype);
     Statamic.$components.register('payment_details-fieldtype', PaymentDetailsFieldtype);
     Statamic.$components.register('shipping_details-fieldtype', ShippingDetailsFieldtype);
     Statamic.$components.register('states-fieldtype', StatesFieldtype);

@@ -12,6 +12,7 @@ use DuncanMcClean\Cargo\Events\OrderPaymentReceived;
 use DuncanMcClean\Cargo\Events\OrderReturned;
 use DuncanMcClean\Cargo\Events\OrderSaved;
 use DuncanMcClean\Cargo\Events\OrderShipped;
+use DuncanMcClean\Cargo\Events\OrderStatusUpdated;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Orders\LineItem;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
@@ -348,6 +349,21 @@ YAML
 
         Event::assertNotDispatched(OrderPaymentPending::class, function ($event) use ($order) {
             return $event->order->id() === $order->id();
+        });
+    }
+
+    #[Test]
+    public function order_status_updated_event_is_dispatched()
+    {
+        Event::fake();
+
+        $order = tap(Order::make())->save();
+        $order->status(OrderStatus::PaymentReceived)->save();
+
+        Event::assertDispatched(OrderStatusUpdated::class, function ($event) use ($order) {
+            return $event->order->id() === $order->id()
+                && $event->originalStatus === OrderStatus::PaymentPending
+                && $event->updatedStatus === OrderStatus::PaymentReceived;
         });
     }
 

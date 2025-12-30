@@ -3,6 +3,7 @@
 namespace Tests;
 
 use DuncanMcClean\Cargo\Discounts\DiscountServiceProvider;
+use DuncanMcClean\Cargo\Orders\OrderServiceProvider;
 use DuncanMcClean\Cargo\Payments\PaymentServiceProvider;
 use DuncanMcClean\Cargo\ServiceProvider;
 use DuncanMcClean\Cargo\Shipping\ShippingServiceProvider;
@@ -28,6 +29,11 @@ abstract class TestCase extends AddonTestCase
                 'attributes' => ['currency' => 'GBP'],
             ],
         ])->save();
+
+        // We need to do this until https://github.com/statamic/cms/pull/13396
+        // has been merged and tagged.
+        \Statamic\Facades\CP\Nav::shouldReceive('clearCachedUrls')->zeroOrMoreTimes();
+        $this->addToAssertionCount(-1); // Dont want to assert this
     }
 
     protected function resolveApplicationConfiguration($app)
@@ -53,6 +59,7 @@ abstract class TestCase extends AddonTestCase
     {
         return array_merge(parent::getPackageProviders($app), [
             DiscountServiceProvider::class,
+            OrderServiceProvider::class,
             PaymentServiceProvider::class,
             ShippingServiceProvider::class,
         ]);

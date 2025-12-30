@@ -127,3 +127,23 @@ When adding a variant to the cart, make sure to include a `variant` input:
 </s:cart:add>
 ```
 ::
+
+## Prerequisite Products
+Cargo supports prerequisite products, allowing you to require customers to have purchased a specific product before they purchase another. Useful if you're selling upgrades or add-ons.
+
+To configure a prerequisite product, add a "Prerequisite Product" field to your product blueprint:
+
+1. Add an "Entries" field to the product blueprint with the handle `prerequisite_product`
+2. Set "Max Items" to `1`
+3. Set "Collections" to your product collection(s)
+
+When a customer attempts to add a product with a prerequisite to their cart:
+
+* **Guest customers** will see an error message asking them to login or register first.
+* **Logged in customers** who haven't purchased the prerequisite product will see an error message indicating which product they need to purchase first.
+* **Logged in customers** who have previously purchased the prerequisite product can add the product to their cart normally.
+
+:::tip note
+The prerequisite check looks at the customer's completed orders to determine if they've purchased the required product. The product must exist in at least one of their past orders.
+:::
+

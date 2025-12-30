@@ -39,6 +39,7 @@ class Currencies
         ['code' => 'FKP', 'name' => 'Falkland Islands Pound', 'symbol' => '£'],
         ['code' => 'GBP', 'name' => 'Pound Sterling', 'symbol' => '£'],
         ['code' => 'GIP', 'name' => 'Gibraltar Pound', 'symbol' => '£'],
+        ['code' => 'GHS', 'name' => 'Ghanaian Cedi', 'symbol' => '₵'],
         ['code' => 'GTQ', 'name' => 'Quetzal', 'symbol' => 'Q'],
         ['code' => 'GYD', 'name' => 'Guyana Dollar', 'symbol' => '$'],
         ['code' => 'HKD', 'name' => 'Hong Kong Dollar', 'symbol' => '$'],
