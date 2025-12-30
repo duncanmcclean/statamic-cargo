@@ -2,7 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Orders;
 
-use DuncanMcClean\Cargo\Contracts\Orders\Order;
 use Statamic\Extend\HasHandle;
 use Statamic\Extend\RegistersItself;
 

@@ -10,13 +10,13 @@ use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Orders\TimelineEvent;
 use DuncanMcClean\Cargo\Orders\TimelineEventType;
+use DuncanMcClean\Cargo\Orders\TimelineEventTypes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\User;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
-use DuncanMcClean\Cargo\Orders\TimelineEventTypes;
 
 class TimelineEventsTest extends TestCase
 {

@@ -7,7 +7,6 @@ use DuncanMcClean\Cargo\Events\OrderRefunded;
 use DuncanMcClean\Cargo\Events\OrderSaved;
 use DuncanMcClean\Cargo\Events\OrderStatusUpdated;
 use DuncanMcClean\Cargo\Orders\TimelineEventTypes;
-use Illuminate\Support\Arr;
 use Statamic\Events\Subscriber;
 
 class RecordTimelineEvents extends Subscriber
