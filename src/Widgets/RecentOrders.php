@@ -5,7 +5,6 @@ namespace DuncanMcClean\Cargo\Widgets;
 use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
 use DuncanMcClean\Cargo\Facades\Order;
 use Illuminate\Support\Carbon;
-use Statamic\Facades\Scope;
 use Statamic\Facades\User;
 use Statamic\Widgets\VueComponent;
 use Statamic\Widgets\Widget;

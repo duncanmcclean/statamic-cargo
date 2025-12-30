@@ -307,7 +307,6 @@ PHP;
         ['type' => 'refunded_orders', 'width' => 25, 'days' => 7],
 PHP;
 
-
         $contents = Str::of($contents)
             ->replace($emptyOption, <<<'PHP'
     'widgets' => [
