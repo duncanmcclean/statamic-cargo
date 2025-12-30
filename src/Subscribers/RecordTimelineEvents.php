@@ -43,8 +43,8 @@ class RecordTimelineEvents extends Subscriber
     public function handleOrderStatusUpdated(OrderStatusUpdated $event): void
     {
         $event->order->appendTimelineEvent(TimelineEventTypes\OrderStatusChanged::class, [
-            'Original Status' => $event->originalStatus?->value,
-            'New Status' => $event->updatedStatus->value,
+            'Original Status' => $event->originalStatus?->name,
+            'New Status' => $event->updatedStatus->name,
         ]);
     }
 
