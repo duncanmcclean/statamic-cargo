@@ -26,8 +26,8 @@ return [
     'tax_zones_type_instructions' => 'Where should this tax zone apply?',
     'timeline_events' => [
         'order_created' => 'Order was created',
-        'order_updated' => 'Order was updated',
         'order_refunded' => 'Order was refunded for :amount',
         'order_status_changed' => 'Status changed to :status',
+        'order_updated' => 'Order was updated',
     ],
 ];
