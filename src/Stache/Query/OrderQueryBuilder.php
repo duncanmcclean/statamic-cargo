@@ -3,11 +3,8 @@
 namespace DuncanMcClean\Cargo\Stache\Query;
 
 use DuncanMcClean\Cargo\Contracts\Orders\QueryBuilder;
-use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Query\QueriesLineItems;
-use Illuminate\Support\Collection;
-use Illuminate\Support\LazyCollection;
 use Statamic\Data\DataCollection;
 use Statamic\Stache\Query\Builder;
 
@@ -35,27 +32,6 @@ class OrderQueryBuilder extends Builder implements QueryBuilder
         $this->where('status', '!=', $status);
 
         return $this;
-    }
-
-    public function getByCustomer(): LazyCollection
-    {
-        $ordersByCustomer = [];
-
-        $ids = $this->pluck('id')->all();
-        $index = $this->store->index('customer');
-
-        foreach ($index->getItems() as $key => $value) {
-            if (! in_array($key, $ids)) {
-                continue;
-            }
-
-            isset($ordersByCustomer[$value])
-                ? $ordersByCustomer[$value][] = $key
-                : $ordersByCustomer[$value] = [$key];
-        }
-
-        return LazyCollection::make($ordersByCustomer)
-            ->map(fn ($items) => collect($items)->map(fn ($id) => $this->store->getItem($id)));
     }
 
     public function sum(string $column)
