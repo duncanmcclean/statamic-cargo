@@ -10,6 +10,7 @@ use DuncanMcClean\Cargo\Data\HasAddresses;
 use DuncanMcClean\Cargo\Events\OrderCreated;
 use DuncanMcClean\Cargo\Events\OrderDeleted;
 use DuncanMcClean\Cargo\Events\OrderSaved;
+use DuncanMcClean\Cargo\Events\OrderStatusUpdated;
 use DuncanMcClean\Cargo\Facades;
 use DuncanMcClean\Cargo\Facades\Order as OrderFacade;
 use DuncanMcClean\Cargo\Payments\Gateways\PaymentGateway;
@@ -17,8 +18,9 @@ use DuncanMcClean\Cargo\Shipping\ShippingMethod;
 use DuncanMcClean\Cargo\Shipping\ShippingOption;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Statamic\Contracts\Data\Augmentable;
 use Statamic\Contracts\Data\Augmented;
 use Statamic\Contracts\Query\ContainsQueryableValues;
@@ -34,6 +36,7 @@ use Statamic\Facades\Stache;
 use Statamic\Facades\User;
 use Statamic\Fields\Blueprint as StatamicBlueprint;
 use Statamic\Search\Searchable;
+use Statamic\Support\Arr;
 use Statamic\Support\Str;
 use Statamic\Support\Traits\FluentlyGetsAndSets;
 
@@ -243,6 +246,31 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
         return Facades\PaymentGateway::find($this->get('payment_gateway'));
     }
 
+    public function timelineEvents(): Collection
+    {
+        return collect($this->get('timeline_events'))->map(fn (array $event) => TimelineEvent::make($event));
+    }
+
+    public function appendTimelineEvent(string|TimelineEventType $type, array $metadata = []): self
+    {
+        if (is_subclass_of($type, TimelineEventType::class)) {
+            $type = $type::handle();
+        }
+
+        $events = $this->get('timeline_events', []);
+
+        $events[] = Arr::removeNullValues([
+            'datetime' => Carbon::now()->format('Y-m-d H:i:s'),
+            'type' => $type,
+            'user' => Auth::id(),
+            'metadata' => $metadata,
+        ]);
+
+        $this->set('timeline_events', $events);
+
+        return $this;
+    }
+
     public function site($site = null)
     {
         return $this
@@ -289,8 +317,11 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
             OrderSaved::dispatch($this);
 
             if ($this->status()->value !== Arr::get($original, 'status')) {
-                $event = OrderStatus::event($this->status());
+                if ($originalStatus = Arr::get($original, 'status')) {
+                    OrderStatusUpdated::dispatch($this, OrderStatus::from($originalStatus), $this->status());
+                }
 
+                $event = OrderStatus::event($this->status());
                 $event::dispatch($this);
             }
         }
@@ -400,14 +431,14 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
             'date' => $this->date(),
             'cart' => $this->cart(),
             'status' => $this->status()?->value,
-            'customer' => $this->customer(),
-            'line_items' => $this->lineItems(),
+            'customer' => $this->customer()?->id(),
+            'line_items' => $this->lineItems()->toArray(),
             'grand_total' => $this->grandTotal(),
             'sub_total' => $this->subTotal(),
             'discount_total' => $this->discountTotal(),
             'tax_total' => $this->taxTotal(),
             'shipping_total' => $this->shippingTotal(),
-        ], $this->data()->toArray());
+        ], $this->data()->except(['updated_at'])->toArray());
     }
 
     public function editUrl(): string

@@ -195,6 +195,20 @@ public function handle(OrderSaved $event)
 }
 ```
 
+### OrderStatusUpdated
+`DuncanMcClean\Cargo\Events\OrderStatusUpdated`
+
+Dispatched when an order's status is changed.
+
+```php
+public function handle(OrderStatusUpdated $event)
+{
+	$event->order;
+	$event->originalStatus;
+	$event->updatedStatus;
+}
+```
+
 ### OrderShipped
 `DuncanMcClean\Cargo\Events\OrderShipped`
 

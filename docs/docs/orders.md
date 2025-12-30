@@ -36,6 +36,72 @@ If you want to customise the packing slip, you may publish it with the following
 php artisan vendor:publish --tag=cargo-packing-slip
 ```
 
+## Timeline
+The Timeline feature provides a complete audit trail of order changes, visible when viewing orders in the Control Panel. It automatically tracks key events including:
+
+- Order creation and updates
+- Status changes
+- Refunds
+
+Each event records the authenticated user who made the change and any relevant metadata.
+
+![Order Timeline](/images/order-timeline.png)
+
+### Custom Timeline Events
+You can extend the Timeline by registering custom event types to track additional order activities beyond the built-in events.
+
+Create a PHP class that extends `TimelineEventType` to represent your custom event:
+
+```php
+// app/TimelineEventTypes/OrderDelivered.php
+
+use DuncanMcClean\Cargo\Orders\TimelineEventType;
+
+class OrderDelivered extends TimelineEventType
+{
+    public function message() : string
+    {
+        return "Order Delivered by Royal Mail";
+    }
+}
+```
+
+Register your custom event type in your `AppServiceProvider`:
+
+```php
+// app/Providers/AppServiceProvider.php
+
+public function boot(): void
+{
+	OrderDelivered::register();
+}
+```
+
+Then listen for the relevant event in your application and append your custom timeline event to the order:
+
+```php
+// app/Listeners/RoyalMailPackageDeliveredListener.php
+
+use DuncanMcClean\Cargo\Facades\Order;
+use RoyalMail\Events\PackageDelivered;
+
+class RoyalMailPackageDeliveredListener
+{
+    public function handle(PackageDelivered $event)
+    {
+        $order = Order::find('the-order-id');
+        
+        $order->appendTimelineEvent(
+            type: OrderDelivered::class, 
+            metadata: [
+                'Foo' => 'bar',
+                'Baz' => 'qux', 
+            ],
+        );
+    }
+}
+```
+
 ## Storage
 Out of the box, orders are stored as YAML files in the `content/cargo/orders` directory. If you wish, you can change the directory in the `cargo.php` config file:
 
