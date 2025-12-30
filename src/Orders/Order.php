@@ -431,7 +431,7 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
             'date' => $this->date(),
             'cart' => $this->cart(),
             'status' => $this->status()?->value,
-            'customer' => $this->customer(),
+            'customer' => $this->customer()?->id(),
             'line_items' => $this->lineItems()->toArray(),
             'grand_total' => $this->grandTotal(),
             'sub_total' => $this->subTotal(),
