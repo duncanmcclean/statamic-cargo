@@ -58,6 +58,11 @@ class OrderQueryBuilder extends Builder implements QueryBuilder
             ->map(fn ($items) => collect($items)->map(fn ($id) => $this->store->getItem($id)));
     }
 
+    public function sum(string $column)
+    {
+        return $this->pluck($column)->sum();
+    }
+
     protected function collect($items = [])
     {
         return DataCollection::make($items);
