@@ -109,7 +109,7 @@ class MigrateOrders extends Command
                     'site' => $entry->site()->handle(),
                 ]);
 
-                $this->createOrderFromData($data)->save();
+                $this->createOrderFromData($data)->saveQuietly();
             },
             hint: 'This may take some time.'
         );
@@ -187,7 +187,7 @@ class MigrateOrders extends Command
                         'status_log' => $statusLogs->where('order_id', $row->id)->toArray(),
                     ]);
 
-                $this->createOrderFromData($data)->save();
+                $this->createOrderFromData($data)->saveQuietly();
             },
             hint: 'This may take some time.'
         );
