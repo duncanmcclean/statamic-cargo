@@ -11,9 +11,12 @@ defineExpose(expose);
 const events = ref(props.value);
 
 const formatRelativeDate = (value) => {
-    const isToday = new Date(value * 1000) < new Date().setUTCHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const isToday = value === Math.floor(today.getTime() / 1000);
 
-    return !isToday
+    return isToday
         ? __('Today')
         : DateFormatter.format(value * 1000, {
             month: 'long',
