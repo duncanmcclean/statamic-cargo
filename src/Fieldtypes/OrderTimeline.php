@@ -2,7 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
-use Carbon\Carbon;
 use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Orders\TimelineEvent;
 use Statamic\Fields\Fieldtype;
@@ -27,13 +26,14 @@ class OrderTimeline extends Fieldtype
                 return [
                     'id' => $index,
                     'message' => $timelineEvent->message(),
-                    'timestamp' => $timelineEvent->timestamp()->timestamp,
+                    'datetime' => $timelineEvent->datetime(),
+                    'timestamp' => $timelineEvent->datetime()->timestamp,
                     'user' => $timelineEvent->user(),
                     'metadata' => $timelineEvent->metadata()->all(),
                 ];
             })
             ->groupBy(function ($event) {
-                return Carbon::parse($event['timestamp'])->startOfDay()->format('U');
+                return $event['datetime']->startOfDay()->format('U');
             })
             ->map(fn ($events, $day) => compact('day', 'events'))
             ->reverse()

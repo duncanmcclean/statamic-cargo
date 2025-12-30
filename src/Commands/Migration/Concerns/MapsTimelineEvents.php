@@ -14,19 +14,19 @@ trait MapsTimelineEvents
         return collect($data->get('status_log'))
             ->map(function (array $statusLogEvent) use (&$previousStatus): ?array {
                 $status = $statusLogEvent['status'];
-                $timestamp = Carbon::parse($statusLogEvent['timestamp'])->timestamp;
+                $datetime = Carbon::parse($statusLogEvent['timestamp'])->format('Y-m-d H:i:s');
 
                 $mappedStatus = $this->mapStatusLogStatus($status);
 
                 if ($status === 'placed') {
                     return [
-                        'timestamp' => $timestamp,
+                        'datetime' => $datetime,
                         'type' => 'order_created',
                     ];
                 }
 
                 $event = [
-                    'timestamp' => $timestamp,
+                    'datetime' => $datetime,
                     'type' => 'order_status_changed',
                     'metadata' => array_filter([
                         'Original Status' => $previousStatus,

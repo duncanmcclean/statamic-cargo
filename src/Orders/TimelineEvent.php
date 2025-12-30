@@ -10,7 +10,7 @@ use Statamic\Facades\User;
 class TimelineEvent implements Arrayable
 {
     public function __construct(
-        protected int $timestamp,
+        protected string $datetime,
         protected string $type,
         protected $user,
         protected array $metadata = []
@@ -19,16 +19,16 @@ class TimelineEvent implements Arrayable
     public static function make(array $data): self
     {
         return new static(
-            timestamp: $data['timestamp'],
+            datetime: $data['datetime'],
             type: $data['type'],
             user: $data['user'] ?? null,
             metadata: $data['metadata'] ?? []
         );
     }
 
-    public function timestamp(): Carbon
+    public function datetime(): Carbon
     {
-        return Carbon::createFromTimestamp($this->timestamp);
+        return Carbon::createFromFormat('Y-m-d H:i:s', $this->datetime);
     }
 
     public function type(): TimelineEventType
@@ -68,7 +68,7 @@ class TimelineEvent implements Arrayable
     public function toArray(): array
     {
         return [
-            'timestamp' => $this->timestamp,
+            'datetime' => $this->datetime,
             'type' => $this->type,
             'user' => $this->user,
             'metadata' => $this->metadata,

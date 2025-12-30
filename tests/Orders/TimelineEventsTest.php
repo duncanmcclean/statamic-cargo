@@ -29,16 +29,16 @@ class TimelineEventsTest extends TestCase
 
         $order = Order::make()->set('timeline_events', [
             [
-                'timestamp' => 1767019337,
+                'datetime' => '2025-12-29 14:42:17',
                 'type' => 'order_created',
             ],
             [
-                'timestamp' => 1767019338,
+                'datetime' => '2025-12-29 14:42:18',
                 'type' => 'order_updated',
                 'user' => $user->id(),
             ],
             [
-                'timestamp' => 1767019339,
+                'datetime' => '2025-12-29 14:42:19',
                 'type' => 'order_status_changed',
                 'user' => $user->id(),
                 'metadata' => [
@@ -54,19 +54,19 @@ class TimelineEventsTest extends TestCase
         $this->assertInstanceOf(Collection::class, $timelineEvents);
 
         $this->assertInstanceOf(TimelineEvent::class, $timelineEvents->get(0));
-        $this->assertEquals('2025-12-29 14:42:17', $timelineEvents->get(0)->timestamp()->format('Y-m-d H:i:s'));
+        $this->assertEquals('2025-12-29 14:42:17', $timelineEvents->get(0)->datetime()->format('Y-m-d H:i:s'));
         $this->assertInstanceOf(TimelineEventTypes\OrderCreated::class, $timelineEvents->get(0)->type());
         $this->assertNull($timelineEvents->get(0)->user());
         $this->assertEquals([], $timelineEvents->get(0)->metadata()->all());
 
         $this->assertInstanceOf(TimelineEvent::class, $timelineEvents->get(1));
-        $this->assertEquals('2025-12-29 14:42:18', $timelineEvents->get(1)->timestamp()->format('Y-m-d H:i:s'));
+        $this->assertEquals('2025-12-29 14:42:18', $timelineEvents->get(1)->datetime()->format('Y-m-d H:i:s'));
         $this->assertInstanceOf(TimelineEventTypes\OrderUpdated::class, $timelineEvents->get(1)->type());
         $this->assertEquals($user, $timelineEvents->get(1)->user());
         $this->assertEquals([], $timelineEvents->get(1)->metadata()->all());
 
         $this->assertInstanceOf(TimelineEvent::class, $timelineEvents->get(2));
-        $this->assertEquals('2025-12-29 14:42:19', $timelineEvents->get(2)->timestamp()->format('Y-m-d H:i:s'));
+        $this->assertEquals('2025-12-29 14:42:19', $timelineEvents->get(2)->datetime()->format('Y-m-d H:i:s'));
         $this->assertInstanceOf(TimelineEventTypes\OrderStatusChanged::class, $timelineEvents->get(2)->type());
         $this->assertEquals($user, $timelineEvents->get(2)->user());
         $this->assertEquals([
@@ -89,7 +89,7 @@ class TimelineEventsTest extends TestCase
         ]);
 
         $this->assertEquals([
-            'timestamp' => '1736942400',
+            'datetime' => '2025-01-15 12:00:00',
             'type' => 'something_happened',
             'user' => 'foo',
             'metadata' => ['foo' => 'bar'],
@@ -106,7 +106,7 @@ class TimelineEventsTest extends TestCase
         $order->appendTimelineEvent(SomethingHappened::class);
 
         $this->assertEquals([
-            'timestamp' => '1736942400',
+            'datetime' => '2025-01-15 12:00:00',
             'type' => 'something_happened',
         ], $order->get('timeline_events')[0]);
     }
@@ -121,7 +121,7 @@ class TimelineEventsTest extends TestCase
         OrderCreated::dispatch($order);
 
         $this->assertEquals([
-            ['timestamp' => 1736942400, 'type' => 'order_created', 'user' => null, 'metadata' => []],
+            ['datetime' => '2025-01-15 12:00:00', 'type' => 'order_created', 'user' => null, 'metadata' => []],
         ], $order->timelineEvents()->toArray());
     }
 
@@ -139,8 +139,8 @@ class TimelineEventsTest extends TestCase
         $order->set('notes', 'Test notes')->save();
 
         $this->assertEquals([
-            ['timestamp' => 1736942400, 'type' => 'order_created', 'user' => null, 'metadata' => []],
-            ['timestamp' => 1736942400, 'type' => 'order_updated', 'user' => null, 'metadata' => [
+            ['datetime' => '2025-01-15 12:00:00', 'type' => 'order_created', 'user' => null, 'metadata' => []],
+            ['datetime' => '2025-01-15 12:00:00', 'type' => 'order_updated', 'user' => null, 'metadata' => [
                 'notes' => 'Test notes',
             ]],
         ], $order->timelineEvents()->toArray());
@@ -154,7 +154,7 @@ class TimelineEventsTest extends TestCase
         $order = $this->makeOrder();
 
         $this->assertEquals([
-            ['timestamp' => 1736942400, 'type' => 'order_created', 'user' => null, 'metadata' => []],
+            ['datetime' => '2025-01-15 12:00:00', 'type' => 'order_created', 'user' => null, 'metadata' => []],
         ], $order->timelineEvents()->toArray());
     }
 
@@ -170,8 +170,8 @@ class TimelineEventsTest extends TestCase
         $order->status(OrderStatus::Shipped)->save();
 
         $this->assertEquals([
-            ['timestamp' => 1736942400, 'type' => 'order_created', 'user' => null, 'metadata' => []],
-            ['timestamp' => 1736949600, 'type' => 'order_status_changed', 'user' => null, 'metadata' => [
+            ['datetime' => '2025-01-15 12:00:00', 'type' => 'order_created', 'user' => null, 'metadata' => []],
+            ['datetime' => '2025-01-15 14:00:00', 'type' => 'order_status_changed', 'user' => null, 'metadata' => [
                 'Original Status' => 'payment_pending',
                 'New Status' => 'shipped',
             ]],
@@ -194,8 +194,8 @@ class TimelineEventsTest extends TestCase
         );
 
         $this->assertEquals([
-            ['timestamp' => 1736942400, 'type' => 'order_created', 'user' => null, 'metadata' => []],
-            ['timestamp' => 1736949600, 'type' => 'order_status_changed', 'user' => null, 'metadata' => [
+            ['datetime' => '2025-01-15 12:00:00', 'type' => 'order_created', 'user' => null, 'metadata' => []],
+            ['datetime' => '2025-01-15 14:00:00', 'type' => 'order_status_changed', 'user' => null, 'metadata' => [
                 'Original Status' => 'payment_pending',
                 'New Status' => 'shipped',
             ]],
@@ -214,8 +214,8 @@ class TimelineEventsTest extends TestCase
         OrderRefunded::dispatch($order, 1500);
 
         $this->assertEquals([
-            ['timestamp' => 1736942400, 'type' => 'order_created', 'user' => null, 'metadata' => []],
-            ['timestamp' => 1736949600, 'type' => 'order_refunded', 'user' => null, 'metadata' => [
+            ['datetime' => '2025-01-15 12:00:00', 'type' => 'order_created', 'user' => null, 'metadata' => []],
+            ['datetime' => '2025-01-15 14:00:00', 'type' => 'order_refunded', 'user' => null, 'metadata' => [
                 'Amount' => 1500,
             ]],
         ], $order->timelineEvents()->toArray());
