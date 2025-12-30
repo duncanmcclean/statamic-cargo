@@ -160,11 +160,6 @@ Since orders are no longer stored in collections, Cargo provides its own "Order"
 
 During the migration process, Cargo will have attempted to copy across any custom fields you added to the order collection's blueprint.
 
-### Status Log
-The "Status Log" feature present in Simple Commerce doesn't exist in Cargo. Cargo simply displays the current status of orders.
-
-If you need to occasionally reference the history of order statuses, you may wish to take advantage of [Statamic's Git Automation](https://statamic.dev/git-automation) if you're storing orders in flat files, or use a package like [`spatie/laravel-activitylog`](https://github.com/spatie/laravel-activitylog) if you're using a database.
-
 ## Customers
 By default, Simple Commerce stored information about your customers in a customers collection or `customers` database table.
 
