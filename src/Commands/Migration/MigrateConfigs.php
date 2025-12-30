@@ -29,7 +29,8 @@ class MigrateConfigs extends Command
             $this
                 ->migrateConfigOptions()
                 ->migratePaymentGatewaysConfig()
-                ->migratePermissions();
+                ->migratePermissions()
+                ->migrateWidgets();
         } catch (MigrationCancelled $e) {
             return;
         }
@@ -193,6 +194,40 @@ PHP;
         });
 
         $this->components->info('Migrated permissions.');
+
+        return $this;
+    }
+
+    private function migrateWidgets(): self
+    {
+        $widgets = config()->collection('statamic.cp.widgets')
+            ->map(function (string|array $widget) {
+                $originalType = $widget['type'] ?? $widget;
+
+                $type = match ($originalType) {
+                    'orders_chart', 'top_customers' => null,
+                    default => $originalType,
+                };
+
+                if (! $type) {
+                    $this->components->warn("Cargo doesn't have an equivalent widget to [{$originalType}]. For information on the available widgets, please review the docs: https://builtwithcargo.dev/docs/orders#widgets");
+
+                    return null;
+                }
+
+                if (is_string($widget)) {
+                    return $type;
+                }
+
+                return [...$widget, 'type' => $type];
+            })
+            ->filter()
+            ->values()
+            ->all();
+
+        ConfigWriter::write('statamic.cp.widgets', $widgets);
+
+        $this->components->info('Updated widgets in the [statamic/cp.php] config file.');
 
         return $this;
     }
