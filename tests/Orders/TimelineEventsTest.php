@@ -172,8 +172,8 @@ class TimelineEventsTest extends TestCase
         $this->assertEquals([
             ['datetime' => '2025-01-15 12:00:00', 'type' => 'order_created', 'user' => null, 'metadata' => []],
             ['datetime' => '2025-01-15 14:00:00', 'type' => 'order_status_changed', 'user' => null, 'metadata' => [
-                'Original Status' => 'Payment Pending',
-                'New Status' => 'Shipped',
+                'Original Status' => 'payment_pending',
+                'New Status' => 'shipped',
             ]],
         ], $order->fresh()->timelineEvents()->toArray());
     }
@@ -196,8 +196,8 @@ class TimelineEventsTest extends TestCase
         $this->assertEquals([
             ['datetime' => '2025-01-15 12:00:00', 'type' => 'order_created', 'user' => null, 'metadata' => []],
             ['datetime' => '2025-01-15 14:00:00', 'type' => 'order_status_changed', 'user' => null, 'metadata' => [
-                'Original Status' => 'Payment Pending',
-                'New Status' => 'Shipped',
+                'Original Status' => 'payment_pending',
+                'New Status' => 'shipped',
             ]],
         ], $order->timelineEvents()->toArray());
     }

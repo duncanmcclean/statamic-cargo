@@ -6,6 +6,7 @@ use DuncanMcClean\Cargo\Events\OrderCreated;
 use DuncanMcClean\Cargo\Events\OrderRefunded;
 use DuncanMcClean\Cargo\Events\OrderSaved;
 use DuncanMcClean\Cargo\Events\OrderStatusUpdated;
+use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Orders\TimelineEventTypes;
 use Statamic\Events\Subscriber;
 
@@ -42,8 +43,8 @@ class RecordTimelineEvents extends Subscriber
     public function handleOrderStatusUpdated(OrderStatusUpdated $event): void
     {
         $event->order->appendTimelineEvent(TimelineEventTypes\OrderStatusChanged::class, [
-            'Original Status' => $event->originalStatus?->name,
-            'New Status' => $event->updatedStatus->name,
+            'Original Status' => $event->originalStatus?->value,
+            'New Status' => $event->updatedStatus->value,
         ]);
     }
 
