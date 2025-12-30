@@ -57,7 +57,8 @@ class InstallCommand extends Command
             ->publishPrebuiltCheckout()
             ->schedulePurgeAbandonedCartsCommand()
             ->createGeneralTaxClass()
-            ->setDefaultPreferences();
+            ->setDefaultPreferences()
+            ->configureWidgets();
 
         $this->line('  <fg=green;options=bold>Cargo has been installed successfully!</> 🎉');
         $this->newLine();
@@ -280,6 +281,43 @@ PHP;
                 ],
             ],
         ])->save();
+
+        return $this;
+    }
+
+    private function configureWidgets(): self
+    {
+        $contents = File::get(config_path('statamic/cp.php'));
+
+        if (Str::contains($contents, "'type' => 'total_sales'")) {
+            return $this;
+        }
+
+        $emptyOption = <<<'PHP'
+    'widgets' => [
+        //
+    ],
+PHP;
+
+        $widgets = <<<'PHP'
+        ['type' => 'total_sales', 'width' => 25, 'days' => 7],
+        ['type' => 'total_revenue', 'width' => 25, 'days' => 7],
+        ['type' => 'new_customers', 'width' => 25, 'days' => 7],
+        ['type' => 'returning_customers', 'width' => 25, 'days' => 7],
+        ['type' => 'refunded_orders', 'width' => 25, 'days' => 7],
+PHP;
+
+
+        $contents = Str::of($contents)
+            ->replace($emptyOption, <<<'PHP'
+    'widgets' => [
+    ],
+PHP)
+            ->replace("'widgets' => [", "'widgets' => [ \n{$widgets}");
+
+        File::put(config_path('statamic/cp.php'), $contents);
+
+        $this->components->info('Added widgets to [config/statamic/cp.php].');
 
         return $this;
     }
