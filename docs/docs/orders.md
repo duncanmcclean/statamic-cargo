@@ -106,6 +106,7 @@ class RoyalMailPackageDeliveredListener
 Cargo includes a few helpful [widgets](https://statamic.dev/widgets/overview) out-of-the-box for things like Total Revenue, New Customers, etc.
 
 Cargo may have already configured widgets during the install process, but you can add and configure them yourself in the `config/statamic/cp.php` file:
+
 ```php
 // config/statamic/cp.php
 
