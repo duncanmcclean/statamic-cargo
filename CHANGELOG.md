@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.0.0-alpha.12 (2025-12-30)
+
+### What's new
+- Widgets #89 by @duncanmcclean
+- Order Timeline #88 by @duncanmcclean
+- Added Ghanaian Cedi to currencies in `cargo:install` command #87 by @duncanmcclean
+- PHP Actions #83 by @duncanmcclean
+
+### What's fixed
+- Prevented error when augmenting cart/order with deleted products by @duncanmcclean
+- Fixed namespace of orders search test by @duncanmcclean
+- Fixed undefined variable `$handle` in ServiceProvider by @duncanmcclean
+- Only run tests when PHP files change #84 by @duncanmcclean
+- Pre-built checkout: Re-fetch payment gateway data when grand total changes #78 by @duncanmcclean
+- Reset discount total on line items when recalculating #74 by @duncanmcclean
+- Tighten up email validation #73 by @duncanmcclean
+
+
+
 ## v1.0.0-alpha.11 (2025-12-03)
 
 ### What's new
