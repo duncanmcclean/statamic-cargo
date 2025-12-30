@@ -4,6 +4,7 @@ namespace DuncanMcClean\Cargo\Fieldtypes;
 
 use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Orders\TimelineEvent;
+use Illuminate\Support\Collection;
 use Statamic\Fields\Fieldtype;
 
 class OrderTimeline extends Fieldtype
@@ -32,10 +33,8 @@ class OrderTimeline extends Fieldtype
                     'metadata' => $timelineEvent->metadata()->all(),
                 ];
             })
-            ->groupBy(function ($event) {
-                return $event['datetime']->startOfDay()->format('U');
-            })
-            ->map(fn ($events, $day) => [
+            ->groupBy(fn (array $event) => $event['datetime']->startOfDay()->format('U'))
+            ->map(fn (Collection $events, int $day) => [
                 'day' => $day,
                 'events' => $events->reverse()->values(),
             ])
