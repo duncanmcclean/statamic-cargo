@@ -35,7 +35,10 @@ class OrderTimeline extends Fieldtype
             ->groupBy(function ($event) {
                 return $event['datetime']->startOfDay()->format('U');
             })
-            ->map(fn ($events, $day) => compact('day', 'events'))
+            ->map(fn ($events, $day) => [
+                'day' => $day,
+                'events' => $events->reverse()->values(),
+            ])
             ->reverse()
             ->values();
     }
