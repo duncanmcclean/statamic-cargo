@@ -260,7 +260,7 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
         $events = $this->get('timeline_events', []);
 
         $events[] = Arr::removeNullValues([
-            'timestamp' => now()->timestamp,
+            'timestamp' => Carbon::now()->timestamp,
             'type' => $type,
             'user' => Auth::id(),
             'metadata' => $metadata,
