@@ -92,7 +92,7 @@ class RoyalMailPackageDeliveredListener
         $order = Order::find('the-order-id');
         
         $order->appendTimelineEvent(
-            eventType: OrderDelivered::class, 
+            type: OrderDelivered::class, 
             metadata: [
                 'Foo' => 'bar',
                 'Baz' => 'qux', 

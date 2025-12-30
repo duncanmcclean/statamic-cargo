@@ -251,17 +251,17 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
         return collect($this->get('timeline_events'))->map(fn (array $event) => TimelineEvent::make($event));
     }
 
-    public function appendTimelineEvent(string|TimelineEventType $eventType, array $metadata = []): self
+    public function appendTimelineEvent(string|TimelineEventType $type, array $metadata = []): self
     {
-        if (is_subclass_of($eventType, TimelineEventType::class)) {
-            $eventType = $eventType::handle();
+        if (is_subclass_of($type, TimelineEventType::class)) {
+            $type = $type::handle();
         }
 
         $events = $this->get('timeline_events', []);
 
         $events[] = Arr::removeNullValues([
             'timestamp' => now()->timestamp,
-            'type' => $eventType,
+            'type' => $type,
             'user' => Auth::id(),
             'metadata' => $metadata,
         ]);
