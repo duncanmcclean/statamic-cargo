@@ -43,7 +43,7 @@ Out of the box, carts are stored as YAML files in the `content/cargo/carts` dire
 ```php
 // config/statamic/cargo.php
 
-'carts' => [  
+'carts' => [
     'repository' => 'file',  
   
     'directory' => base_path('carts'),

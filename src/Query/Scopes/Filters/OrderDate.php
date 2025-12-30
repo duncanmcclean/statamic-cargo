@@ -2,8 +2,9 @@
 
 namespace DuncanMcClean\Cargo\Query\Scopes\Filters;
 
-use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Statamic\Query\Scopes\Filter;
+use Statamic\Support\Arr;
 
 class OrderDate extends Filter
 {
@@ -17,22 +18,65 @@ class OrderDate extends Filter
     public function fieldItems()
     {
         return [
-            'date' => [
+            'operator' => [
+                'type' => 'select',
+                'placeholder' => __('Select Operator'),
+                'options' => [
+                    '<' => __('Before'),
+                    '>' => __('After'),
+                    'between' => __('Between'),
+                    'null' => __('Empty'),
+                    'not-null' => __('Not empty'),
+                ],
+            ],
+            'value' => [
                 'type' => 'date',
-                'inline' => true,
-                'latest_date' => now(tz: 'UTC')->format('Y-m-d'),
+                'full_width' => true,
+                'if' => [
+                    'operator' => 'contains_any >, <',
+                ],
+            ],
+            'range_value' => [
+                'type' => 'date',
+                'mode' => 'range',
+                'full_width' => true,
+                'if' => [
+                    'operator' => 'between',
+                ],
             ],
         ];
     }
 
     public function apply($query, $values)
     {
-        $query->whereDate('date', Arr::get($values, 'date.date'));
+        $operator = $values['operator'];
+
+        if ($operator == 'between') {
+            $query->whereDate('date', '>=', Carbon::parse($values['range_value']['start']));
+            $query->whereDate('date', '<=', Carbon::parse($values['range_value']['end']));
+
+            return;
+        }
+
+        $value = Carbon::parse($values['value']);
+
+        match ($operator) {
+            'null' => $query->whereNull('date'),
+            'not-null' => $query->whereNotNull('date'),
+            default => $query->where('date', $operator, $value),
+        };
     }
 
     public function badge($values)
     {
-        return Arr::get($values, 'date.date');
+        $operator = $values['operator'];
+        $translatedOperator = Arr::get($this->fieldItems(), "operator.options.{$operator}");
+
+        if ($operator == 'between') {
+            return 'Date'.' '.strtolower($translatedOperator).' '.$values['range_value']['start'].' '.__('and').' '.$values['range_value']['end'];
+        }
+
+        return 'Date'.' '.strtolower($translatedOperator).' '.$values['value'];
     }
 
     public function visibleTo($key)

@@ -18,6 +18,9 @@ import TaxClassesIndex from './pages/tax-classes/Index.vue';
 import TaxClassesEmpty from './pages/tax-classes/Empty.vue';
 import TaxZonesIndex from './pages/tax-zones/Index.vue';
 import TaxZonesEmpty from './pages/tax-zones/Empty.vue';
+import LowStockProducts from './components/widgets/LowStockProducts.vue';
+import RecentOrders from './components/widgets/RecentOrders.vue';
+import StatisticWidget from './components/widgets/StatisticWidget.vue';
 
 Statamic.booting(() => {
     // Discounts
@@ -49,4 +52,9 @@ Statamic.booting(() => {
     // Tax Zones
     Statamic.$inertia.register('cargo::TaxZones/Index', TaxZonesIndex);
     Statamic.$inertia.register('cargo::TaxZones/Empty', TaxZonesEmpty);
+
+    // Widgets
+    Statamic.$components.register('low-stock-products-widget', LowStockProducts);
+    Statamic.$components.register('recent-orders-widget', RecentOrders);
+    Statamic.$components.register('statistic-widget', StatisticWidget);
 });

@@ -34,6 +34,11 @@ class OrderQueryBuilder extends Builder implements QueryBuilder
         return $this;
     }
 
+    public function sum(string $column)
+    {
+        return $this->pluck($column)->sum();
+    }
+
     protected function collect($items = [])
     {
         return DataCollection::make($items);
