@@ -21,7 +21,9 @@ class RecordTimelineEvents extends Subscriber
 
     public function handleOrderCreated(OrderCreated $event): void
     {
-        $event->order->appendTimelineEvent(TimelineEventTypes\OrderCreated::class);
+        $event->order
+            ->appendTimelineEvent(TimelineEventTypes\OrderCreated::class)
+            ->saveQuietly();
     }
 
     public function handleOrderSaved(OrderSaved $event): void
@@ -36,22 +38,28 @@ class RecordTimelineEvents extends Subscriber
             ->except('status');
 
         if ($updatedAttributes->isNotEmpty()) {
-            $event->order->appendTimelineEvent(TimelineEventTypes\OrderUpdated::class, $updatedAttributes->toArray());
+            $event->order
+                ->appendTimelineEvent(TimelineEventTypes\OrderUpdated::class, $updatedAttributes->toArray())
+                ->saveQuietly();
         }
     }
 
     public function handleOrderStatusUpdated(OrderStatusUpdated $event): void
     {
-        $event->order->appendTimelineEvent(TimelineEventTypes\OrderStatusChanged::class, [
-            'Original Status' => $event->originalStatus?->value,
-            'New Status' => $event->updatedStatus->value,
-        ]);
+        $event->order
+            ->appendTimelineEvent(TimelineEventTypes\OrderStatusChanged::class, [
+                'Original Status' => $event->originalStatus?->value,
+                'New Status' => $event->updatedStatus->value,
+            ])
+            ->saveQuietly();
     }
 
     public function handleOrderRefunded(OrderRefunded $event): void
     {
-        $event->order->appendTimelineEvent(TimelineEventTypes\OrderRefunded::class, [
-            'Amount' => $event->amount,
-        ]);
+        $event->order
+            ->appendTimelineEvent(TimelineEventTypes\OrderRefunded::class, [
+                'Amount' => $event->amount,
+            ])
+            ->saveQuietly();
     }
 }
