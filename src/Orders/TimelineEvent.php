@@ -36,7 +36,7 @@ class TimelineEvent implements Arrayable
         $timelineEventTypes = app('statamic.extensions')[TimelineEventType::class];
 
         if (! $timelineEventTypes->has($this->type)) {
-            throw new \Exception("Timeline Event Type [{$this->type}] does not exist.");
+            throw new TimelineEventTypeNotFound("Timeline Event Type [{$this->type}] could not be found.");
         }
 
         return app($timelineEventTypes->get($this->type))->setTimelineEvent($this);
