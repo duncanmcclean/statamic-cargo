@@ -21,6 +21,7 @@ import TaxZonesEmpty from './pages/tax-zones/Empty.vue';
 import RecentOrders from './components/widgets/RecentOrders.vue';
 import TopCustomers from './components/widgets/TopCustomers.vue';
 import StatisticWidget from './components/widgets/StatisticWidget.vue';
+import LowStockProducts from './components/widgets/LowStockProducts.vue';
 
 Statamic.booting(() => {
     // Discounts
@@ -57,4 +58,5 @@ Statamic.booting(() => {
     Statamic.$components.register('recent-orders-widget', RecentOrders);
     Statamic.$components.register('top-customers-widget', TopCustomers);
     Statamic.$components.register('statistic-widget', StatisticWidget);
+    Statamic.$components.register('low-stock-products-widget', LowStockProducts);
 });
