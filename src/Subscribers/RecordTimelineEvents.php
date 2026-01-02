@@ -34,7 +34,7 @@ class RecordTimelineEvents extends Subscriber
         $updatedAttributes = collect($event->order->getCurrentDirtyStateAttributes())
             ->filter(fn ($value, $key) => $event->order->isDirty($key))
             ->map(fn ($value, $key) => is_array($value) || is_object($value) ? json_encode($value) : $value)
-            ->except('status');
+            ->except('status', 'payment_gateway');
 
         if ($updatedAttributes->isNotEmpty()) {
             $event->order
