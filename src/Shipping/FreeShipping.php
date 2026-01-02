@@ -15,7 +15,8 @@ class FreeShipping extends ShippingMethod
         return collect([
             ShippingOption::make($this)
                 ->name(__('Free Shipping'))
-                ->price(0),
+                ->price(0)
+                ->acceptsPaymentOnDelivery(true),
         ]);
     }
 

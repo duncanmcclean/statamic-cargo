@@ -16,6 +16,11 @@ abstract class PaymentGateway
 {
     use HasHandle, HasTitle, RegistersItself;
 
+    public function isAvailable(Cart $cart): bool
+    {
+        return true;
+    }
+
     abstract public function setup(Cart $cart): array;
 
     abstract public function process(Order $order): void;

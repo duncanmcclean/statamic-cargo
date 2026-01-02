@@ -18,6 +18,7 @@ class PaymentGateways extends Tags
 
         if (! Blink::has(self::BLINK_KEY)) {
             $paymentGateways = Facades\PaymentGateway::all()
+                ->filter(fn (PaymentGateway $paymentGateway) => $paymentGateway->isAvailable($cart))
                 ->map(function (PaymentGateway $paymentGateway) use ($cart) {
                     $setup = $cart->isFree() ? [] : $paymentGateway->setup($cart);
 

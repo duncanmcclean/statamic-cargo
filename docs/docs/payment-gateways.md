@@ -336,6 +336,65 @@ You can workaround this by setting up a tunneling service, like [Expose](https:/
 
 You will need to update the `APP_URL` key in your `.env` while your tunnel is active, so the gateway points towards the tunnel.
 
+## Pay on delivery
+In some markets, you may wish to offer "Pay on delivery" instead of requiring payment upfront. To do this, simply add the built-in `pay_on_delivery` payment gateway to your gateways array:
+
+```php
+// config/statamic/cargo.php
+
+'gateways' => [
+    'pay_on_delivery' => [], // [tl! add]
+],
+```
+
+:::tip note
+The "Pay on delivery" gateway will only be shown to customers when their selected shipping option supports it. 
+
+```php
+// app/ShippingMethods/LocalPostageService.php
+
+public function options(Cart $cart): Collection  
+{  
+	return collect([  
+		ShippingOption::make($this)  
+			->name(__('Standard Shipping'))  
+            ->price(499)
+            ->acceptsPaymentOnDelivery(true), // [tl! add]
+        ]);  
+}
+```
+:::
+
+When orders are placed using "Pay on delivery":
+- They'll start with a status of "Payment Pending"
+- When you ship the order, update the status to "Shipped"
+- Once the delivery company has collected payment and confirmed delivery, update the status to "Payment Received"
+
+Depending on the delivery company, you may be able to automate the final status update via a custom API integration.
+
+### Payment Form
+
+:::tip note
+You don't need to copy this into your project if you're using the [built-in checkout flow](/frontend/checkout/prebuilt), as you'll already have it.
+:::
+
+To use the Pay on delivery gateway, copy and paste this template into your checkout flow:
+
+::tabs
+::tab antlers
+```antlers
+<form x-data="{ busy: false }" action="{{ checkout_url }}" method="POST" @submit="busy = true">
+    <button>Place Order</button>
+</form>
+```
+::tab blade
+```blade
+<form x-data="{ busy: false }" action="{{ $checkout_url }}" method="POST" @submit="busy = true">
+    <button>Place Order</button>
+</form>
+```
+::
+
 ## Build your own
 If you need to use a payment processor that Cargo doesn't support out-of-the-box, it's pretty easy to build your own payment gateway.
 

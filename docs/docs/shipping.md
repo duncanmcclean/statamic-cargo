@@ -40,6 +40,8 @@ class RoyalMail extends ShippingMethod
 
 The `options` method should return a collection of `ShippingOption` objects. The name and the price are displayed to the customer during checkout.
 
+If you want to accept [payment on delivery](/docs/payment-gateways#pay-on-delivery), you'll also need to chain `->acceptsPaymentOnDelivery(true)` when creating shipping options.
+
 You can optionally provide a `fieldtypeDetails` method to your shipping method, allowing you to display information about the shipment in the Control Panel, under the "Shipping" tab:
 
 ```php

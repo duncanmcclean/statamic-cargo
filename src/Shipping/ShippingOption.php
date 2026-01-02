@@ -21,6 +21,7 @@ class ShippingOption implements Augmentable, Purchasable
     public $name;
     public $handle;
     public $price;
+    public $acceptsPaymentOnDelivery = false;
     public $shippingMethod;
 
     public static function make(ShippingMethod $shippingMethod): self
@@ -49,6 +50,11 @@ class ShippingOption implements Augmentable, Purchasable
     public function price($price = null)
     {
         return $this->fluentlyGetOrSet('price')->args(func_get_args());
+    }
+
+    public function acceptsPaymentOnDelivery($acceptsPaymentOnDelivery = null)
+    {
+        return $this->fluentlyGetOrSet('acceptsPaymentOnDelivery')->args(func_get_args());
     }
 
     public function shippingMethod($shippingMethod = null)
@@ -105,6 +111,7 @@ class ShippingOption implements Augmentable, Purchasable
             'name' => $this->name(),
             'handle' => $this->handle(),
             'price' => $this->price(),
+            'accepts_payment_on_delivery' => $this->acceptsPaymentOnDelivery(),
             'shipping_method' => $this->shippingMethod(),
         ];
     }
@@ -115,6 +122,7 @@ class ShippingOption implements Augmentable, Purchasable
             'name' => $this->name(),
             'handle' => $this->handle(),
             'price' => $this->price(),
+            'accepts_payment_on_delivery' => $this->acceptsPaymentOnDelivery(),
         ];
     }
 }

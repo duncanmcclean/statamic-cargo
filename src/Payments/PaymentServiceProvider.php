@@ -10,6 +10,7 @@ class PaymentServiceProvider extends AddonServiceProvider
     protected array $paymentGateways = [
         Gateways\Dummy::class,
         Gateways\Mollie::class,
+        Gateways\PayOnDelivery::class,
         Gateways\Stripe::class,
     ];
 
