@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Orders;
 
+use DuncanMcClean\Cargo\Exceptions\TimelineEventTypeNotFound;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Carbon;
 use Statamic\Contracts\Auth\User as UserContract;

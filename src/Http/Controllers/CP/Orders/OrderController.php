@@ -164,11 +164,9 @@ class OrderController extends CpController
         [$values, $meta, $extraValues] = $this->extractFromFields($order, $blueprint);
 
         return [
-            'data' => array_merge_recursive((new OrderResource($order->fresh()))->resolve(), [
-                'data' => [
-                    'values' => $values,
-                    'extraValues' => $extraValues,
-                ],
+            'data' => array_merge_recursive((new OrderResource($order->fresh()))->resolve()['data'], [
+                'values' => $values,
+                'extraValues' => $extraValues,
             ]),
             'saved' => $saved,
         ];

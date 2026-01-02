@@ -1,14 +1,14 @@
 <script setup>
 import { Fieldtype, DateFormatter } from '@statamic/cms';
 import { Heading, Subheading, Avatar, Table, TableRows, TableRow, TableCell, Icon } from '@statamic/cms/ui';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const emit = defineEmits(Fieldtype.emits);
 const props = defineProps(Fieldtype.props);
 const { expose } = Fieldtype.use(emit, props);
 defineExpose(expose);
 
-const events = ref(props.value);
+const events = computed(() => props.value);
 
 const formatRelativeDate = (value) => {
     const today = new Date();

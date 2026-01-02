@@ -133,6 +133,7 @@ function actionCompleted(successful = null, response) {
         :meta="meta"
         :errors="errors"
         :read-only="readOnly"
+        :remember-tab="true"
     >
         <PublishTabs>
             <template #actions>

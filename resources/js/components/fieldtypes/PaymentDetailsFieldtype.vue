@@ -1,11 +1,14 @@
 <script setup>
 import { Fieldtype } from '@statamic/cms';
 import { Heading, Description, Icon } from '@statamic/cms/ui';
+import { computed } from 'vue';
 
 const emit = defineEmits(Fieldtype.emits);
 const props = defineProps(Fieldtype.props);
 const { expose } = Fieldtype.use(emit, props);
 defineExpose(expose);
+
+const hasDetails = computed(() => Object.entries(props.value.details).length > 0);
 </script>
 
 <template>
@@ -27,9 +30,9 @@ defineExpose(expose);
                 </div>
             </div>
 
-            <hr v-if="value.details.length" class="my-4 border-gray-300 dark:border-gray-700" />
+            <hr v-if="hasDetails" class="my-4 border-gray-300 dark:border-gray-700" />
 
-            <div v-if="value.details.length">
+            <div v-if="hasDetails">
                 <ul class="list-none space-y-2">
                     <li v-for="(value, label) in value.details" :key="label">
                         <Description>
