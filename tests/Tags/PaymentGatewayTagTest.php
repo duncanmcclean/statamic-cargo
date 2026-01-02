@@ -25,6 +25,7 @@ class PaymentGatewayTagTest extends TestCase
     {
         Config::set('statamic.cargo.payments.gateways', [
             'dummy' => [],
+            'pay_on_delivery' => [],
         ]);
 
         $cart = tap(Cart::make()->grandTotal(1000))->saveWithoutRecalculating();
@@ -34,6 +35,7 @@ class PaymentGatewayTagTest extends TestCase
         $output = $this->tag('{{ payment_gateways }}<option>{{ name }}</option>{{ /payment_gateways }}');
 
         $this->assertStringContainsString('<option>Dummy</option>', $output);
+        $this->assertStringNotContainsString('<option>Pay on delivery</option>', $output);
     }
 
     private function tag($tag, $variables = [])

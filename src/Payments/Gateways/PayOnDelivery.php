@@ -13,6 +13,8 @@ use Illuminate\Http\Response;
 
 class PayOnDelivery extends PaymentGateway
 {
+    protected static $title = 'Pay on delivery';
+
     public function isAvailable(Cart $cart): bool
     {
         return $cart->shippingOption()?->acceptsPaymentOnDelivery() ?? false;
