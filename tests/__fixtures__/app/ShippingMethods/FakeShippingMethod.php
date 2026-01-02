@@ -23,6 +23,11 @@ class FakeShippingMethod extends ShippingMethod
             ShippingOption::make($this)
                 ->name('Express Shipping')
                 ->price(1000),
+
+            ShippingOption::make($this)
+                ->name('Pay On Delivery')
+                ->price(1500)
+                ->acceptsPaymentOnDelivery(true),
         ]);
     }
 }

@@ -28,7 +28,7 @@ class ShippingTest extends TestCase
         $options = $shippingMethod->options(Facades\Cart::make());
 
         $this->assertInstanceOf(Collection::class, $options);
-        $this->assertCount(3, $options);
+        $this->assertCount(4, $options);
 
         $this->assertInstanceOf(ShippingOption::class, $options->first());
         $this->assertEquals('In-Store Pickup', $options->first()->name());
