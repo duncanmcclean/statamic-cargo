@@ -17,6 +17,7 @@ class CartPaymentGatewaysController
         $cart = CartFacade::current();
 
         return Facades\PaymentGateway::all()
+            ->filter(fn (PaymentGateway $paymentGateway) => $paymentGateway->isAvailable($cart))
             ->map(function (PaymentGateway $paymentGateway) use ($cart) {
                 $setup = $cart->isFree() ? [] : $paymentGateway->setup($cart);
 
