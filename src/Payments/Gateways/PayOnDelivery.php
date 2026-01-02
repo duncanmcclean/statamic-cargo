@@ -15,9 +15,7 @@ class PayOnDelivery extends PaymentGateway
 {
     public function isAvailable(Cart $cart): bool
     {
-        return true;
-
-//        return $cart->shippingOption()?->acceptsPaymentOnDelivery() ?? false;
+        return $cart->shippingOption()?->acceptsPaymentOnDelivery() ?? false;
     }
 
     public function setup(Cart $cart): array

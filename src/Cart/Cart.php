@@ -128,7 +128,8 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
         return ShippingOption::make($this->shippingMethod())
             ->name(Arr::get($this->get('shipping_option'), 'name'))
             ->handle(Arr::get($this->get('shipping_option'), 'handle'))
-            ->price(Arr::get($this->get('shipping_option'), 'price'));
+            ->price(Arr::get($this->get('shipping_option'), 'price'))
+            ->acceptsPaymentOnDelivery(Arr::get($this->get('shipping_option'), 'accepts_payment_on_delivery'));
     }
 
     public function paymentGateway(): ?PaymentGateway
