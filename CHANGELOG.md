@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.0.0-alpha.13 (2026-01-02)
+
+### What's new
+- Added "Pay on delivery" support #90 by @duncanmcclean
+
+### What's fixed
+- Ensure active tab is remembered in order publish form by @duncanmcclean
+- Fixed payment & shipping details not showing by @duncanmcclean
+- Ensure order timeline updates on save by @duncanmcclean
+- Added missing import by @duncanmcclean
+- Updating `payment_gateway` key alone shouldn't create timeline event by @duncanmcclean
+
+
+
 ## v1.0.0-alpha.12 (2025-12-30)
 
 ### What's new
