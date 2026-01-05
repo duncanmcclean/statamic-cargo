@@ -14,7 +14,6 @@ class Currencies
         ['code' => 'AZN', 'name' => 'Azerbaijanian Manat', 'symbol' => 'ман'],
         ['code' => 'BAM', 'name' => 'Convertible Marks', 'symbol' => 'KM'],
         ['code' => 'BBD', 'name' => 'Barbados Dollar', 'symbol' => '$'],
-        ['code' => 'BGN', 'name' => 'Bulgarian Lev', 'symbol' => 'лв'],
         ['code' => 'BMD', 'name' => 'Bermudian Dollar', 'symbol' => '$'],
         ['code' => 'BND', 'name' => 'Brunei Dollar', 'symbol' => '$'],
         ['code' => 'BOB', 'name' => 'BOV Boliviano Mvdol', 'symbol' => '$b'],
