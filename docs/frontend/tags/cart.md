@@ -57,6 +57,8 @@ These snippets might come in handy... they're all pretty self-explanatory:
 * `{{ cart:sub_total }}`
 * `{{ cart:discount_total }}`
 * `{{ cart:tax_total }}`
+* `{{ cart:line_item_tax_total }}`
+* `{{ cart:shipping_tax_total }}`
 * `{{ cart:shipping_total }}`
 * `{{ cart:is_free }}`
 * `{{ cart:has_physical_products }}`
