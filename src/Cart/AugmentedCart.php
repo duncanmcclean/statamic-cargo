@@ -7,6 +7,7 @@ use DuncanMcClean\Cargo\Fieldtypes\Money;
 use DuncanMcClean\Cargo\Orders\LineItem;
 use Statamic\Data\AbstractAugmented;
 use Statamic\Fields\Field;
+use Statamic\Fields\Value;
 
 class AugmentedCart extends AbstractAugmented
 {
@@ -47,6 +48,7 @@ class AugmentedCart extends AbstractAugmented
             'tax_breakdown',
             'has_physical_products',
             'has_digital_products',
+            'line_items_tax_total',
         ];
     }
 
@@ -125,5 +127,19 @@ class AugmentedCart extends AbstractAugmented
         return $this->data->lineItems()
             ->filter(fn (LineItem $lineItem) => $lineItem->product()?->get('type', 'physical') === 'digital')
             ->isNotEmpty();
+    }
+
+    public function lineItemsTaxTotal()
+    {
+        $moneyField = new Field('line_items_tax_total', [
+            'type' => 'money',
+            'save_zero_value' => true,
+        ]);
+
+        return new Value(
+            value: $this->data->lineItems()->sum('taxTotal'),
+            fieldtype: $moneyField->fieldtype(),
+            augmentable: $this->data
+        );
     }
 }

@@ -44,6 +44,7 @@ class AugmentedOrder extends AugmentedCart
             'tax_breakdown',
             'has_physical_products',
             'has_digital_products',
+            'line_items_tax_total',
             'downloads',
         ];
     }
