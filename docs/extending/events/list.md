@@ -98,6 +98,20 @@ public function handle(DiscountSaved $event)
 }
 ```
 
+### OrderBlueprintFound
+`DuncanMcClean\Cargo\Events\OrderBlueprintFound`
+
+Dispatched when Cargo gets the [order blueprint](/docs/orders#blueprint).
+
+You may modify the blueprint here, and it will be reflected in the publish form (and wherever else the blueprint is used). An example of when this might be useful is to add a section to the blueprint on the fly.
+
+```php
+public function handle(OrderBlueprintFound $event)
+{
+	$event->blueprint;
+}
+```
+
 ### OrderCancelled
 `DuncanMcClean\Cargo\Events\OrderCancelled`
 

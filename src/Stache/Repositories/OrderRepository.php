@@ -7,6 +7,7 @@ use DuncanMcClean\Cargo\Contracts\Orders\Order;
 use DuncanMcClean\Cargo\Contracts\Orders\OrderRepository as RepositoryContract;
 use DuncanMcClean\Cargo\Contracts\Orders\QueryBuilder;
 use DuncanMcClean\Cargo\Customers\GuestCustomer;
+use DuncanMcClean\Cargo\Events\OrderBlueprintFound;
 use DuncanMcClean\Cargo\Exceptions\OrderNotFound;
 use DuncanMcClean\Cargo\Orders\Blueprint;
 use Illuminate\Support\Carbon;
@@ -120,7 +121,11 @@ class OrderRepository implements RepositoryContract
 
     public function blueprint(): StatamicBlueprint
     {
-        return (new Blueprint)();
+        $blueprint = (new Blueprint)();
+
+        OrderBlueprintFound::dispatch($blueprint);
+
+        return $blueprint;
     }
 
     public static function bindings(): array

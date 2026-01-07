@@ -3,13 +3,16 @@
 namespace Tests\Stache\Repositories;
 
 use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
+use DuncanMcClean\Cargo\Events\OrderBlueprintFound;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
 use Statamic\Facades\YAML;
+use Statamic\Fields\Blueprint;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
 
@@ -172,5 +175,25 @@ class OrderRepositoryTest extends TestCase
         $this->repo->delete($order);
 
         $this->assertFileDoesNotExist($order->path());
+    }
+
+    #[Test]
+    public function can_get_blueprint()
+    {
+        $blueprint = $this->repo->blueprint();
+
+        $this->assertInstanceOf(Blueprint::class, $blueprint);
+    }
+
+    #[Test]
+    public function order_blueprint_found_event_is_dispatched()
+    {
+        Event::fake();
+
+        $blueprint = $this->repo->blueprint();
+
+        Event::assertDispatched(OrderBlueprintFound::class, function ($event) use ($blueprint) {
+            return $event->blueprint === $blueprint;
+        });
     }
 }
