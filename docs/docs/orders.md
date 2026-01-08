@@ -143,6 +143,23 @@ When an order is created, Cargo will generate a unique order number. By default,
 'minimum_order_number' => 5000,
 ```
 
+You may hook into the Stache `OrderRepository` class to customize how order numbers are generated:
+
+```php
+// app/Providers/AppServiceProvider.php
+
+use DuncanMcClean\Cargo\Stache\Repositories\OrderRepository;
+
+OrderRepository::hook('generating-order-number', function ($payload, $next) {
+    // $payload->order;
+    // $payload->orderNumber;
+    
+    $payload->orderNumber = 5000;
+    
+    return $next($payload);
+});
+```
+
 :::tip note
 When storing orders in the database, the `order_number` column is auto-incrementing, meaning the database (eg. MySQL, PostgreSQL, etc) is in charge of generating the next order number.
 
