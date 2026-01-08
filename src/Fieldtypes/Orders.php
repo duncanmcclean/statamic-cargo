@@ -3,6 +3,7 @@
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
 use DuncanMcClean\Cargo\Facades\Order;
+use DuncanMcClean\Cargo\Http\Resources\CP\Orders\Order as OrderResource;
 use Illuminate\Support\Str;
 use Statamic\CP\Column;
 use Statamic\CP\Columns;
@@ -10,7 +11,6 @@ use Statamic\Facades\User;
 use Statamic\Fieldtypes\Relationship;
 use Statamic\Query\Scopes\Filters\Concerns\QueriesFilters;
 use Statamic\Statamic;
-use DuncanMcClean\Cargo\Http\Resources\CP\Orders\Order as OrderResource;
 
 class Orders extends Relationship
 {
