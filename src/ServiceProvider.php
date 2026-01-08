@@ -11,6 +11,8 @@ use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Facades\PaymentGateway;
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use DuncanMcClean\Cargo\Facades\TaxZone;
+use DuncanMcClean\Cargo\Orders\OrderStatus;
+use DuncanMcClean\Cargo\Orders\OrderStatus as OrderStatusEnum;
 use DuncanMcClean\Cargo\Search\DiscountsProvider;
 use DuncanMcClean\Cargo\Search\OrdersProvider;
 use DuncanMcClean\Cargo\Stache\Query\CartQueryBuilder;
@@ -88,8 +90,15 @@ class ServiceProvider extends AddonServiceProvider
         ], 'cargo-packing-slip');
 
         User::computed('orders', function ($user) {
-            return Order::query()->where('customer', $user->getKey())->orderByDesc('date')->pluck('id')->all();
+            return Order::query()->where('customer', $user->getKey())->orderByDesc('date')->pluck('id')->prepend('foo')->all();
         });
+
+        Statamic::provideToScript([
+            'orderStatuses' => collect(OrderStatus::cases())->map(fn ($status) => [
+                'value' => $status,
+                'label' => OrderStatusEnum::label($status),
+            ])->values(),
+        ]);
 
         $this
             ->bootStacheStores()
