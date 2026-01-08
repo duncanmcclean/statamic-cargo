@@ -1,23 +1,10 @@
 <script setup>
 import { IndexFieldtype } from '@statamic/cms';
-import { Badge } from '@statamic/cms/ui';
-import { computed } from 'vue';
+import OrderStatusBadge from "../orders/OrderStatusBadge.vue";
 
 const props = defineProps(IndexFieldtype.props);
-
-const color = computed(() => {
-    let colors = {
-        payment_pending: 'default',
-        payment_received: 'blue',
-        shipped: 'green',
-        returned: 'orange',
-        cancelled: 'red',
-    };
-
-    return colors[props.value.value] ?? 'green';
-});
 </script>
 
 <template>
-    <Badge :text="String(value.label)" :color variant="flat" pill />
+	<OrderStatusBadge :status="props.value" />
 </template>
