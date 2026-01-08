@@ -372,6 +372,24 @@ When orders are placed using "Pay on delivery":
 
 Depending on the delivery company, you may be able to automate the final status update via a custom API integration.
 
+### Email Notifications
+
+Cargo will add an event listener to your `AppServiceProvider` during the install process. The listener is responsible for [sending the "Order Confirmation" email](/docs/email-notifications).
+
+It usually listens for the `OrderPaymentReceived` event, dispatched when an order's payment is successful. You may want to listen to the `OrderCreated` instead so the email is sent when the order is created.
+
+```php
+use DuncanMcClean\Cargo\Events\OrderPaymentReceived; // [tl! remove]
+use DuncanMcClean\Cargo\Events\OrderCreated; // [tl! add]
+
+Event::listen(OrderPaymentReceived::class, function ($event) { // [tl! remove]
+Event::listen(OrderCreated::class, function ($event) { // [tl! add]
+    Mail::to($event->order->customer())  
+        ->locale($event->order->site()->shortLocale())  
+        ->send(new OrderConfirmation($event->order));  
+});
+```
+
 ### Payment Form
 
 :::tip note
