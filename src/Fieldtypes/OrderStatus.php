@@ -15,14 +15,11 @@ class OrderStatus extends Fieldtype
             return null;
         }
 
-        if (! $data instanceof OrderStatusEnum) {
-            $data = OrderStatusEnum::from($data);
+        if ($data instanceof OrderStatusEnum) {
+            $data = $data->value;
         }
 
-        return [
-            'value' => $data,
-            'label' => OrderStatusEnum::label($data),
-        ];
+        return $data;
     }
 
     public function preload()

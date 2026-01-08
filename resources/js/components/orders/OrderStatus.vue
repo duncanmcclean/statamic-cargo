@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue';
 import { Badge, Button, Field, Select, Input, Description } from '@statamic/cms/ui';
+import OrderStatusBadge from "./OrderStatusBadge.vue";
 
 const emit = defineEmits(['update:modelValue', 'update:trackingNumber']);
 
@@ -18,20 +19,6 @@ const props = defineProps({
 const status = ref(props.modelValue);
 const trackingNumber = ref(props.trackingNumber);
 const updating = ref(false);
-
-const statusLabel = computed(() => props.statuses.find((status) => status.value === props.modelValue)?.label);
-
-const statusBadgeColour = computed(() => {
-    let colors = {
-        payment_pending: 'default',
-        payment_received: 'blue',
-        shipped: 'green',
-        returned: 'orange',
-        cancelled: 'red',
-    };
-
-    return colors[props.modelValue];
-});
 
 function update() {
     emit('update:modelValue', status.value);
@@ -52,7 +39,7 @@ onMounted(() => {
 <template>
     <div v-if="!updating">
         <div class="flex items-center justify-between">
-            <Badge :text="statusLabel" size="lg" flat :color="statusBadgeColour" />
+	        <OrderStatusBadge :status="status" size="lg" />
             <Button :text="__('Change')" size="sm" @click="updating = true" />
         </div>
 

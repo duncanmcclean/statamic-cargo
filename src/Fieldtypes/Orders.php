@@ -3,6 +3,7 @@
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
 use DuncanMcClean\Cargo\Facades\Order;
+use DuncanMcClean\Cargo\Http\Resources\CP\Orders\Order as OrderResource;
 use Illuminate\Support\Str;
 use Statamic\CP\Column;
 use Statamic\CP\Columns;
@@ -19,6 +20,7 @@ class Orders extends Relationship
     protected $canCreate = false;
     protected $canSearch = false;
     protected $formComponent = 'order-publish-form';
+    protected $itemComponent = 'related-order';
     protected $formComponentProps = [
         'blueprint' => 'blueprint',
         'reference' => 'reference',
@@ -41,15 +43,11 @@ class Orders extends Relationship
 
     protected function toItemArray($id)
     {
-        $order = Order::find($id);
+        if (! $order = Order::find($id)) {
+            return $this->invalidItemArray($id);
+        }
 
-        return [
-            'id' => $order->id(),
-            'reference' => $order->reference(),
-            'title' => "#{$order->orderNumber()}",
-            'hint' => $order->date()->format('Y-m-d'),
-            'edit_url' => cp_route('cargo.orders.edit', $order->id()),
-        ];
+        return (new OrderResource($order))->resolve()['data'];
     }
 
     public function getIndexItems($request)
