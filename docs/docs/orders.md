@@ -133,6 +133,43 @@ You may provide a `limit` option to control the number of items displayed in lis
 ['type' => 'recent_orders', 'width' => 50, 'limit' => 10],
 ```
 
+## Order Numbers
+
+When an order is created, Cargo will generate a unique order number. By default, order numbers start at `1000` but the minimum value is configurable:
+
+```php
+// config/statamic/cargo.php
+
+'minimum_order_number' => 5000,
+```
+
+:::tip note
+When storing orders in the database, the `order_number` column is auto-incrementing, meaning the database (eg. MySQL, PostgreSQL, etc) is in charge of generating the next order number.
+
+To customize how order numbers are generated, remove `->autoIncrement()` from the migration and listen for the Order model's `creating` event:
+
+```php
+$table->integer('order_number')->autoIncrement(); // [tl! remove]
+$table->integer('order_number'); // [tl! add]
+```
+
+```php
+// app/Providers/AppServiceProvider.php
+
+use DuncanMcClean\Cargo\Orders\Eloquent\OrderModel;
+use Illuminate\Database\Eloquent\Model;
+
+Model::creating(function (Model $model) {
+    if ($model instanceof OrderModel) {
+        $model->orderNumber = 5000;
+    }
+});
+```
+:::
+
+
+when you're using a db, the order number column is auto incrementing. if you want to customize order numbers, you'll need to edit the migration 
+
 ## Storage
 Out of the box, orders are stored as YAML files in the `content/cargo/orders` directory. If you wish, you can change the directory in the `cargo.php` config file:
 
