@@ -17,7 +17,7 @@ import {
 import OrderStatus from './OrderStatus.vue';
 import { Pipeline, Request, BeforeSaveHooks, AfterSaveHooks } from '@statamic/cms/save-pipeline';
 import { ItemActions } from '@statamic/cms';
-import { resetValuesFromResponse } from '@statamic/cms/temporary';
+import { resetValuesFromResponse } from '@statamic/cms';
 
 const props = defineProps({
     blueprint: Object,
