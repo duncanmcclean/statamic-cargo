@@ -90,7 +90,7 @@ class ServiceProvider extends AddonServiceProvider
         ], 'cargo-packing-slip');
 
         User::computed('orders', function ($user) {
-            return Order::query()->where('customer', $user->getKey())->orderByDesc('date')->pluck('id')->prepend('foo')->all();
+            return Order::query()->where('customer', $user->getKey())->orderByDesc('date')->pluck('id')->all();
         });
 
         Statamic::provideToScript([
