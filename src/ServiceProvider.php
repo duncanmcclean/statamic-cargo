@@ -94,8 +94,8 @@ class ServiceProvider extends AddonServiceProvider
         });
 
         Statamic::provideToScript([
-            'orderStatuses' => collect(OrderStatus::cases())->map(fn ($status) => [
-                'value' => $status,
+            'orderStatuses' => collect(OrderStatus::cases())->map(fn (OrderStatus $status): array => [
+                'value' => $status->value,
                 'label' => OrderStatusEnum::label($status),
             ])->values(),
         ]);
