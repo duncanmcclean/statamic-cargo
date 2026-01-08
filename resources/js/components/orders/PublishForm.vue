@@ -19,6 +19,8 @@ import { Pipeline, Request, BeforeSaveHooks, AfterSaveHooks } from '@statamic/cm
 import { ItemActions } from '@statamic/cms';
 import { resetValuesFromResponse } from '@statamic/cms/temporary';
 
+const emit = defineEmits(['saved']);
+
 const props = defineProps({
     blueprint: Object,
     reference: String,
@@ -51,6 +53,7 @@ function save() {
             new AfterSaveHooks('order'),
         ])
         .then((response) => {
+			emit('saved', response);
             Statamic.$toast.success('Saved');
         });
 }
