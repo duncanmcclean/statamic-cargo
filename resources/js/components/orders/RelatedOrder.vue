@@ -45,7 +45,7 @@ function itemUpdated(responseData) {
 	item.value.order_number = responseData.order_number;
 	item.value.date = responseData.date;
 	item.value.status = responseData.status;
-	item.value.grand_total = responseData.total;
+	item.value.grand_total = responseData.grand_total;
 
 	Statamic.$events.$emit(`live-preview.${name.value}.refresh`);
 }
