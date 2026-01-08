@@ -12,13 +12,13 @@ Cargo will also configure an [event listener](https://laravel.com/docs/master/ev
 
 use App\Mail\OrderConfirmation;
 use DuncanMcClean\Cargo\Events\OrderPaymentReceived;
-use Illuminate\Support\Facades\Event;  
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 
-Event::listen(OrderPaymentReceived::class, function ($event) {  
-    Mail::to($event->order->customer())  
-        ->locale($event->order->site()->shortLocale())  
-        ->send(new OrderConfirmation($event->order));  
+Event::listen(OrderPaymentReceived::class, function ($event) {
+    Mail::to($event->order->customer())
+        ->locale($event->order->site()->shortLocale())
+        ->send(new OrderConfirmation($event->order));
 });
 ```
 
