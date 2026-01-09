@@ -385,7 +385,7 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
 
     public function fileData(): array
     {
-        return $this->data()->merge([
+        return Arr::removeNullValues($this->data()->merge([
             'id' => $this->id(),
             'cart' => $this->cart(),
             'status' => $this->status()->value,
@@ -396,7 +396,7 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
             'discount_total' => $this->discountTotal(),
             'tax_total' => $this->taxTotal(),
             'shipping_total' => $this->shippingTotal(),
-        ])->filter()->all();
+        ])->all());
     }
 
     public function fresh(): ?Order
