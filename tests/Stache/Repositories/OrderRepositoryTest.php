@@ -161,6 +161,22 @@ class OrderRepositoryTest extends TestCase
     }
 
     #[Test]
+    public function can_hook_into_generating_order_number()
+    {
+        $this->repo->hook('generating-order-number', function ($payload, $next) {
+            $payload->orderNumber = 5000;
+
+            return $next($payload);
+        });
+
+        $order = Order::make();
+
+        $this->repo->save($order);
+
+        $this->assertEquals(5000, $order->orderNumber());
+    }
+
+    #[Test]
     public function can_delete_an_order()
     {
         $order = Order::make()

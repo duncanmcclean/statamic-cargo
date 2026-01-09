@@ -18,6 +18,8 @@ import OrderStatus from './OrderStatus.vue';
 import { Pipeline, Request, BeforeSaveHooks, AfterSaveHooks } from '@statamic/cms/save-pipeline';
 import { ItemActions, resetValuesFromResponse } from '@statamic/cms';
 
+const emit = defineEmits(['saved']);
+
 const props = defineProps({
     blueprint: Object,
     reference: String,
@@ -50,6 +52,7 @@ function save() {
             new AfterSaveHooks('order'),
         ])
         .then((response) => {
+			emit('saved', response);
             Statamic.$toast.success('Saved');
         });
 }

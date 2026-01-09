@@ -14,6 +14,8 @@ import StatesFieldtype from './components/fieldtypes/StatesFieldtype.vue';
 import TaxRatesFieldtype from './components/fieldtypes/TaxRatesFieldtype.vue';
 import OrdersIndex from './pages/orders/Index.vue';
 import OrdersEdit from './pages/orders/Edit.vue';
+import OrderPublishForm from './components/orders/PublishForm.vue';
+import RelatedOrder from './components/orders/RelatedOrder.vue';
 import TaxClassesIndex from './pages/tax-classes/Index.vue';
 import TaxClassesEmpty from './pages/tax-classes/Empty.vue';
 import TaxZonesIndex from './pages/tax-zones/Index.vue';
@@ -44,6 +46,8 @@ Statamic.booting(() => {
     // Orders
     Statamic.$inertia.register('cargo::Orders/Index', OrdersIndex);
     Statamic.$inertia.register('cargo::Orders/Edit', OrdersEdit);
+    Statamic.$components.register('order-publish-form', OrderPublishForm);
+    Statamic.$components.register('related-order', RelatedOrder);
 
     // Tax Classes
     Statamic.$inertia.register('cargo::TaxClasses/Index', TaxClassesIndex);
