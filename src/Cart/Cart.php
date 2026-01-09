@@ -21,7 +21,7 @@ use DuncanMcClean\Cargo\Shipping\ShippingMethod;
 use DuncanMcClean\Cargo\Shipping\ShippingOption;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Arr;
+use Statamic\Support\Arr;
 use Illuminate\Support\Carbon;
 use Statamic\Contracts\Data\Augmentable;
 use Statamic\Contracts\Data\Augmented;
@@ -266,7 +266,7 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
 
     public function fileData(): array
     {
-        return $this->data()->merge([
+        return Arr::removeNullValues($this->data()->merge([
             'id' => $this->id(),
             'customer' => $this->customer,
             'line_items' => $this->lineItems()->map->fileData()->all(),
@@ -275,7 +275,7 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
             'discount_total' => $this->discountTotal(),
             'tax_total' => $this->taxTotal(),
             'shipping_total' => $this->shippingTotal(),
-        ])->filter()->all();
+        ])->all());
     }
 
     public function fresh(): ?Cart
