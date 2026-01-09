@@ -1,6 +1,6 @@
 <?php
 
-namespace Payments;
+namespace Tests\Payments;
 
 use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
 use DuncanMcClean\Cargo\Facades\Cart;
