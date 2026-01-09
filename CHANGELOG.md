@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.0.0-alpha.14 (2026-01-09)
+
+### What's improved
+- Improved Orders Fieldtype UX #98 by @duncanmcclean
+- Added `generating-order-number` hook #97 by @duncanmcclean
+- Implemented `OrderBlueprintFound` event #95 by @duncanmcclean
+- Made `line_item_tax_total` available in templates #93 by @duncanmcclean
+- Added `format_money` modifier #92 by @duncanmcclean by @duncanmcclean
+
+### What's fixed
+- Sorted out temporary JS imports #96 by @duncanmcclean
+- Corrected namespace in test by @duncanmcclean
+- Only filter out nulls when returning `fileData` #99 by @duncanmcclean
+- Remove Bulgarian Lev from Currencies array #91 by @duncanmcclean
+
+
+
 ## v1.0.0-alpha.13 (2026-01-02)
 
 ### What's new
