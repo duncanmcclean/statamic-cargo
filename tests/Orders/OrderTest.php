@@ -296,6 +296,11 @@ class OrderTest extends TestCase
         $this->assertEquals(<<<'YAML'
 id: abc
 status: payment_pending
+grand_total: 0
+sub_total: 0
+discount_total: 0
+tax_total: 0
+shipping_total: 0
 
 YAML
             , file_get_contents($order->path()));
@@ -335,6 +340,11 @@ YAML
         $this->assertEquals(<<<'YAML'
 id: abc
 status: payment_pending
+grand_total: 0
+sub_total: 0
+discount_total: 0
+tax_total: 0
+shipping_total: 0
 
 YAML
             , file_get_contents($order->path()));
