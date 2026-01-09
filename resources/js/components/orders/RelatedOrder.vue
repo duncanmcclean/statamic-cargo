@@ -1,6 +1,5 @@
 <script setup>
-import { DateFormatter } from '@statamic/cms';
-import {InlineEditForm} from '@statamic/cms/temporary';
+import { DateFormatter, InlineEditForm } from '@statamic/cms';
 import { Heading, Description, Badge, Button, Dropdown, DropdownMenu, DropdownItem, injectPublishContext as injectContainerContext } from '@statamic/cms/ui';
 import OrderStatusBadge from "./OrderStatusBadge.vue";
 import { ref, computed } from 'vue';

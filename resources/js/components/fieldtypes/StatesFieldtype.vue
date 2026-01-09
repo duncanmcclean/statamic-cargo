@@ -60,12 +60,11 @@
 </template>
 
 <script>
-import { FieldtypeMixin } from '@statamic/cms';
-import { HasInputOptions, SortableList } from '@statamic/cms/temporary';
+import { FieldtypeMixin, HasInputOptionsMixin, SortableList } from '@statamic/cms';
 import { Badge, Combobox } from '@statamic/cms/ui';
 
 export default {
-    mixins: [FieldtypeMixin, HasInputOptions],
+    mixins: [FieldtypeMixin, HasInputOptionsMixin],
 
     components: {
         Badge,

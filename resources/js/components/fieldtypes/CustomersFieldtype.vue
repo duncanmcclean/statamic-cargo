@@ -1,6 +1,5 @@
 <script setup>
-import { Fieldtype, requireElevatedSession } from '@statamic/cms';
-import { InlineEditForm } from '@statamic/cms/temporary';
+import { Fieldtype, InlineEditForm, requireElevatedSession } from '@statamic/cms';
 import { Dropdown, DropdownMenu, DropdownItem, Heading, Description, Badge, injectPublishContext } from '@statamic/cms/ui';
 import { getCurrentInstance, computed, ref } from 'vue';
 
