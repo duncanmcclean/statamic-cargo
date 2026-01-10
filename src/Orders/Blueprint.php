@@ -178,6 +178,10 @@ class Blueprint
                                     'field' => ['type' => 'money', 'display' => __('Tax Total'), 'visibility' => 'hidden', 'listable' => 'hidden', 'save_zero_value' => true],
                                 ],
                                 [
+                                    'handle' => 'shipping_tax_total',
+                                    'field' => ['type' => 'money', 'display' => __('Shipping Tax Total'), 'visibility' => 'hidden', 'listable' => 'hidden', 'save_zero_value' => true],
+                                ],
+                                [
                                     'handle' => 'payment_gateway',
                                     'field' => ['type' => 'payment_gateways', 'display' => __('Payment Gateway'), 'visibility' => 'hidden', 'listable' => 'hidden', 'max_items' => 1],
                                 ],
