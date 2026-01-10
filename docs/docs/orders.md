@@ -184,9 +184,6 @@ Model::creating(function (Model $model) {
 ```
 :::
 
-
-when you're using a db, the order number column is auto incrementing. if you want to customize order numbers, you'll need to edit the migration 
-
 ## Storage
 Out of the box, orders are stored as YAML files in the `content/cargo/orders` directory. If you wish, you can change the directory in the `cargo.php` config file:
 
