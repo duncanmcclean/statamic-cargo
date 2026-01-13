@@ -4,6 +4,7 @@ namespace DuncanMcClean\Cargo\Commands;
 
 use DuncanMcClean\Cargo\Data\Currencies;
 use DuncanMcClean\Cargo\Facades\TaxClass;
+use DuncanMcClean\Cargo\Products\Product;
 use DuncanMcClean\Cargo\Support\CodeInjection;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -120,6 +121,7 @@ class InstallCommand extends Command
             Collection::make($collection = Str::kebab($name))
                 ->title($name)
                 ->routes([Site::default()->handle() => Str::plural(Str::kebab($name)).'/{slug}'])
+                ->entryClass(Product::class)
                 ->save();
 
             $this->components->info("Collection [{$name}] created.");
