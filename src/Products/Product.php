@@ -89,11 +89,6 @@ class Product extends Entry implements Contract, Purchasable
         })->first();
     }
 
-    public function fresh(): self
-    {
-        return Facades\Product::find($this->id);
-    }
-
     public function purchasablePrice(): int
     {
         return $this->price();
