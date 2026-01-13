@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Statamic\Console\Commands\Multisite as MultisiteCommand;
+use Statamic\Events\CollectionSaving;
 use Statamic\Facades\Blueprint;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Config;
@@ -448,12 +449,21 @@ class ServiceProvider extends AddonServiceProvider
         $shouldInvalidateCache = Collection::all()
             ->filter(fn ($collection) => in_array($collection->handle(), config('statamic.cargo.products.collections', ['products'])))
             ->filter(fn ($collection) => $collection->entryClass() === $entryClass)
-            ->each(fn ($collection) => $collection->entryClass($entryClass)->save())
+            ->each(fn ($collection) => $collection->entryClass($entryClass)->saveQuietly())
             ->isNotEmpty();
 
         if ($driver === 'file' && $shouldInvalidateCache) {
             app(Stache::class)->store('entries')?->clear();
         }
+
+        Event::listen(function (CollectionSaving $event) use ($entryClass) {
+            if (
+                ! $event->collection->entryClass()
+                && in_array($event->collection->handle(), config('statamic.cargo.products.collections', ['products']))
+            ) {
+                $event->collection->entryClass($entryClass);
+            }
+        });
 
         return $this;
     }
