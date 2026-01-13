@@ -118,7 +118,7 @@ class CheckoutTest extends TestCase
     #[Test]
     public function ensure_product_stock_field_is_updated()
     {
-        Event::fake();
+        Event::fake(ProductStockLow::class);
 
         config()->set('statamic.cargo.products.low_stock_threshold', 10);
 
@@ -142,7 +142,7 @@ class CheckoutTest extends TestCase
     #[Test]
     public function ensure_product_variant_stock_field_is_updated()
     {
-        Event::fake();
+        Event::fake(ProductStockLow::class);
 
         config()->set('statamic.cargo.products.low_stock_threshold', 10);
 
@@ -181,7 +181,7 @@ class CheckoutTest extends TestCase
     #[Test]
     public function it_dispatches_no_stock_remaining_event_when_stock_is_zero()
     {
-        Event::fake();
+        Event::fake([ProductStockLow::class, ProductNoStockRemaining::class]);
 
         $cart = $this->makeCart();
         $cart->lineItems()->update(123, ['quantity' => 2]);
@@ -204,7 +204,7 @@ class CheckoutTest extends TestCase
     #[Test]
     public function it_dispatches_discount_redeemed_event_and_updates_redemption_counts()
     {
-        Event::fake();
+        Event::fake(DiscountRedeemed::class);
 
         Discount::make()->handle('a')->type('percentage_off')->set('percentage_off', 50)->save();
         Discount::make()->handle('b')->set('discount_code', 'B')->type('amount_off')->set('amount_off', 100)->set('redemptions_count', 50)->save();
