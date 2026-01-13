@@ -8,10 +8,13 @@ use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Role;
 use Statamic\Facades\User;
 use Statamic\Facades\UserGroup;
+use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
 
 class CustomersTest extends TestCase
 {
+    use PreventsSavingStacheItemsToDisk;
+
     protected function setUp(): void
     {
         parent::setUp();

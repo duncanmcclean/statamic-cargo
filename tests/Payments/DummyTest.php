@@ -8,11 +8,14 @@ use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Payments\Gateways\Dummy;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
 
 #[Group('payments')]
 class DummyTest extends TestCase
 {
+    use PreventsSavingStacheItemsToDisk;
+
     #[Test]
     public function it_can_process_a_payment()
     {
