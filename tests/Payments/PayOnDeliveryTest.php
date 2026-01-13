@@ -12,12 +12,15 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
+use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\Fixtures\ShippingMethods\FakeShippingMethod;
 use Tests\TestCase;
 
 #[Group('payments')]
 class PayOnDeliveryTest extends TestCase
 {
+    use PreventsSavingStacheItemsToDisk;
+
     #[Test]
     public function it_can_determine_availability()
     {

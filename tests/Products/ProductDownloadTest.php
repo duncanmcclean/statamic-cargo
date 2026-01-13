@@ -39,7 +39,7 @@ class ProductDownloadTest extends TestCase
     #[Test]
     public function can_download_a_product()
     {
-        Event::fake();
+        Event::fake(ProductDownloaded::class);
 
         File::put(Storage::path('one.png'), '');
         Asset::make()->container('assets')->path('one.png')->save();
@@ -65,7 +65,7 @@ class ProductDownloadTest extends TestCase
     #[Test]
     public function can_download_a_product_with_multiple_files()
     {
-        Event::fake();
+        Event::fake(ProductDownloaded::class);
 
         File::put(Storage::path('one.png'), '');
         Asset::make()->container('assets')->path('one.png')->save();
@@ -97,7 +97,7 @@ class ProductDownloadTest extends TestCase
     #[Test]
     public function can_download_a_variant_product()
     {
-        Event::fake();
+        Event::fake(ProductDownloaded::class);
 
         File::put(Storage::path('one.png'), '');
         Asset::make()->container('assets')->path('one.png')->save();
@@ -123,7 +123,7 @@ class ProductDownloadTest extends TestCase
     #[Test]
     public function cant_download_a_product_with_no_downloads()
     {
-        Event::fake();
+        Event::fake(ProductDownloaded::class);
 
         $product = $this->makeProductWithDownloads([]);
         $order = $this->makeOrderWithLineItem($product);
@@ -145,7 +145,7 @@ class ProductDownloadTest extends TestCase
     #[Test]
     public function cant_download_when_download_limit_has_been_reached()
     {
-        Event::fake();
+        Event::fake(ProductDownloaded::class);
 
         File::put(Storage::path('one.png'), '');
         Asset::make()->container('assets')->path('one.png')->save();
