@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Statamic\Console\Commands\Multisite as MultisiteCommand;
 use Statamic\Facades\Blueprint;
+use Statamic\Facades\Collection;
 use Statamic\Facades\Config;
 use Statamic\Facades\CP\Nav;
 use Statamic\Facades\File;
@@ -110,7 +111,8 @@ class ServiceProvider extends AddonServiceProvider
             ->registerBlueprintNamespace()
             ->registerSearchables()
             ->addAboutCommandInfo()
-            ->addMultisiteCommandHook();
+            ->addMultisiteCommandHook()
+            ->ensureEntryClassIsConfigured();
     }
 
     protected function bootStacheStores(): self
@@ -430,6 +432,21 @@ class ServiceProvider extends AddonServiceProvider
 
             return $next($payload);
         });
+
+        return $this;
+    }
+
+    private function ensureEntryClassIsConfigured(): self
+    {
+        $shouldInvalidateEntriesStore = Collection::all()
+            ->filter(fn ($collection) => in_array($collection->handle(), config('statamic.cargo.products.collections', ['products'])))
+            ->filter(fn ($collection) => ! $collection->entryClass())
+            ->each(fn ($collection) => $collection->entryClass(Products\Product::class)->save())
+            ->isNotEmpty();
+
+        if ($shouldInvalidateEntriesStore) {
+            app(Stache::class)->store('entries')?->clear();
+        }
 
         return $this;
     }
