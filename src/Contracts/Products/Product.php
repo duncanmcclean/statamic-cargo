@@ -17,7 +17,7 @@ interface Product
 
     public function stock(): ?int;
 
-    public function isStockEnabled(): bool;
+    public function isStockEnabled(): ?bool;
 
     public function variantOptions(): Collection;
 
