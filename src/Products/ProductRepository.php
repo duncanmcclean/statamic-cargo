@@ -6,7 +6,6 @@ use DuncanMcClean\Cargo\Contracts\Products\Product;
 use DuncanMcClean\Cargo\Contracts\Products\ProductRepository as RepositoryContract;
 use DuncanMcClean\Cargo\Exceptions\ProductNotFound;
 use Illuminate\Support\Collection;
-use Statamic\Contracts\Entries\Entry as EntryContract;
 use Statamic\Facades\Entry;
 
 class ProductRepository implements RepositoryContract
@@ -46,8 +45,6 @@ class ProductRepository implements RepositoryContract
 
     public static function bindings(): array
     {
-        return [
-            Product::class => \DuncanMcClean\Cargo\Products\Product::class,
-        ];
+        return [];
     }
 }
