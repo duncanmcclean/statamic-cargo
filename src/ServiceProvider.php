@@ -438,13 +438,20 @@ class ServiceProvider extends AddonServiceProvider
 
     private function ensureEntryClassIsConfigured(): self
     {
-        $shouldInvalidateEntriesStore = Collection::all()
+        $driver = config('statamic.eloquent-driver.entries.driver', 'file');
+
+        $entryClass = match ($driver) {
+            'file' => Products\Product::class,
+            'eloquent' => Products\EloquentProduct::class,
+        };
+
+        $shouldInvalidateCache = Collection::all()
             ->filter(fn ($collection) => in_array($collection->handle(), config('statamic.cargo.products.collections', ['products'])))
-            ->filter(fn ($collection) => ! $collection->entryClass())
-            ->each(fn ($collection) => $collection->entryClass(Products\Product::class)->save())
+            ->filter(fn ($collection) => $collection->entryClass() === $entryClass)
+            ->each(fn ($collection) => $collection->entryClass($entryClass)->save())
             ->isNotEmpty();
 
-        if ($shouldInvalidateEntriesStore) {
+        if ($driver === 'file' && $shouldInvalidateCache) {
             app(Stache::class)->store('entries')?->clear();
         }
 

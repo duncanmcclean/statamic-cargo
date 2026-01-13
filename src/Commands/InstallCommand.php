@@ -121,7 +121,6 @@ class InstallCommand extends Command
             Collection::make($collection = Str::kebab($name))
                 ->title($name)
                 ->routes([Site::default()->handle() => Str::plural(Str::kebab($name)).'/{slug}'])
-                ->entryClass(Product::class)
                 ->save();
 
             $this->components->info("Collection [{$name}] created.");
