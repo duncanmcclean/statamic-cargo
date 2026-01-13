@@ -4,7 +4,6 @@ namespace DuncanMcClean\Cargo\Commands;
 
 use DuncanMcClean\Cargo\Data\Currencies;
 use DuncanMcClean\Cargo\Facades\TaxClass;
-use DuncanMcClean\Cargo\Products\Product;
 use DuncanMcClean\Cargo\Support\CodeInjection;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
