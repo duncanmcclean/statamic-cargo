@@ -439,15 +439,15 @@ class ServiceProvider extends AddonServiceProvider
 
     private function ensureEntryClassIsConfigured(): self
     {
-        $driver = config('statamic.eloquent-driver.entries.driver', 'file');
+        $collections = config('statamic.cargo.products.collections', ['products']);
 
-        $entryClass = match ($driver) {
+        $entryClass = match (config('statamic.eloquent-driver.entries.driver', 'file')) {
             'file' => Products\Product::class,
             'eloquent' => Products\EloquentProduct::class,
         };
 
         $shouldInvalidateCache = Collection::all()
-            ->filter(fn ($collection) => in_array($collection->handle(), config('statamic.cargo.products.collections', ['products'])))
+            ->filter(fn ($collection) => in_array($collection->handle(), $collections))
             ->reject(fn ($collection) => $collection->entryClass() === $entryClass)
             ->each(fn ($collection) => $collection->entryClass($entryClass)->saveQuietly())
             ->isNotEmpty();
@@ -456,11 +456,8 @@ class ServiceProvider extends AddonServiceProvider
             app(Stache::class)->store('entries')?->clear();
         }
 
-        Event::listen(function (CollectionSaving $event) use ($entryClass) {
-            if (
-                ! $event->collection->entryClass()
-                && in_array($event->collection->handle(), config('statamic.cargo.products.collections', ['products']))
-            ) {
+        Event::listen(function (CollectionSaving $event) use ($collections, $entryClass) {
+            if (! $event->collection->entryClass() && in_array($event->collection->handle(), $collections)) {
                 $event->collection->entryClass($entryClass);
             }
         });
