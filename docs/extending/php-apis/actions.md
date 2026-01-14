@@ -32,7 +32,7 @@ $cart->save();
 | Parameter  | Description                                                                                                            |
 |------------|------------------------------------------------------------------------------------------------------------------------|
 | `cart`     | Instance of [`Cart`](/extending/php-apis/carts)                                                                        |
-| `product`  | Instance of `Product`. You may convert an entry object into a product via `Product::fromEntry($entry)`                 |
+| `product`  | Instance of [`Product`](/extending/php-apis/products)                                                                  |
 | `variant`  | Optional. Instance of `ProductVariant`. You can do `$product->productVariant($key)` to get a product variant instance. |
 | `quantity` | Optional. Line item quantity. Defaults to `1`                                                                          |
 | `data`     | Optional. Laravel [`Collection`](https://laravel.com/docs/master/collections) instance containing line item data.      |
@@ -54,10 +54,10 @@ app(PrerequisiteProductsCheck::class)->handle($cart, $product);
 $cart->save();
 ```
 
-| Parameter  | Description                                                                                                            |
-|------------|------------------------------------------------------------------------------------------------------------------------|
-| `cart`     | Instance of [`Cart`](/extending/php-apis/carts)                                                                        |
-| `product`  | Instance of `Product`. You may convert an entry object into a product via `Product::fromEntry($entry)`                 |
+| Parameter | Description                                           |
+|-----------|-------------------------------------------------------|
+| `cart`    | Instance of [`Cart`](/extending/php-apis/carts)       |
+| `product` | Instance of [`Product`](/extending/php-apis/products) |
 
 ## UpdateDiscounts
 
@@ -104,9 +104,9 @@ app(ValidateStock::class)->handle(
 );
 ```
 
-| Parameter | Description                                                                                                                                                      |
-|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `lineItem` | Instance of `LineItem`. Can be `null` when the `$product` parameter is present.                                                                                  |
-| `product`  | Instance of `Product`. You may convert an entry object into a product via `Product::fromEntry($entry)`. Can be `null` when the `$lineItem` parameter is present. |
-| `variant`  | Required when dealing with a variant product. Instance of `ProductVariant`. You can do `$product->productVariant($key)` to get a product variant instance.       |
-| `quantity` | Line item quantity. Can be `null` when the `$lineItem` parameter is present.                                                                                                                                                       
+| Parameter  | Description                                                                                                                                                |
+|------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `lineItem` | Instance of `LineItem`. Can be `null` when the `$product` parameter is present.                                                                            |
+| `product`  | Instance of [`Product`](/extending/php-apis/products). Can be `null` when the `$lineItem` parameter is present.                                            |
+| `variant`  | Required when dealing with a variant product. Instance of `ProductVariant`. You can do `$product->productVariant($key)` to get a product variant instance. |
+| `quantity` | Line item quantity. Can be `null` when the `$lineItem` parameter is present.                                                                               |

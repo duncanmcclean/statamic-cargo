@@ -4,9 +4,9 @@ namespace DuncanMcClean\Cargo\Products;
 
 use DuncanMcClean\Cargo\Contracts\Products\Product as Contract;
 use DuncanMcClean\Cargo\Contracts\Purchasable;
-use Statamic\Entries\Entry;
+use Statamic\Eloquent\Entries\Entry as EloquentEntry;
 
-class Product extends Entry implements Contract, Purchasable
+class EloquentProduct extends EloquentEntry implements Contract, Purchasable
 {
     use Productable;
 }

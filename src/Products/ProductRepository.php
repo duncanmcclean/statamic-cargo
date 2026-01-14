@@ -6,7 +6,6 @@ use DuncanMcClean\Cargo\Contracts\Products\Product;
 use DuncanMcClean\Cargo\Contracts\Products\ProductRepository as RepositoryContract;
 use DuncanMcClean\Cargo\Exceptions\ProductNotFound;
 use Illuminate\Support\Collection;
-use Statamic\Contracts\Entries\Entry as EntryContract;
 use Statamic\Facades\Entry;
 
 class ProductRepository implements RepositoryContract
@@ -22,22 +21,15 @@ class ProductRepository implements RepositoryContract
     {
         return Entry::query()
             ->whereIn('collection', $this->collections)
-            ->get()
-            ->map(fn ($entry) => $this->fromEntry($entry));
+            ->get();
     }
 
     public function find($id): ?Product
     {
-        $entry = Entry::query()
+        return Entry::query()
             ->whereIn('collection', $this->collections)
             ->where('id', $id)
             ->find($id);
-
-        if (! $entry) {
-            return null;
-        }
-
-        return $this->fromEntry($entry);
     }
 
     public function findOrFail($id): Product
@@ -51,37 +43,8 @@ class ProductRepository implements RepositoryContract
         return $product;
     }
 
-    public function fromEntry(EntryContract $entry): Product
-    {
-        $product = app(Product::class)
-            ->id($entry->id())
-            ->collection($entry->collection());
-
-        if ($origin = $entry->origin()) {
-            $product->origin($origin);
-        }
-
-        $product
-            ->blueprint($entry->blueprint())
-            ->locale($entry->locale())
-            ->initialPath($entry->initialPath())
-            ->published($entry->published())
-            ->data($entry->data())
-            ->slug($entry->slug())
-            ->template($entry->template())
-            ->layout($entry->layout());
-
-        if ($entry->hasDate()) {
-            $product->date($entry->date());
-        }
-
-        return $product;
-    }
-
     public static function bindings(): array
     {
-        return [
-            Product::class => \DuncanMcClean\Cargo\Products\Product::class,
-        ];
+        return [];
     }
 }

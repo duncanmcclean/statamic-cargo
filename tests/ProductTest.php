@@ -60,21 +60,4 @@ class ProductTest extends TestCase
 
         $this->assertInstanceOf(\DuncanMcClean\Cargo\Products\Product::class, $product);
     }
-
-    #[Test]
-    public function can_make_product_from_entry()
-    {
-        $entry = tap(Entry::make()->collection('products')->id('abc')->set('price', 2500)->template('foo')->layout('bar'))->save();
-
-        $product = Product::fromEntry($entry);
-
-        $this->assertInstanceOf(\DuncanMcClean\Cargo\Products\Product::class, $product);
-
-        $this->assertEquals($entry->id(), $product->id());
-        $this->assertEquals($entry->collectionHandle(), $product->collectionHandle());
-        $this->assertEquals($entry->locale(), $product->locale());
-        $this->assertEquals($entry->template(), $product->template());
-        $this->assertEquals($entry->layout(), $product->layout());
-        $this->assertEquals($entry->data(), $product->data());
-    }
 }
