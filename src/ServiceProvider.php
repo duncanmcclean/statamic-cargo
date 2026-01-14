@@ -452,7 +452,7 @@ class ServiceProvider extends AddonServiceProvider
             ->each(fn ($collection) => $collection->entryClass($entryClass)->saveQuietly())
             ->isNotEmpty();
 
-        if ($driver === 'file' && $shouldInvalidateCache) {
+        if ($shouldInvalidateCache) {
             app(Stache::class)->store('entries')?->clear();
         }
 
