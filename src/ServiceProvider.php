@@ -448,7 +448,7 @@ class ServiceProvider extends AddonServiceProvider
 
         $shouldInvalidateCache = Collection::all()
             ->filter(fn ($collection) => in_array($collection->handle(), config('statamic.cargo.products.collections', ['products'])))
-            ->filter(fn ($collection) => $collection->entryClass() === $entryClass)
+            ->reject(fn ($collection) => $collection->entryClass() === $entryClass)
             ->each(fn ($collection) => $collection->entryClass($entryClass)->saveQuietly())
             ->isNotEmpty();
 
