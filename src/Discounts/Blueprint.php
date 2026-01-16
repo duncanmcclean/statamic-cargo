@@ -159,6 +159,18 @@ class Blueprint
                         ],
                     ],
                 ],
+                'stats' => [
+                    'sections' => [
+                        [
+                            'fields' => [
+                                [
+                                    'handle' => 'redemptions_count',
+                                    'field' => ['type' => 'integer', 'listable' => 'hidden', 'visibility' => 'hidden', 'default' => 0],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ]);
     }
