@@ -44,8 +44,15 @@ class States extends Fieldtype
 
     private function country(): ?string
     {
-        $address = $this->field()->parentField()->value();
-        $country = Arr::get($address, 'country');
+        // Inside the Address fieldtype, we want to get the parent field's value
+        // and extract the country from there. Otherwise, we want to get the
+        // country from the parent item (eg. in tax zones).
+        if ($parentField = $this->field()->parentField()) {
+            $address = $parentField->value();
+            $country = Arr::get($address, 'country');
+        } else {
+            $country = $this->field()->parent()?->get($this->config('from'));
+        }
 
         if (is_array($country)) {
             $country = Arr::first($country);
