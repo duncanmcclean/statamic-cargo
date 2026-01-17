@@ -44,7 +44,8 @@ class States extends Fieldtype
 
     private function country(): ?string
     {
-        $country = $this->field()->parent()?->get($this->config('from'));
+        $address = $this->field()->parentField()->value();
+        $country = Arr::get($address, 'country');
 
         if (is_array($country)) {
             $country = Arr::first($country);
