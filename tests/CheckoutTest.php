@@ -93,7 +93,7 @@ class CheckoutTest extends TestCase
     public function cant_checkout_without_taxable_address()
     {
         $cart = $this->makeCart();
-        $cart->remove('shipping_line_1')->save();
+        $cart->remove('shipping_address')->save();
 
         $this
             ->get('/!/cargo/payments/fake/checkout')
@@ -238,11 +238,13 @@ class CheckoutTest extends TestCase
             ->customer(['name' => 'John Doe', 'email' => 'john.doe@example.com'])
             ->lineItems([['id' => '123', 'product' => 'product-1', 'total' => 5000, 'quantity' => 1]])
             ->merge([
-                'shipping_line_1' => '123 Fake St',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA 1234',
-                'shipping_country' => 'GBR',
-                'shipping_state' => 'GLG',
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA 1234',
+                    'country' => 'GBR',
+                    'state' => 'GLG',
+                ],
                 ...$data,
             ]);
 

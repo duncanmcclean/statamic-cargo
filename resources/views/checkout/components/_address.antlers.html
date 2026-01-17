@@ -5,7 +5,7 @@
 #}}
 
 <div x-data="{{ type | ucfirst }}Address" class="flex flex-col space-y-6">
-    {{ partial:checkout/components/select name="{type}_country" label="Country" autocomplete="{type} country" required="true" x-model="country" }}
+    {{ partial:checkout/components/select name="{type}_address[country]" label="Country" autocomplete="{type} country" required="true" x-model="country" }}
         <option disabled value="">{{ 'Select a country' | trans }}</option>
         {{ dictionary:countries emojis="false" }}
             <option value="{{ value }}">{{ label }}</option>
@@ -13,56 +13,56 @@
     {{ /partial:checkout/components/select }}
 
     {{ partial:checkout/components/input
-        name="{type}_name"
+        name="{type}_address[name]"
         label="{type | ucfirst} Name"
         type="text"
-        xBindValue="cart.{type}_name || cart.customer?.name"
+        xBindValue="cart.{type}_address?.name || cart.customer?.name"
         autocomplete="{type} name"
         required="true"
     }}
 
     {{ partial:checkout/components/input
-        name="{type}_line_1"
+        name="{type}_address[line_1]"
         label="{type | ucfirst} Line 1"
         type="text"
-        xBindValue="cart.{type}_line_1"
+        xBindValue="cart.{type}_address?.line_1"
         autocomplete="{type} address-line1"
         required="true"
     }}
 
     {{ partial:checkout/components/input
-        name="{type}_line_2"
+        name="{type}_address[line_2]"
         label="{type | ucfirst} Line 2"
         type="text"
-        xBindValue="cart.{type}_line_2"
+        xBindValue="cart.{type}_address?.line_2"
         autocomplete="{type} address-line2"
     }}
 
     <div class="grid sm:grid-cols-2 gap-6">
         {{ partial:checkout/components/input
-            name="{type}_city"
+            name="{type}_address[city]"
             label="Town/City"
             type="text"
-            xBindValue="cart.{type}_city"
+            xBindValue="cart.{type}_address?.city"
             autocomplete="{type} address-level1"
             required="true"
         }}
 
         {{ partial:checkout/components/input
-            name="{type}_postcode"
+            name="{type}_address[postcode]"
             label="Postcode"
             type="text"
-            xBindValue="cart.{type}_postcode"
+            xBindValue="cart.{type}_address?.postcode"
             autocomplete="{type} postal-code"
             required="true"
         }}
     </div>
 
     <template x-if="states.length">
-        {{ partial:checkout/components/select name="{type}_state" label="State/County" autocomplete="{type} address-level1" required="true" }}
+        {{ partial:checkout/components/select name="{type}_address[state]" label="State/County" autocomplete="{type} address-level1" required="true" }}
             <option disabled value="">{{ 'Select a state' | trans }}</option>
             <template x-for="state in states" :key="state.code">
-                <option :value="state.code" :selected="state.code === cart.{{ type }}_state?.code" x-text="state.name"></option>
+                <option :value="state.code" :selected="state.code === cart.{{ type }}_address?.state?.code" x-text="state.name"></option>
             </template>
         {{ /partial:checkout/components/select }}
     </template>
@@ -76,7 +76,7 @@
                 states: [],
 
                 init() {
-                    this.country = this.cart.{{ type }}_country?.value;
+                    this.country = this.cart.{{ type }}_address?.country?.value;
 
                     if (this.country) this.fetchStates();
 

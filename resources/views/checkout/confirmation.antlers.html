@@ -24,26 +24,26 @@
         </div>
 
         <div class="grid md:grid-cols-2 gap-8 bg-white p-6 rounded-lg border border-gray-200 mb-6">
-            {{ if shipping_line_1 }}
+            {{ if shipping_address:line_1 }}
                 <div>
                     <span class="block text-sm mb-2 text-gray-600 uppercase font-medium">{{ 'Shipping address' | trans }}</span>
                     <address>
-                        {{ shipping_line_1 }}<br>
-                        {{ if shipping_line_2 }}{{ shipping_line_2 }}<br>{{ /if }}
-                        {{ shipping_city }}, {{ shipping_postcode }}<br>
-                        {{ if shipping_state }}{{ shipping_state:name }}<br>{{ /if }}
-                        {{ shipping_country }}
+                        {{ shipping_address:line_1 }}<br>
+                        {{ if shipping_address:line_2 }}{{ shipping_address:line_2 }}<br>{{ /if }}
+                        {{ shipping_address:city }}, {{ shipping_address:postcode }}<br>
+                        {{ if shipping_address:state }}{{ shipping_address:state:name }}<br>{{ /if }}
+                        {{ shipping_address:country }}
                     </address>
                 </div>
             {{ /if }}
             <div>
                 <span class="block text-sm mb-2 text-gray-600 uppercase font-medium">{{ 'Billing address' | trans }}</span>
                 <address>
-                    {{ billing_line_1 }}<br>
-                    {{ if billing_line_2 }}{{ billing_line_2 }}<br>{{ /if }}
-                    {{ billing_city }}, {{ shipping_postcode }}<br>
-                    {{ if billing_state }}{{ billing_state:name }}<br>{{ /if }}
-                    {{ billing_country }}
+                    {{ billing_address:line_1 }}<br>
+                    {{ if billing_address:line_2 }}{{ billing_address:line_2 }}<br>{{ /if }}
+                    {{ billing_address:city }}, {{ billing_address:postcode }}<br>
+                    {{ if billing_address:state }}{{ billing_address:state:name }}<br>{{ /if }}
+                    {{ billing_address:country }}
                 </address>
             </div>
         </div>

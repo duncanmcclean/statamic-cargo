@@ -264,17 +264,17 @@ You might notice that the state dropdowns in the example below are a *little* we
 	<h3>Shipping Address</h3>
 
 	<div>
-		<select name="shipping_country" required>
+		<select name="shipping_address[country]" required>
 			<option selected disabled>Select a country</option>
 			{{ dictionary:countries emojis="false" }}
 				<option value="{{ value }}">{{ label }}</option>
 			{{ /dictionary:countries }}
 		</select>
-		<input type="text" name="shipping_line_1" placeholder="Shipping Line 1" required>
-		<input type="text" name="shipping_line_2" placeholder="Shipping Line 2">
-		<input type="text" name="shipping_city" placeholder="Town/City" required>
-		<input type="text" name="shipping_postcode" placeholder="Postcode" required>
-		<select name="shipping_state" required>
+		<input type="text" name="shipping_address[line_1]" placeholder="Shipping Line 1" required>
+		<input type="text" name="shipping_address[line_2]" placeholder="Shipping Line 2">
+		<input type="text" name="shipping_address[city]" placeholder="Town/City" required>
+		<input type="text" name="shipping_address[postcode]" placeholder="Postcode" required>
+		<select name="shipping_address[state]" required>
 			<option selected disabled>Select a state</option>
 			{{# States will be magically injected using JavaScript #}}
 		</select>
@@ -283,17 +283,17 @@ You might notice that the state dropdowns in the example below are a *little* we
 	<h3>Billing Address</h3>
 
 	<div>
-		<select name="billing_country" required>
+		<select name="billing_address[country]" required>
 			<option selected disabled>Select a country</option>
 			{{ dictionary:countries emojis="false" }}
 				<option value="{{ value }}">{{ label }}</option>
 			{{ /dictionary:countries }}
 		</select>
-		<input type="text" name="billing_line_1" placeholder="Billing Line 1" required>
-		<input type="text" name="billing_line_2" placeholder="Billing Line 2">
-		<input type="text" name="billing_city" placeholder="Town/City" required>
-		<input type="text" name="billing_postcode" placeholder="Postcode" required>
-		<select name="billing_state" required>
+		<input type="text" name="billing_address[line_1]" placeholder="Billing Line 1" required>
+		<input type="text" name="billing_address[line_2]" placeholder="Billing Line 2">
+		<input type="text" name="billing_address[city]" placeholder="Town/City" required>
+		<input type="text" name="billing_address[postcode]" placeholder="Postcode" required>
+		<select name="billing_address[state]" required>
 			<option selected disabled>Select a state</option>
 			{{# States will be magically injected using JavaScript #}}
 		</select>
@@ -307,14 +307,14 @@ You might notice that the state dropdowns in the example below are a *little* we
 {{ /cart }}
 
 <script>
-    // Listen to changes on the shipping_country dropdown
-    document.getElementsByName('shipping_country')[0].addEventListener('change', (e) => {
+    // Listen to changes on the shipping_address[country] dropdown
+    document.getElementsByName('shipping_address[country]')[0].addEventListener('change', (e) => {
         // Fetch the country's states
         fetch(`{{ route:statamic.cargo.states }}?country=${e.target.value}`)
             .then(response => response.json())
             .then((data) => {
-                let stateDropdown = document.getElementsByName('shipping_state')[0];
-                
+                let stateDropdown = document.getElementsByName('shipping_address[state]')[0];
+
                 // Remove every option, apart from the first one.
                 while (stateDropdown.options.length > 1) {
                     stateDropdown.remove(1);
@@ -325,14 +325,14 @@ You might notice that the state dropdowns in the example below are a *little* we
             });
     });
 
-    // Listen to changes on the billing_country dropdown
-    document.getElementsByName('billing_country')[0].addEventListener('change', (e) => {
+    // Listen to changes on the billing_address[country] dropdown
+    document.getElementsByName('billing_address[country]')[0].addEventListener('change', (e) => {
         // Fetch the country's states
         fetch(`{{ route:statamic.cargo.states }}?country=${e.target.value}`)
             .then(response => response.json())
             .then((data) => {
-                let stateDropdown = document.getElementsByName('billing_state')[0];
-                
+                let stateDropdown = document.getElementsByName('billing_address[state]')[0];
+
                 // Remove every option, apart from the first one.
                 while (stateDropdown.options.length > 1) {
                     stateDropdown.remove(1);
@@ -351,87 +351,87 @@ You might notice that the state dropdowns in the example below are a *little* we
 <h2>Addresses</h2>  
   
 <s:cart:update redirect="/checkout/shipping">  
-    <h3>Shipping Address</h3>  
-  
-    <div>  
-        <select name="shipping_country" required>  
-            <option selected disabled>Select a country</option>  
-            <s:dictionary handle="countries" emojis="false">  
-                <option value="{{ $value }}">{{ $label }}</option>  
-            </s:dictionary>  
-        </select>  
-        <input type="text" name="shipping_line_1" placeholder="Shipping Line 1" required>  
-        <input type="text" name="shipping_line_2" placeholder="Shipping Line 2">  
-        <input type="text" name="shipping_city" placeholder="Town/City" required>  
-        <input type="text" name="shipping_postcode" placeholder="Postcode" required>  
-        <select name="shipping_state" required>  
-            <option selected disabled>Select a state</option>  
-            {{# States will be magically injected using JavaScript #}}  
-        </select>  
-    </div>  
-  
-    <h3>Billing Address</h3>  
-  
-    <div>  
-        <select name="billing_country" required>  
-            <option selected disabled>Select a country</option>  
-            <s:dictionary handle="countries" emojis="false">  
-                <option value="{{ $value }}">{{ $label }}</option>  
-            </s:dictionary>  
-        </select>  
-        <input type="text" name="billing_line_1" placeholder="Billing Line 1" required>  
-        <input type="text" name="billing_line_2" placeholder="Billing Line 2">  
-        <input type="text" name="billing_city" placeholder="Town/City" required>  
-        <input type="text" name="billing_postcode" placeholder="Postcode" required>  
-        <select name="billing_state" required>  
-            <option selected disabled>Select a state</option>  
-            {{# States will be magically injected using JavaScript #}}  
-        </select>  
-    </div>  
-  
-    <button>Continue</button>  
-</s:cart:update>  
-  
-<s:cart>  
-    @include('checkout/summary')  
-</s:cart>  
-  
-<script>  
-    // Listen to changes on the shipping_country dropdown  
-    document.getElementsByName('shipping_country')[0].addEventListener('change', (e) => {  
-        // Fetch the country's states  
-        fetch(`{{ route('statamic.cargo.states') }}?country=${e.target.value}`)  
-            .then(response => response.json())  
-            .then((data) => {  
-                let stateDropdown = document.getElementsByName('shipping_state')[0];  
-  
-                // Remove every option, apart from the first one.  
+    <h3>Shipping Address</h3>
+
+    <div>
+        <select name="shipping_address[country]" required>
+            <option selected disabled>Select a country</option>
+            <s:dictionary handle="countries" emojis="false">
+                <option value="{{ $value }}">{{ $label }}</option>
+            </s:dictionary>
+        </select>
+        <input type="text" name="shipping_address[line_1]" placeholder="Shipping Line 1" required>
+        <input type="text" name="shipping_address[line_2]" placeholder="Shipping Line 2">
+        <input type="text" name="shipping_address[city]" placeholder="Town/City" required>
+        <input type="text" name="shipping_address[postcode]" placeholder="Postcode" required>
+        <select name="shipping_address[state]" required>
+            <option selected disabled>Select a state</option>
+            {{# States will be magically injected using JavaScript #}}
+        </select>
+    </div>
+
+    <h3>Billing Address</h3>
+
+    <div>
+        <select name="billing_address[country]" required>
+            <option selected disabled>Select a country</option>
+            <s:dictionary handle="countries" emojis="false">
+                <option value="{{ $value }}">{{ $label }}</option>
+            </s:dictionary>
+        </select>
+        <input type="text" name="billing_address[line_1]" placeholder="Billing Line 1" required>
+        <input type="text" name="billing_address[line_2]" placeholder="Billing Line 2">
+        <input type="text" name="billing_address[city]" placeholder="Town/City" required>
+        <input type="text" name="billing_address[postcode]" placeholder="Postcode" required>
+        <select name="billing_address[state]" required>
+            <option selected disabled>Select a state</option>
+            {{# States will be magically injected using JavaScript #}}
+        </select>
+    </div>
+
+    <button>Continue</button>
+</s:cart:update>
+
+<s:cart>
+    @include('checkout/summary')
+</s:cart>
+
+<script>
+    // Listen to changes on the shipping_address[country] dropdown
+    document.getElementsByName('shipping_address[country]')[0].addEventListener('change', (e) => {
+        // Fetch the country's states
+        fetch(`{{ route('statamic.cargo.states') }}?country=${e.target.value}`)
+            .then(response => response.json())
+            .then((data) => {
+                let stateDropdown = document.getElementsByName('shipping_address[state]')[0];
+
+                // Remove every option, apart from the first one.
                 while (stateDropdown.options.length > 1) {  
                     stateDropdown.remove(1);  
                 }  
   
-                // Add the new options  
-                Object.values(data).forEach((state) => stateDropdown.add(new Option(state.name, state.code)));  
-            });  
-    });  
-  
-    // Listen to changes on the billing_country dropdown  
-    document.getElementsByName('billing_country')[0].addEventListener('change', (e) => {  
-        // Fetch the country's states  
-        fetch(`{{ route('statamic.cargo.states') }}?country=${e.target.value}`)  
-            .then(response => response.json())  
-            .then((data) => {  
-                let stateDropdown = document.getElementsByName('billing_state')[0];  
-  
-                // Remove every option, apart from the first one.  
-                while (stateDropdown.options.length > 1) {  
-                    stateDropdown.remove(1);  
-                }  
-  
-                // Add the new options  
-                Object.values(data).forEach((state) => stateDropdown.add(new Option(state.name, state.code)));  
-            });  
-    });  
+                // Add the new options
+                Object.values(data).forEach((state) => stateDropdown.add(new Option(state.name, state.code)));
+            });
+    });
+
+    // Listen to changes on the billing_address[country] dropdown
+    document.getElementsByName('billing_address[country]')[0].addEventListener('change', (e) => {
+        // Fetch the country's states
+        fetch(`{{ route('statamic.cargo.states') }}?country=${e.target.value}`)
+            .then(response => response.json())
+            .then((data) => {
+                let stateDropdown = document.getElementsByName('billing_address[state]')[0];
+
+                // Remove every option, apart from the first one.
+                while (stateDropdown.options.length > 1) {
+                    stateDropdown.remove(1);
+                }
+
+                // Add the new options
+                Object.values(data).forEach((state) => stateDropdown.add(new Option(state.name, state.code)));
+            });
+    });
 </script>
 ```
 ::
@@ -631,8 +631,8 @@ The URL contains the `order_id` as a query parameter, which you can pass into th
 	<hr>
 
 	<p>{{ customer:name }} - {{ customer:email }}</p>
-	<p>{{ shipping_line_1 }}, {{ shipping_line_2 }}, ...</p>
-	<p>{{ billing_line_1 }}, {{ billing_line_2 }}, ...</p>
+	<p>{{ shipping_address:line_1 }}, {{ shipping_address:line_2 }}, ...</p>
+	<p>{{ billing_address:line_1 }}, {{ billing_address:line_2 }}, ...</p>
 {{ /orders }}
 ``` 
 ::tab blade
@@ -643,9 +643,9 @@ The URL contains the `order_id` as a query parameter, which you can pass into th
       
     <hr>  
       
-    <p>{{ $customer->name }} - {{ $customer->email }}</p>  
-    <p>{{ $shipping_line_1 }}, {{ $shipping_line_2 }}, ...</p>  
-    <p>{{ $billing_line_1 }}, {{ $billing_line_2 }}, ...</p>  
+    <p>{{ $customer->name }} - {{ $customer->email }}</p>
+    <p>{{ $shipping_address['line_1'] }}, {{ $shipping_address['line_2'] }}, ...</p>
+    <p>{{ $billing_address['line_1'] }}, {{ $billing_address['line_2'] }}, ...</p>  
 </s:orders>
 ```
 ::

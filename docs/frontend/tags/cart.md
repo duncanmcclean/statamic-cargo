@@ -296,34 +296,34 @@ This tag allows you to update the customer's cart. Allowing you to update everyt
 ::tabs
 ::tab antlers
 ```antlers
-{{ cart:update }}  
-    <input type="text" name="customer[name]" value="{{ customer:name }}" required>  
-    <input type="email" name="customer[email]" value="{{ customer:email }}" required>  
+{{ cart:update }}
+    <input type="text" name="customer[name]" value="{{ customer:name }}" required>
+    <input type="email" name="customer[email]" value="{{ customer:email }}" required>
 
-	<input type="text" name="shipping_line_1" value="{{ shipping_line_1 }}">
-	<input type="text" name="shipping_line_2" value="{{ shipping_line_2 }}">
-	<input type="text" name="shipping_city" value="{{ shipping_city }}">
-	<input type="text" name="shipping_postcode" value="{{ shipping_postcode }}">
-	<input type="text" name="shipping_country" value="{{ shipping_country }}">
-	<input type="text" name="shipping_state" value="{{ shipping_state }}">
-    
-    <button>Update</button>  
+	<input type="text" name="shipping_address[line_1]" value="{{ shipping_address:line_1 }}">
+	<input type="text" name="shipping_address[line_2]" value="{{ shipping_address:line_2 }}">
+	<input type="text" name="shipping_address[city]" value="{{ shipping_address:city }}">
+	<input type="text" name="shipping_address[postcode]" value="{{ shipping_address:postcode }}">
+	<input type="text" name="shipping_address[country]" value="{{ shipping_address:country }}">
+	<input type="text" name="shipping_address[state]" value="{{ shipping_address:state }}">
+
+    <button>Update</button>
 {{ /cart:update }}
 ```
 ::tab blade
 ```blade
-<s:cart:update>  
-    <input type="text" name="customer[name]" value="{{ $customer['name'] }}" required>  
-    <input type="email" name="customer[email]" value="{{ $customer['email'] }}" required>  
+<s:cart:update>
+    <input type="text" name="customer[name]" value="{{ $customer['name'] }}" required>
+    <input type="email" name="customer[email]" value="{{ $customer['email'] }}" required>
 
-	<input type="text" name="shipping_line_1" value="{{ $shipping_line_1 }}">
-	<input type="text" name="shipping_line_2" value="{{ $shipping_line_2 }}">
-	<input type="text" name="shipping_city" value="{{ $shipping_city }}">
-	<input type="text" name="shipping_postcode" value="{{ $shipping_postcode }}">
-	<input type="text" name="shipping_country" value="{{ $shipping_country }}">
-	<input type="text" name="shipping_state" value="{{ $shipping_state }}">
-    
-    <button>Update</button>  
+	<input type="text" name="shipping_address[line_1]" value="{{ $shipping_address['line_1'] }}">
+	<input type="text" name="shipping_address[line_2]" value="{{ $shipping_address['line_2'] }}">
+	<input type="text" name="shipping_address[city]" value="{{ $shipping_address['city'] }}">
+	<input type="text" name="shipping_address[postcode]" value="{{ $shipping_address['postcode'] }}">
+	<input type="text" name="shipping_address[country]" value="{{ $shipping_address['country'] }}">
+	<input type="text" name="shipping_address[state]" value="{{ $shipping_address['state'] }}">
+
+    <button>Update</button>
 </s:cart:update>
 ```
 ::
@@ -366,18 +366,34 @@ This form supports the following fields:
 		['key' => 'discount_code', 'type' => 'string'],
 		['key' => 'shipping_method', 'type' => 'string', 'description' => 'Required when `shipping_option` is provided.'],
 		['key' => 'shipping_option', 'type' => 'string', 'description' => 'Required when `shipping_method` is provided.'],
-		['key' => 'shipping_line_1', 'type' => 'string'],
-		['key' => 'shipping_line_2', 'type' => 'string'],
-		['key' => 'shipping_city', 'type' => 'string'],
-		['key' => 'shipping_postcode', 'type' => 'string'],
-		['key' => 'shipping_country', 'type' => 'string', 'description' => 'Must be in [ISO3](https://www.iso.org/obp/ui#iso:pub:PUB500001:en) format.'],
-		['key' => 'shipping_state', 'type' => 'string', 'description' => 'Must match one of the states in [Cargo\'s `states.json` file](https://github.com/duncanmcclean/statamic-cargo/blob/main/resources/json/states.json).'],
-		['key' => 'billing_line_1', 'type' => 'string'],
-		['key' => 'billing_line_2', 'type' => 'string'],
-		['key' => 'billing_city', 'type' => 'string'],
-		['key' => 'billing_postcode', 'type' => 'string'],
-		['key' => 'billing_country', 'type' => 'string', 'description' => 'Must be in [ISO3](https://www.iso.org/obp/ui#iso:pub:PUB500001:en) format.'],
-		['key' => 'billing_state', 'type' => 'string', 'description' => 'Must match one of the states in [Cargo\'s `states.json` file](https://github.com/duncanmcclean/statamic-cargo/blob/main/resources/json/states.json).'],
+		[
+			'key' => 'shipping_address',
+			'type' => 'array',
+			'description' => 'Shipping address for the order.',
+			'parameters' => [
+				['key' => 'name', 'type' => 'string'],
+				['key' => 'line_1', 'type' => 'string'],
+				['key' => 'line_2', 'type' => 'string'],
+				['key' => 'city', 'type' => 'string'],
+				['key' => 'postcode', 'type' => 'string'],
+				['key' => 'country', 'type' => 'string', 'description' => 'Must be in [ISO3](https://www.iso.org/obp/ui#iso:pub:PUB500001:en) format.'],
+				['key' => 'state', 'type' => 'string', 'description' => 'Must match one of the states in [Cargo\'s `states.json` file](https://github.com/duncanmcclean/statamic-cargo/blob/main/resources/json/states.json).'],
+			],
+		],
+		[
+			'key' => 'billing_address',
+			'type' => 'array',
+			'description' => 'Billing address for the order.',
+			'parameters' => [
+				['key' => 'name', 'type' => 'string'],
+				['key' => 'line_1', 'type' => 'string'],
+				['key' => 'line_2', 'type' => 'string'],
+				['key' => 'city', 'type' => 'string'],
+				['key' => 'postcode', 'type' => 'string'],
+				['key' => 'country', 'type' => 'string', 'description' => 'Must be in [ISO3](https://www.iso.org/obp/ui#iso:pub:PUB500001:en) format.'],
+				['key' => 'state', 'type' => 'string', 'description' => 'Must match one of the states in [Cargo\'s `states.json` file](https://github.com/duncanmcclean/statamic-cargo/blob/main/resources/json/states.json).'],
+			],
+		],
 		['key' => '*', 'description' => 'Any other fields defined in your [order blueprint](/docs/orders#blueprint).'],
 	]"
 />

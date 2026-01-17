@@ -64,12 +64,12 @@
                 <h2 class="text-base font-semibold mb-3">{{ trans key="Bill to:" }}</h2>
                 <div>
                     <p class="mb-1 text-sm">{{ order:customer:name }}</p>
-                    {{ if order:billing_line_1 }}<p class="mb-1 text-sm">{{ order:billing_line_1 }}</p>{{ /if }}
-                    {{ if order:billing_line_2 }}<p class="mb-1 text-sm">{{ order:billing_line_2 }}</p>{{ /if }}
-                    {{ if order:billing_city }}<p class="mb-1 text-sm">{{ order:billing_city }}</p>{{ /if }}
-                    {{ if order:billing_state:name }}<p class="mb-1 text-sm">{{ order:billing_state:name }}</p>{{ /if }}
-                    {{ if order:billing_postcode }}<p class="mb-1 text-sm">{{ order:billing_postcode }}</p>{{ /if }}
-                    {{ if order:billing_country:label }}<p class="mb-1 text-sm">{{ order:billing_country:label }}</p>{{ /if }}
+                    {{ if order:billing_address:line_1 }}<p class="mb-1 text-sm">{{ order:billing_address:line_1 }}</p>{{ /if }}
+                    {{ if order:billing_address:line_2 }}<p class="mb-1 text-sm">{{ order:billing_address:line_2 }}</p>{{ /if }}
+                    {{ if order:billing_address:city }}<p class="mb-1 text-sm">{{ order:billing_address:city }}</p>{{ /if }}
+                    {{ if order:billing_address:state:name }}<p class="mb-1 text-sm">{{ order:billing_address:state:name }}</p>{{ /if }}
+                    {{ if order:billing_address:postcode }}<p class="mb-1 text-sm">{{ order:billing_address:postcode }}</p>{{ /if }}
+                    {{ if order:billing_address:country:label }}<p class="mb-1 text-sm">{{ order:billing_address:country:label }}</p>{{ /if }}
                 </div>
             </div>
 
@@ -78,12 +78,12 @@
                 <h2 class="text-base font-semibold mb-3">{{ trans key="Ship to:" }}</h2>
                 <div>
                     <p class="mb-1 text-sm">{{ order:customer:name }}</p>
-                    {{ if order:shipping_line_1 }}<p class="mb-1 text-sm">{{ order:shipping_line_1 }}</p>{{ /if }}
-                    {{ if order:shipping_line_2 }}<p class="mb-1 text-sm">{{ order:shipping_line_2 }}</p>{{ /if }}
-                    {{ if order:shipping_city }}<p class="mb-1 text-sm">{{ order:shipping_city }}</p>{{ /if }}
-                    {{ if order:shipping_state:name }}<p class="mb-1 text-sm">{{ order:shipping_state:name }}</p>{{ /if }}
-                    {{ if order:shipping_postcode }}<p class="mb-1 text-sm">{{ order:shipping_postcode }}</p>{{ /if }}
-                    {{ if order:shipping_country:label }}<p class="mb-1 text-sm">{{ order:shipping_country:label }}</p>{{ /if }}
+                    {{ if order:shipping_address:line_1 }}<p class="mb-1 text-sm">{{ order:shipping_address:line_1 }}</p>{{ /if }}
+                    {{ if order:shipping_address:line_2 }}<p class="mb-1 text-sm">{{ order:shipping_address:line_2 }}</p>{{ /if }}
+                    {{ if order:shipping_address:city }}<p class="mb-1 text-sm">{{ order:shipping_address:city }}</p>{{ /if }}
+                    {{ if order:shipping_address:state:name }}<p class="mb-1 text-sm">{{ order:shipping_address:state:name }}</p>{{ /if }}
+                    {{ if order:shipping_address:postcode }}<p class="mb-1 text-sm">{{ order:shipping_address:postcode }}</p>{{ /if }}
+                    {{ if order:shipping_address:country:label }}<p class="mb-1 text-sm">{{ order:shipping_address:country:label }}</p>{{ /if }}
                 </div>
             </div>
         </div>

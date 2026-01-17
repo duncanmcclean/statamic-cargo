@@ -187,16 +187,20 @@ class MollieTest extends TestCase
         $cart = $this->makeCartWithGuestCustomer();
 
         $cart->data([
-            'shipping_line_1' => '123 Fake St',
-            'shipping_city' => 'Fakeville',
-            'shipping_postcode' => 'FA 1234',
-            'shipping_country' => 'USA',
-            'shipping_state' => 'CA',
-            'billing_line_1' => '123 Fake Road',
-            'billing_city' => 'Faketown',
-            'billing_postcode' => 'FA 5678',
-            'billing_country' => 'USA',
-            'billing_state' => 'CA',
+            'shipping_address' => [
+                'line_1' => '123 Fake St',
+                'city' => 'Fakeville',
+                'postcode' => 'FA 1234',
+                'country' => 'USA',
+                'state' => 'CA',
+            ],
+            'billing_address' => [
+                'line_1' => '123 Fake Road',
+                'city' => 'Faketown',
+                'postcode' => 'FA 5678',
+                'country' => 'USA',
+                'state' => 'CA',
+            ],
         ])->save();
 
         (new Mollie)->setup($cart);
