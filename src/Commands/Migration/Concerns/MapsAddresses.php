@@ -30,21 +30,29 @@ trait MapsAddresses
             );
         }
 
+        $shippingAddress = array_filter([
+            'name' => $shippingName = $data->get('shipping_name'),
+            'line_1' => $shippingLine1 = $data->get('shipping_address', $data->get('shipping_address_line1')),
+            'line_2' => $shippingLine2 = $data->get('shipping_address_line2'),
+            'city' => $shippingCity = $data->get('shipping_city'),
+            'postcode' => $shippingPostcode = $data->get('shipping_zip_code', $data->get('shipping_postal_code')),
+            'country' => $shippingCountry,
+            'state' => $shippingState,
+        ]);
+
+        $billingAddress = array_filter([
+            'name' => $useShippingAddressForBilling ? $shippingName : $data->get('billing_name'),
+            'line_1' => $useShippingAddressForBilling ? $shippingLine1 : $data->get('billing_address', $data->get('billing_address_line1')),
+            'line_2' => $useShippingAddressForBilling ? $shippingLine2 : $data->get('billing_address_line1'),
+            'city' => $useShippingAddressForBilling ? $shippingCity : $data->get('billing_city'),
+            'postcode' => $useShippingAddressForBilling ? $shippingPostcode : $data->get('billing_zip_code', $data->get('billing_postal_code')),
+            'country' => $useShippingAddressForBilling ? $shippingCountry : $billingCountry,
+            'state' => $useShippingAddressForBilling ? $shippingState : $billingState,
+        ]);
+
         return [
-            'shipping_name' => $shippingName = $data->get('shipping_name'),
-            'shipping_line_1' => $shippingLine1 = $data->get('shipping_address', $data->get('shipping_address_line1')),
-            'shipping_line_2' => $shippingLine2 = $data->get('shipping_address_line2'),
-            'shipping_city' => $shippingCity = $data->get('shipping_city'),
-            'shipping_state' => $shippingState,
-            'shipping_postcode' => $shippingPostcode = $data->get('shipping_zip_code', $data->get('shipping_postal_code')),
-            'shipping_country' => $shippingCountry,
-            'billing_name' => $useShippingAddressForBilling ? $shippingName : $data->get('billing_name'),
-            'billing_line_1' => $useShippingAddressForBilling ? $shippingLine1 : $data->get('billing_address', $data->get('billing_address_line1')),
-            'billing_line_2' => $useShippingAddressForBilling ? $shippingLine2 : $data->get('billing_address_line1'),
-            'billing_city' => $useShippingAddressForBilling ? $shippingCity : $data->get('billing_city'),
-            'billing_state' => $useShippingAddressForBilling ? $shippingState : $billingState,
-            'billing_postcode' => $useShippingAddressForBilling ? $shippingPostcode : $data->get('billing_zip_code', $data->get('billing_postal_code')),
-            'billing_country' => $useShippingAddressForBilling ? $shippingCountry : $billingCountry,
+            'shipping_address' => ! empty($shippingAddress) ? $shippingAddress : null,
+            'billing_address' => ! empty($billingAddress) ? $billingAddress : null,
         ];
     }
 
