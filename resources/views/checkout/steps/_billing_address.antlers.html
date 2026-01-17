@@ -13,13 +13,13 @@
     <!-- We'll use hidden inputs to fall back to the shipping address if the user chooses to use it for billing. -->
     <template x-if="useShippingAddressForBilling">
         <div>
-            <input type="hidden" name="billing_name" :value="cart.shipping_name">
-            <input type="hidden" name="billing_line_1" :value="cart.shipping_line_1">
-            <input type="hidden" name="billing_line_2" :value="cart.shipping_line_2">
-            <input type="hidden" name="billing_city" :value="cart.shipping_city">
-            <input type="hidden" name="billing_postcode" :value="cart.shipping_postcode">
-            <input type="hidden" name="billing_state" :value="cart.shipping_state?.code">
-            <input type="hidden" name="billing_country" :value="cart.shipping_country.value">
+            <input type="hidden" name="billing_address[name]" :value="cart.shipping_address?.name">
+            <input type="hidden" name="billing_address[line_1]" :value="cart.shipping_address?.line_1">
+            <input type="hidden" name="billing_address[line_2]" :value="cart.shipping_address?.line_2">
+            <input type="hidden" name="billing_address[city]" :value="cart.shipping_address?.city">
+            <input type="hidden" name="billing_address[postcode]" :value="cart.shipping_address?.postcode">
+            <input type="hidden" name="billing_address[state]" :value="cart.shipping_address?.state?.code">
+            <input type="hidden" name="billing_address[country]" :value="cart.shipping_address?.country?.value">
         </div>
     </template>
 
@@ -47,27 +47,27 @@
                     // If they're not, keep it checked.
                     if (
                         this.cart.has_physical_products
-                        && this.cart.shipping_line_1
-                        && this.cart.billing_line_1
+                        && this.cart.shipping_address?.line_1
+                        && this.cart.billing_address?.line_1
                     ) {
                         let shippingAddress = {
-                            name: this.cart.shipping_name,
-                            line_1: this.cart.shipping_line_1,
-                            line_2: this.cart.shipping_line_2,
-                            city: this.cart.shipping_city,
-                            postcode: this.cart.shipping_postcode,
-                            state: this.cart.shipping_state?.code,
-                            country: this.cart.shipping_country?.value,
+                            name: this.cart.shipping_address?.name,
+                            line_1: this.cart.shipping_address?.line_1,
+                            line_2: this.cart.shipping_address?.line_2,
+                            city: this.cart.shipping_address?.city,
+                            postcode: this.cart.shipping_address?.postcode,
+                            state: this.cart.shipping_address?.state?.code,
+                            country: this.cart.shipping_address?.country?.value,
                         };
 
                         let billingAddress = {
-                            name: this.cart.billing_name,
-                            line_1: this.cart.billing_line_1,
-                            line_2: this.cart.billing_line_2,
-                            city: this.cart.billing_city,
-                            postcode: this.cart.billing_postcode,
-                            state: this.cart.billing_state?.code,
-                            country: this.cart.billing_country?.value,
+                            name: this.cart.billing_address?.name,
+                            line_1: this.cart.billing_address?.line_1,
+                            line_2: this.cart.billing_address?.line_2,
+                            city: this.cart.billing_address?.city,
+                            postcode: this.cart.billing_address?.postcode,
+                            state: this.cart.billing_address?.state?.code,
+                            country: this.cart.billing_address?.country?.value,
                         };
 
                         this.useShippingAddressForBilling = JSON.stringify(shippingAddress) === JSON.stringify(billingAddress);
