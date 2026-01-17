@@ -6,7 +6,6 @@ use DuncanMcClean\Cargo\Contracts\Cart\Cart as CartContract;
 use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
-use Illuminate\Support\Collection;
 use Statamic\UpdateScripts\UpdateScript;
 
 class MigrateAddresses extends UpdateScript
