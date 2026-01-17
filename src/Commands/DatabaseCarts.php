@@ -8,6 +8,7 @@ use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Orders\LineItem;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Artisan;
 use Statamic\Console\RunsInPlease;
 use Statamic\Statamic;
 use Stillat\Proteus\Support\Facades\ConfigWriter;
@@ -74,7 +75,7 @@ class DatabaseCarts extends Command
 
     private function runMigrations(): self
     {
-        $this->call('migrate');
+        Artisan::call('migrate', ['--force' => true], $this->output);
 
         $this->newLine();
 
