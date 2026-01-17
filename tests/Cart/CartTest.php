@@ -163,11 +163,13 @@ class CartTest extends TestCase
             ->subtotal(10500)
             ->shippingTotal(2000)
             ->data([
-                'shipping_line_1' => '123 Fake St',
-                'shipping_city' => 'Glasgow',
-                'shipping_postcode' => 'G1 234',
-                'shipping_country' => 'GBR',
-                'shipping_state' => 'GLS',
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Glasgow',
+                    'postcode' => 'G1 234',
+                    'country' => 'GBR',
+                    'state' => 'GLS',
+                ],
                 'shipping_method' => 'paid_shipping',
                 'shipping_option' => 'the_only_option',
                 'shipping_tax_breakdown' => [

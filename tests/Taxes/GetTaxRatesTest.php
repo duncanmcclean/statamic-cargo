@@ -27,11 +27,13 @@ class GetTaxRatesTest extends TestCase
     public function can_get_tax_rates_by_everywhere()
     {
         $cart = Cart::make()->data([
-            'shipping_line_1' => '123 Fake St',
-            'shipping_city' => 'Fakeville',
-            'shipping_postcode' => 'FA 1234',
-            'shipping_country' => 'USA',
-            'shipping_state' => 'CA',
+            'shipping_address' => [
+                'line_1' => '123 Fake St',
+                'city' => 'Fakeville',
+                'postcode' => 'FA 1234',
+                'country' => 'USA',
+                'state' => 'CA',
+            ],
         ]);
 
         $taxClass = tap(TaxClass::make()->handle('standard'))->save();
@@ -52,11 +54,13 @@ class GetTaxRatesTest extends TestCase
     public function can_get_tax_rates_by_country()
     {
         $cart = Cart::make()->data([
-            'shipping_line_1' => '123 Fake St',
-            'shipping_city' => 'Fakeville',
-            'shipping_postcode' => 'FA 1234',
-            'shipping_country' => 'USA',
-            'shipping_state' => 'CA',
+            'shipping_address' => [
+                'line_1' => '123 Fake St',
+                'city' => 'Fakeville',
+                'postcode' => 'FA 1234',
+                'country' => 'USA',
+                'state' => 'CA',
+            ],
         ]);
 
         $taxClass = tap(TaxClass::make()->handle('standard'))->save();
@@ -78,11 +82,13 @@ class GetTaxRatesTest extends TestCase
     public function can_get_tax_rates_by_state()
     {
         $cart = Cart::make()->data([
-            'shipping_line_1' => '123 Fake St',
-            'shipping_city' => 'Fakeville',
-            'shipping_postcode' => 'FA 1234',
-            'shipping_country' => 'USA',
-            'shipping_state' => 'CA',
+            'shipping_address' => [
+                'line_1' => '123 Fake St',
+                'city' => 'Fakeville',
+                'postcode' => 'FA 1234',
+                'country' => 'USA',
+                'state' => 'CA',
+            ],
         ]);
 
         $taxClass = tap(TaxClass::make()->handle('standard'))->save();
@@ -105,11 +111,13 @@ class GetTaxRatesTest extends TestCase
     public function can_get_tax_rates_by_postcode()
     {
         $cart = Cart::make()->data([
-            'shipping_line_1' => '123 Fake St',
-            'shipping_city' => 'Fakeville',
-            'shipping_postcode' => 'FA 1234',
-            'shipping_country' => 'USA',
-            'shipping_state' => 'CA',
+            'shipping_address' => [
+                'line_1' => '123 Fake St',
+                'city' => 'Fakeville',
+                'postcode' => 'FA 1234',
+                'country' => 'USA',
+                'state' => 'CA',
+            ],
         ]);
 
         $taxClass = tap(TaxClass::make()->handle('standard'))->save();
@@ -132,11 +140,13 @@ class GetTaxRatesTest extends TestCase
     public function can_get_tax_rates_by_postcode_with_wildcard()
     {
         $cart = Cart::make()->data([
-            'shipping_line_1' => '123 Fake St',
-            'shipping_city' => 'Fakeville',
-            'shipping_postcode' => 'FA 1234',
-            'shipping_country' => 'USA',
-            'shipping_state' => 'CA',
+            'shipping_address' => [
+                'line_1' => '123 Fake St',
+                'city' => 'Fakeville',
+                'postcode' => 'FA 1234',
+                'country' => 'USA',
+                'state' => 'CA',
+            ],
         ]);
 
         $taxClass = tap(TaxClass::make()->handle('standard'))->save();
@@ -159,11 +169,13 @@ class GetTaxRatesTest extends TestCase
     public function can_get_multiple_tax_rates()
     {
         $cart = Cart::make()->data([
-            'shipping_line_1' => '123 Fake St',
-            'shipping_city' => 'Fakeville',
-            'shipping_postcode' => 'FA 1234',
-            'shipping_country' => 'USA',
-            'shipping_state' => 'CA',
+            'shipping_address' => [
+                'line_1' => '123 Fake St',
+                'city' => 'Fakeville',
+                'postcode' => 'FA 1234',
+                'country' => 'USA',
+                'state' => 'CA',
+            ],
         ]);
 
         $taxClass = tap(TaxClass::make()->handle('standard'))->save();

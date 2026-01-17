@@ -59,11 +59,13 @@ class CalculateTaxesTest extends TestCase
                 ['id' => 'one', 'product' => $product->id(), 'quantity' => 1, 'total' => 10000],
             ])
             ->data([
-                'shipping_line_1' => '123 Fake St',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA 1234',
-                'shipping_country' => 'GBR',
-                'shipping_state' => 'GLG',
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA 1234',
+                    'country' => 'GBR',
+                    'state' => 'GLG',
+                ],
             ]);
 
         $cart = app(CalculateTaxes::class)->handle($cart, fn ($cart) => $cart);
@@ -89,11 +91,13 @@ class CalculateTaxesTest extends TestCase
                 ['id' => 'one', 'product' => $product->id(), 'quantity' => 1, 'total' => 10000],
             ])
             ->data([
-                'shipping_line_1' => '123 Fake St',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA 1234',
-                'shipping_country' => 'GBR',
-                'shipping_state' => 'GLG',
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA 1234',
+                    'country' => 'GBR',
+                    'state' => 'GLG',
+                ],
             ]);
 
         TaxZone::make()->handle('uk')->data([
@@ -127,11 +131,13 @@ class CalculateTaxesTest extends TestCase
                 ['id' => 'one', 'product' => $product->id(), 'quantity' => 1, 'total' => 10000],
             ])
             ->data([
-                'shipping_line_1' => '123 Fake St',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA 1234',
-                'shipping_country' => 'USA',
-                'shipping_state' => 'CA',
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA 1234',
+                    'country' => 'USA',
+                    'state' => 'CA',
+                ],
             ]);
 
         TaxZone::make()->handle('usa')->data([
@@ -165,11 +171,13 @@ class CalculateTaxesTest extends TestCase
                 ['id' => 'one', 'product' => $product->id(), 'quantity' => 1, 'total' => 10000],
             ])
             ->data([
-                'shipping_line_1' => '123 Fake St',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA 1234',
-                'shipping_country' => 'USA',
-                'shipping_state' => 'CA',
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA 1234',
+                    'country' => 'USA',
+                    'state' => 'CA',
+                ],
             ]);
 
         TaxZone::make()->handle('usa')->data([
@@ -205,11 +213,13 @@ class CalculateTaxesTest extends TestCase
                 ['id' => 'one', 'product' => $product->id(), 'quantity' => 1, 'total' => 2500, 'discount_amount' => 500],
             ])
             ->data([
-                'shipping_line_1' => '123 Fake St',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA 1234',
-                'shipping_country' => 'USA',
-                'shipping_state' => 'CA',
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA 1234',
+                    'country' => 'USA',
+                    'state' => 'CA',
+                ],
                 'discount_code' => 'FOOBAR',
             ]);
 
@@ -245,11 +255,13 @@ class CalculateTaxesTest extends TestCase
                 ['id' => 'one', 'product' => $product->id(), 'quantity' => 5, 'total' => 50000],
             ])
             ->data([
-                'shipping_line_1' => '123 Fake St',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA 1234',
-                'shipping_country' => 'USA',
-                'shipping_state' => 'CA',
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA 1234',
+                    'country' => 'USA',
+                    'state' => 'CA',
+                ],
             ]);
 
         TaxZone::make()->handle('usa')->data([
@@ -283,11 +295,13 @@ class CalculateTaxesTest extends TestCase
                 ['id' => 'one', 'product' => $product->id(), 'quantity' => 1, 'total' => 10000],
             ])
             ->data([
-                'shipping_line_1' => '123 Fake St',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA 1234',
-                'shipping_country' => 'USA',
-                'shipping_state' => 'CA',
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA 1234',
+                    'country' => 'USA',
+                    'state' => 'CA',
+                ],
             ]);
 
         TaxZone::make()->handle('usa')->data([
@@ -339,11 +353,13 @@ class CalculateTaxesTest extends TestCase
                 ['id' => 'one', 'product' => $product->id(), 'quantity' => 1, 'total' => 10000],
             ])
             ->data([
-                'shipping_line_1' => '123 Fake St',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA 1234',
-                'shipping_country' => 'USA',
-                'shipping_state' => 'CA',
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA 1234',
+                    'country' => 'USA',
+                    'state' => 'CA',
+                ],
             ]);
 
         TaxZone::make()->handle('usa')->data([
@@ -383,11 +399,13 @@ class CalculateTaxesTest extends TestCase
                 ['id' => 'two', 'product' => $productB->id(), 'quantity' => 1, 'total' => 5000],
             ])
             ->data([
-                'shipping_line_1' => '123 Fake St',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA 1234',
-                'shipping_country' => 'USA',
-                'shipping_state' => 'CA',
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA 1234',
+                    'country' => 'USA',
+                    'state' => 'CA',
+                ],
             ]);
 
         TaxZone::make()->handle('usa')->data([
@@ -439,11 +457,13 @@ class CalculateTaxesTest extends TestCase
                 ['id' => 'one', 'product' => $product->id(), 'variant' => 'Red', 'quantity' => 1, 'total' => 10000],
             ])
             ->data([
-                'shipping_line_1' => '123 Fake St',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA 1234',
-                'shipping_country' => 'USA',
-                'shipping_state' => 'CA',
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA 1234',
+                    'country' => 'USA',
+                    'state' => 'CA',
+                ],
             ]);
 
         TaxZone::make()->handle('usa')->data([
@@ -474,11 +494,13 @@ class CalculateTaxesTest extends TestCase
         $cart = Cart::make()
             ->shippingTotal(500)
             ->data([
-                'shipping_line_1' => '123 Fake St',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA 1234',
-                'shipping_country' => 'USA',
-                'shipping_state' => 'CA',
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA 1234',
+                    'country' => 'USA',
+                    'state' => 'CA',
+                ],
                 'shipping_method' => 'paid_shipping',
                 'shipping_option' => 'the_only_option',
             ]);
@@ -507,11 +529,13 @@ class CalculateTaxesTest extends TestCase
         $cart = Cart::make()
             ->shippingTotal(500)
             ->data([
-                'shipping_line_1' => '123 Fake St',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA 1234',
-                'shipping_country' => 'USA',
-                'shipping_state' => 'CA',
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA 1234',
+                    'country' => 'USA',
+                    'state' => 'CA',
+                ],
                 'shipping_method' => 'paid_shipping',
                 'shipping_option' => 'the_only_option',
             ]);
@@ -540,11 +564,13 @@ class CalculateTaxesTest extends TestCase
         $cart = Cart::make()
             ->shippingTotal(500)
             ->data([
-                'shipping_line_1' => '123 Fake St',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA 1234',
-                'shipping_country' => 'USA',
-                'shipping_state' => 'CA',
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA 1234',
+                    'country' => 'USA',
+                    'state' => 'CA',
+                ],
                 'shipping_method' => 'paid_shipping',
                 'shipping_option' => 'the_only_option',
             ]);
@@ -591,11 +617,13 @@ class CalculateTaxesTest extends TestCase
         $cart = Cart::make()
             ->shippingTotal(500)
             ->data([
-                'shipping_line_1' => '123 Fake St',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA 1234',
-                'shipping_country' => 'USA',
-                'shipping_state' => 'CA',
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA 1234',
+                    'country' => 'USA',
+                    'state' => 'CA',
+                ],
                 'shipping_method' => 'paid_shipping',
                 'shipping_option' => 'the_only_option',
             ]);
@@ -669,11 +697,13 @@ class CalculateTaxesTest extends TestCase
                 ['id' => 'one', 'product' => $product->id(), 'quantity' => 1, 'total' => 10000],
             ])
             ->data([
-                'shipping_line_1' => '123 Fake St',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA 1234',
-                'shipping_country' => 'USA',
-                'shipping_state' => 'CA',
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA 1234',
+                    'country' => 'USA',
+                    'state' => 'CA',
+                ],
                 'shipping_method' => 'paid_shipping',
                 'shipping_option' => 'the_only_option',
             ]);

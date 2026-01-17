@@ -76,11 +76,13 @@ class CartControllerTest extends TestCase
                     'email' => 'jane.doe@example.com',
                 ],
                 'discount_code' => 'FOOBAR',
-                'shipping_line_1' => '123 ShippingMethod St',
-                'shipping_line_2' => 'Apt 1',
-                'shipping_city' => 'Shippingville',
-                'shipping_postcode' => '12345',
-                'shipping_country' => 'US',
+                'shipping_address' => [
+                    'line_1' => '123 ShippingMethod St',
+                    'line_2' => 'Apt 1',
+                    'city' => 'Shippingville',
+                    'postcode' => '12345',
+                    'country' => 'US',
+                ],
 
                 // These fields shouldn't get updated.
                 'random_field' => 'foo',
@@ -96,11 +98,12 @@ class CartControllerTest extends TestCase
 
         $this->assertEquals('FOOBAR', $cart->get('discount_code'));
 
-        $this->assertEquals('123 ShippingMethod St', $cart->get('shipping_line_1'));
-        $this->assertEquals('Apt 1', $cart->get('shipping_line_2'));
-        $this->assertEquals('Shippingville', $cart->get('shipping_city'));
-        $this->assertEquals('12345', $cart->get('shipping_postcode'));
-        $this->assertEquals('US', $cart->get('shipping_country'));
+        $shippingAddress = $cart->shippingAddress();
+        $this->assertEquals('123 ShippingMethod St', $shippingAddress->line1);
+        $this->assertEquals('Apt 1', $shippingAddress->line2);
+        $this->assertEquals('Shippingville', $shippingAddress->city);
+        $this->assertEquals('12345', $shippingAddress->postcode);
+        $this->assertEquals('US', $shippingAddress->country);
 
         // Ensure that keys NOT in the order blueprint aren't saved.
         $this->assertNull($cart->get('random_field'));

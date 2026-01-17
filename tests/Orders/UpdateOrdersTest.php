@@ -30,10 +30,12 @@ class UpdateOrdersTest extends TestCase
         $this
             ->actingAs(User::make()->makeSuper()->save())
             ->patch(cp_route('cargo.orders.update', $order->id()), [
-                'shipping_line_1' => '123 Fake Street',
-                'shipping_city' => 'Fakeville',
-                'shipping_postcode' => 'FA1 1KE',
-                'shipping_country' => 'United Kingdom',
+                'shipping_address' => [
+                    'line_1' => '123 Fake Street',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA1 1KE',
+                    'country' => 'United Kingdom',
+                ],
                 'status' => 'shipped',
                 'grand_total' => 1000, // This should be ignored.
             ])
@@ -42,10 +44,11 @@ class UpdateOrdersTest extends TestCase
 
         $order = $order->fresh();
 
-        $this->assertEquals($order->get('shipping_line_1'), '123 Fake Street');
-        $this->assertEquals($order->get('shipping_city'), 'Fakeville');
-        $this->assertEquals($order->get('shipping_postcode'), 'FA1 1KE');
-        $this->assertEquals($order->get('shipping_country'), 'United Kingdom');
+        $shippingAddress = $order->shippingAddress();
+        $this->assertEquals($shippingAddress->line1, '123 Fake Street');
+        $this->assertEquals($shippingAddress->city, 'Fakeville');
+        $this->assertEquals($shippingAddress->postcode, 'FA1 1KE');
+        $this->assertEquals($shippingAddress->country, 'United Kingdom');
         $this->assertEquals($order->status(), OrderStatus::Shipped);
         $this->assertEquals($order->grandTotal(), 0);
     }
