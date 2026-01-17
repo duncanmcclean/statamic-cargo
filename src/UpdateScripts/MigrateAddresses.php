@@ -13,7 +13,7 @@ class MigrateAddresses extends UpdateScript
 {
     public function shouldUpdate($newVersion, $oldVersion)
     {
-        return $this->isUpdatingTo('v1.0.0-alpha.15');
+        return $this->isUpdatingTo('1.0.0-alpha.15');
     }
 
     public function update()
