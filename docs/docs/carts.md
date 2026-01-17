@@ -55,7 +55,7 @@ You can also opt to store carts in a traditional database, which might be useful
 To move carts to the database, run this command:
 
 ```
-php please statamic:cargo:database-carts
+php please cargo:database-carts
 ```
 
 It'll automatically publish database migrations, update your `cargo.php` config file and import existing carts into the database.
