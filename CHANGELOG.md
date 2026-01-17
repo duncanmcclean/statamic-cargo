@@ -1,5 +1,27 @@
 # Changelog
 
+## v1.0.0-alpha.15 (2026-01-17)
+
+**This release contains breaking changes!** You'll need to update your project's code. Please [review the list of breaking changes](https://github.com/duncanmcclean/statamic-cargo/pull/111).
+
+### What's new
+- Laravel Boost Guidelines #110 by @duncanmcclean
+- Added "Redemptions Count" column to discounts listing by @duncanmcclean
+
+### What's improved
+- Addresses Refactor #111 by @duncanmcclean
+- Define `entry_class` on product collections #104 by @duncanmcclean
+
+### What's fixed
+- Ensure "Amount Off" discounts are only applied once per cart #112 by @duncanmcclean
+- Ignore `created_at` and `updated_at` timestamps when hydrating db carts/orders by @duncanmcclean
+- Moved bindings out of command constructors by @duncanmcclean
+- Test Cleanup #103 by @duncanmcclean
+- Added `shipping_tax_total` field to order blueprint #102 by @duncanmcclean
+- Fixed typo in cart tag docs #100 by @marcorieser
+
+
+
 ## v1.0.0-alpha.14 (2026-01-09)
 
 ### What's improved
