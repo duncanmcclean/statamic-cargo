@@ -119,12 +119,12 @@ To use the Stripe gateway, copy and paste this template into your checkout flow:
                     name: '{{ cart:customer:name }}',
                     email: '{{ cart:customer:email }}',
                     address: {
-                        line1: '{{ cart:billing_line_1 }}',
-                        line2: '{{ cart:billing_line_2 }}',
-                        city: '{{ cart:billing_city }}',
-                        postal_code: '{{ cart:billing_postcode }}',
-                        state: '{{ cart:billing_state:code }}',
-                        country: '{{ cart:billing_country:iso2 }}',
+                        line1: '{{ cart:billing_address:line_1 }}',
+                        line2: '{{ cart:billing_address:line_2 }}',
+                        city: '{{ cart:billing_address:city }}',
+                        postal_code: '{{ cart:billing_address:postcode }}',
+                        state: '{{ cart:billing_address:state:code }}',
+                        country: '{{ cart:billing_address:country:iso2 }}',
                     },
                 },
             },
@@ -213,17 +213,17 @@ To use the Stripe gateway, copy and paste this template into your checkout flow:
         const paymentElementOptions = {  
             layout: "accordion",  
             defaultValues: {  
-                billingDetails: {  
-                    name: '{{ Statamic::tag('cart:customer:name') }}',  
-                    email: '{{ Statamic::tag('cart:customer:email') }}',  
-                    address: {  
-                        line1: '{{ Statamic::tag('cart:billing_line_1') }}',  
-                        line2: '{{ Statamic::tag('cart:billing_line_2') }}',  
-                        city: '{{ Statamic::tag('cart:billing_city') }}',  
-                        postal_code: '{{ Statamic::tag('cart:billing_postcode') }}',  
-                        state: '{{ Statamic::tag('cart:billing_state:code') }}',  
-                        country: '{{ {{ Statamic::tag('cart:billing_country:iso2') }} }}',  
-                    },  
+                billingDetails: {
+                    name: '{{ Statamic::tag('cart:customer:name') }}',
+                    email: '{{ Statamic::tag('cart:customer:email') }}',
+                    address: {
+                        line1: '{{ Statamic::tag('cart:billing_address:line_1') }}',
+                        line2: '{{ Statamic::tag('cart:billing_address:line_2') }}',
+                        city: '{{ Statamic::tag('cart:billing_address:city') }}',
+                        postal_code: '{{ Statamic::tag('cart:billing_address:postcode') }}',
+                        state: '{{ Statamic::tag('cart:billing_address:state:code') }}',
+                        country: '{{ Statamic::tag('cart:billing_address:country:iso2') }}',
+                    },
                 },  
             },  
         };  
