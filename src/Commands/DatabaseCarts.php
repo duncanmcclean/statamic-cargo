@@ -8,6 +8,7 @@ use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Orders\LineItem;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Artisan;
 use Statamic\Console\RunsInPlease;
 use Statamic\Statamic;
 use Stillat\Proteus\Support\Facades\ConfigWriter;
@@ -24,10 +25,8 @@ class DatabaseCarts extends Command
 
     protected $description = 'Migrates carts to the database.';
 
-    public function __construct()
+    public function handle(): void
     {
-        parent::__construct();
-
         app()->bind('cargo.carts.eloquent.model', function () {
             return \DuncanMcClean\Cargo\Cart\Eloquent\CartModel::class;
         });
@@ -40,10 +39,7 @@ class DatabaseCarts extends Command
             \DuncanMcClean\Cargo\Contracts\Cart\CartRepository::class,
             \DuncanMcClean\Cargo\Stache\Repositories\CartRepository::class
         );
-    }
 
-    public function handle(): void
-    {
         $this
             ->publishMigrations()
             ->runMigrations()
@@ -74,7 +70,7 @@ class DatabaseCarts extends Command
 
     private function runMigrations(): self
     {
-        $this->call('migrate');
+        Artisan::call('migrate', ['--force' => true], $this->output);
 
         $this->newLine();
 

@@ -8,6 +8,7 @@ use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Orders\LineItem;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Artisan;
 use Statamic\Console\RunsInPlease;
 use Statamic\Statamic;
 use Stillat\Proteus\Support\Facades\ConfigWriter;
@@ -24,10 +25,8 @@ class DatabaseOrders extends Command
 
     protected $description = 'Migrates orders to the database.';
 
-    public function __construct()
+    public function handle(): void
     {
-        parent::__construct();
-
         app()->bind('cargo.orders.eloquent.model', function () {
             return \DuncanMcClean\Cargo\Orders\Eloquent\OrderModel::class;
         });
@@ -40,10 +39,7 @@ class DatabaseOrders extends Command
             \DuncanMcClean\Cargo\Contracts\Orders\OrderRepository::class,
             \DuncanMcClean\Cargo\Stache\Repositories\OrderRepository::class
         );
-    }
 
-    public function handle(): void
-    {
         $this
             ->publishMigrations()
             ->runMigrations()
@@ -74,7 +70,7 @@ class DatabaseOrders extends Command
 
     private function runMigrations(): self
     {
-        $this->call('migrate');
+        Artisan::call('migrate', ['--force' => true], $this->output);
 
         $this->newLine();
 

@@ -203,7 +203,7 @@ You can also opt to store orders in a traditional database, which might be usefu
 To move orders to the database, run this command:
 
 ```
-php please statamic:cargo:database-orders
+php please cargo:database-orders
 ```
 
 It'll automatically publish database migrations, update your `cargo.php` config file and import existing orders into the database.
