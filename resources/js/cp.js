@@ -1,5 +1,6 @@
 import DiscountsIndex from './pages/discounts/Index.vue';
 import DiscountsEmpty from './pages/discounts/Empty.vue';
+import AddressFieldtype from './components/fieldtypes/AddressFieldtype.vue';
 import CustomersFieldtype from './components/fieldtypes/CustomersFieldtype.vue';
 import CustomersFieldtypeIndex from './components/fieldtypes/CustomersFieldtypeIndex.vue';
 import DiscountCodeFieldtype from './components/fieldtypes/DiscountCodeFieldtype.vue';
@@ -30,6 +31,7 @@ Statamic.booting(() => {
     Statamic.$inertia.register('cargo::Discounts/Empty', DiscountsEmpty);
 
     // Fieldtypes
+    Statamic.$components.register('address-fieldtype', AddressFieldtype);
     Statamic.$components.register('customers-fieldtype', CustomersFieldtype);
     Statamic.$components.register('customers-fieldtype-index', CustomersFieldtypeIndex);
     Statamic.$components.register('discount_code-fieldtype', DiscountCodeFieldtype);

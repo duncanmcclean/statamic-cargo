@@ -67,32 +67,8 @@ class Blueprint
                             'display' => __('Shipping Address'),
                             'fields' => [
                                 [
-                                    'handle' => 'shipping_name',
-                                    'field' => ['type' => 'text', 'display' => __('Name'), 'listable' => false, 'width' => 50, 'unless' => ['has_physical_products' => false]],
-                                ],
-                                [
-                                    'handle' => 'shipping_line_1',
-                                    'field' => ['type' => 'text', 'display' => __('Address Line 1'), 'listable' => false, 'width' => 50, 'unless' => ['has_physical_products' => false]],
-                                ],
-                                [
-                                    'handle' => 'shipping_line_2',
-                                    'field' => ['type' => 'text', 'display' => __('Address Line 2'), 'listable' => false, 'width' => 50, 'unless' => ['has_physical_products' => false]],
-                                ],
-                                [
-                                    'handle' => 'shipping_city',
-                                    'field' => ['type' => 'text', 'display' => __('Town/City'), 'listable' => false, 'width' => 50, 'unless' => ['has_physical_products' => false]],
-                                ],
-                                [
-                                    'handle' => 'shipping_postcode',
-                                    'field' => ['type' => 'text', 'display' => __('Postcode'), 'listable' => false, 'width' => 50, 'unless' => ['has_physical_products' => false]],
-                                ],
-                                [
-                                    'handle' => 'shipping_country',
-                                    'field' => ['type' => 'dictionary', 'dictionary' => ['type' => 'countries', 'emojis' => false], 'max_items' => 1, 'display' => __('Country'), 'listable' => false, 'width' => 50, 'unless' => ['has_physical_products' => false]],
-                                ],
-                                [
-                                    'handle' => 'shipping_state',
-                                    'field' => ['type' => 'states', 'from' => 'shipping_country', 'display' => __('State/County'), 'listable' => false, 'max_items' => 1, 'width' => 50, 'unless' => ['has_physical_products' => false]],
+                                    'handle' => 'shipping_address',
+                                    'field' => ['type' => 'address', 'display' => __('Shipping Address'), 'hide_display' => true, 'listable' => false, 'unless' => ['has_physical_products' => false]],
                                 ],
                             ],
                         ],
@@ -114,32 +90,8 @@ class Blueprint
                             'display' => __('Billing Address'),
                             'fields' => [
                                 [
-                                    'handle' => 'billing_name',
-                                    'field' => ['type' => 'text', 'display' => __('Name'), 'listable' => false, 'width' => 50],
-                                ],
-                                [
-                                    'handle' => 'billing_line_1',
-                                    'field' => ['type' => 'text', 'display' => __('Address Line 1'), 'listable' => false, 'width' => 50],
-                                ],
-                                [
-                                    'handle' => 'billing_line_2',
-                                    'field' => ['type' => 'text', 'display' => __('Address Line 2'), 'listable' => false, 'width' => 50],
-                                ],
-                                [
-                                    'handle' => 'billing_city',
-                                    'field' => ['type' => 'text', 'display' => __('Town/City'), 'listable' => false, 'width' => 50],
-                                ],
-                                [
-                                    'handle' => 'billing_postcode',
-                                    'field' => ['type' => 'text', 'display' => __('Postcode'), 'listable' => false, 'width' => 50],
-                                ],
-                                [
-                                    'handle' => 'billing_country',
-                                    'field' => ['type' => 'dictionary', 'dictionary' => ['type' => 'countries', 'emojis' => false], 'display' => __('Country'), 'listable' => false, 'max_items' => 1, 'width' => 50],
-                                ],
-                                [
-                                    'handle' => 'billing_state',
-                                    'field' => ['type' => 'states', 'from' => 'billing_country', 'display' => __('State/County'), 'listable' => false, 'max_items' => 1, 'width' => 50],
+                                    'handle' => 'billing_address',
+                                    'field' => ['type' => 'address', 'display' => __('Billing Address'), 'hide_display' => true, 'listable' => false],
                                 ],
                             ],
                         ],

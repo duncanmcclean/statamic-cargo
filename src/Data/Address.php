@@ -2,11 +2,13 @@
 
 namespace DuncanMcClean\Cargo\Data;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\File;
 use Statamic\Dictionaries\Item;
 use Statamic\Facades\Dictionary;
+use Stringable;
 
-class Address
+class Address implements Arrayable, Stringable
 {
     public function __construct(
         public ?string $name = null,
@@ -40,6 +42,19 @@ class Address
         }
 
         return array_values(array_filter($states[$this->country], fn ($state) => $state['code'] === $this->state))[0];
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'line_1' => $this->line1,
+            'line_2' => $this->line2,
+            'city' => $this->city,
+            'postcode' => $this->postcode,
+            'country' => $this->country,
+            'state' => $this->state,
+        ];
     }
 
     public function __toString(): string
