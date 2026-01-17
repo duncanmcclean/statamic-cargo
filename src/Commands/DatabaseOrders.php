@@ -25,10 +25,8 @@ class DatabaseOrders extends Command
 
     protected $description = 'Migrates orders to the database.';
 
-    public function __construct()
+    public function handle(): void
     {
-        parent::__construct();
-
         app()->bind('cargo.orders.eloquent.model', function () {
             return \DuncanMcClean\Cargo\Orders\Eloquent\OrderModel::class;
         });
@@ -41,10 +39,7 @@ class DatabaseOrders extends Command
             \DuncanMcClean\Cargo\Contracts\Orders\OrderRepository::class,
             \DuncanMcClean\Cargo\Stache\Repositories\OrderRepository::class
         );
-    }
 
-    public function handle(): void
-    {
         $this
             ->publishMigrations()
             ->runMigrations()

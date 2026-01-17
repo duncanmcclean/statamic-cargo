@@ -25,10 +25,8 @@ class DatabaseCarts extends Command
 
     protected $description = 'Migrates carts to the database.';
 
-    public function __construct()
+    public function handle(): void
     {
-        parent::__construct();
-
         app()->bind('cargo.carts.eloquent.model', function () {
             return \DuncanMcClean\Cargo\Cart\Eloquent\CartModel::class;
         });
@@ -41,10 +39,7 @@ class DatabaseCarts extends Command
             \DuncanMcClean\Cargo\Contracts\Cart\CartRepository::class,
             \DuncanMcClean\Cargo\Stache\Repositories\CartRepository::class
         );
-    }
 
-    public function handle(): void
-    {
         $this
             ->publishMigrations()
             ->runMigrations()
