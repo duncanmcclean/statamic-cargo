@@ -6,6 +6,7 @@ use DuncanMcClean\Cargo\Contracts\Cart\Cart as CartContract;
 use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
+use Illuminate\Support\Collection;
 use Statamic\UpdateScripts\UpdateScript;
 
 class MigrateAddresses extends UpdateScript
@@ -27,28 +28,26 @@ class MigrateAddresses extends UpdateScript
 
     private function migrateCarts(): void
     {
-        $query = Cart::query();
+        $query = Cart::query()
+            ->whereNotNull('shipping_line_1')
+            ->orWhereNotNull('billing_line_1');
 
-        if ($query->count() === 0) {
-            return;
-        }
+        $count = $query->count();
+        $query->chunk(50, fn ($carts) => $carts->each(fn ($cart) => $this->migrateEntity($cart)));
 
-        $query->get()->each(fn (CartContract $cart) => $this->migrateEntity($cart));
-
-        $this->console()->info('Migrated '.Cart::query()->count().' carts.');
+        $this->console()->info("Migrated {$count} carts.");
     }
 
     private function migrateOrders(): void
     {
-        $query = Order::query();
+        $query = Order::query()
+            ->whereNotNull('shipping_line_1')
+            ->orWhereNotNull('billing_line_1');
 
-        if ($query->count() === 0) {
-            return;
-        }
+        $count = $query->count();
+        $query->chunk(50, fn ($orders) => $orders->each(fn ($order) => $this->migrateEntity($order)));
 
-        $query->get()->each(fn (OrderContract $order) => $this->migrateEntity($order));
-
-        $this->console()->info('Migrated '.Order::query()->count().' orders.');
+        $this->console()->info("Migrated {$count} orders.");
     }
 
     private function migrateEntity(CartContract|OrderContract $entity): void
