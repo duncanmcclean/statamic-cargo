@@ -8,3 +8,4 @@ node_modules
 composer.lock
 .env
 public
+.claude
