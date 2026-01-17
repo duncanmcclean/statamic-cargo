@@ -11,7 +11,26 @@ class AmountOff extends DiscountType
 
     public function calculate(Cart $cart, LineItem $lineItem): int
     {
-        return (int) $this->discount->get('amount_off');
+        $discountValue = (int) $this->discount->get('amount_off');
+
+        $eligibleSubtotal = $cart->lineItems()
+            ->filter(fn (LineItem $line) => $this->isValidForLineItem($cart, $line))
+            ->sum(fn (LineItem $line) => $line->total());
+
+        if ($eligibleSubtotal <= 0) {
+            return 0;
+        }
+
+        // Don't discount more than the cart subtotal.
+        if ($discountValue > $eligibleSubtotal) {
+            $discountValue = $eligibleSubtotal;
+        }
+
+        // Calculate this line item's proportional share of the discount.
+        $lineTotal = $lineItem->total();
+        $proportion = $lineTotal / $eligibleSubtotal;
+
+        return (int) floor($discountValue * $proportion);
     }
 
     public function fieldItems(): array
