@@ -28,7 +28,7 @@ class Order extends StacheOrder
             )
             ->lineItems($model->lineItems->map(function (LineItemModel $model) {
                 return collect($model->getAttributes())
-                    ->except(['order_id', 'data'])
+                    ->except(['order_id', 'data', 'created_at', 'updated_at'])
                     ->merge($model->data)
                     ->all();
             }))
