@@ -6,9 +6,12 @@ use DuncanMcClean\Cargo\Data\Address as AddressData;
 use Statamic\Fields\Fields;
 use Statamic\Fields\Values;
 use Statamic\Fieldtypes\Group as GroupFieldtype;
+use Statamic\Support\Traits\Hookable;
 
 class Address extends GroupFieldtype
 {
+    use Hookable;
+
     protected $selectable = false;
 
     public function preload()
@@ -112,6 +115,8 @@ class Address extends GroupFieldtype
                 ],
             ],
         ];
+
+        $fields = $this->runHooksWith('fields', ['fields' => $fields])?->fields;
 
         return new Fields($fields, $this->field()->parent(), $this->field());
     }
