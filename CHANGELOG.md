@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.0.0-beta.1 (2026-01-19)
+
+### What's fixed
+- Move subtotal calculation to right after line item calculations #114 by @duncanmcclean
+
+
+
 ## v1.0.0-alpha.15 (2026-01-17)
 
 **This release contains breaking changes!** You'll need to update your project's code. Please [review the list of breaking changes](https://github.com/duncanmcclean/statamic-cargo/pull/111).
