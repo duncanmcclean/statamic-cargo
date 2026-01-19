@@ -11,9 +11,6 @@ class CalculateTotals
     {
         $pricesIncludeTax = config('statamic.cargo.taxes.price_includes_tax');
 
-        // Calculate the subtotal by summing the line item subtotals (totals without additional taxes)
-        $cart->subTotal($cart->lineItems()->map->subTotal()->sum());
-
         // Calculate the total (subtotal + taxes if they aren't included in the prices)
         $total = $cart->subTotal();
 

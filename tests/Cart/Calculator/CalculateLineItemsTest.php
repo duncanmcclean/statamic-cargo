@@ -94,6 +94,23 @@ class CalculateLineItemsTest extends TestCase
     }
 
     #[Test]
+    public function calculates_order_subtotal()
+    {
+        Collection::make('products')->save();
+        $productA = tap(Entry::make()->collection('products')->data(['price' => 2550]))->save();
+        $productB = tap(Entry::make()->collection('products')->data(['price' => 1500]))->save();
+
+        $cart = Cart::make()->lineItems([
+            ['id' => 'a', 'product' => $productA->id(), 'quantity' => 2],
+            ['id' => 'b', 'product' => $productB->id(), 'quantity' => 1],
+        ]);
+
+        (new CalculateLineItems)->handle($cart, fn ($cart) => $cart);
+
+        $this->assertEquals(6600, $cart->subTotal());
+    }
+
+    #[Test]
     public function total_can_be_calculated_correctly_using_price_hook()
     {
         Collection::make('products')->save();

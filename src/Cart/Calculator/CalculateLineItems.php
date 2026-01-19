@@ -12,7 +12,7 @@ class CalculateLineItems
 
     public function handle(Cart $cart, Closure $next)
     {
-        $cart->lineItems()->map(function (LineItem $lineItem) use ($cart) {
+        $cart->lineItems()->each(function (LineItem $lineItem) use ($cart) {
             $product = $lineItem->product();
 
             $price = match (true) {
@@ -24,9 +24,9 @@ class CalculateLineItems
             $lineItem->unitPrice($price);
             $lineItem->subTotal($price * $lineItem->quantity());
             $lineItem->total($lineItem->subTotal());
-
-            return $lineItem;
         });
+
+        $cart->subTotal($cart->lineItems()->map->subTotal()->sum());
 
         return $next($cart);
     }
