@@ -503,4 +503,4 @@ public function boot(): void
 * Every payment gateway has a unique webhook URL...
 	* It takes the format of `/!/cargo/payments/gateway_handle/webhook`. 
 * Where possible, if your gateway supports it, we recommend separating the authorisation and capture steps of the payment.
-* If you're in need of inspiration, feel free to look at Cargo's [Stripe](https://github.com/duncanmcclean/cargo/blob/main/src/Payments/Gateways/Stripe.php) and [Mollie](https://github.com/duncanmcclean/cargo/blob/main/src/Payments/Gateways/Mollie.php) payment gateways.
+* If you're in need of inspiration, feel free to look at Cargo's [Stripe](https://github.com/duncanmcclean/cargo/blob/1.x/src/Payments/Gateways/Stripe.php) and [Mollie](https://github.com/duncanmcclean/cargo/blob/1.x/src/Payments/Gateways/Mollie.php) payment gateways.

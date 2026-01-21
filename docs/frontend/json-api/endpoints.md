@@ -45,7 +45,7 @@ Updates the customer's cart. You can post customer information, redeem a discoun
 				['key' => 'city', 'type' => 'string'],
 				['key' => 'postcode', 'type' => 'string'],
 				['key' => 'country', 'type' => 'string', 'description' => 'Must be in [ISO3](https://www.iso.org/obp/ui#iso:pub:PUB500001:en) format.'],
-				['key' => 'state', 'type' => 'string', 'description' => 'Must match one of the states in [Cargo\'s `states.json` file](https://github.com/duncanmcclean/statamic-cargo/blob/main/resources/json/states.json).'],
+				['key' => 'state', 'type' => 'string', 'description' => 'Must match one of the states in [Cargo\'s `states.json` file](https://github.com/duncanmcclean/statamic-cargo/blob/1.x/resources/json/states.json).'],
 			],
 		],
 		[
@@ -59,7 +59,7 @@ Updates the customer's cart. You can post customer information, redeem a discoun
 				['key' => 'city', 'type' => 'string'],
 				['key' => 'postcode', 'type' => 'string'],
 				['key' => 'country', 'type' => 'string', 'description' => 'Must be in [ISO3](https://www.iso.org/obp/ui#iso:pub:PUB500001:en) format.'],
-				['key' => 'state', 'type' => 'string', 'description' => 'Must match one of the states in [Cargo\'s `states.json` file](https://github.com/duncanmcclean/statamic-cargo/blob/main/resources/json/states.json).'],
+				['key' => 'state', 'type' => 'string', 'description' => 'Must match one of the states in [Cargo\'s `states.json` file](https://github.com/duncanmcclean/statamic-cargo/blob/1.x/resources/json/states.json).'],
 			],
 		],
 		['key' => '*', 'description' => 'Any other fields defined in your [order blueprint](/docs/orders#blueprint).'],
