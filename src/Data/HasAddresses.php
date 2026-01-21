@@ -2,8 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Data;
 
-use Illuminate\Support\Arr;
-
 trait HasAddresses
 {
     public function taxableAddress(): ?Address
