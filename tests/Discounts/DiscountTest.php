@@ -186,13 +186,12 @@ class DiscountTest extends TestCase
         $this->assertFileExists($discount->path());
         $this->assertStringContainsString('content/cargo/discounts/foo-bar.yaml', $discount->path());
 
-        $this->assertEquals(<<<'YAML'
+        $this->assertStringEqualsStringIgnoringLineEndings(<<<'YAML'
 title: 'Foo Bar'
 type: percentage_off
 percentage_off: 10
 
-YAML
-            , file_get_contents($discount->path()));
+YAML, file_get_contents($discount->path()));
 
         Event::assertDispatched(DiscountCreated::class, function ($event) use ($discount) {
             return $event->discount->id() === $discount->handle();
@@ -223,13 +222,12 @@ YAML
         $this->assertFileExists($discount->path());
         $this->assertStringContainsString('content/cargo/discounts/foo-bar.yaml', $discount->path());
 
-        $this->assertEquals(<<<'YAML'
+        $this->assertStringEqualsStringIgnoringLineEndings(<<<'YAML'
 title: 'Foo Bar'
 type: percentage_off
 percentage_off: 10
 
-YAML
-            , file_get_contents($discount->path()));
+YAML, file_get_contents($discount->path()));
 
         Event::assertNotDispatched(DiscountCreated::class, function ($event) use ($discount) {
             return $event->discount->id() === $discount->handle();
