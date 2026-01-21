@@ -21,32 +21,12 @@ trait HasAddresses
 
     public function shippingAddress(): Address
     {
-        $address = $this->get('shipping_address', []);
-
-        return new Address(
-            name: Arr::get($address, 'name'),
-            line1: Arr::get($address, 'line_1'),
-            line2: Arr::get($address, 'line_2'),
-            city: Arr::get($address, 'city'),
-            postcode: Arr::get($address, 'postcode'),
-            country: Arr::get($address, 'country'),
-            state: Arr::get($address, 'state'),
-        );
+        return Address::make($this->get('shipping_address', []));
     }
 
     public function billingAddress(): Address
     {
-        $address = $this->get('billing_address', []);
-
-        return new Address(
-            name: Arr::get($address, 'name'),
-            line1: Arr::get($address, 'line_1'),
-            line2: Arr::get($address, 'line_2'),
-            city: Arr::get($address, 'city'),
-            postcode: Arr::get($address, 'postcode'),
-            country: Arr::get($address, 'country'),
-            state: Arr::get($address, 'state'),
-        );
+        return Address::make($this->get('billing_address', []));
     }
 
     public function hasShippingAddress(): bool

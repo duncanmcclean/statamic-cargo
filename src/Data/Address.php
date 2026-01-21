@@ -5,68 +5,136 @@ namespace DuncanMcClean\Cargo\Data;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\File;
 use Statamic\Dictionaries\Item;
+use Statamic\Facades\Blueprint;
 use Statamic\Facades\Dictionary;
+use Statamic\Fields\Field;
+use Statamic\Support\Arr;
+use Statamic\Support\Traits\Hookable;
 use Stringable;
 
 class Address implements Arrayable, Stringable
 {
-    public function __construct(
-        public ?string $name = null,
-        public ?string $line1 = null,
-        public ?string $line2 = null,
-        public ?string $city = null,
-        public ?string $postcode = null,
-        public ?string $country = null,
-        public ?string $state = null,
-    ) {}
+    use Hookable;
+
+    public function __construct(protected array $address = []) {}
+
+    public static function make(array $address)
+    {
+        return new static($address);
+    }
 
     public function country(): ?Item
     {
-        if (! $this->country) {
+        $country = Arr::get($this->address, 'country');
+
+        if (! $country) {
             return null;
         }
 
-        return Dictionary::find('countries')->get($this->country);
+        return Dictionary::find('countries')->get($country);
     }
 
     public function state(): ?array
     {
-        if (! $this->state) {
+        $state = Arr::get($this->address, 'state');
+        $country = Arr::get($this->address, 'country');
+
+        if (! $country || ! $state) {
             return null;
         }
 
         $states = File::json(__DIR__.'/../../resources/json/states.json');
 
-        if (! isset($states[$this->country])) {
+        if (! isset($states[$country])) {
             return null;
         }
 
-        return array_values(array_filter($states[$this->country], fn ($state) => $state['code'] === $this->state))[0];
+        return collect($states[$country])->firstWhere('code', $state);
     }
 
     public function toArray(): array
     {
-        return [
-            'name' => $this->name,
-            'line_1' => $this->line1,
-            'line_2' => $this->line2,
-            'city' => $this->city,
-            'postcode' => $this->postcode,
-            'country' => $this->country,
-            'state' => $this->state,
-        ];
+        return $this->address;
     }
 
     public function __toString(): string
     {
-        return collect([
-            $this->name,
-            $this->line1,
-            $this->line2,
-            $this->city,
-            $this->state() ? $this->state()['name'] : null,
-            $this->postcode,
-            $this->country()?->extra()['name'],
-        ])->filter()->implode(', ');
+        return static::blueprint()->fields()->all()
+            ->map(function (Field $field) {
+                $value = Arr::get($this->address, $field->handle());
+
+                if ($field->handle() === 'state') {
+                    return $this->state()['name'] ?? null;
+                }
+
+                if ($field->handle() === 'country') {
+                    return $this->country()?->extra()['name'];
+                }
+
+                return $value;
+            })
+            ->filter()
+            ->implode(', ');
+    }
+
+    public function __get(string $name)
+    {
+        return $this->address[$name] ?? null;
+    }
+
+    public static function blueprint(): \Statamic\Fields\Blueprint
+    {
+        $fields = [
+            'name' => [
+                'type' => 'text',
+                'display' => __('Name'),
+                'listable' => false,
+                'width' => 50,
+            ],
+            'line_1' => [
+                'type' => 'text',
+                'display' => __('Address Line 1'),
+                'listable' => false,
+                'width' => 50,
+            ],
+            'line_2' => [
+                'type' => 'text',
+                'display' => __('Address Line 2'),
+                'listable' => false,
+                'width' => 50,
+            ],
+            'city' => [
+                'type' => 'text',
+                'display' => __('Town/City'),
+                'listable' => false,
+                'width' => 50,
+            ],
+            'postcode' => [
+                'type' => 'text',
+                'display' => __('Postcode'),
+                'listable' => false,
+                'width' => 50,
+            ],
+            'country' => [
+                'type' => 'dictionary',
+                'dictionary' => ['type' => 'countries', 'emojis' => false],
+                'max_items' => 1,
+                'display' => __('Country'),
+                'listable' => false,
+                'width' => 50,
+            ],
+            'state' => [
+                'type' => 'states',
+                'from' => 'country',
+                'display' => __('State/County'),
+                'listable' => false,
+                'max_items' => 1,
+                'width' => 50,
+            ],
+        ];
+
+        $fields = (new self)->runHooksWith('fields', ['fields' => $fields])?->fields;
+
+        return Blueprint::makeFromFields($fields);
     }
 }
