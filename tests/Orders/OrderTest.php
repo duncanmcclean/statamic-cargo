@@ -293,7 +293,7 @@ class OrderTest extends TestCase
         $this->assertFileExists($order->path());
         $this->assertStringContainsString('content/cargo/orders/2025-03-15-123456.1000.yaml', $order->path());
 
-        $this->assertEquals(<<<'YAML'
+        $this->assertStringEqualsStringIgnoringLineEndings(<<<'YAML'
 id: abc
 status: payment_pending
 grand_total: 0
@@ -302,8 +302,7 @@ discount_total: 0
 tax_total: 0
 shipping_total: 0
 
-YAML
-            , file_get_contents($order->path()));
+YAML, file_get_contents($order->path()));
 
         Event::assertDispatched(OrderCreated::class, function ($event) use ($order) {
             return $event->order->id() === $order->id();
@@ -337,7 +336,7 @@ YAML
         $this->assertFileExists($order->path());
         $this->assertStringContainsString('content/cargo/orders/2025-03-15-123456.1000.yaml', $order->path());
 
-        $this->assertEquals(<<<'YAML'
+        $this->assertStringEqualsStringIgnoringLineEndings(<<<'YAML'
 id: abc
 status: payment_pending
 grand_total: 0
@@ -346,8 +345,7 @@ discount_total: 0
 tax_total: 0
 shipping_total: 0
 
-YAML
-            , file_get_contents($order->path()));
+YAML, file_get_contents($order->path()));
 
         Event::assertNotDispatched(OrderCreated::class, function ($event) use ($order) {
             return $event->order->id() === $order->id();

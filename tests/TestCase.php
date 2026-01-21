@@ -8,6 +8,7 @@ use DuncanMcClean\Cargo\Payments\PaymentServiceProvider;
 use DuncanMcClean\Cargo\ServiceProvider;
 use DuncanMcClean\Cargo\Shipping\ShippingServiceProvider;
 use Illuminate\Support\Facades\Route;
+use PHPUnit\Framework\Assert;
 use ReflectionClass;
 use Statamic\Facades\Config;
 use Statamic\Facades\Site;
@@ -82,5 +83,18 @@ abstract class TestCase extends AddonTestCase
         $app['config']->set('statamic.cargo.carts.directory', $directory.'/../tests/__fixtures__/content/cargo/carts');
         $app['config']->set('statamic.cargo.discounts.directory', $directory.'/../tests/__fixtures__/content/cargo/discounts');
         $app['config']->set('statamic.cargo.orders.directory', $directory.'/../tests/__fixtures__/content/cargo/orders');
+    }
+
+    public function __call($name, $arguments)
+    {
+        if ($name == 'assertStringEqualsStringIgnoringLineEndings') {
+            return Assert::assertThat(
+                $arguments[1],
+                new StringEqualsStringIgnoringLineEndings($arguments[0]),
+                $arguments[2] ?? ''
+            );
+        }
+
+        throw new \BadMethodCallException("Method [$name] does not exist.");
     }
 }
