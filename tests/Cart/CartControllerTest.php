@@ -99,8 +99,8 @@ class CartControllerTest extends TestCase
         $this->assertEquals('FOOBAR', $cart->get('discount_code'));
 
         $shippingAddress = $cart->shippingAddress();
-        $this->assertEquals('123 ShippingMethod St', $shippingAddress->line1);
-        $this->assertEquals('Apt 1', $shippingAddress->line2);
+        $this->assertEquals('123 ShippingMethod St', $shippingAddress->line_1);
+        $this->assertEquals('Apt 1', $shippingAddress->line_2);
         $this->assertEquals('Shippingville', $shippingAddress->city);
         $this->assertEquals('12345', $shippingAddress->postcode);
         $this->assertEquals('US', $shippingAddress->country);

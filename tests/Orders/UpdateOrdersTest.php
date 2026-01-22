@@ -45,7 +45,7 @@ class UpdateOrdersTest extends TestCase
         $order = $order->fresh();
 
         $shippingAddress = $order->shippingAddress();
-        $this->assertEquals($shippingAddress->line1, '123 Fake Street');
+        $this->assertEquals($shippingAddress->line_1, '123 Fake Street');
         $this->assertEquals($shippingAddress->city, 'Fakeville');
         $this->assertEquals($shippingAddress->postcode, 'FA1 1KE');
         $this->assertEquals($shippingAddress->country, 'United Kingdom');
