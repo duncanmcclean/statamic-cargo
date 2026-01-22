@@ -2,16 +2,14 @@
 
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
+use DuncanMcClean\Cargo\Data;
 use DuncanMcClean\Cargo\Data\Address as AddressData;
 use Statamic\Fields\Fields;
 use Statamic\Fields\Values;
 use Statamic\Fieldtypes\Group as GroupFieldtype;
-use Statamic\Support\Traits\Hookable;
 
 class Address extends GroupFieldtype
 {
-    use Hookable;
-
     protected $selectable = false;
 
     public function preload()
@@ -46,79 +44,10 @@ class Address extends GroupFieldtype
 
     public function fields(): Fields
     {
-        $fields = [
-            [
-                'handle' => 'name',
-                'field' => [
-                    'type' => 'text',
-                    'display' => __('Name'),
-                    'listable' => false,
-                    'width' => 50,
-                ],
-            ],
-            [
-                'handle' => 'line_1',
-                'field' => [
-                    'type' => 'text',
-                    'display' => __('Address Line 1'),
-                    'listable' => false,
-                    'width' => 50,
-                ],
-            ],
-            [
-                'handle' => 'line_2',
-                'field' => [
-                    'type' => 'text',
-                    'display' => __('Address Line 2'),
-                    'listable' => false,
-                    'width' => 50,
-                ],
-            ],
-            [
-                'handle' => 'city',
-                'field' => [
-                    'type' => 'text',
-                    'display' => __('Town/City'),
-                    'listable' => false,
-                    'width' => 50,
-                ],
-            ],
-            [
-                'handle' => 'postcode',
-                'field' => [
-                    'type' => 'text',
-                    'display' => __('Postcode'),
-                    'listable' => false,
-                    'width' => 50,
-                ],
-            ],
-            [
-                'handle' => 'country',
-                'field' => [
-                    'type' => 'dictionary',
-                    'dictionary' => ['type' => 'countries', 'emojis' => false],
-                    'max_items' => 1,
-                    'display' => __('Country'),
-                    'listable' => false,
-                    'width' => 50,
-                ],
-            ],
-            [
-                'handle' => 'state',
-                'field' => [
-                    'type' => 'states',
-                    'from' => 'country',
-                    'display' => __('State/County'),
-                    'listable' => false,
-                    'max_items' => 1,
-                    'width' => 50,
-                ],
-            ],
-        ];
-
-        $fields = $this->runHooksWith('fields', ['fields' => $fields])?->fields;
-
-        return new Fields($fields, $this->field()->parent(), $this->field());
+        return Data\Address::blueprint()
+            ->fields()
+            ->setParent($this->field()->parent())
+            ->setParentField($this->field());
     }
 
     private function normalizeValue($value): array

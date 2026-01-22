@@ -97,15 +97,15 @@ class Mollie extends PaymentGateway
                 })
                 ->values()->all(),
             'billingAddress' => $cart->hasBillingAddress() ? array_filter([
-                'streetAndNumber' => $cart->billingAddress()?->line1,
-                'streetAdditional' => $cart->billingAddress()?->line2,
+                'streetAndNumber' => $cart->billingAddress()?->line_1,
+                'streetAdditional' => $cart->billingAddress()?->line_2,
                 'postalCode' => $cart->billingAddress()?->postcode,
                 'city' => $cart->billingAddress()?->city,
                 'country' => Arr::get($cart->billingAddress()?->country()?->data(), 'iso2'),
             ]) : null,
             'shippingAddress' => $cart->hasShippingAddress() ? array_filter([
-                'streetAndNumber' => $cart->shippingAddress()?->line1,
-                'streetAdditional' => $cart->shippingAddress()?->line2,
+                'streetAndNumber' => $cart->shippingAddress()?->line_1,
+                'streetAdditional' => $cart->shippingAddress()?->line_2,
                 'postalCode' => $cart->shippingAddress()?->postcode,
                 'city' => $cart->shippingAddress()?->city,
                 'country' => Arr::get($cart->shippingAddress()?->country()?->data(), 'iso2'),
