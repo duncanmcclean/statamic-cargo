@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.0.0-beta.2 (2026-01-22)
+
+### What's improved
+- Run tests on Windows #117 by @duncanmcclean
+
+### What's fixed
+- Ensure custom address fields are available in templates #118 by @duncanmcclean
+
+
+
 ## v1.0.0-beta.1 (2026-01-19)
 
 ### What's fixed
