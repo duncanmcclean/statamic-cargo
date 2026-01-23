@@ -37,7 +37,7 @@ trait Productable
 
     public function productVariants(): array
     {
-        return $this->value('product_variants', []);
+        return $this->value('product_variants') ?? [];
     }
 
     public function stock(): ?int
