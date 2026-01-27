@@ -28,6 +28,8 @@ abstract class TestCase extends AddonTestCase
         $uses = array_flip(class_uses_recursive(static::class));
 
         if (isset($uses[PreventsSavingStacheItemsToDisk::class])) {
+            dump('getting here');
+
             $reflection = new ReflectionClass($this);
             $this->fakeStacheDirectory = Path::tidy(Str::before(dirname($reflection->getFileName()), DIRECTORY_SEPARATOR.'tests').'/tests/__fixtures__/dev-null');
 
