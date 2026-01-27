@@ -8,11 +8,9 @@ use DuncanMcClean\Cargo\Payments\PaymentServiceProvider;
 use DuncanMcClean\Cargo\ServiceProvider;
 use DuncanMcClean\Cargo\Shipping\ShippingServiceProvider;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
 use PHPUnit\Framework\Assert;
 use ReflectionClass;
 use Statamic\Facades\Config;
-use Statamic\Facades\Path;
 use Statamic\Facades\Site;
 use Statamic\Testing\AddonTestCase;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
@@ -23,16 +21,16 @@ abstract class TestCase extends AddonTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-
+        // Set this BEFORE parent::setUp() to ensure the path is resolved correctly
+        // The parent will use this value if it's already set
         $uses = array_flip(class_uses_recursive(static::class));
-
         if (isset($uses[PreventsSavingStacheItemsToDisk::class])) {
-            $reflection = new ReflectionClass($this);
-            $this->fakeStacheDirectory = Path::tidy(Str::before(dirname($reflection->getFileName()), DIRECTORY_SEPARATOR.'tests').'/tests/__fixtures__/dev-null');
-
-            $this->preventSavingStacheItemsToDisk();
+            $reflector = new ReflectionClass($this->addonServiceProvider);
+            // Resolve the ../ to get an absolute path without relative segments
+            $this->fakeStacheDirectory = str_replace('\\', '/', realpath(dirname($reflector->getFileName()).'/../tests/__fixtures__')).'/dev-null';
         }
+
+        parent::setUp();
 
         Site::setSites([
             'default' => [
