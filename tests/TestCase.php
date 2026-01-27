@@ -8,11 +8,13 @@ use DuncanMcClean\Cargo\Payments\PaymentServiceProvider;
 use DuncanMcClean\Cargo\ServiceProvider;
 use DuncanMcClean\Cargo\Shipping\ShippingServiceProvider;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use PHPUnit\Framework\Assert;
 use ReflectionClass;
 use Statamic\Facades\Config;
 use Statamic\Facades\Site;
 use Statamic\Testing\AddonTestCase;
+use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 
 abstract class TestCase extends AddonTestCase
 {
@@ -21,6 +23,20 @@ abstract class TestCase extends AddonTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $uses = array_flip(class_uses_recursive(static::class));
+
+        if (isset($uses[PreventsSavingStacheItemsToDisk::class])) {
+            // Old
+            $reflection = new ReflectionClass($this);
+            $this->fakeStacheDirectory = Str::before(dirname($reflection->getFileName()), DIRECTORY_SEPARATOR.'tests').'/tests/__fixtures__/dev-null';
+
+            // New
+//            $reflector = new ReflectionClass($this->addonServiceProvider);
+//            $this->fakeStacheDirectory = dirname($reflector->getFileName()).'/../tests/__fixtures__/dev-null';
+
+            $this->preventSavingStacheItemsToDisk();
+        }
 
         Site::setSites([
             'default' => [
