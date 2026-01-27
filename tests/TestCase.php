@@ -32,8 +32,8 @@ abstract class TestCase extends AddonTestCase
             $this->fakeStacheDirectory = Str::before(dirname($reflection->getFileName()), DIRECTORY_SEPARATOR.'tests').'/tests/__fixtures__/dev-null';
 
             // New
-//            $reflector = new ReflectionClass($this->addonServiceProvider);
-//            $this->fakeStacheDirectory = dirname($reflector->getFileName()).'/../tests/__fixtures__/dev-null';
+            //            $reflector = new ReflectionClass($this->addonServiceProvider);
+            //            $this->fakeStacheDirectory = dirname($reflector->getFileName()).'/../tests/__fixtures__/dev-null';
 
             $this->preventSavingStacheItemsToDisk();
         }
