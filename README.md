@@ -21,7 +21,7 @@ Cargo is a comprehensive e-commerce addon for Statamic, allowing you to sell bot
 * Product Variants support for managing different sizes, colors, or other variations
 * Pre-built checkout flow, saving you previous development time. If you need more control, you can always build your own
 * Stripe & Mollie payment gateways are included out of the box, with support for custom gateways
-* Configure taxes by country, state, or post-code for precise tax management
+* Configure taxes by country, state, or postcode for precise tax management
 * Supports both automatic site-wide discounts and coupon codes for promotions
 * Basic inventory management for physical products
 * Built by a member of the Statamic Core Team
