@@ -21,15 +21,6 @@ abstract class TestCase extends AddonTestCase
 
     protected function setUp(): void
     {
-        // Set this BEFORE parent::setUp() to ensure the path is resolved correctly
-        // The parent will use this value if it's already set
-        $uses = array_flip(class_uses_recursive(static::class));
-        if (isset($uses[PreventsSavingStacheItemsToDisk::class])) {
-            $reflector = new ReflectionClass($this->addonServiceProvider);
-            // Resolve the ../ to get an absolute path without relative segments
-            $this->fakeStacheDirectory = str_replace('\\', '/', realpath(dirname($reflector->getFileName()).'/../tests/__fixtures__')).'/dev-null';
-        }
-
         parent::setUp();
 
         Site::setSites([
@@ -40,6 +31,20 @@ abstract class TestCase extends AddonTestCase
                 'attributes' => ['currency' => 'GBP'],
             ],
         ])->save();
+    }
+
+    protected function preventSavingStacheItemsToDisk(): void
+    {
+        // Fix the path BEFORE calling the parent's preventSavingStacheItemsToDisk
+        // The parent sets it with unresolved ../ which breaks on Windows
+        if (isset($this->fakeStacheDirectory)) {
+            // Extract the base path and rebuild without the ../ segment
+            $reflector = new ReflectionClass($this->addonServiceProvider);
+            $basePath = dirname(dirname($reflector->getFileName())); // Go up two levels from src/ServiceProvider.php
+            $this->fakeStacheDirectory = str_replace('\\', '/', $basePath).'/tests/__fixtures__/dev-null';
+        }
+
+        parent::preventSavingStacheItemsToDisk();
     }
 
     protected function resolveApplicationConfiguration($app)
