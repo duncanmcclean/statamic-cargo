@@ -21,6 +21,15 @@ abstract class TestCase extends AddonTestCase
 
     protected function setUp(): void
     {
+        // Set fakeStacheDirectory BEFORE parent::setUp() so parent won't override it
+        // Resolve ../ to prevent Windows path issues
+        $uses = array_flip(class_uses_recursive(static::class));
+        if (isset($uses[PreventsSavingStacheItemsToDisk::class])) {
+            $reflector = new ReflectionClass($this->addonServiceProvider);
+            $basePath = dirname(dirname($reflector->getFileName()));
+            $this->fakeStacheDirectory = str_replace('\\', '/', $basePath).'/tests/__fixtures__/dev-null';
+        }
+
         parent::setUp();
 
         Site::setSites([
@@ -31,20 +40,6 @@ abstract class TestCase extends AddonTestCase
                 'attributes' => ['currency' => 'GBP'],
             ],
         ])->save();
-    }
-
-    protected function preventSavingStacheItemsToDisk(): void
-    {
-        // Fix the path BEFORE calling the parent's preventSavingStacheItemsToDisk
-        // The parent sets it with unresolved ../ which breaks on Windows
-        if (isset($this->fakeStacheDirectory)) {
-            // Extract the base path and rebuild without the ../ segment
-            $reflector = new ReflectionClass($this->addonServiceProvider);
-            $basePath = dirname(dirname($reflector->getFileName())); // Go up two levels from src/ServiceProvider.php
-            $this->fakeStacheDirectory = str_replace('\\', '/', $basePath).'/tests/__fixtures__/dev-null';
-        }
-
-        parent::preventSavingStacheItemsToDisk();
     }
 
     protected function resolveApplicationConfiguration($app)
@@ -93,11 +88,25 @@ abstract class TestCase extends AddonTestCase
         parent::getEnvironmentSetUp($app);
 
         $reflector = new ReflectionClass($this->addonServiceProvider);
-        $directory = dirname($reflector->getFileName());
+        $directory = dirname(dirname($reflector->getFileName())); // Resolve ../ by going up a level
 
-        $app['config']->set('statamic.cargo.carts.directory', $directory.'/../tests/__fixtures__/content/cargo/carts');
-        $app['config']->set('statamic.cargo.discounts.directory', $directory.'/../tests/__fixtures__/content/cargo/discounts');
-        $app['config']->set('statamic.cargo.orders.directory', $directory.'/../tests/__fixtures__/content/cargo/orders');
+        $app['config']->set('statamic.cargo.carts.directory', $directory.'/tests/__fixtures__/content/cargo/carts');
+        $app['config']->set('statamic.cargo.discounts.directory', $directory.'/tests/__fixtures__/content/cargo/discounts');
+        $app['config']->set('statamic.cargo.orders.directory', $directory.'/tests/__fixtures__/content/cargo/orders');
+        
+        // Also fix the parent's stache store paths that have ../ in them
+        $app['config']->set('statamic.stache.stores.taxonomies.directory', $directory.'/tests/__fixtures__/content/taxonomies');
+        $app['config']->set('statamic.stache.stores.terms.directory', $directory.'/tests/__fixtures__/content/taxonomies');
+        $app['config']->set('statamic.stache.stores.collections.directory', $directory.'/tests/__fixtures__/content/collections');
+        $app['config']->set('statamic.stache.stores.entries.directory', $directory.'/tests/__fixtures__/content/collections');
+        $app['config']->set('statamic.stache.stores.navigation.directory', $directory.'/tests/__fixtures__/content/navigation');
+        $app['config']->set('statamic.stache.stores.globals.directory', $directory.'/tests/__fixtures__/content/globals');
+        $app['config']->set('statamic.stache.stores.global-variables.directory', $directory.'/tests/__fixtures__/content/globals');
+        $app['config']->set('statamic.stache.stores.asset-containers.directory', $directory.'/tests/__fixtures__/content/assets');
+        $app['config']->set('statamic.stache.stores.nav-trees.directory', $directory.'/tests/__fixtures__/content/structures/navigation');
+        $app['config']->set('statamic.stache.stores.collection-trees.directory', $directory.'/tests/__fixtures__/content/structures/collections');
+        $app['config']->set('statamic.stache.stores.form-submissions.directory', $directory.'/tests/__fixtures__/content/submissions');
+        $app['config']->set('statamic.stache.stores.users.directory', $directory.'/tests/__fixtures__/users');
     }
 
     public function __call($name, $arguments)
