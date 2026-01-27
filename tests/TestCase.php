@@ -8,6 +8,7 @@ use DuncanMcClean\Cargo\Payments\PaymentServiceProvider;
 use DuncanMcClean\Cargo\ServiceProvider;
 use DuncanMcClean\Cargo\Shipping\ShippingServiceProvider;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use PHPUnit\Framework\Assert;
 use ReflectionClass;
 use Statamic\Facades\Config;
@@ -21,13 +22,11 @@ abstract class TestCase extends AddonTestCase
 
     protected function setUp(): void
     {
-        // Set fakeStacheDirectory BEFORE parent::setUp() so parent won't override it
-        // Resolve ../ to prevent Windows path issues
+        // Set fakeStacheDirectory BEFORE parent::setUp() using the original working approach
         $uses = array_flip(class_uses_recursive(static::class));
         if (isset($uses[PreventsSavingStacheItemsToDisk::class])) {
-            $reflector = new ReflectionClass($this->addonServiceProvider);
-            $basePath = dirname(dirname($reflector->getFileName()));
-            $this->fakeStacheDirectory = str_replace('\\', '/', $basePath).'/tests/__fixtures__/dev-null';
+            $reflection = new ReflectionClass($this);
+            $this->fakeStacheDirectory = Str::before(dirname($reflection->getFileName()), DIRECTORY_SEPARATOR.'tests').'/tests/__fixtures__/dev-null';
         }
 
         parent::setUp();
