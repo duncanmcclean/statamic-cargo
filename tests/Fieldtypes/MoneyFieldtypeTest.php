@@ -3,6 +3,7 @@
 namespace Tests\Fieldtypes;
 
 use DuncanMcClean\Cargo\Fieldtypes\Money;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Fields\Field;
 use Tests\TestCase;
@@ -49,9 +50,18 @@ class MoneyFieldtypeTest extends TestCase
     }
 
     #[Test]
-    public function can_process_data()
+    #[DataProvider('processDataProvider')]
+    public function can_process_data($input, $expected)
     {
-        $this->assertEquals(1265, (new Money)->process('12.65'));
+        $this->assertEquals($expected, (new Money)->process($input));
+    }
+
+    public static function processDataProvider(): array
+    {
+        return [
+            'two decimal digits' => ['12.65', 1265],
+            'single decimal digit' => ['5.1', 510],
+        ];
     }
 
     #[Test]
