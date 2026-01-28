@@ -14,6 +14,7 @@ use PHPUnit\Framework\Assert;
 use ReflectionClass;
 use Statamic\Console\Processes\Composer;
 use Statamic\Facades\Config;
+use Statamic\Facades\Path;
 use Statamic\Facades\Site;
 use Statamic\Statamic;
 use Statamic\Testing\AddonTestCase;
@@ -34,7 +35,7 @@ abstract class TestCase extends AddonTestCase
 
         if (isset($uses[PreventsSavingStacheItemsToDisk::class])) {
             $reflector = new ReflectionClass($this->addonServiceProvider);
-            $this->fakeStacheDirectory = dirname($reflector->getFileName()).'/../tests/__fixtures__/dev-null';
+            $this->fakeStacheDirectory = Path::resolve(dirname($reflector->getFileName()).'/../tests/__fixtures__/dev-null');
 
             $this->preventSavingStacheItemsToDisk();
         }
