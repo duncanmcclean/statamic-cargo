@@ -59,6 +59,7 @@ class MoneyFieldtypeTest extends TestCase
     public static function processDataProvider(): array
     {
         return [
+            'no decimals' => ['15', 1500],
             'two decimal digits' => ['12.65', 1265],
             'single decimal digit' => ['5.1', 510],
         ];
