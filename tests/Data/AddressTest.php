@@ -1,6 +1,6 @@
 <?php
 
-namespace Data;
+namespace Tests\Data;
 
 use DuncanMcClean\Cargo\Data\Address;
 use PHPUnit\Framework\Attributes\Test;
