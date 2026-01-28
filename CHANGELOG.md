@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.0.0 (2026-01-29)
+
+### Cargo 1.0 is out! 📦🚀
+
+It’s been a long time coming, but Cargo 1.0 is finally here.
+
+Check out the launch announcement for more information: https://duncanmcclean.com/cargo-launch
+
+If you’re migrating from Simple Commerce, see the migration guide: https://builtwithcargo.dev/docs/migrating-from-simple-commerce
+
+
+
 ## v1.0.0-beta.2 (2026-01-22)
 
 ### What's improved
