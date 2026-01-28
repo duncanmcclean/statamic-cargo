@@ -25,7 +25,7 @@ abstract class TestCase extends AddonTestCase
 
     protected function setUp(): void
     {
-        (new \Orchestra\Testbench\PHPUnit\TestCase($this->name()))->setUp();
+        \Orchestra\Testbench\TestCase::setUp();
 
         $this->withoutMix();
         $this->withoutVite();
@@ -40,11 +40,11 @@ abstract class TestCase extends AddonTestCase
         }
 
         Version::shouldReceive('get')->zeroOrMoreTimes()->andReturn(Composer::create(__DIR__.'/../')->installedVersion(Statamic::PACKAGE));
-        $this->addToAssertionCount(-1);
+        //        $this->addToAssertionCount(-1);
 
         \Statamic\Facades\CP\Nav::shouldReceive('build')->zeroOrMoreTimes()->andReturn(collect());
         \Statamic\Facades\CP\Nav::shouldReceive('clearCachedUrls')->zeroOrMoreTimes();
-        $this->addToAssertionCount(-2); // Dont want to assert this
+        //        $this->addToAssertionCount(-2); // Dont want to assert this
 
         // Cargo stuff
         Site::setSites([
