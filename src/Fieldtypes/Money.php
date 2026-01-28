@@ -55,10 +55,13 @@ class Money extends Fieldtype
         }
 
         if (! str_contains($data, '.')) {
-            $data = $data * 100;
+            return (int) ($data * 100);
         }
 
-        return (int) str_replace('.', '', $data ?? 0);
+        [$whole, $decimal] = explode('.', $data);
+        $decimal = str_pad(substr($decimal, 0, 2), 2, '0');
+
+        return (int) ($whole.$decimal);
     }
 
     public function augment($value)
