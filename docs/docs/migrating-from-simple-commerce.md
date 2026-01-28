@@ -596,11 +596,11 @@ If you're listening to any of Simple Commerce's events, you will need to listen 
 For a full list of events, please consult the [Events](/extending/events/list) page.
 
 ### Products
-Like Simple Commerce, Cargo has a `Product` facade, allowing you to fetch products. 
+Products are entries, so you can use Statamic's [Entry Repository](https://statamic.dev/repositories/entry-repository) to query, create and update products.
 
-The `Product` instances returned by Cargo's facade are thin wrappers around Statamic's `Entry` class. They add some handy helper methods around things like product variants, stock, and taxation.
+Cargo will define an `entry_class` on your product collections, meaning that any queries will return `Product` (or `EloquentProduct`) instances, rather than standard `Entry` instances.
 
-While you can use Cargo's `Product` facade in your own code, we would recommend using [Statamic's `Entry` repository](https://statamic.dev/repositories/entry-repository) directly instead.
+To find out more about interacting with products in PHP, please visit the [PHP APIs](/extending/php-apis/introduction) page.
 
 ### Carts
 As mentioned earlier in this guide, carts and orders are now stored separately. You can use the `Cart` facade to find, query and create new carts:
