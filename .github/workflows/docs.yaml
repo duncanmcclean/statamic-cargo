@@ -3,7 +3,7 @@ name: Docs
 on:
   push:
     branches:
-      - main
+      - 1.x
     paths:
       - 'docs/**'
 
