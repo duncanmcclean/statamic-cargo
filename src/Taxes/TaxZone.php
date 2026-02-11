@@ -37,7 +37,9 @@ class TaxZone implements Augmentable, Contract
 
     public function rates(): Collection
     {
-        return collect($this->get('rates'))->reject(fn ($rate) => is_null($rate));
+        return collect($this->get('rates'))
+            ->mapWithKeys(fn ($rate, $handle) => [(string) $handle => $rate])
+            ->reject(fn ($rate) => is_null($rate));
     }
 
     public function save(): bool

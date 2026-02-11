@@ -102,4 +102,44 @@ class TaxClassTest extends TestCase
             'reduced' => ['title' => 'Reduced Tax'],
         ], YAML::file($this->path)->parse());
     }
+
+    #[Test]
+    public function it_handles_tax_classes_with_numerical_handles_correctly()
+    {
+        // Create tax class with numerical value
+        $taxClass = Facades\TaxClass::make()
+            ->handle('21')
+            ->data(['title' => '21% Tax']);
+
+        $taxClass->save();
+
+        $this->assertEquals([
+            21 => ['title' => '21% Tax'],
+        ], YAML::file($this->path)->parse());
+
+        // Find tax class by its handle
+        $find = Facades\TaxClass::find('21');
+
+        $this->assertInstanceOf(TaxClass::class, $find);
+        $this->assertSame('21', $find->handle());
+        $this->assertEquals('21% Tax', $find->get('title'));
+
+        // Verify it appears in all()
+        $all = Facades\TaxClass::all();
+
+        $this->assertEquals(1, $all->count());
+        $this->assertSame('21', $all->first()->handle());
+
+        // Update the tax class
+        $find->set('title', '21% VAT')->save();
+
+        $this->assertEquals([
+            21 => ['title' => '21% VAT'],
+        ], YAML::file($this->path)->parse());
+
+        // Delete the tax class
+        $find->delete();
+
+        $this->assertEquals([], YAML::file($this->path)->parse());
+    }
 }

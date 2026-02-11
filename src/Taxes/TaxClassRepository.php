@@ -20,7 +20,7 @@ class TaxClassRepository implements Contract
         $parse = YAML::file($this->getPath())->parse();
 
         return collect($parse)->map(function ($taxClass, $handle) {
-            return $this->make()->handle($handle)->data($taxClass);
+            return $this->make()->handle((string) $handle)->data($taxClass);
         });
     }
 
