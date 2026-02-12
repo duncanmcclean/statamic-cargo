@@ -184,7 +184,11 @@ class MigrateOrders extends Command
                         'items' => Json::decode($row->items),
                         'gateway' => Json::decode($row->gateway),
                         'site' => Site::default()->handle(),
-                        'status_log' => $statusLogs->where('order_id', $row->id)->toArray(),
+                        'status_log' => $statusLogs
+                            ->where('order_id', $row->id)
+                            ->map(fn ($item) => (array) $item)
+                            ->values()
+                            ->all(),
                     ]);
 
                 $this->createOrderFromData($data)->saveQuietly();
