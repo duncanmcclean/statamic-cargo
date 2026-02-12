@@ -109,4 +109,64 @@ class TaxZoneTest extends TestCase
             'eu' => ['title' => 'European Union', 'type' => 'countries', 'countries' => ['FRA', 'DEU'], 'rates' => ['standard' => 20]],
         ], YAML::file($this->path)->parse());
     }
+
+    #[Test]
+    public function it_handles_tax_zones_with_numerical_tax_class_handles_correctly()
+    {
+        File::put($this->path, YAML::dump([
+            'uk' => [
+                'title' => 'United Kingdom',
+                'type' => 'countries',
+                'countries' => ['GBR'],
+                'rates' => [
+                    'standard' => 20,
+                    21 => 15,
+                ],
+            ],
+        ]));
+
+        $taxZone = Facades\TaxZone::find('uk');
+        $rates = $taxZone->rates();
+
+        $this->assertEquals(20, $rates->get('standard'));
+        $this->assertEquals(15, $rates->get('21'));
+    }
+
+    #[Test]
+    public function it_handles_tax_zones_with_numerical_handles_correctly()
+    {
+        $taxZone = Facades\TaxZone::make()
+            ->handle('21')
+            ->data([
+                'title' => '21% VAT Zone',
+                'type' => 'everywhere',
+                'rates' => ['standard' => 21],
+            ]);
+
+        $taxZone->save();
+
+        // Find tax zone by its handle
+        $find = Facades\TaxZone::find('21');
+
+        $this->assertInstanceOf(TaxZone::class, $find);
+        $this->assertSame('21', $find->handle());
+        $this->assertEquals('21% VAT Zone', $find->get('title'));
+
+        // Verify it appears in all()
+        $all = Facades\TaxZone::all();
+
+        $this->assertEquals(1, $all->count());
+        $this->assertSame('21', $all->first()->handle());
+
+        // Update the tax zone
+        $find->set('title', '21% VAT')->save();
+
+        $reloaded = Facades\TaxZone::find('21');
+        $this->assertEquals('21% VAT', $reloaded->get('title'));
+
+        // Delete the tax zone
+        $find->delete();
+
+        $this->assertEquals([], YAML::file($this->path)->parse());
+    }
 }
