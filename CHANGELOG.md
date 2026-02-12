@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.0.1 (2026-02-12)
+
+### What's fixed
+- Fixed error migrating status log entries from the database #133 #134 by @duncanmcclean
+- Handle tax classes & tax zones with numerical handles #127 #131 by @duncanmcclean
+
+
+
 ## v1.0.0 (2026-01-29)
 
 ### Cargo 1.0 is out! 📦🚀
