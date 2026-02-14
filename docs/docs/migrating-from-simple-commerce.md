@@ -158,7 +158,7 @@ Since orders are no longer stored in collections, Cargo provides its own "Order"
 
 ![Order Blueprint](/images/order-blueprint.png)
 
-During the migration process, Cargo will have attempted to copy across any custom fields you added to the order collection's blueprint.
+During the migration process, Cargo will have attempted to copy any custom fields from your order collection's blueprint. Any other fields are now included in Cargo's [built-in blueprint](/docs/orders#blueprint).
 
 ## Customers
 By default, Simple Commerce stored information about your customers in a customers collection or `customers` database table.
