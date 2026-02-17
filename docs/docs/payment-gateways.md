@@ -473,7 +473,7 @@ class FooPay extends PaymentGateway
 
 Cargo will automatically register any payment gateways in the `app/PaymentGateways` directory. 
 
-If your payment gateways live elsewhere or you're inside of an addon, you will need to register it manually in a service provider:
+If your payment gateways live elsewhere, or you're inside an addon, you will need to register it manually in a service provider:
 
 ```php
 // app/Providers/AppServiceProvider.php
