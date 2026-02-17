@@ -485,6 +485,7 @@ public function boot(): void
 	FooPay::register();
 }
 ```
+
 ### Methods
 
 | Method             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -498,7 +499,7 @@ public function boot(): void
 | `fieldtypeDetails` | The `fieldtypeDetails` method allows you to display information about the payment in the Control Panel. For example: payment ID, card brand, etc. <br><br>You can find [an example](https://github.com/duncanmcclean/statamic-cargo/blob/2a70ce37c8e4f1214565b42d5c0eaf2cc65aeb0f/src/Payments/Gateways/Stripe.php#L200) of it being used in the built-in Stripe gateway.                                                                                                                  |
 
 ### Notes
-* Every payment gateway has a unique checkout URL...
+* Every payment gateway has a unique callback URL...
 	* You can either submit to this URL using a `<form>` tag or use it as a redirect/callback URL, depending on your needs.
 * Every payment gateway has a unique webhook URL...
 	* It takes the format of `/!/cargo/payments/gateway_handle/webhook`. 
