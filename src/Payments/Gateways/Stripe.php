@@ -145,7 +145,7 @@ class Stripe extends PaymentGateway
                 }
             }
 
-            if ($order) {
+            if ($order && $order->status() === OrderStatus::PaymentPending) {
                 $this->capture($order);
             }
         }
