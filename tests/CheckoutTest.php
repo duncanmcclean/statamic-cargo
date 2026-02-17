@@ -6,15 +6,18 @@ use DuncanMcClean\Cargo\Contracts\Orders\Order;
 use DuncanMcClean\Cargo\Events\DiscountRedeemed;
 use DuncanMcClean\Cargo\Events\ProductNoStockRemaining;
 use DuncanMcClean\Cargo\Events\ProductStockLow;
+use DuncanMcClean\Cargo\Exceptions\PreventCheckout;
 use DuncanMcClean\Cargo\Facades;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Discount;
+use DuncanMcClean\Cargo\Orders\Actions\CreateOrderFromCart;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Payments\Gateways\PaymentGateway;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
@@ -223,6 +226,74 @@ class CheckoutTest extends TestCase
 
         $this->assertEquals(Discount::find('b')->get('redemptions_count'), 51);
         Event::assertDispatched(DiscountRedeemed::class, fn ($event) => $event->discount->id() === 'b');
+    }
+
+    #[Test]
+    public function action_creates_order_from_cart()
+    {
+        $cart = $this->makeCart();
+
+        $order = app(CreateOrderFromCart::class)->handle($cart);
+
+        $this->assertNotNull($order);
+        $this->assertEquals($cart->id(), $order->cart());
+        $this->assertEquals($cart->grandTotal(), $order->grandTotal());
+    }
+
+    #[Test]
+    public function action_returns_existing_order_if_one_already_exists()
+    {
+        $cart = $this->makeCart();
+
+        $existingOrder = tap(Facades\Order::makeFromCart($cart))->save();
+
+        $order = app(CreateOrderFromCart::class)->handle($cart);
+
+        $this->assertEquals($existingOrder->id(), $order->id());
+    }
+
+    #[Test]
+    public function action_throws_exception_when_payment_gateway_argument_is_null_for_paid_cart()
+    {
+        $cart = $this->makeCart()->grandTotal(1);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The $paymentGateway argument is required for paid carts.');
+
+        app(CreateOrderFromCart::class)->handle($cart);
+    }
+
+    #[Test]
+    public function action_throws_prevent_checkout_when_stock_unavailable()
+    {
+        $cart = $this->makeCart();
+        $cart->lineItems()->first()->product()->set('stock', 0)->save();
+
+        $this->expectException(PreventCheckout::class);
+
+        app(CreateOrderFromCart::class)->handle($cart);
+    }
+
+    #[Test]
+    public function action_throws_prevent_checkout_without_address()
+    {
+        $cart = $this->makeCart();
+        $cart->remove('shipping_address')->save();
+
+        $this->expectException(PreventCheckout::class);
+
+        app(CreateOrderFromCart::class)->handle($cart);
+    }
+
+    #[Test]
+    public function action_throws_prevent_checkout_without_customer()
+    {
+        $cart = $this->makeCart();
+        $cart->customer(null)->save();
+
+        $this->expectException(PreventCheckout::class);
+
+        app(CreateOrderFromCart::class)->handle($cart);
     }
 
     private function makeCart(array $data = [])

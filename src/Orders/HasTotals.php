@@ -26,6 +26,11 @@ trait HasTotals
         return $this->grandTotal() === 0;
     }
 
+    public function isPaid(): bool
+    {
+        return ! $this->isFree();
+    }
+
     public function subTotal($subTotal = null)
     {
         return $this->fluentlyGetOrSet('subTotal')
