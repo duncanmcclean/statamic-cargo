@@ -150,8 +150,10 @@ function actionCompleted(successful = null, response) {
                             :packing-slip-url="actions.packingSlip"
                             :model-value="values.status"
                             :tracking-number="values.tracking_number"
+                            :cancellation-reason="values.cancellation_reason"
                             @update:modelValue="values.status = $event"
                             @update:trackingNumber="values.tracking_number = $event"
+                            @update:cancellationReason="values.cancellation_reason = $event"
                         />
                     </Card>
                 </Panel>

@@ -149,6 +149,10 @@ class Blueprint
                                     'handle' => 'tracking_number',
                                     'field' => ['type' => 'text', 'display' => __('Tracking Number'), 'visibility' => 'hidden', 'listable' => 'hidden'],
                                 ],
+                                [
+                                    'handle' => 'cancellation_reason',
+                                    'field' => ['type' => 'text', 'display' => __('Cancellation Reason'), 'visibility' => 'hidden', 'listable' => 'hidden'],
+                                ],
                             ],
                         ],
                     ],

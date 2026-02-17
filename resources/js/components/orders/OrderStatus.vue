@@ -1,28 +1,28 @@
 <script setup>
-import { computed, ref, onMounted } from 'vue';
-import { Badge, Button, Field, Select, Input, Description } from '@statamic/cms/ui';
+import { ref, onMounted } from 'vue';
+import { Button, Field, Select, Input, Description, Textarea } from '@statamic/cms/ui';
 import OrderStatusBadge from "./OrderStatusBadge.vue";
 
-const emit = defineEmits(['update:modelValue', 'update:trackingNumber']);
+const emit = defineEmits(['update:modelValue', 'update:trackingNumber', 'update:cancellationReason']);
 
 const props = defineProps({
     orderId: String,
     statuses: Array,
     packingSlipUrl: String,
     modelValue: String,
-    trackingNumber: {
-        type: String,
-        default: null,
-    },
+    trackingNumber: { type: String, required: false },
+    cancellationReason: { type: String, required: false },
 });
 
 const status = ref(props.modelValue);
 const trackingNumber = ref(props.trackingNumber);
+const cancellationReason = ref(props.cancellationReason);
 const updating = ref(false);
 
 function update() {
     emit('update:modelValue', status.value);
     emit('update:trackingNumber', trackingNumber.value);
+    emit('update:cancellationReason', cancellationReason.value);
     updating.value = false;
 }
 
@@ -37,17 +37,15 @@ onMounted(() => {
 </script>
 
 <template>
-    <div v-if="!updating">
+    <div v-if="!updating" class="flex flex-col gap-y-4">
         <div class="flex items-center justify-between">
 	        <OrderStatusBadge :status="status" size="lg" />
             <Button :text="__('Change')" size="sm" @click="updating = true" />
         </div>
 
-        <Description
-            v-if="trackingNumber"
-            class="mt-2"
-            :text="__('Tracking Number: :trackingNumber', { trackingNumber })"
-        />
+        <Description v-if="trackingNumber" :text="__('Tracking Number: :trackingNumber', { trackingNumber })" />
+
+        <Description v-if="cancellationReason" :text="__('Cancellation Reason: :cancellationReason', { cancellationReason })" />
     </div>
 
     <div v-else class="flex flex-col space-y-6">
@@ -55,8 +53,12 @@ onMounted(() => {
             <Select class="w-full" :options="statuses" v-model:modelValue="status" />
         </Field>
 
-        <Field v-if="status === 'shipped'" label="Tracking Number">
+        <Field v-if="status === 'shipped'" :label="__('Tracking Number')">
             <Input v-model:modelValue="trackingNumber" />
+        </Field>
+
+        <Field v-if="status === 'cancelled'" :label="__('Cancellation Reason')">
+            <Textarea v-model:modelValue="cancellationReason" />
         </Field>
 
         <div v-if="status === 'returned' || status === 'cancelled'">
