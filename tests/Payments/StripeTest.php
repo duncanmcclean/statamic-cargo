@@ -291,6 +291,87 @@ class StripeTest extends TestCase
     }
 
     #[Test]
+    public function it_creates_order_from_cart_when_webhook_is_received_without_existing_order()
+    {
+        $stripePaymentIntent = PaymentIntent::create([
+            'amount' => 1000,
+            'currency' => 'gbp',
+            'payment_method_types' => ['card'],
+            'capture_method' => 'manual',
+        ]);
+
+        $stripePaymentIntent->confirm(['payment_method' => 'pm_card_visa']);
+
+        $cart = $this->makeCartWithGuestCustomer();
+        $cart->data([
+            'shipping_address' => [
+                'line_1' => '123 Fake St',
+                'city' => 'Fakeville',
+                'postcode' => 'FA 1234',
+                'country' => 'GBR',
+            ],
+        ])->save();
+        $cart->set('stripe_payment_intent', $stripePaymentIntent->id)->save();
+
+        $this
+            ->post(
+                uri: '/!/cargo/payments/stripe/webhook',
+                data: [
+                    'type' => 'payment_intent.amount_capturable_updated',
+                    'data' => [
+                        'object' => [
+                            'id' => $stripePaymentIntent->id,
+                        ],
+                    ],
+                ]
+            )
+            ->assertOk();
+
+        $order = Order::query()->where('stripe_payment_intent', $stripePaymentIntent->id)->first();
+
+        $this->assertNotNull($order);
+        $this->assertEquals('payment_received', $order->status()->value);
+        $this->assertEquals('stripe', $order->get('payment_gateway'));
+    }
+
+    #[Test]
+    public function it_creates_cancelled_order_when_webhook_is_received_for_cart_without_address()
+    {
+        $stripePaymentIntent = PaymentIntent::create([
+            'amount' => 1000,
+            'currency' => 'gbp',
+            'payment_method_types' => ['card'],
+            'capture_method' => 'manual',
+        ]);
+
+        $stripePaymentIntent->confirm(['payment_method' => 'pm_card_visa']);
+
+        $cart = $this->makeCartWithGuestCustomer();
+        $cart->set('stripe_payment_intent', $stripePaymentIntent->id)->save();
+
+        $this
+            ->post(
+                uri: '/!/cargo/payments/stripe/webhook',
+                data: [
+                    'type' => 'payment_intent.amount_capturable_updated',
+                    'data' => [
+                        'object' => [
+                            'id' => $stripePaymentIntent->id,
+                        ],
+                    ],
+                ]
+            )
+            ->assertOk();
+
+        $order = Order::query()->where('stripe_payment_intent', $stripePaymentIntent->id)->first();
+
+        $this->assertNotNull($order);
+        $this->assertEquals('cancelled', $order->status()->value);
+        $this->assertEquals('stripe', $order->get('payment_gateway'));
+        $this->assertEquals('Order cannot be created without an address.', $order->get('cancellation_reason'));
+    }
+
+    #[Test]
     public function it_refunds_a_payment()
     {
         $stripePaymentIntent = PaymentIntent::create([
