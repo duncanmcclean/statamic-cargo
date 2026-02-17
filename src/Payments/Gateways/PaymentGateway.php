@@ -4,6 +4,10 @@ namespace DuncanMcClean\Cargo\Payments\Gateways;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Orders\Order;
+use DuncanMcClean\Cargo\Exceptions\PreventCheckout;
+use DuncanMcClean\Cargo\Facades;
+use DuncanMcClean\Cargo\Orders\Actions\CreateOrderFromCart;
+use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Support\Money;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -62,5 +66,23 @@ abstract class PaymentGateway
         }
 
         return route('statamic.cargo.payments.webhook', $this->handle());
+    }
+
+    protected function createOrderFromCart(Cart $cart): Order
+    {
+        try {
+            return app(CreateOrderFromCart::class)->handle($cart, $this);
+        } catch (PreventCheckout $e) {
+            $order = Facades\Order::makeFromCart($cart)
+                ->status(OrderStatus::Cancelled)
+                ->set('payment_gateway', static::handle())
+                ->set('cancellation_reason', $e->getMessage());
+
+            $order->save();
+
+            $this->cancel($cart);
+
+            return $order;
+        }
     }
 }
