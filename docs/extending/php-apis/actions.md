@@ -73,6 +73,35 @@ app(UpdateDiscounts::class)->handle($order);
 |-----------|---------------------------------------------------|
 | `order`   | Instance of [`Order`](/extending/php-apis/orders) |
 
+## CreateOrderFromCart
+
+The `CreateOrderFromCart` action handles creating orders from carts. It validates stock, creates the order, processes the payment, updates the stock counter and updates discount redemption counts.
+
+The action uses a cache lock to prevent race conditions when the same cart is being processed concurrently (eg. when a webhook and a redirect callback happen at the same time).
+
+```php
+use DuncanMcClean\Cargo\Orders\Actions\CreateOrderFromCart;
+use DuncanMcClean\Cargo\Exceptions\PreventCheckout;
+
+try {
+    $order = app(CreateOrderFromCart::class)->handle($cart, $paymentGateway);
+} catch (PreventCheckout $e) {
+    // Handle validation failures (missing address, out of stock, etc.)
+}
+```
+
+| Parameter        | Description                                                                                       |
+|------------------|---------------------------------------------------------------------------------------------------|
+| `cart`           | Instance of [`Cart`](/extending/php-apis/carts)                                                   |
+| `paymentGateway` | Optional. Instance of `PaymentGateway`. Required when the cart total is greater than zero.        |
+
+If an order already exists for the given cart, the action will return the existing order rather than creating a duplicate.
+
+The action will throw the `PreventCheckout` exception when:
+- Stock is unavailable for one or more products
+- The cart is missing a taxable address
+- The cart is missing customer information
+
 ## UpdateStock
 
 Typically run during the Checkout process, the `UpdateStock` action is responsible for updating the [stock counters](/docs/products#inventory--stock-tracking) on products and variants. It also dispatches various [stock-related events](/extending/events/list#productnostockremaining).
