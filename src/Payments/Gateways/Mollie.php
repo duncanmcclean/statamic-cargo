@@ -158,17 +158,17 @@ class Mollie extends PaymentGateway
     public function webhook(Request $request): Response
     {
         $payment = $this->mollie->payments->get($request->id);
+        $order = Facades\Order::query()->where('mollie_payment_id', $payment->id)->first();
 
         if ($payment->status === PaymentStatus::STATUS_CANCELED) {
-            $order = Facades\Order::query()->where('mollie_payment_id', $payment->id)->first();
             $order?->delete();
         }
 
         if ($payment->status === PaymentStatus::STATUS_PAID) {
-            $order = Facades\Order::query()->where('mollie_payment_id', $payment->id)->first();
-
             if (! $order) {
-                $cart = Facades\Cart::query()->where('mollie_payment_id', $payment->id)->first();
+                $cart = Facades\Cart::query()
+                    ->where('mollie_payment_id', $payment->id)
+                    ->first();
 
                 if ($cart) {
                     $order = $this->createOrderFromCart($cart);
@@ -181,7 +181,6 @@ class Mollie extends PaymentGateway
         }
 
         if ($payment->amountRefunded) {
-            $order = Facades\Order::query()->where('mollie_payment_id', $payment->id)->first();
             $order?->set('amount_refunded', (int) str_replace('.', '', $payment->amountRefunded->value))->save();
         }
 
