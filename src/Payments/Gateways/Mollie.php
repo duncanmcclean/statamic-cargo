@@ -148,11 +148,10 @@ class Mollie extends PaymentGateway
     public function cancel(Cart $cart): void
     {
         $payment = $this->mollie->payments->get($cart->get('mollie_payment_id'));
-        $order = Facades\Order::query()->where('mollie_payment_id', $payment->id)->first();
 
         $payment->isCancelable
             ? $this->mollie->payments->cancel($payment->id)
-            : $this->refund($order, $order->grandTotal());
+            : $this->refund($cart->order(), $cart->order()->grandTotal());
     }
 
     public function webhook(Request $request): Response

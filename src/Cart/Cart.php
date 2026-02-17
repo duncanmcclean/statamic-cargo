@@ -5,6 +5,7 @@ namespace DuncanMcClean\Cargo\Cart;
 use ArrayAccess;
 use DuncanMcClean\Cargo\Cart\Calculator\Calculator;
 use DuncanMcClean\Cargo\Contracts\Cart\Cart as Contract;
+use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
 use DuncanMcClean\Cargo\Customers\GuestCustomer;
 use DuncanMcClean\Cargo\Data\HasAddresses;
 use DuncanMcClean\Cargo\Events\CartCreated;
@@ -293,6 +294,11 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
         return $this->blueprint()->fields()->all()->map->handle()->except([
             'id', 'line_items', 'discount_total', 'grand_total', 'shipping_total', 'sub_total', 'tax_total',
         ])->all();
+    }
+
+    public function order(): OrderContract
+    {
+        return Order::query()->where('cart', $this->id)->get();
     }
 
     public function recalculate(): void
