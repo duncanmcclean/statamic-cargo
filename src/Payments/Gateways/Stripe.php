@@ -135,57 +135,36 @@ class Stripe extends PaymentGateway
 
         if ($request->type === Event::PAYMENT_INTENT_AMOUNT_CAPTURABLE_UPDATED) {
             $paymentIntent = PaymentIntent::retrieve($request->data['object']['id']);
+            $order = Facades\Order::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
 
-            // We're queuing this logic so that we can release the job and retry later if
-            // the order hasn't been created yet.
-            dispatch(function ($job) use ($paymentIntent): void {
-                $order = Facades\Order::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
+            if (! $order) {
+                $cart = Facades\Cart::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
 
-                if (! $order) {
-                    $cart = Facades\Cart::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
-
-                    if ($cart) {
-                        $order = $this->createOrderFromCart($cart);
-                    }
+                if ($cart) {
+                    $order = $this->createOrderFromCart($cart);
                 }
+            }
 
-                if (! $order) {
-                    $job->release(10);
-
-                    return;
-                }
-
-                $this->__construct();
+            if ($order) {
                 $this->capture($order);
-            })->delay(3);
+            }
         }
 
         if ($request->type === Event::PAYMENT_INTENT_SUCCEEDED) {
             $paymentIntent = PaymentIntent::retrieve($request->data['object']['id']);
+            $order = Facades\Order::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
 
-            // We're queuing this logic so that we can release the job and retry later if
-            // the order hasn't been created yet.
-            dispatch(function ($job) use ($paymentIntent): void {
-                $order = Facades\Order::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
+            if (! $order) {
+                $cart = Facades\Cart::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
 
-                if (! $order) {
-                    $cart = Facades\Cart::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
-
-                    if ($cart) {
-                        $order = $this->createOrderFromCart($cart);
-                    }
+                if ($cart) {
+                    $order = $this->createOrderFromCart($cart);
                 }
+            }
 
-                if (! $order) {
-                    $job->release(10);
-
-                    return;
-                }
-
-                if ($order->status() === OrderStatus::PaymentPending) {
-                    $order->status(OrderStatus::PaymentReceived)->save();
-                }
-            })->delay(3);
+            if ($order && $order->status() === OrderStatus::PaymentPending) {
+                $order->status(OrderStatus::PaymentReceived)->save();
+            }
         }
 
         if ($request->type === Event::CHARGE_REFUNDED) {
