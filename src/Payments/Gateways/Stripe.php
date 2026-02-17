@@ -142,6 +142,14 @@ class Stripe extends PaymentGateway
                 $order = Facades\Order::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
 
                 if (! $order) {
+                    $cart = Facades\Cart::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
+
+                    if ($cart) {
+                        $order = $this->createOrderFromCart($cart);
+                    }
+                }
+
+                if (! $order) {
                     $job->release(10);
 
                     return;
@@ -159,6 +167,14 @@ class Stripe extends PaymentGateway
             // the order hasn't been created yet.
             dispatch(function ($job) use ($paymentIntent): void {
                 $order = Facades\Order::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
+
+                if (! $order) {
+                    $cart = Facades\Cart::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
+
+                    if ($cart) {
+                        $order = $this->createOrderFromCart($cart);
+                    }
+                }
 
                 if (! $order) {
                     $job->release(10);

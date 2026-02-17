@@ -165,7 +165,18 @@ class Mollie extends PaymentGateway
 
         if ($payment->status === PaymentStatus::STATUS_PAID) {
             $order = Facades\Order::query()->where('mollie_payment_id', $payment->id)->first();
-            $order?->status(OrderStatus::PaymentReceived)->save();
+
+            if (! $order) {
+                $cart = Facades\Cart::query()->where('mollie_payment_id', $payment->id)->first();
+
+                if ($cart) {
+                    $order = $this->createOrderFromCart($cart);
+                }
+            }
+
+            if ($order && $order->status() === OrderStatus::PaymentPending) {
+                $order->status(OrderStatus::PaymentReceived)->save();
+            }
         }
 
         if ($payment->amountRefunded) {
