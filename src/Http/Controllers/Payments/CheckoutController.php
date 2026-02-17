@@ -7,7 +7,6 @@ use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Facades\PaymentGateway;
 use DuncanMcClean\Cargo\Orders\Actions\CreateOrderFromCart;
-use DuncanMcClean\Cargo\Orders\OrderStatus;
 use Illuminate\Http\Request;
 use Statamic\Exceptions\NotFoundHttpException;
 use Statamic\Sites\Site;
@@ -17,12 +16,13 @@ class CheckoutController
     public function __invoke(Request $request, ?string $paymentGateway = null)
     {
         $cart = Cart::current();
-        $paymentGateway = null;
 
         if ($cart->isPaid()) {
             $paymentGateway = PaymentGateway::find($paymentGateway);
 
             throw_if(! $paymentGateway, NotFoundHttpException::class);
+        } else {
+            $paymentGateway = null;
         }
 
         try {
