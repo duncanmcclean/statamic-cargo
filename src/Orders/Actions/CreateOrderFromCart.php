@@ -6,13 +6,13 @@ use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Orders\Order;
 use DuncanMcClean\Cargo\Discounts\Actions\UpdateDiscounts;
 use DuncanMcClean\Cargo\Exceptions\PreventCheckout;
+use DuncanMcClean\Cargo\Facades;
 use DuncanMcClean\Cargo\Orders\LineItem;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Payments\Gateways\PaymentGateway;
 use DuncanMcClean\Cargo\Products\Actions\UpdateStock;
 use DuncanMcClean\Cargo\Products\Actions\ValidateStock;
 use Illuminate\Support\Facades\Cache;
-use DuncanMcClean\Cargo\Facades;
 use Illuminate\Validation\ValidationException;
 use InvalidArgumentException;
 
