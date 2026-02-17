@@ -233,7 +233,7 @@ class CheckoutTest extends TestCase
     {
         $cart = $this->makeCart();
 
-        $order = app(CreateOrderFromCart::class)->handle($cart);
+        $order = app(CreateOrderFromCart::class)->handle($cart, new FakePaymentGateway);
 
         $this->assertNotNull($order);
         $this->assertEquals($cart->id(), $order->cart());
@@ -247,7 +247,7 @@ class CheckoutTest extends TestCase
 
         $existingOrder = tap(Facades\Order::makeFromCart($cart))->save();
 
-        $order = app(CreateOrderFromCart::class)->handle($cart);
+        $order = app(CreateOrderFromCart::class)->handle($cart, new FakePaymentGateway);
 
         $this->assertEquals($existingOrder->id(), $order->id());
     }
@@ -255,7 +255,7 @@ class CheckoutTest extends TestCase
     #[Test]
     public function action_throws_exception_when_payment_gateway_argument_is_null_for_paid_cart()
     {
-        $cart = $this->makeCart()->grandTotal(1);
+        $cart = $this->makeCart();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The $paymentGateway argument is required for paid carts.');
@@ -271,7 +271,7 @@ class CheckoutTest extends TestCase
 
         $this->expectException(PreventCheckout::class);
 
-        app(CreateOrderFromCart::class)->handle($cart);
+        app(CreateOrderFromCart::class)->handle($cart, new FakePaymentGateway);
     }
 
     #[Test]
@@ -282,7 +282,7 @@ class CheckoutTest extends TestCase
 
         $this->expectException(PreventCheckout::class);
 
-        app(CreateOrderFromCart::class)->handle($cart);
+        app(CreateOrderFromCart::class)->handle($cart, new FakePaymentGateway);
     }
 
     #[Test]
@@ -293,7 +293,7 @@ class CheckoutTest extends TestCase
 
         $this->expectException(PreventCheckout::class);
 
-        app(CreateOrderFromCart::class)->handle($cart);
+        app(CreateOrderFromCart::class)->handle($cart, new FakePaymentGateway);
     }
 
     private function makeCart(array $data = [])
