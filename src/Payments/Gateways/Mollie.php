@@ -127,7 +127,7 @@ class Mollie extends PaymentGateway
     {
         $payment = $this->mollie->payments->get($order->get('mollie_payment_id'));
 
-        if ($payment->status === PaymentStatus::STATUS_CANCELED) {
+        if ($payment->status === PaymentStatus::CANCELED) {
             throw new PreventCheckout(__('Payment was cancelled.'));
         }
 
@@ -159,11 +159,11 @@ class Mollie extends PaymentGateway
         $payment = $this->mollie->payments->get($request->id);
         $order = Facades\Order::query()->where('mollie_payment_id', $payment->id)->first();
 
-        if ($payment->status === PaymentStatus::STATUS_CANCELED) {
+        if ($payment->status === PaymentStatus::CANCELED) {
             $order?->delete();
         }
 
-        if ($payment->status === PaymentStatus::STATUS_PAID) {
+        if ($payment->status === PaymentStatus::PAID) {
             if (! $order) {
                 $cart = Facades\Cart::query()
                     ->where('mollie_payment_id', $payment->id)
