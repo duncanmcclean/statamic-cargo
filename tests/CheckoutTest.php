@@ -264,7 +264,7 @@ class CheckoutTest extends TestCase
     }
 
     #[Test]
-    public function action_throws_prevent_checkout_when_stock_unavailable()
+    public function action_throws_prevent_checkout_exception_when_stock_unavailable()
     {
         $cart = $this->makeCart();
         $cart->lineItems()->first()->product()->set('stock', 0)->save();
@@ -275,7 +275,7 @@ class CheckoutTest extends TestCase
     }
 
     #[Test]
-    public function action_throws_prevent_checkout_without_address()
+    public function action_throws_prevent_checkout_exception_without_address()
     {
         $cart = $this->makeCart();
         $cart->remove('shipping_address')->save();
@@ -286,7 +286,7 @@ class CheckoutTest extends TestCase
     }
 
     #[Test]
-    public function action_throws_prevent_checkout_without_customer()
+    public function action_throws_prevent_checkout_exception_without_customer()
     {
         $cart = $this->makeCart();
         $cart->customer(null)->save();
