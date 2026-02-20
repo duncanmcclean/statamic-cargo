@@ -79,7 +79,7 @@ class Mollie extends PaymentGateway
                             ? $this->formatAmount(site: $cart->site(), amount: $lineItem->get('discount_amount'))
                             : null,
                         'totalAmount' => $this->formatAmount(site: $cart->site(), amount: $lineItem->total()),
-                        'vatRate' => collect($lineItem->get('tax_breakdown'))->sum('rate'),
+                        'vatRate' => number_format(collect($lineItem->get('tax_breakdown'))->sum('rate'), 2, '.', ''),
                         'vatAmount' => $this->formatAmount(site: $cart->site(), amount: $lineItem->taxTotal()),
                         'productUrl' => $lineItem->product()->absoluteUrl(),
                     ];
@@ -91,7 +91,7 @@ class Mollie extends PaymentGateway
                         'quantity' => 1,
                         'unitPrice' => $this->formatAmount(site: $cart->site(), amount: $cart->shippingTotal()),
                         'totalAmount' => $this->formatAmount(site: $cart->site(), amount: $cart->shippingTotal()),
-                        'vatRate' => collect($cart->get('shipping_tax_breakdown'))->sum('rate'),
+                        'vatRate' => number_format(collect($cart->get('shipping_tax_breakdown'))->sum('rate'), 2, '.', ''),
                         'vatAmount' => $this->formatAmount(site: $cart->site(), amount: $cart->get('shipping_tax_total', 0)),
                     ]);
                 })
