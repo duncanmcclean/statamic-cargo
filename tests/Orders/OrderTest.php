@@ -56,9 +56,9 @@ class OrderTest extends TestCase
             'date from string, with time' => ['2025-04-05-1241', '2025-04-05 12:41:00', '2025-04-05-1241.1234'],
             'date from string, with seconds' => ['2025-04-05-124124', '2025-04-05 12:41:24', '2025-04-05-124124.1234'],
 
-            'date from carbon instance' => [Carbon::parse('2025-04-05'), '2025-04-05 00:00:00', '2025-04-05.1234'],
-            'date from carbon instance, with time' => [Carbon::parse('2025-04-05 12:41:00'), '2025-04-05 12:41:00', '2025-04-05-1241.1234'],
-            'date from carbon instance, with seconds' => [Carbon::parse('2025-04-05 12:41:24'), '2025-04-05 12:41:24', '2025-04-05-124124.1234'],
+            'date from carbon instance' => [Carbon::parse('2025-04-05', 'UTC'), '2025-04-05 00:00:00', '2025-04-05.1234'],
+            'date from carbon instance, with time' => [Carbon::parse('2025-04-05 12:41:00', 'UTC'), '2025-04-05 12:41:00', '2025-04-05-1241.1234'],
+            'date from carbon instance, with seconds' => [Carbon::parse('2025-04-05 12:41:24', 'UTC'), '2025-04-05 12:41:24', '2025-04-05-124124.1234'],
 
             'date from carbon instance in another timezone' => [Carbon::parse('2025-04-05 22:00', 'America/New_York'), '2025-04-06 02:00:00', '2025-04-06-0200.1234'],
         ];
