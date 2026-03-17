@@ -50,7 +50,7 @@ class MigrateDiscounts extends Command
 
                 Discount::make()
                     ->handle($data['id'])
-                    ->name($data['code'])
+                    ->title($data['code'])
                     ->type($type)
                     ->data(array_filter([
                         $type => $data['value'],

@@ -100,9 +100,11 @@ class Stripe extends PaymentGateway
     {
         $paymentIntent = PaymentIntent::retrieve($order->get('stripe_payment_intent'));
 
-        $paymentIntent = $paymentIntent->capture([
-            'amount_to_capture' => $order->grandTotal(),
-        ]);
+        if ($paymentIntent->status === PaymentIntent::STATUS_REQUIRES_CAPTURE) {
+            $paymentIntent = $paymentIntent->capture([
+                'amount_to_capture' => $order->grandTotal(),
+            ]);
+        }
 
         if ($paymentIntent->status === PaymentIntent::STATUS_SUCCEEDED) {
             $order->status(OrderStatus::PaymentReceived)->save();

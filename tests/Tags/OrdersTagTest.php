@@ -105,7 +105,7 @@ class OrdersTagTest extends TestCase
 
     private function tag($tag, $data = [])
     {
-        return (string) Parse::template($tag, $data);
+        return (string) Parse::template($tag, $data, [], true);
     }
 }
 

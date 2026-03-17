@@ -50,6 +50,6 @@ class ShippingOptionsTagTest extends TestCase
 
     private function tag($tag, $variables = [])
     {
-        return Parse::template($tag, $variables);
+        return (string) Parse::template($tag, $variables, [], true);
     }
 }
