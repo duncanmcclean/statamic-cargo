@@ -12,6 +12,7 @@ use Illuminate\Support\Traits\Localizable;
 use Illuminate\Validation\ValidationException;
 use Statamic\Exceptions\NotFoundHttpException;
 use Statamic\Facades\Site;
+use Statamic\Facades\URL;
 
 class UpdateCartRequest extends FormRequest
 {
@@ -38,7 +39,9 @@ class UpdateCartRequest extends FormRequest
         $url = $this->redirector->getUrlGenerator();
 
         if ($redirect = $this->input('_error_redirect')) {
-            return $url->to($redirect);
+            return URL::isExternalToApplication($redirect)
+                ? $url->previous()
+                : $url->to($redirect);
         }
 
         return $url->previous();
