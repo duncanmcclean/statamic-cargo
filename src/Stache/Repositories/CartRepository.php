@@ -35,7 +35,13 @@ class CartRepository implements RepositoryContract
 
     public function find($id): ?Cart
     {
-        return $this->query()->where('id', $id)->first();
+        $cart = $this->query()->where('id', $id)->first();
+
+        if (! $cart) {
+            return null;
+        }
+
+        return $cart->validateLineItems();
     }
 
     public function findOrFail($id): Cart
@@ -56,7 +62,7 @@ class CartRepository implements RepositoryContract
         }
 
         if (self::$current) {
-            return self::$current;
+            return self::$current->validateLineItems();
         }
 
         try {

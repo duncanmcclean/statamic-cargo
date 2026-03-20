@@ -68,6 +68,36 @@ class CartRepositoryTest extends TestCase
     }
 
     #[Test]
+    public function deleted_products_are_filtered_out_when_finding_a_cart()
+    {
+        $productA = Entry::make()->collection('products')->id('product-a')->data(['price' => 2500]);
+        $productA->save();
+
+        $productB = Entry::make()->collection('products')->id('product-b')->data(['price' => 1500]);
+        $productB->save();
+
+        $cart = Cart::make()
+            ->id('cart-with-deleted-product')
+            ->site('default')
+            ->lineItems([
+                ['id' => 'line-a', 'product' => 'product-a', 'quantity' => 1],
+                ['id' => 'line-b', 'product' => 'product-b', 'quantity' => 2],
+            ]);
+
+        $cart->save();
+
+        $this->assertCount(2, $cart->lineItems());
+
+        $productA->delete();
+
+        $cart = Cart::find('cart-with-deleted-product');
+
+        $this->assertCount(1, $cart->lineItems());
+        $this->assertNull($cart->lineItems()->find('line-a'));
+        $this->assertNotNull($cart->lineItems()->find('line-b'));
+    }
+
+    #[Test]
     public function can_save_a_cart()
     {
         Collection::make('products')->save();
