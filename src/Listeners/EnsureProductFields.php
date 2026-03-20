@@ -36,6 +36,8 @@ class EnsureProductFields
                 'max_items' => 1,
                 'create' => true,
                 'validate' => 'required',
+                'default' => 'general',
+                'mode' => 'select',
             ], 'sidebar');
         }
 
