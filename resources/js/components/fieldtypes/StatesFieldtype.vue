@@ -162,6 +162,10 @@ export default {
                 this.update(null);
             }
 
+			if (Array.isArray(country)) {
+				country = country[0];
+			}
+
             this.request({ country }).then((response) => (this.loading = false));
         },
     },
