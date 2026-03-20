@@ -8,6 +8,7 @@ use DuncanMcClean\Cargo\Http\Resources\API\CartResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Statamic\Exceptions\NotFoundHttpException;
+use Statamic\Facades\URL;
 
 class CartController
 {
@@ -36,7 +37,9 @@ class CartController
             return new CartResource($cart->fresh());
         }
 
-        return $request->_redirect ? redirect($request->_redirect) : back();
+        return $request->_redirect && ! URL::isExternalToApplication($request->_redirect)
+            ? redirect($request->_redirect)
+            : back();
     }
 
     public function destroy(Request $request)
@@ -50,6 +53,8 @@ class CartController
             return [];
         }
 
-        return $request->_redirect ? redirect($request->_redirect) : back();
+        return $request->_redirect && ! URL::isExternalToApplication($request->_redirect)
+            ? redirect($request->_redirect)
+            : back();
     }
 }

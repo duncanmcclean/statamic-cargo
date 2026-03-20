@@ -113,6 +113,28 @@ class CartControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_redirects_when_updating_the_cart()
+    {
+        $this->makeCart();
+
+        $this
+            ->from('/cart')
+            ->patch('/!/cargo/cart', ['_redirect' => '/thank-you'])
+            ->assertRedirect('/thank-you');
+    }
+
+    #[Test]
+    public function it_doesnt_redirect_to_external_urls_when_updating_the_cart()
+    {
+        $this->makeCart();
+
+        $this
+            ->from('/cart')
+            ->patch('/!/cargo/cart', ['_redirect' => 'https://evil.com/path'])
+            ->assertRedirect('/cart');
+    }
+
+    #[Test]
     public function it_updates_the_cart_and_expects_a_json_response()
     {
         $cart = $this->makeCart();
@@ -187,6 +209,28 @@ class CartControllerTest extends TestCase
             ->assertRedirect('/cart');
 
         $this->assertNull(Cart::find($cart->id()));
+    }
+
+    #[Test]
+    public function it_redirects_when_deleting_the_cart()
+    {
+        $this->makeCart();
+
+        $this
+            ->from('/cart')
+            ->delete('/!/cargo/cart', ['_redirect' => '/'])
+            ->assertRedirect('/');
+    }
+
+    #[Test]
+    public function it_doesnt_redirect_to_external_urls_when_deleting_the_cart()
+    {
+        $this->makeCart();
+
+        $this
+            ->from('/cart')
+            ->delete('/!/cargo/cart', ['_redirect' => 'https://evil.com/path'])
+            ->assertRedirect('/cart');
     }
 
     #[Test]

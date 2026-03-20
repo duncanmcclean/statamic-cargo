@@ -45,6 +45,38 @@ class CartLineItemsControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_redirects_when_adding_a_line_item()
+    {
+        $this->makeCart();
+        $product = $this->makeProduct();
+
+        $this
+            ->from('/products')
+            ->post('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'quantity' => 1,
+                '_redirect' => '/cart',
+            ])
+            ->assertRedirect('/cart');
+    }
+
+    #[Test]
+    public function it_doesnt_redirect_to_external_urls_when_adding_a_line_item()
+    {
+        $this->makeCart();
+        $product = $this->makeProduct();
+
+        $this
+            ->from('/products')
+            ->post('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'quantity' => 1,
+                '_redirect' => 'https://evil.com/path',
+            ])
+            ->assertRedirect('/products');
+    }
+
+    #[Test]
     public function it_adds_a_product_to_the_cart_and_expects_json_response()
     {
         $cart = $this->makeCart();
@@ -540,6 +572,34 @@ class CartLineItemsControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_redirects_when_updating_a_line_item()
+    {
+        $this->makeCartWithLineItems();
+
+        $this
+            ->from('/cart')
+            ->patch('/!/cargo/cart/line-items/line-item-1', [
+                'quantity' => 2,
+                '_redirect' => '/checkout',
+            ])
+            ->assertRedirect('/checkout');
+    }
+
+    #[Test]
+    public function it_doesnt_redirect_to_external_urls_when_updating_a_line_item()
+    {
+        $this->makeCartWithLineItems();
+
+        $this
+            ->from('/cart')
+            ->patch('/!/cargo/cart/line-items/line-item-1', [
+                'quantity' => 2,
+                '_redirect' => 'https://evil.com/path',
+            ])
+            ->assertRedirect('/cart');
+    }
+
+    #[Test]
     public function it_updates_a_line_item_with_a_different_variant()
     {
         $cart = $this->makeCart();
@@ -629,6 +689,28 @@ class CartLineItemsControllerTest extends TestCase
             ->assertJsonPath('data.id', $cart->id());
 
         $this->assertCount(0, $cart->fresh()->lineItems());
+    }
+
+    #[Test]
+    public function it_redirects_when_removing_a_line_item()
+    {
+        $this->makeCartWithLineItems();
+
+        $this
+            ->from('/cart')
+            ->delete('/!/cargo/cart/line-items/line-item-1', ['_redirect' => '/products'])
+            ->assertRedirect('/products');
+    }
+
+    #[Test]
+    public function it_doesnt_redirect_to_external_urls_when_removing_a_line_item()
+    {
+        $this->makeCartWithLineItems();
+
+        $this
+            ->from('/cart')
+            ->delete('/!/cargo/cart/line-items/line-item-1', ['_redirect' => 'https://evil.com/path'])
+            ->assertRedirect('/cart');
     }
 
     protected function makeCart()

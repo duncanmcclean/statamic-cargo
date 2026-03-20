@@ -11,6 +11,7 @@ use DuncanMcClean\Cargo\Http\Resources\API\CartResource;
 use DuncanMcClean\Cargo\Products\Actions\ValidateStock;
 use Illuminate\Http\Request;
 use Statamic\Exceptions\NotFoundHttpException;
+use Statamic\Facades\URL;
 
 class CartLineItemsController
 {
@@ -42,7 +43,9 @@ class CartLineItemsController
             return new CartResource($cart->fresh());
         }
 
-        return $request->_redirect ? redirect($request->_redirect) : back();
+        return $request->_redirect && ! URL::isExternalToApplication($request->_redirect)
+            ? redirect($request->_redirect)
+            : back();
     }
 
     public function update(UpdateLineItemRequest $request, string $lineItem)
@@ -82,7 +85,9 @@ class CartLineItemsController
             return new CartResource($cart->fresh());
         }
 
-        return $request->_redirect ? redirect($request->_redirect) : back();
+        return $request->_redirect && ! URL::isExternalToApplication($request->_redirect)
+            ? redirect($request->_redirect)
+            : back();
     }
 
     public function destroy(Request $request, string $lineItem)
@@ -101,6 +106,8 @@ class CartLineItemsController
             return new CartResource($cart->fresh());
         }
 
-        return $request->_redirect ? redirect($request->_redirect) : back();
+        return $request->_redirect && ! URL::isExternalToApplication($request->_redirect)
+            ? redirect($request->_redirect)
+            : back();
     }
 }
