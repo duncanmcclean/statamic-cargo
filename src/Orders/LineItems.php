@@ -56,6 +56,18 @@ class LineItems extends Collection
         return $this;
     }
 
+    public function rejectInvalidProducts(): bool
+    {
+        $count = $this->count();
+
+        $this->items = $this
+            ->reject(fn (LineItem $lineItem) => $lineItem->product && is_null($lineItem->product()))
+            ->values()
+            ->all();
+
+        return $this->count() < $count;
+    }
+
     public function flush()
     {
         $this->items = [];

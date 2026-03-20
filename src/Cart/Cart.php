@@ -16,7 +16,6 @@ use DuncanMcClean\Cargo\Facades;
 use DuncanMcClean\Cargo\Facades\Cart as CartFacade;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Orders\HasTotals;
-use DuncanMcClean\Cargo\Orders\LineItem;
 use DuncanMcClean\Cargo\Orders\LineItems;
 use DuncanMcClean\Cargo\Payments\Gateways\PaymentGateway;
 use DuncanMcClean\Cargo\Shipping\ShippingMethod;
@@ -51,7 +50,6 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
     protected $site;
     protected $withEvents = true;
     private bool $withoutRecalculating = false;
-    private static bool $validatingLineItems = false;
 
     public function __construct()
     {
@@ -148,6 +146,13 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
     {
         return $this
             ->fluentlyGetOrSet('lineItems')
+            ->getter(function (LineItems $lineItems) {
+                if ($lineItems->rejectInvalidProducts()) {
+                    $this->recalculate();
+                }
+
+                return $lineItems;
+            })
             ->setter(function ($lineItems) {
                 $items = new LineItems;
 
@@ -156,27 +161,6 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
                 return $items;
             })
             ->args(func_get_args());
-    }
-
-    public function validateLineItems(): self
-    {
-        if (self::$validatingLineItems) {
-            return $this;
-        }
-
-        self::$validatingLineItems = true;
-
-        $originalCount = $this->lineItems->count();
-
-        $this->lineItems = $this->lineItems->reject(fn (LineItem $lineItem) => is_null($lineItem->product()));
-
-        if ($this->lineItems->count() < $originalCount) {
-            $this->save();
-        }
-
-        self::$validatingLineItems = false;
-
-        return $this;
     }
 
     public function site($site = null)

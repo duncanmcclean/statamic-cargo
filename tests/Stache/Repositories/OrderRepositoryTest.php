@@ -80,11 +80,13 @@ class OrderRepositoryTest extends TestCase
     #[Test]
     public function can_make_order_from_cart()
     {
+        Entry::make()->collection('products')->id('product-123')->data(['price' => 2500])->save();
+
         $cart = Cart::make()
-            ->id('abc')
+            ->id('cart-id')
             ->lineItems([
                 [
-                    'product' => '123',
+                    'product' => 'product-123',
                     'quantity' => 1,
                     'total' => 2500,
                 ],
