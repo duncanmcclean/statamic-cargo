@@ -14,6 +14,7 @@ use Statamic\Facades\Scope;
 use Statamic\Facades\User;
 use Statamic\Http\Controllers\CP\CpController;
 use Statamic\Http\Requests\FilteredRequest;
+use Statamic\Query\OrderBy;
 use Statamic\Query\Scopes\Filters\Concerns\QueriesFilters;
 
 class OrderController extends CpController
@@ -29,7 +30,7 @@ class OrderController extends CpController
 
             $activeFilterBadges = $this->queryFilters($query, $request->filters);
 
-            $sortField = request('sort');
+            $sortField = OrderBy::column(request('sort'));
             $sortDirection = request('order', 'asc');
 
             if (! $sortField && ! request('search')) {
