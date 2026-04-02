@@ -76,8 +76,6 @@ class ServiceProvider extends AddonServiceProvider
 
     public function register()
     {
-        parent::register();
-
         $this->registerSerializableClasses([
             \DuncanMcClean\Cargo\Cart\Cart::class,
             \DuncanMcClean\Cargo\Discounts\Discount::class,
