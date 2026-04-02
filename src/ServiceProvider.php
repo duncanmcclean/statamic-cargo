@@ -78,23 +78,12 @@ class ServiceProvider extends AddonServiceProvider
     {
         parent::register();
 
-        $existing = $this->app['config']->get('cache.serializable_classes');
-
-        if ($existing === true) {
-            return;
-        }
-
-        $classes = [
+        $this->registerSerializableClasses([
             \DuncanMcClean\Cargo\Cart\Cart::class,
             \DuncanMcClean\Cargo\Discounts\Discount::class,
             \DuncanMcClean\Cargo\Orders\Order::class,
             \DuncanMcClean\Cargo\Products\Product::class,
-        ];
-
-        $this->app['config']->set('cache.serializable_classes', array_merge(
-            is_array($existing) ? $existing : [],
-            $classes
-        ));
+        ]);
     }
 
     public function bootAddon()
