@@ -46,7 +46,7 @@
         "mollie/mollie-api-php": "^3.0",
         "moneyphp/money": "^4.5",
         "pixelfear/composer-dist-plugin": "^0.1.0",
-        "statamic/cms": "^6.5",
+        "statamic/cms": "^6.10",
         "stillat/proteus": "^4.2.1",
         "stripe/stripe-php": "^16.4",
         "ext-zip": "*"
