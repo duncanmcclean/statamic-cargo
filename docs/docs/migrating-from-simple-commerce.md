@@ -34,7 +34,7 @@ To upgrade, uninstall Simple Commerce and install Cargo using composer:
 
 ```
 composer remove duncanmcclean/simple-commerce
-composer require duncanmcclean/cargo
+composer require duncanmcclean/statamic-cargo
 ```
 
 Once composer has done its thing, run Cargo's install command to publish various stubs, select your products collection, and more:
