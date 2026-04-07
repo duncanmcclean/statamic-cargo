@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Http\Requests;
 
+use DuncanMcClean\Cargo\Exceptions\FormRequestDoesNotExist;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -99,7 +100,7 @@ abstract class CustomizableFormRequest extends FormRequest
         $formRequest = decrypt($this->input('_request'));
 
         if (! class_exists($formRequest)) {
-            throw new \Exception("Form Request [{$formRequest}] does not exist.");
+            throw new FormRequestDoesNotExist("Form Request [{$formRequest}] does not exist.");
         }
 
         return $this->customFormRequestInstance = app($formRequest, [
