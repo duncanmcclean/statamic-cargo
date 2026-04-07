@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.3.0 (2026-04-07)
+
+### What's new
+- Support additional methods in custom form requests [#169](https://github.com/duncanmcclean/statamic-cargo/pull/169) by @duncanmcclean
+- Add `always_checkout_as_guest` config option [#170](https://github.com/duncanmcclean/statamic-cargo/pull/170) by @duncanmcclean
+
+### What's fixed
+- Update installation command for Cargo in migration guide [#163](https://github.com/duncanmcclean/statamic-cargo/pull/163) by @marcorieser
+- Fix amount off discount calculation when not perfectly divisible [#168](https://github.com/duncanmcclean/statamic-cargo/pull/168) by @duncanmcclean
+
+
+
 ## v1.2.3 (2026-04-04)
 
 ### What's fixed
