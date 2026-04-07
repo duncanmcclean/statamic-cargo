@@ -4,23 +4,22 @@ namespace DuncanMcClean\Cargo\Http\Requests\Cart;
 
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
-use DuncanMcClean\Cargo\Http\Requests\Concerns\AcceptsCustomFormRequests;
+use DuncanMcClean\Cargo\Http\Requests\CustomizableFormRequest;
 use DuncanMcClean\Cargo\Rules\ValidDiscountCode;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Traits\Localizable;
 use Illuminate\Validation\ValidationException;
 use Statamic\Exceptions\NotFoundHttpException;
 use Statamic\Facades\Site;
 use Statamic\Facades\URL;
 
-class UpdateCartRequest extends FormRequest
+class UpdateCartRequest extends CustomizableFormRequest
 {
-    use AcceptsCustomFormRequests, Localizable;
+    use Localizable;
 
     private $cachedFields;
 
-    public function authorize()
+    public function authorize(): bool
     {
         throw_if(! Cart::hasCurrentCart(), NotFoundHttpException::class);
 
@@ -31,9 +30,6 @@ class UpdateCartRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Optionally override the redirect url based on the presence of _error_redirect
-     */
     protected function getRedirectUrl()
     {
         $url = $this->redirector->getUrlGenerator();
@@ -47,8 +43,12 @@ class UpdateCartRequest extends FormRequest
         return $url->previous();
     }
 
-    public function rules()
+    public function rules(): array
     {
+        if ($this->hasCustomFormRequest()) {
+            return $this->resolveCustomFormRequest()->rules();
+        }
+
         $fields = $this->getFormFields();
 
         return $fields
