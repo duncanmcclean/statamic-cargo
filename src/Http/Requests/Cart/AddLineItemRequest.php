@@ -3,26 +3,16 @@
 namespace DuncanMcClean\Cargo\Http\Requests\Cart;
 
 use DuncanMcClean\Cargo\Facades\Product;
-use DuncanMcClean\Cargo\Http\Requests\Concerns\AcceptsCustomFormRequests;
-use Illuminate\Foundation\Http\FormRequest;
+use DuncanMcClean\Cargo\Http\Requests\CustomizableFormRequest;
 use Illuminate\Support\Traits\Localizable;
 use Illuminate\Validation\Rule;
 use Statamic\Facades\Site;
 
-class AddLineItemRequest extends FormRequest
+class AddLineItemRequest extends CustomizableFormRequest
 {
-    use AcceptsCustomFormRequests, Localizable;
+    use Localizable;
 
-    public function authorize()
-    {
-        if ($this->hasCustomFormRequest()) {
-            return $this->resolveCustomFormRequest()->authorize();
-        }
-
-        return true;
-    }
-
-    public function rules()
+    public function rules(): array
     {
         if ($this->hasCustomFormRequest()) {
             return $this->resolveCustomFormRequest()->rules();

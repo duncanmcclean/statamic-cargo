@@ -3,17 +3,16 @@
 namespace DuncanMcClean\Cargo\Http\Requests\Cart;
 
 use DuncanMcClean\Cargo\Facades\Cart;
-use DuncanMcClean\Cargo\Http\Requests\Concerns\AcceptsCustomFormRequests;
-use Illuminate\Foundation\Http\FormRequest;
+use DuncanMcClean\Cargo\Http\Requests\CustomizableFormRequest;
 use Illuminate\Support\Traits\Localizable;
 use Statamic\Exceptions\NotFoundHttpException;
 use Statamic\Facades\Site;
 
-class UpdateLineItemRequest extends FormRequest
+class UpdateLineItemRequest extends CustomizableFormRequest
 {
-    use AcceptsCustomFormRequests, Localizable;
+    use Localizable;
 
-    public function authorize()
+    public function authorize(): bool
     {
         throw_if(! Cart::hasCurrentCart(), NotFoundHttpException::class);
 
@@ -24,7 +23,7 @@ class UpdateLineItemRequest extends FormRequest
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         if ($this->hasCustomFormRequest()) {
             return $this->resolveCustomFormRequest()->rules();
