@@ -18,7 +18,7 @@ trait HandlesCustomerInformation
             'email' => $request->email,
         ])->filter()->all());
 
-        if ($user = User::current()) {
+        if (! config('statamic.cargo.carts.always_checkout_as_guest') && $user = User::current()) {
             // When a customer is missing from the order, we'll set it to the logged-in user.
             if (! $cart->customer()) {
                 $cart->customer($user);

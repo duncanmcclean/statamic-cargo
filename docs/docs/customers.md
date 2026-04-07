@@ -33,3 +33,18 @@ You can disable this behaviour in the `cargo.php` config file:
 	'merge_on_login' => true,
 ],
 ```
+
+## Always checkout as guest
+By default, when a logged-in user checks out, Cargo will associate the order with their user account.
+
+If you'd prefer to always create guest customers instead (even when users are logged in), you may enable the `always_checkout_as_guest` option:
+
+```php
+// config/statamic/cargo.php
+
+'carts' => [
+	'always_checkout_as_guest' => true,
+],
+```
+
+When enabled, customer details will be saved on the order, rather than being linked to a user account.
