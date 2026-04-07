@@ -9,6 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
+use Statamic\Facades\User;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
 
@@ -196,6 +197,88 @@ class CartControllerTest extends TestCase
             ->assertSessionHasErrors('customer.email');
 
         $this->assertNull($cart->fresh()->customer());
+    }
+
+    #[Test]
+    public function it_assigns_logged_in_user_to_cart_by_default()
+    {
+        config()->set('statamic.cargo.carts.always_checkout_as_guest', false);
+
+        $cart = $this->makeCart();
+        $cart->customer(null)->save();
+
+        $user = User::make()->email('user@example.com')->save();
+
+        $this->actingAs($user)
+            ->from('/cart')
+            ->patch('/!/cargo/cart', [
+                'customer' => [
+                    'name' => 'John Doe',
+                    'email' => 'john@example.com',
+                ],
+            ])
+            ->assertRedirect('/cart');
+
+        $cart = $cart->fresh();
+
+        $this->assertNotInstanceOf(GuestCustomer::class, $cart->customer());
+        $this->assertEquals($user->id(), $cart->customer()->id());
+    }
+
+    #[Test]
+    public function it_creates_guest_customer_when_always_checkout_as_guest_is_enabled()
+    {
+        config()->set('statamic.cargo.carts.always_checkout_as_guest', true);
+
+        $cart = $this->makeCart();
+        $cart->customer(null)->save();
+
+        $user = User::make()->email('user@example.com')->save();
+
+        $this->actingAs($user)
+            ->from('/cart')
+            ->patch('/!/cargo/cart', [
+                'customer' => [
+                    'name' => 'John Doe',
+                    'email' => 'john@example.com',
+                ],
+            ])
+            ->assertRedirect('/cart');
+
+        $cart = $cart->fresh();
+
+        $this->assertInstanceOf(GuestCustomer::class, $cart->customer());
+        $this->assertEquals('John Doe', $cart->customer()->name());
+        $this->assertEquals('john@example.com', $cart->customer()->email());
+    }
+
+    #[Test]
+    public function it_does_not_update_user_data_when_always_checkout_as_guest_is_enabled()
+    {
+        config()->set('statamic.cargo.carts.always_checkout_as_guest', true);
+
+        $cart = $this->makeCart();
+        $cart->customer(null)->save();
+
+        $user = User::make()
+            ->email('original@example.com')
+            ->set('name', 'Original Name')
+            ->save();
+
+        $this->actingAs($user)
+            ->from('/cart')
+            ->patch('/!/cargo/cart', [
+                'customer' => [
+                    'name' => 'New Name',
+                    'email' => 'new@example.com',
+                ],
+            ])
+            ->assertRedirect('/cart');
+
+        $user = User::find($user->id());
+
+        $this->assertEquals('original@example.com', $user->email());
+        $this->assertEquals('Original Name', $user->get('name'));
     }
 
     #[Test]

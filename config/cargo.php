@@ -108,6 +108,19 @@ return [
 
         /*
         |--------------------------------------------------------------------------
+        | Always checkout as guest
+        |--------------------------------------------------------------------------
+        |
+        | By default, when a logged-in user checks out, Cargo will associate the order
+        | with their user account. Enable this option to always create guest customers
+        | instead, even when users are logged in.
+        |
+        */
+
+        'always_checkout_as_guest' => false,
+
+        /*
+        |--------------------------------------------------------------------------
         | Cookie Name
         |--------------------------------------------------------------------------
         |
