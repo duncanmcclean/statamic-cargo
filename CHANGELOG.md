@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.3.1 (2026-04-13)
+
+### What's fixed
+- Upgrade to Vite 8 [#172](https://github.com/duncanmcclean/statamic-cargo/pull/172) by @duncanmcclean
+
+
+
 ## v1.3.0 (2026-04-07)
 
 ### What's new
