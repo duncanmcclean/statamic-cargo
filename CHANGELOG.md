@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.3.2 (2026-04-14)
+
+### What's fixed
+- Harden query value resolution [#173](https://github.com/duncanmcclean/statamic-cargo/pull/173) by @duncanmcclean
+
+
+
 ## v1.3.1 (2026-04-13)
 
 ### What's fixed
