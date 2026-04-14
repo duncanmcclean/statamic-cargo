@@ -205,7 +205,7 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
 
     public function getQueryableValue(string $field)
     {
-        if (method_exists($this, $method = Str::camel($field))) {
+        if (in_array($method = Str::camel($field), $this->queryableMethods())) {
             return $this->{$method}();
         }
 
@@ -216,5 +216,12 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
         }
 
         return $field->fieldtype()->toQueryableValue($value);
+    }
+
+    private function queryableMethods(): array
+    {
+        return [
+            'discountType', 'editUrl', 'handle', 'id', 'reference', 'title', 'type', 'updateUrl',
+        ];
     }
 }
