@@ -122,9 +122,9 @@ class OrderQueryBuilderTest extends TestCase
     #[Test]
     public function sorting_by_unsafe_method_does_not_invoke_it()
     {
-        Order::make()->id('abc')->save();
-        Order::make()->id('def')->save();
-        Order::make()->id('ghi')->save();
+        Order::make()->id('abc')->customer(['name' => 'Foo', 'email' => 'foo@example.com'])->save();
+        Order::make()->id('def')->customer(['name' => 'Bar', 'email' => 'bar@example.com'])->save();
+        Order::make()->id('ghi')->customer(['name' => 'Baz', 'email' => 'baz@example.com'])->save();
 
         $count = Order::all()->count();
         $this->assertGreaterThan(0, $count);
