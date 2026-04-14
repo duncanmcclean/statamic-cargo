@@ -6,6 +6,7 @@ use DuncanMcClean\Cargo\Contracts\Taxes\TaxClass as TaxClassContract;
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Statamic\Support\Str;
 
 trait Productable
 {
@@ -97,5 +98,21 @@ trait Productable
         }
 
         return TaxClass::find($taxClass);
+    }
+
+    public function getQueryableValue(string $field)
+    {
+        if (in_array($method = Str::camel($field), $this->productQueryableMethods())) {
+            return $this->{$method}();
+        }
+
+        return parent::getQueryableValue($field);
+    }
+
+    private function productQueryableMethods(): array
+    {
+        return [
+            'isStandardProduct', 'isStockEnabled', 'isVariantProduct', 'price', 'productVariants', 'stock',
+        ];
     }
 }
