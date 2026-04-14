@@ -1,6 +1,6 @@
 <?php
 
-namespace Stache\Query;
+namespace Tests\Stache\Query;
 
 use DuncanMcClean\Cargo\Facades\Discount;
 use PHPUnit\Framework\Attributes\Test;
