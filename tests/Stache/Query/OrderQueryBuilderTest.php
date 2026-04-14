@@ -118,4 +118,19 @@ class OrderQueryBuilderTest extends TestCase
         $this->assertCount(2, $query);
         $this->assertEquals([123, 789], $query->map->id()->all());
     }
+
+    #[Test]
+    public function sorting_by_unsafe_method_does_not_invoke_it()
+    {
+        Order::make()->id('abc')->save();
+        Order::make()->id('def')->save();
+        Order::make()->id('ghi')->save();
+
+        $count = Order::all()->count();
+        $this->assertGreaterThan(0, $count);
+
+        Order::query()->orderBy('delete', 'asc')->get();
+
+        $this->assertCount($count, Order::all());
+    }
 }

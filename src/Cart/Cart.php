@@ -388,7 +388,7 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
             return $this->customer;
         }
 
-        if (method_exists($this, $method = Str::camel($field))) {
+        if (in_array($method = Str::camel($field), $this->queryableMethods())) {
             return $this->{$method}();
         }
 
@@ -399,5 +399,14 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
         }
 
         return $field->fieldtype()->toQueryableValue($value);
+    }
+
+    private function queryableMethods(): array
+    {
+        return [
+            'billingAddress', 'blueprint', 'customer', 'discountTotal', 'grandTotal', 'hasBillingAddress', 'hasShippingAddress',
+            'id', 'isFree', 'isPaid', 'lineItems', 'path', 'paymentGateway', 'reference', 'shippingAddress', 'shippingMethod',
+            'shippingOption', 'shippingTotal', 'site', 'subTotal', 'taxableAddress', 'taxBreakdown', 'taxTotal',
+        ];
     }
 }

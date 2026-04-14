@@ -475,7 +475,7 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
             return $this->customer;
         }
 
-        if (method_exists($this, $method = Str::camel($field))) {
+        if (in_array($method = Str::camel($field), $this->queryableMethods())) {
             return $this->{$method}();
         }
 
@@ -486,5 +486,15 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
         }
 
         return $field->fieldtype()->toQueryableValue($value);
+    }
+
+    private function queryableMethods(): array
+    {
+        return [
+            'billingAddress', 'blueprint', 'cart', 'customer', 'date', 'discountTotal', 'editUrl', 'grandTotal', 'hasBillingAddress',
+            'hasSeconds', 'hasShippingAddress', 'hasTime', 'id', 'isFree', 'isPaid', 'lineItems', 'orderNumber', 'path',
+            'paymentGateway', 'reference', 'shippingAddress', 'shippingMethod', 'shippingOption', 'shippingTotal', 'site', 'status',
+            'subTotal', 'taxableAddress', 'taxBreakdown', 'taxTotal', 'timelineEvents', 'updateUrl',
+        ];
     }
 }
