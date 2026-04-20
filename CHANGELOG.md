@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.3.4 (2026-04-20)
+
+### What's fixed
+- Remove return type from query builder `column()` [#180](https://github.com/duncanmcclean/statamic-cargo/pull/180) by @v-Woody
+- Fix AugmentedOrder::downloads() calling undefined method [#178](https://github.com/duncanmcclean/statamic-cargo/pull/178) by @v-Woody
+
+
+
 ## v1.3.3 (2026-04-20)
 
 ### What's fixed
