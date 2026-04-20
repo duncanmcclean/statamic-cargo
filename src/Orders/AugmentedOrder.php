@@ -66,7 +66,7 @@ class AugmentedOrder extends AugmentedCart
                 'product' => $lineItem->product(),
                 'variant' => $lineItem->variant(),
                 'download_url' => URL::temporarySignedRoute('statamic.cargo.download', now()->addHour(), [
-                    'orderId' => $this->id(),
+                    'orderId' => $this->data->id(),
                     'lineItem' => $lineItem->id(),
                 ]),
             ]);
