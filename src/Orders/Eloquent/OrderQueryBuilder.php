@@ -57,7 +57,7 @@ class OrderQueryBuilder extends EloquentQueryBuilder implements QueryBuilder
         });
     }
 
-    protected function column($column): string|Closure
+    protected function column($column)
     {
         if (! is_string($column)) {
             return $column;
