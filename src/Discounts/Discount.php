@@ -221,7 +221,7 @@ class Discount implements Arrayable, ArrayAccess, Augmentable, ContainsQueryable
     private function queryableMethods(): array
     {
         return [
-            'discountType', 'editUrl', 'handle', 'id', 'reference', 'title', 'type', 'updateUrl',
+            'discountType', 'editUrl', 'handle', 'id', 'path', 'reference', 'title', 'type', 'updateUrl',
         ];
     }
 }
