@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.3.3 (2026-04-20)
+
+### What's fixed
+- Add missing 'path' to Discount queryableMethods [#175](https://github.com/duncanmcclean/statamic-cargo/pull/175) by @Jamesking56
+
+
+
 ## v1.3.2 (2026-04-14)
 
 ### What's fixed
