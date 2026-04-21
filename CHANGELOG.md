@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.4.0 (2026-04-21)
+
+### What's new
+- Add PreventRequestForgery to CSRF middleware exclusion for Laravel 13 [#182](https://github.com/duncanmcclean/statamic-cargo/pull/182) by @v-Woody
+
+
+
 ## v1.3.4 (2026-04-20)
 
 ### What's fixed
