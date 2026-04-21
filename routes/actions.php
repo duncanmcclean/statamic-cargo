@@ -29,7 +29,7 @@ Route::name('cargo.')->group(function () {
 
     Route::name('payments.')
         ->prefix('payments')
-        ->withoutMiddleware(['App\Http\Middleware\VerifyCsrfToken', 'Illuminate\Foundation\Http\Middleware\VerifyCsrfToken'])
+        ->withoutMiddleware(['App\Http\Middleware\VerifyCsrfToken', 'Illuminate\Foundation\Http\Middleware\VerifyCsrfToken', 'Illuminate\Foundation\Http\Middleware\PreventRequestForgery'])
         ->group(function () {
             Route::post('{paymentGateway}/webhook', WebhookController::class)->name('webhook');
             Route::match(['get', 'post'], '{paymentGateway}/checkout', CheckoutController::class)->name('checkout');
