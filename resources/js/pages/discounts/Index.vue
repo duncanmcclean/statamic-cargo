@@ -30,14 +30,6 @@ function requestComplete({ items: newItems, parameters }) {
         <Button :href="createUrl" :text="__('Create Discount')" variant="primary" />
     </Header>
 
-    <DiscountsListing
-        sort-column="code"
-        sort-direction="asc"
-        :columns
-        :filters
-        :action-url
-    />
-
     <Listing
         ref="listing"
         :url="cp_url(`discounts`)"
