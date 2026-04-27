@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static void delete(string $handle)
  * @method static \Statamic\Fields\Blueprint blueprint()
  *
- * @see \DuncanMcClean\Cargo\Taxes\TaxClassRepository
+ * @see \DuncanMcClean\Cargo\Taxes\File\TaxClassRepository
  */
 class TaxClass extends Facade
 {

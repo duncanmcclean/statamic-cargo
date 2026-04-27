@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Taxes;
+namespace DuncanMcClean\Cargo\Taxes\File;
 
 use DuncanMcClean\Cargo\Contracts\Taxes\TaxZone;
 use DuncanMcClean\Cargo\Contracts\Taxes\TaxZoneRepository as Contract;
@@ -150,9 +150,9 @@ class TaxZoneRepository implements Contract
         ]);
     }
 
-    private function getPath(): string
+    protected function getPath(): string
     {
-        return base_path('content/cargo/tax-zones.yaml');
+        return config('statamic.cargo.taxes.tax_zones.path', base_path('content/cargo/tax-zones.yaml'));
     }
 
     public static function bindings(): array
