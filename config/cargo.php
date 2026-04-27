@@ -49,12 +49,19 @@ return [
         | Storage
         |--------------------------------------------------------------------------
         |
-        | Discounts are stored in flat files. If you need to change the location of
-        | them, you can do that here.
+        | By default, discounts are stored in flat files. However, it's also possible
+        | to store them in a database by changing the "driver" to "eloquent".
+        |
+        | Learn more at https://builtwithcargo.dev/docs/discounts
         |
         */
 
+        'driver' => 'file',
+
         'directory' => base_path('content/cargo/discounts'),
+
+        // 'model' => \DuncanMcClean\Cargo\Discounts\Eloquent\DiscountModel::class,
+        // 'table' => 'cargo_discounts',
 
     ],
 
