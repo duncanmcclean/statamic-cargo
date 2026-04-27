@@ -42,9 +42,8 @@ class DiscountCalculation implements Arrayable
     public function toArray(): array
     {
         return [
-            'rate' => $this->rate,
+            'discount' => $this->discount,
             'description' => $this->description,
-            'zone' => $this->zone,
             'amount' => $this->amount,
         ];
     }
