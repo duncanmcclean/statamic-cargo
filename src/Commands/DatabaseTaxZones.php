@@ -70,6 +70,12 @@ class DatabaseTaxZones extends Command
 
         $taxZones = Facades\TaxZone::all();
 
+        if ($taxZones->isEmpty()) {
+            $this->components->warn('Nothing to import.');
+
+            return $this;
+        }
+
         $progress = progress(label: 'Importing tax zones', steps: $taxZones->count());
 
         $progress->start();

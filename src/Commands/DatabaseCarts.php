@@ -88,6 +88,12 @@ class DatabaseCarts extends Command
 
         $query = Cart::query();
 
+        if ($query->count() === 0) {
+            $this->components->warn('Nothing to import.');
+
+            return $this;
+        }
+
         $progress = progress(label: 'Importing carts', steps: $query->count());
 
         $progress->start();

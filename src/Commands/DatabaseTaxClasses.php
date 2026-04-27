@@ -70,6 +70,12 @@ class DatabaseTaxClasses extends Command
 
         $taxClasses = Facades\TaxClass::all();
 
+        if ($taxClasses->isEmpty()) {
+            $this->components->warn('Nothing to import.');
+
+            return $this;
+        }
+
         $progress = progress(label: 'Importing tax classes', steps: $taxClasses->count());
 
         $progress->start();
