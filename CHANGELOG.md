@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.5.0 (2026-04-27)
+
+### What's new
+- Support storing discounts in the database [#184](https://github.com/duncanmcclean/statamic-cargo/pull/184) by @duncanmcclean
+- Support storing tax classes & zones in the database [#185](https://github.com/duncanmcclean/statamic-cargo/pull/185) by @duncanmcclean
+- Add `cargo:database` command [#186](https://github.com/duncanmcclean/statamic-cargo/pull/186) by @duncanmcclean
+
+
+
 ## v1.4.0 (2026-04-21)
 
 ### What's new
