@@ -25,6 +25,36 @@ Discounts can be configured using various conditions and limitations. Most of th
 
 Cargo supports "Amount off" and "Percentage off" discount types out-of-the-box, with more on the way. If you need to, you can also [build your own discount type](#building-your-own-discount-type).
 
+## Storage
+Out of the box, discounts are stored as YAML files in the `content/cargo/discounts` directory. If you wish, you can change the directory in the `cargo.php` config file:
+
+```php
+// config/statamic/cargo.php
+
+'discounts' => [
+    'repository' => 'file',  
+  
+    'directory' => base_path('discounts'),
+],
+```
+
+### Database
+You can also opt to store discounts in a traditional database, which might be useful if you have a large number of discounts.
+
+To move discounts to the database, run this command:
+
+```
+php please cargo:database-discounts
+```
+
+It'll automatically publish database migrations, update your `cargo.php` config file and import existing discounts into the database.
+
+If needed, you can customise the eloquent model Cargo uses by updating the `model` key in the `cargo.php` config file. 
+
+:::tip warning
+Make sure you have a backup strategy in place before moving discounts to the database, in case the worst happens. Both [Laravel Forge](https://forge.laravel.com/docs/servers/backups) and [Ploi](https://ploi.io/features/database-backups) have built-in solutions for database backups.
+:::
+
 ## Redeem discount codes
 You can redeem discount codes using the `{{ cart:update }}` form. Simply provide a `discount_code` input so the customer can enter their discount code.
 
