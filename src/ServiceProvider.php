@@ -158,8 +158,8 @@ class ServiceProvider extends AddonServiceProvider
             \DuncanMcClean\Cargo\Contracts\Discounts\DiscountRepository::class => \DuncanMcClean\Cargo\Stache\Repositories\DiscountRepository::class,
             \DuncanMcClean\Cargo\Contracts\Orders\OrderRepository::class => \DuncanMcClean\Cargo\Stache\Repositories\OrderRepository::class,
             \DuncanMcClean\Cargo\Contracts\Products\ProductRepository::class => \DuncanMcClean\Cargo\Products\ProductRepository::class,
-            \DuncanMcClean\Cargo\Contracts\Taxes\TaxClassRepository::class => \DuncanMcClean\Cargo\Taxes\TaxClassRepository::class,
-            \DuncanMcClean\Cargo\Contracts\Taxes\TaxZoneRepository::class => \DuncanMcClean\Cargo\Taxes\TaxZoneRepository::class,
+            \DuncanMcClean\Cargo\Contracts\Taxes\TaxClassRepository::class => \DuncanMcClean\Cargo\Taxes\File\TaxClassRepository::class,
+            \DuncanMcClean\Cargo\Contracts\Taxes\TaxZoneRepository::class => \DuncanMcClean\Cargo\Taxes\File\TaxZoneRepository::class,
         ])->each(function ($concrete, $abstract) {
             if (! $this->app->bound($abstract)) {
                 Statamic::repository($abstract, $concrete);
@@ -181,6 +181,17 @@ class ServiceProvider extends AddonServiceProvider
             );
         }
 
+        if (config('statamic.cargo.discounts.driver') === 'eloquent') {
+            $this->app->bind('cargo.discounts.eloquent.model', function () {
+                return config('statamic.cargo.discounts.model', \DuncanMcClean\Cargo\Discounts\Eloquent\DiscountModel::class);
+            });
+
+            Statamic::repository(
+                \DuncanMcClean\Cargo\Contracts\Discounts\DiscountRepository::class,
+                \DuncanMcClean\Cargo\Discounts\Eloquent\DiscountRepository::class
+            );
+        }
+
         if (config('statamic.cargo.orders.driver') === 'eloquent') {
             $this->app->bind('cargo.orders.eloquent.model', function () {
                 return config('statamic.cargo.orders.model', \DuncanMcClean\Cargo\Orders\Eloquent\OrderModel::class);
@@ -196,14 +207,17 @@ class ServiceProvider extends AddonServiceProvider
             );
         }
 
-        if (config('statamic.cargo.discounts.driver') === 'eloquent') {
-            $this->app->bind('cargo.discounts.eloquent.model', function () {
-                return config('statamic.cargo.discounts.model', \DuncanMcClean\Cargo\Discounts\Eloquent\DiscountModel::class);
-            });
-
+        if (config('statamic.cargo.taxes.tax_classes.driver') === 'eloquent') {
             Statamic::repository(
-                \DuncanMcClean\Cargo\Contracts\Discounts\DiscountRepository::class,
-                \DuncanMcClean\Cargo\Discounts\Eloquent\DiscountRepository::class
+                \DuncanMcClean\Cargo\Contracts\Taxes\TaxClassRepository::class,
+                \DuncanMcClean\Cargo\Taxes\Eloquent\TaxClassRepository::class
+            );
+        }
+
+        if (config('statamic.cargo.taxes.tax_zones.driver') === 'eloquent') {
+            Statamic::repository(
+                \DuncanMcClean\Cargo\Contracts\Taxes\TaxZoneRepository::class,
+                \DuncanMcClean\Cargo\Taxes\Eloquent\TaxZoneRepository::class
             );
         }
 

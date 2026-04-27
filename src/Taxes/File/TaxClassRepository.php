@@ -1,6 +1,6 @@
 <?php
 
-namespace DuncanMcClean\Cargo\Taxes;
+namespace DuncanMcClean\Cargo\Taxes\File;
 
 use DuncanMcClean\Cargo\Contracts\Taxes\TaxClass;
 use DuncanMcClean\Cargo\Contracts\Taxes\TaxClassRepository as Contract;
@@ -85,9 +85,9 @@ class TaxClassRepository implements Contract
         ]);
     }
 
-    private function getPath(): string
+    protected function getPath(): string
     {
-        return base_path('content/cargo/tax-classes.yaml');
+        return config('statamic.cargo.taxes.tax_classes.path', base_path('content/cargo/tax-classes.yaml'));
     }
 
     public static function bindings(): array
