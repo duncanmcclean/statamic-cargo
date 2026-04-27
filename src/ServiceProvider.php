@@ -181,6 +181,17 @@ class ServiceProvider extends AddonServiceProvider
             );
         }
 
+        if (config('statamic.cargo.discounts.driver') === 'eloquent') {
+            $this->app->bind('cargo.discounts.eloquent.model', function () {
+                return config('statamic.cargo.discounts.model', \DuncanMcClean\Cargo\Discounts\Eloquent\DiscountModel::class);
+            });
+
+            Statamic::repository(
+                \DuncanMcClean\Cargo\Contracts\Discounts\DiscountRepository::class,
+                \DuncanMcClean\Cargo\Discounts\Eloquent\DiscountRepository::class
+            );
+        }
+
         if (config('statamic.cargo.orders.driver') === 'eloquent') {
             $this->app->bind('cargo.orders.eloquent.model', function () {
                 return config('statamic.cargo.orders.model', \DuncanMcClean\Cargo\Orders\Eloquent\OrderModel::class);
