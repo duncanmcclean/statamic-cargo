@@ -74,6 +74,12 @@ class DatabaseDiscounts extends Command
 
         $query = Discount::query();
 
+        if ($query->count() === 0) {
+            $this->components->warn('Nothing to import.');
+
+            return $this;
+        }
+
         $progress = progress(label: 'Importing discounts', steps: $query->count());
 
         $progress->start();

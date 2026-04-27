@@ -20,10 +20,31 @@ You can create discounts in the Control Panel.
 
 Discounts can be configured using various conditions and limitations. Most of the options are pretty self-explanatory:
 
-
 ![Discount Create Form](/images/discount-publish-form.png)
 
 Cargo supports "Amount off" and "Percentage off" discount types out-of-the-box, with more on the way. If you need to, you can also [build your own discount type](#building-your-own-discount-type).
+
+## Redeem discount codes
+You can redeem discount codes using the `{{ cart:update }}` form. Simply provide a `discount_code` input so the customer can enter their discount code.
+
+::tabs  
+::tab antlers
+```antlers  
+{{ cart:update }}    
+    <input type="text" name="discount_code" value="{{ discount_code }}" required>    
+	<button>Update</button>  
+{{ /cart:update }}  
+```  
+::tab blade
+```blade  
+<s:cart:update>    
+    <input type="text" name="discount_code" value="{{ $discount_code }}" required>
+	<button>Update</button>  
+</s:cart:update>  
+```  
+::
+
+When the customer attempts to use an invalid discount code, you use Statamic's [`{{ get_errors }}`](https://statamic.dev/tags/get_errors) tag to display the validation error.
 
 ## Storage
 Out of the box, discounts are stored as YAML files in the `content/cargo/discounts` directory. If you wish, you can change the directory in the `cargo.php` config file:
@@ -54,28 +75,6 @@ If needed, you can customise the eloquent model Cargo uses by updating the `mode
 :::tip warning
 Make sure you have a backup strategy in place before moving discounts to the database, in case the worst happens. Both [Laravel Forge](https://forge.laravel.com/docs/servers/backups) and [Ploi](https://ploi.io/features/database-backups) have built-in solutions for database backups.
 :::
-
-## Redeem discount codes
-You can redeem discount codes using the `{{ cart:update }}` form. Simply provide a `discount_code` input so the customer can enter their discount code.
-
-::tabs  
-::tab antlers  
-```antlers  
-{{ cart:update }}    
-    <input type="text" name="discount_code" value="{{ discount_code }}" required>    
-	<button>Update</button>  
-{{ /cart:update }}  
-```  
-::tab blade  
-```blade  
-<s:cart:update>    
-    <input type="text" name="discount_code" value="{{ $discount_code }}" required>
-	<button>Update</button>  
-</s:cart:update>  
-```  
-::
-
-When the customer attempts to use an invalid discount code, you use Statamic's [`{{ get_errors }}`](https://statamic.dev/tags/get_errors) tag to display the validation error. 
 
 ## Building your own discount type
 If you need to support some kind of discount that Cargo doesn't already support, you can build your own discount type.

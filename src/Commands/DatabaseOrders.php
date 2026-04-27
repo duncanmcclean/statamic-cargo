@@ -88,6 +88,12 @@ class DatabaseOrders extends Command
 
         $query = Order::query();
 
+        if ($query->count() === 0) {
+            $this->components->warn('Nothing to import.');
+
+            return $this;
+        }
+
         $progress = progress(label: 'Importing orders', steps: $query->count());
 
         $progress->start();
