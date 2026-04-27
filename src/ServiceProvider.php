@@ -158,8 +158,8 @@ class ServiceProvider extends AddonServiceProvider
             \DuncanMcClean\Cargo\Contracts\Discounts\DiscountRepository::class => \DuncanMcClean\Cargo\Stache\Repositories\DiscountRepository::class,
             \DuncanMcClean\Cargo\Contracts\Orders\OrderRepository::class => \DuncanMcClean\Cargo\Stache\Repositories\OrderRepository::class,
             \DuncanMcClean\Cargo\Contracts\Products\ProductRepository::class => \DuncanMcClean\Cargo\Products\ProductRepository::class,
-            \DuncanMcClean\Cargo\Contracts\Taxes\TaxClassRepository::class => \DuncanMcClean\Cargo\Taxes\TaxClassRepository::class,
-            \DuncanMcClean\Cargo\Contracts\Taxes\TaxZoneRepository::class => \DuncanMcClean\Cargo\Taxes\TaxZoneRepository::class,
+            \DuncanMcClean\Cargo\Contracts\Taxes\TaxClassRepository::class => \DuncanMcClean\Cargo\Taxes\File\TaxClassRepository::class,
+            \DuncanMcClean\Cargo\Contracts\Taxes\TaxZoneRepository::class => \DuncanMcClean\Cargo\Taxes\File\TaxZoneRepository::class,
         ])->each(function ($concrete, $abstract) {
             if (! $this->app->bound($abstract)) {
                 Statamic::repository($abstract, $concrete);
@@ -193,6 +193,20 @@ class ServiceProvider extends AddonServiceProvider
             Statamic::repository(
                 \DuncanMcClean\Cargo\Contracts\Orders\OrderRepository::class,
                 \DuncanMcClean\Cargo\Orders\Eloquent\OrderRepository::class
+            );
+        }
+
+        if (config('statamic.cargo.taxes.tax_classes.driver') === 'eloquent') {
+            Statamic::repository(
+                \DuncanMcClean\Cargo\Contracts\Taxes\TaxClassRepository::class,
+                \DuncanMcClean\Cargo\Taxes\Eloquent\TaxClassRepository::class
+            );
+        }
+
+        if (config('statamic.cargo.taxes.tax_zones.driver') === 'eloquent') {
+            Statamic::repository(
+                \DuncanMcClean\Cargo\Contracts\Taxes\TaxZoneRepository::class,
+                \DuncanMcClean\Cargo\Taxes\Eloquent\TaxZoneRepository::class
             );
         }
 

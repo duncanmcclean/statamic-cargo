@@ -187,6 +187,44 @@ return [
 
         'price_includes_tax' => true,
 
+        /*
+        |--------------------------------------------------------------------------
+        | Tax Classes
+        |--------------------------------------------------------------------------
+        |
+        | By default, tax classes are stored in a flat file. However, it's also
+        | possible to store them in a database by changing the "driver" to "eloquent".
+        |
+        */
+
+        'tax_classes' => [
+            'driver' => 'file',
+
+            'path' => base_path('content/cargo/tax-classes.yaml'),
+
+            // 'model' => \DuncanMcClean\Cargo\Taxes\Eloquent\TaxClassModel::class,
+            // 'table' => 'cargo_tax_classes',
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Tax Zones
+        |--------------------------------------------------------------------------
+        |
+        | By default, tax zones are stored in a flat file. However, it's also
+        | possible to store them in a database by changing the "driver" to "eloquent".
+        |
+        */
+
+        'tax_zones' => [
+            'driver' => 'file',
+
+            'path' => base_path('content/cargo/tax-zones.yaml'),
+
+            // 'model' => \DuncanMcClean\Cargo\Taxes\Eloquent\TaxZoneModel::class,
+            // 'table' => 'cargo_tax_zones',
+        ],
+
     ],
 
     'shipping' => [

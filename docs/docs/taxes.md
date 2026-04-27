@@ -87,6 +87,28 @@ If needed, you can also display taxes on a more granular level, looping through 
 
 [//]: # (```)
 
+## Database
+
+By default, tax classes and tax zones are stored in flat files. However, you can opt to store them in a database instead.
+
+### Tax Classes
+To move tax classes to the database, run this command:
+
+```
+php please cargo:database-tax-classes
+```
+
+It'll automatically publish database migrations, update your `cargo.php` config file and import existing tax classes into the database.
+
+### Tax Zones
+To move tax zones to the database, run this command:
+
+```
+php please cargo:database-tax-zones
+```
+
+It'll automatically publish database migrations, update your `cargo.php` config file and import existing tax zones into the database.
+
 ## Custom Tax Driver
 If you need to integrate with a third-party taxation system, or just prefer to handle it yourself, you can create a custom tax driver.
 
