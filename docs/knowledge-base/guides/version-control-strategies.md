@@ -21,7 +21,5 @@ Since you're no longer "backing up" data into version control, you should make s
 This may be via a server provider, or using a package like [`spatie/laravel-backup`](https://github.com/spatie/laravel-backup) to backup files to an S3-compatible filesystem.
 :::
 
-## Move carts, orders & users into a database
-The other approach is to move carts, orders and users into the database. 
-
-Cargo provides commands for migrating [carts](/docs/carts#database) and [orders](/docs/orders#database) into the database. There's also a guide on the [Statamic documentation](https://statamic.dev/tips/storing-users-in-a-database) covering the process of moving users into the database.
+## Move data into a database
+The other approach is to move carts, orders, users, etc. into a database. You can learn more about doing this in the [dedicated database guide](/knowledge-base/guides/database).
