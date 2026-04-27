@@ -61,21 +61,31 @@ If needed, you can also display taxes on a more granular level, looping through 
 ```
 ::
 
-## Shipping
-Cargo supports two different methods of calculating shipping taxes:
+[//]: # (## Shipping)
 
-* **Tax Class:** Creates a "Shipping" tax class, allowing to assign a specific tax rate for all shipping costs.
-* **Highest Rate:** Charges the highest tax rate from the cart's line items.
+[//]: # (Cargo supports two different methods of calculating shipping taxes:)
 
-You can configure the method used in your `cargo.php` config file:
+[//]: # ()
+[//]: # (* **Tax Class:** Creates a "Shipping" tax class, allowing to assign a specific tax rate for all shipping costs.)
 
-```php
-// config/statamic/cargo.php
+[//]: # (* **Highest Rate:** Charges the highest tax rate from the cart's line items.)
 
-'taxes' => [  
-	'shipping_tax_behaviour' => 'tax_class', // Either "tax_class" or "highest_tax_rate"
-],
-```
+[//]: # ()
+[//]: # (You can configure the method used in your `cargo.php` config file:)
+
+[//]: # ()
+[//]: # (```php)
+
+[//]: # (// config/statamic/cargo.php)
+
+[//]: # ()
+[//]: # ('taxes' => [  )
+
+[//]: # (	'shipping_tax_behaviour' => 'tax_class', // Either "tax_class" or "highest_tax_rate")
+
+[//]: # (],)
+
+[//]: # (```)
 
 ## Custom Tax Driver
 If you need to integrate with a third-party taxation system, or just prefer to handle it yourself, you can create a custom tax driver.
