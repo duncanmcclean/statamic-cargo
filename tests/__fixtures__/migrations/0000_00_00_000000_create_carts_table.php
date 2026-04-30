@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('cargo_carts', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->string('site');
             $table->string('customer')->nullable();
             $table->bigInteger('grand_total');
