@@ -10,8 +10,8 @@ class TaxClassRepository extends FileRepository
 {
     public function all(): Collection
     {
-        return TaxClassModel::query()->get()->map(function (TaxClassModel $model) {
-            return $this->make()->handle($model->handle)->data($model->data ?? []);
+        return TaxClassModel::query()->get()->mapWithKeys(function (TaxClassModel $model) {
+            return [$model->handle => $this->make()->handle($model->handle)->data($model->data ?? [])];
         });
     }
 
