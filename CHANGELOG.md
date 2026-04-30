@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.5.1 (2026-04-30)
+
+### What's fixed
+- Correct `DiscountCalculation` array by @duncanmcclean
+- Add primary keys to UUID columns in migration stubs [#188](https://github.com/duncanmcclean/statamic-cargo/pull/188) by @duncanmcclean
+- Fix Eloquent tax repositories losing handle-based keys [#189](https://github.com/duncanmcclean/statamic-cargo/pull/189) by @duncanmcclean
+
+
+
 ## v1.5.0 (2026-04-27)
 
 ### What's new
