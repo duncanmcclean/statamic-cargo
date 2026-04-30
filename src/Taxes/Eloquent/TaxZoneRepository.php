@@ -10,8 +10,8 @@ class TaxZoneRepository extends FileRepository
 {
     public function all(): Collection
     {
-        return TaxZoneModel::query()->get()->map(function (TaxZoneModel $model) {
-            return $this->make()->handle($model->handle)->data($model->data ?? []);
+        return TaxZoneModel::query()->get()->mapWithKeys(function (TaxZoneModel $model) {
+            return [$model->handle => $this->make()->handle($model->handle)->data($model->data ?? [])];
         });
     }
 
