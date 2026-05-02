@@ -29,6 +29,13 @@ abstract class PaymentGateway
 
     abstract public function process(Order $order): void;
 
+    /**
+     * Called by CreateOrderFromCart immediately after process(). Override in gateway
+     * subclasses to handle any post-creation status checks, such as closing the race
+     * condition where a webhook arrives and is acknowledged before the order exists.
+     */
+    public function afterProcess(Order $order): void {}
+
     abstract public function capture(Order $order): void;
 
     abstract public function cancel(Cart $cart): void;

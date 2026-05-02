@@ -372,6 +372,67 @@ class StripeTest extends TestCase
     }
 
     #[Test]
+    public function it_transitions_order_to_payment_received_when_payment_intent_has_already_succeeded_at_process_time()
+    {
+        $stripePaymentIntent = PaymentIntent::create([
+            'amount' => 1000,
+            'currency' => 'gbp',
+            'payment_method_types' => ['card'],
+        ]);
+
+        $stripePaymentIntent->confirm(['payment_method' => 'pm_card_visa']);
+
+        $order = $this->makeOrder();
+        $order->set('stripe_payment_intent', $stripePaymentIntent->id)->save();
+
+        (new Stripe)->afterProcess($order);
+
+        $order->fresh();
+        $this->assertEquals('payment_received', $order->status()->value);
+    }
+
+    #[Test]
+    public function it_captures_and_transitions_order_when_payment_intent_requires_capture_at_process_time()
+    {
+        $stripePaymentIntent = PaymentIntent::create([
+            'amount' => 1000,
+            'currency' => 'gbp',
+            'payment_method_types' => ['card'],
+            'capture_method' => 'manual',
+        ]);
+
+        $stripePaymentIntent->confirm(['payment_method' => 'pm_card_visa']);
+
+        $order = $this->makeOrder();
+        $order->set('stripe_payment_intent', $stripePaymentIntent->id)->save();
+
+        (new Stripe)->afterProcess($order);
+
+        $stripePaymentIntent = PaymentIntent::retrieve($stripePaymentIntent->id);
+        $this->assertEquals('succeeded', $stripePaymentIntent->status);
+
+        $order->fresh();
+        $this->assertEquals('payment_received', $order->status()->value);
+    }
+
+    #[Test]
+    public function it_does_nothing_in_after_process_when_payment_intent_is_still_pending()
+    {
+        $stripePaymentIntent = PaymentIntent::create([
+            'amount' => 1000,
+            'currency' => 'gbp',
+        ]);
+
+        $order = $this->makeOrder();
+        $order->set('stripe_payment_intent', $stripePaymentIntent->id)->save();
+
+        (new Stripe)->afterProcess($order);
+
+        $order->fresh();
+        $this->assertEquals('payment_pending', $order->status()->value);
+    }
+
+    #[Test]
     public function it_refunds_a_payment()
     {
         $stripePaymentIntent = PaymentIntent::create([

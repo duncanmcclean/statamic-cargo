@@ -50,6 +50,7 @@ class CreateOrderFromCart
             } else {
                 $paymentGateway->process($order);
                 $order->set('payment_gateway', $paymentGateway::handle())->save();
+                $paymentGateway->afterProcess($order);
             }
 
             app(UpdateStock::class)->handle($order);

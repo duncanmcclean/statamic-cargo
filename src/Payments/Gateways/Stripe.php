@@ -96,6 +96,31 @@ class Stripe extends PaymentGateway
         ]);
     }
 
+    /**
+     * Close the race condition between the checkout redirect and Stripe's webhooks.
+     *
+     * When capture_method is manual, Stripe fires payment_intent.amount_capturable_updated
+     * almost immediately after the customer confirms payment on the Stripe-hosted page.
+     * In practice this webhook arrives at the endpoint before CreateOrderFromCart has
+     * finished persisting the order. The webhook handler finds no order, acknowledges
+     * the request, and Stripe marks it complete. It will never retry.
+     *
+     * By checking the PaymentIntent status synchronously here we close that window: if
+     * payment has already been authorised or captured by the time we reach this point,
+     * we transition the order status immediately rather than waiting for a webhook that
+     * may have already been consumed.
+     */
+    public function afterProcess(Order $order): void
+    {
+        $paymentIntent = PaymentIntent::retrieve($order->get('stripe_payment_intent'));
+
+        if ($paymentIntent->status === PaymentIntent::STATUS_SUCCEEDED) {
+            $order->status(OrderStatus::PaymentReceived)->save();
+        } elseif ($paymentIntent->status === PaymentIntent::STATUS_REQUIRES_CAPTURE) {
+            $this->capture($order);
+        }
+    }
+
     public function capture(Order $order): void
     {
         $paymentIntent = PaymentIntent::retrieve($order->get('stripe_payment_intent'));
