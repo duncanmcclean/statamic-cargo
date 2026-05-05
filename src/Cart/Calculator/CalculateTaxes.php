@@ -20,8 +20,8 @@ class CalculateTaxes
         $cart->lineItems()->each(function (LineItem $lineItem) use ($cart, &$taxBreakdowns) {
             $lineItemTotal = $lineItem->total();
 
-            if ($lineItem->get('discount_amount')) {
-                $lineItemTotal -= $lineItem->get('discount_amount');
+            if ($lineItem->discountTotal()) {
+                $lineItemTotal -= $lineItem->discountTotal();
             }
 
             $taxBreakdown = app(TaxDriver::class)

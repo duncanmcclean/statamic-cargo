@@ -68,15 +68,16 @@ class Mollie extends PaymentGateway
                 ->map(function (LineItem $lineItem) use ($cart) {
                     // Mollie expects the unit price to include taxes. However, we only apply taxes to the line item total.
                     // So, we need to do some calculations to figure out what the unit price would be including tax.
-                    $unitPrice = ($lineItem->total() + $lineItem->get('discount_amount', 0)) / $lineItem->quantity();
+                    $discountAmount = $lineItem->discountTotal() ?? 0;
+                    $unitPrice = ($lineItem->total() + $discountAmount) / $lineItem->quantity();
 
                     return [
                         'type' => $lineItem->product()->get('type', 'physical'),
                         'description' => $lineItem->product()->get('title'),
                         'quantity' => $lineItem->quantity(),
                         'unitPrice' => $this->formatAmount(site: $cart->site(), amount: $unitPrice),
-                        'discountAmount' => $lineItem->has('discount_amount')
-                            ? $this->formatAmount(site: $cart->site(), amount: $lineItem->get('discount_amount'))
+                        'discountAmount' => $discountAmount > 0
+                            ? $this->formatAmount(site: $cart->site(), amount: $discountAmount)
                             : null,
                         'totalAmount' => $this->formatAmount(site: $cart->site(), amount: $lineItem->total()),
                         'vatRate' => number_format(collect($lineItem->get('tax_breakdown'))->sum('rate'), 2, '.', ''),
