@@ -48,8 +48,8 @@ class CreateOrderFromCart
             if ($order->isFree()) {
                 $order->status(OrderStatus::PaymentReceived)->save();
             } else {
-                $paymentGateway->process($order);
                 $order->set('payment_gateway', $paymentGateway::handle())->save();
+                $paymentGateway->process($order);
             }
 
             app(UpdateStock::class)->handle($order);
