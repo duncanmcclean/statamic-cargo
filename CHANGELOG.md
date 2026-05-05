@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.5.2 (2026-05-05)
+
+### What's fixed
+- Fix discount not applied to tax calculation and Mollie line items [#193](https://github.com/duncanmcclean/statamic-cargo/pull/193) by @eugene-karuna
+- Make line items count string translatable [#194](https://github.com/duncanmcclean/statamic-cargo/pull/194) by @duncanmcclean
+- Fix potential race condition between webhook and order save [#195](https://github.com/duncanmcclean/statamic-cargo/pull/195) by @duncanmcclean
+
+
+
 ## v1.5.1 (2026-04-30)
 
 ### What's fixed
