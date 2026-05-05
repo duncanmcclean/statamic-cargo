@@ -296,6 +296,16 @@ class CheckoutTest extends TestCase
         app(CreateOrderFromCart::class)->handle($cart, new FakePaymentGateway);
     }
 
+    #[Test]
+    public function order_status_is_not_overwritten_when_webhook_fires_during_process()
+    {
+        $cart = $this->makeCart();
+
+        $order = app(CreateOrderFromCart::class)->handle($cart, new WebhookRacingPaymentGateway);
+
+        $this->assertEquals(OrderStatus::PaymentReceived, $order->fresh()->status());
+    }
+
     private function makeCart(array $data = [])
     {
         $collection = tap(Collection::make('products'))->save();
@@ -358,6 +368,45 @@ class FakePaymentGateway extends PaymentGateway
     {
         //
 
+        return response();
+    }
+
+    public function refund(Order $order, int $amount): void
+    {
+        //
+    }
+}
+
+class WebhookRacingPaymentGateway extends PaymentGateway
+{
+    public static $handle = 'webhook_racing';
+
+    public function setup(\DuncanMcClean\Cargo\Contracts\Cart\Cart $cart): array
+    {
+        return [];
+    }
+
+    public function process(Order $order): void
+    {
+        // Simulate the webhook arriving during process() and updating the order
+        // status via a separate object instance, like Stripe's webhook would in
+        // a separate HTTP request (especially with the Eloquent driver).
+        $webhookOrder = clone $order;
+        $webhookOrder->status(OrderStatus::PaymentReceived)->save();
+    }
+
+    public function capture(Order $order): void
+    {
+        //
+    }
+
+    public function cancel(\DuncanMcClean\Cargo\Contracts\Cart\Cart $cart): void
+    {
+        //
+    }
+
+    public function webhook(Request $request): Response
+    {
         return response();
     }
 
