@@ -210,7 +210,7 @@ class CalculateTaxesTest extends TestCase
 
         $cart = Cart::make()
             ->lineItems([
-                ['id' => 'one', 'product' => $product->id(), 'quantity' => 1, 'total' => 2500, 'discount_amount' => 500],
+                ['id' => 'one', 'product' => $product->id(), 'quantity' => 1, 'total' => 2500, 'discount_total' => 500],
             ])
             ->data([
                 'shipping_address' => [
