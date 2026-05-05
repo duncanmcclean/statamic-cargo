@@ -131,7 +131,7 @@ class MollieTest extends TestCase
                 [
                     'product' => 'product-id',
                     'quantity' => 1,
-                    'discount_amount' => 100,
+                    'discount_total' => 100,
                     'unit_price' => 1000,
                     'sub_total' => 1000,
                     'tax_total' => 150,
