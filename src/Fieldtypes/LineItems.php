@@ -2,7 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
-use Illuminate\Support\Str;
 use Statamic\Fields\Fieldtype;
 
 class LineItems extends Fieldtype
@@ -16,6 +15,6 @@ class LineItems extends Fieldtype
 
     public function preProcessIndex($data): string
     {
-        return $data->count().' '.Str::plural('line item', $data->count());
+        return trans_choice('{1} :count line item|[2,*] :count line items', $data->count());
     }
 }
