@@ -23,7 +23,7 @@ use Statamic\Support\Arr;
 
 class Mollie extends PaymentGateway
 {
-    private $mollie;
+    protected $mollie;
 
     public function __construct()
     {
@@ -204,7 +204,7 @@ class Mollie extends PaymentGateway
         ];
     }
 
-    private function formatAmount(Site $site, int $amount): array
+    protected function formatAmount(Site $site, int $amount): array
     {
         return [
             'currency' => Str::upper($site->attribute('currency')),
