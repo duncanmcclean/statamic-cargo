@@ -88,7 +88,7 @@ class Stripe extends PaymentGateway
     public function process(Order $order): void
     {
         PaymentIntent::update($order->get('stripe_payment_intent'), [
-            'description' => __('Order #:orderNumber', ['orderNumber' => $order->orderNumber()]),
+            'description' => str_replace(':orderNumber', $order->orderNumber(), $this->config()->get('description', 'Order #:orderNumber')),
             'metadata' => [
                 'order_id' => $order->id(),
                 'order_number' => $order->orderNumber(),

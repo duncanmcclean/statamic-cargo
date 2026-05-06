@@ -133,7 +133,7 @@ class Mollie extends PaymentGateway
         }
 
         $this->mollie->payments->update($payment->id, [
-            'description' => __('Order #:orderNumber', ['orderNumber' => $order->orderNumber()]),
+            'description' => str_replace(':orderNumber', $order->orderNumber(), $this->config()->get('description', 'Order #:orderNumber')),
             'metadata' => array_merge((array) $payment->metadata, [
                 'order_id' => $order->id(),
                 'order_number' => $order->orderNumber(),
