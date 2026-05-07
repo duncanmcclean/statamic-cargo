@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.6.0 (2026-05-07)
+
+### What's new
+- Make it possible to customise Stripe & Mollie payment descriptions [#197](https://github.com/duncanmcclean/statamic-cargo/pull/197) by @eugene-karuna
+
+### What's fixed
+- Add German translations [#196](https://github.com/duncanmcclean/statamic-cargo/pull/196) by @eugene-karuna
+
+
+
 ## v1.5.2 (2026-05-05)
 
 ### What's fixed
