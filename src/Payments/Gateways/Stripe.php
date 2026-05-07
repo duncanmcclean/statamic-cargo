@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Payments\Gateways;
 
+use Closure;
 use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Orders\Order;
@@ -18,7 +19,6 @@ use Stripe\Event;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\PaymentIntent;
 use Stripe\Refund;
-use Closure;
 use Stripe\WebhookSignature;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 

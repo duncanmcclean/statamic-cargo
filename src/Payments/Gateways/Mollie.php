@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Payments\Gateways;
 
+use Closure;
 use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Orders\Order;
@@ -18,7 +19,6 @@ use Mollie\Api\MollieApiClient;
 use Mollie\Api\Types\PaymentStatus;
 use Statamic\Contracts\Auth\User;
 use Statamic\Sites\Site;
-use Closure;
 use Statamic\Statamic;
 use Statamic\Support\Arr;
 
