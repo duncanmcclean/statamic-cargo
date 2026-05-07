@@ -18,11 +18,14 @@ use Stripe\Event;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\PaymentIntent;
 use Stripe\Refund;
+use Closure;
 use Stripe\WebhookSignature;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class Stripe extends PaymentGateway
 {
+    protected static ?Closure $paymentDescriptionResolver = null;
+
     public function __construct()
     {
         \Stripe\Stripe::setApiKey($this->config()->get('secret'));
@@ -88,7 +91,9 @@ class Stripe extends PaymentGateway
     public function process(Order $order): void
     {
         PaymentIntent::update($order->get('stripe_payment_intent'), [
-            'description' => str_replace(':orderNumber', $order->orderNumber(), $this->config()->get('description', 'Order #:orderNumber')),
+            'description' => static::$paymentDescriptionResolver
+                ? call_user_func(static::$paymentDescriptionResolver, $order)
+                : __('Order #:orderNumber', ['orderNumber' => $order->orderNumber()]),
             'metadata' => [
                 'order_id' => $order->id(),
                 'order_number' => $order->orderNumber(),
@@ -201,5 +206,10 @@ class Stripe extends PaymentGateway
             __('Payment ID') => "<a href='https://dashboard.stripe.com/payments/{$order->get('stripe_payment_intent')}' target='_blank'>{$order->get('stripe_payment_intent')}</a>",
             __('Amount') => Money::format($order->grandTotal(), $order->site()),
         ];
+    }
+
+    public static function paymentDescription(Closure $callback): void
+    {
+        static::$paymentDescriptionResolver = $callback;
     }
 }
