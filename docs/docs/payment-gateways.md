@@ -302,6 +302,18 @@ For additional security, we recommend copying the "Webhook Secret" into your `.e
 STRIPE_WEBHOOK_SECRET=whsec_...
 ```
 
+### Payment Description
+By default, the payment description will be `Order #1234`. If necessary, you can customize this by calling the `Stripe::paymentDescription()` hook in your `AppServiceProvider`:
+
+```php
+use DuncanMcClean\Cargo\Contracts\Orders\Order;
+use DuncanMcClean\Cargo\Payments\Gateways\Stripe;
+
+Stripe::paymentDescription(function (Order $order) {
+    return "Acme Store - {$order->orderNumber()}";
+});
+```
+
 ## Mollie
 ### Payment Form
 :::tip note
@@ -335,6 +347,18 @@ However, when you're developing locally, your local development site won't be ac
 You can workaround this by setting up a tunneling service, like [Expose](https://expose.dev) or [Ngrok](https://ngrok.com), which will provide you with a publicly accessible URL that Mollie can use to talk with your local dev site.
 
 You will need to update the `APP_URL` key in your `.env` while your tunnel is active, so the gateway points towards the tunnel.
+
+### Payment Description
+By default, the payment description will be `Order #1234`. If necessary, you can customize this by calling the `Mollie::paymentDescription()` hook in your `AppServiceProvider`:
+
+```php
+use DuncanMcClean\Cargo\Contracts\Orders\Order;
+use DuncanMcClean\Cargo\Payments\Gateways\Mollie;
+
+Mollie::paymentDescription(function (Order $order) {
+    return "Acme Store - {$order->orderNumber()}";
+});
+```
 
 ## Pay on delivery
 In some markets, you may wish to offer "Pay on delivery" instead of requiring payment upfront. To do this, simply add the built-in `pay_on_delivery` payment gateway to your gateways array:

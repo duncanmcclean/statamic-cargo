@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Payments\Gateways;
 
+use Closure;
 use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Orders\Order;
@@ -23,6 +24,8 @@ use Statamic\Support\Arr;
 
 class Mollie extends PaymentGateway
 {
+    protected static ?Closure $paymentDescriptionResolver = null;
+
     private $mollie;
 
     public function __construct()
@@ -133,7 +136,9 @@ class Mollie extends PaymentGateway
         }
 
         $this->mollie->payments->update($payment->id, [
-            'description' => __('Order #:orderNumber', ['orderNumber' => $order->orderNumber()]),
+            'description' => static::$paymentDescriptionResolver
+                ? call_user_func(static::$paymentDescriptionResolver, $order)
+                : __('Order #:orderNumber', ['orderNumber' => $order->orderNumber()]),
             'metadata' => array_merge((array) $payment->metadata, [
                 'order_id' => $order->id(),
                 'order_number' => $order->orderNumber(),
@@ -202,6 +207,11 @@ class Mollie extends PaymentGateway
             __('Payment ID') => $order->get('mollie_payment_id'),
             __('Amount') => Money::format($order->grandTotal(), $order->site()),
         ];
+    }
+
+    public static function paymentDescription(Closure $callback): void
+    {
+        static::$paymentDescriptionResolver = $callback;
     }
 
     private function formatAmount(Site $site, int $amount): array
