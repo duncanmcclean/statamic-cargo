@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.6.1 (2026-05-12)
+
+### What's fixed
+- Prevent errors when viewing orders with deleted products [#200](https://github.com/duncanmcclean/statamic-cargo/pull/200) by @duncanmcclean
+
+
+
 ## v1.6.0 (2026-05-07)
 
 ### What's new
