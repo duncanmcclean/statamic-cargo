@@ -130,7 +130,7 @@ class LineItem
 
     public function hasDownloads(): bool
     {
-        return $this->variant()?->has('downloads') ?? $this->product()->has('downloads');
+        return $this->variant()?->has('downloads') ?? $this->product()?->has('downloads') ?? false;
     }
 
     public function defaultAugmentedArrayKeys()
