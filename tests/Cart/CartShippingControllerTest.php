@@ -7,6 +7,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
+use Tests\Fixtures\ShippingMethods\FakeShippingMethod;
 use Tests\TestCase;
 
 class CartShippingControllerTest extends TestCase
@@ -18,6 +19,26 @@ class CartShippingControllerTest extends TestCase
         parent::setUp();
 
         Cart::forgetCurrentCart();
+    }
+
+    #[Test]
+    public function it_returns_shipping_options()
+    {
+        FakeShippingMethod::register();
+
+        config()->set('statamic.cargo.shipping.methods', [
+            'fake_shipping_method' => [],
+        ]);
+
+        $cart = $this->makeCart();
+        $cart->merge(['shipping_address' => ['country' => 'US']])->save();
+
+        $this
+            ->getJson('/!/cargo/cart/shipping')
+            ->assertOk()
+            ->assertJsonStructure([
+                '*' => ['name', 'price'],
+            ]);
     }
 
     #[Test]
