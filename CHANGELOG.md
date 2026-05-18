@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.6.2 (2026-05-18)
+
+### What's fixed
+- Add `.npmrc` file [#201](https://github.com/duncanmcclean/statamic-cargo/pull/201) by @duncanmcclean
+- Pin GitHub Actions to commit SHAs and add Dependabot config [#203](https://github.com/duncanmcclean/statamic-cargo/pull/203) by @duncanmcclean
+- Fix CartShippingController throwing ValidationException with a string [#206](https://github.com/duncanmcclean/statamic-cargo/pull/206) by @eugene-karuna
+- Fix order search with separate first & last name fields [#208](https://github.com/duncanmcclean/statamic-cargo/pull/208) by @duncanmcclean
+- Bump the github-actions group with 5 updates [#204](https://github.com/duncanmcclean/statamic-cargo/pull/204) by @dependabot
+
+
+
 ## v1.6.1 (2026-05-12)
 
 ### What's fixed
