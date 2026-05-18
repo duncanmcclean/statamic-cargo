@@ -16,12 +16,16 @@ class CartShippingController
 
         $cart = Cart::current();
 
-        if (! $cart->shippingAddress()) {
-            throw new ValidationException('cargo::validation.shipping_address_missing');
+        if (! $cart->hasShippingAddress()) {
+            throw ValidationException::withMessages([
+                'shipping_address' => __('cargo::validation.shipping_address_missing'),
+            ]);
         }
 
         if (! $this->hasPhysicalProducts($cart)) {
-            throw new ValidationException('cargo::validation.no_physical_products');
+            throw ValidationException::withMessages([
+                'line_items' => __('cargo::validation.no_physical_products'),
+            ]);
         }
 
         return ShippingMethod::all()
