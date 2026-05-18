@@ -80,8 +80,16 @@ class OrderController extends CpController
                 ->orWhere('order_number', 'LIKE', '%'.Str::remove('#', $search).'%')
                 ->orWhere(function ($query) use ($search) {
                     $users = User::query()
-                        ->where('name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('email', 'LIKE', '%'.$search.'%')
+                        ->where('email', 'LIKE', '%'.$search.'%')
+                        ->when(User::blueprint()->hasField('first_name'), function ($query) use ($search) {
+                            foreach (explode(' ', $search) as $word) {
+                                $query
+                                    ->orWhere('first_name', 'LIKE', '%'.$word.'%')
+                                    ->orWhere('last_name', 'LIKE', '%'.$word.'%');
+                            }
+                        }, function ($query) use ($search) {
+                            $query->orWhere('name', 'LIKE', '%'.$search.'%');
+                        })
                         ->pluck('id')
                         ->all();
 
