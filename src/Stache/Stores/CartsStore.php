@@ -41,7 +41,8 @@ class CartsStore extends BasicStore
             ->discountTotal(Arr::pull($data, 'discount_total'))
             ->taxTotal(Arr::pull($data, 'tax_total'))
             ->shippingTotal(Arr::pull($data, 'shipping_total'))
-            ->data($data);
+            ->data($data)
+            ->initialPath($path);
     }
 
     protected function extractSiteFromPath($path)

@@ -28,6 +28,7 @@ class DiscountsStore extends BasicStore
             ->handle((new GetSlugFromPath)($path))
             ->title(Arr::pull($data, 'title'))
             ->type(Arr::pull($data, 'type'))
-            ->data($data);
+            ->data($data)
+            ->initialPath($path);
     }
 }
