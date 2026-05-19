@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.6.3 (2026-05-19)
+
+### What's fixed
+- Fix orphaned files when orders, carts, or discounts are resaved [#210](https://github.com/duncanmcclean/statamic-cargo/pull/210) by @duncanmcclean
+
+
+
 ## v1.6.2 (2026-05-18)
 
 ### What's fixed
