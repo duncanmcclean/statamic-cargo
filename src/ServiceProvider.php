@@ -207,14 +207,14 @@ class ServiceProvider extends AddonServiceProvider
             );
         }
 
-        if (config('statamic.cargo.taxes.tax_classes.driver') === 'eloquent') {
+        if (config('cargo.taxes.tax_classes.driver') === 'eloquent') {
             Statamic::repository(
                 \DuncanMcClean\Cargo\Contracts\Taxes\TaxClassRepository::class,
                 \DuncanMcClean\Cargo\Taxes\Eloquent\TaxClassRepository::class
             );
         }
 
-        if (config('statamic.cargo.taxes.tax_zones.driver') === 'eloquent') {
+        if (config('cargo.taxes.tax_zones.driver') === 'eloquent') {
             Statamic::repository(
                 \DuncanMcClean\Cargo\Contracts\Taxes\TaxZoneRepository::class,
                 \DuncanMcClean\Cargo\Taxes\Eloquent\TaxZoneRepository::class
