@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.6.4 (2026-05-21)
+
+### What's fixed
+- Fix: read from `cargo.*` config namespace for tax driver checks [#213](https://github.com/duncanmcclean/statamic-cargo/pull/213) by @v-Woody
+
+
+
 ## v1.6.3 (2026-05-19)
 
 ### What's fixed
