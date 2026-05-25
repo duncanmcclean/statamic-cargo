@@ -53,7 +53,7 @@
             }.bind(this), 150);
         },
 
-        onFocus() {
+        openDropdown() {
             this.open = true;
             this.search = '';
 
@@ -75,7 +75,7 @@
         onKeydown(e) {
             if (!this.open) {
                 if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-                    this.open = true;
+                    this.openDropdown();
                     e.preventDefault();
                 }
 
@@ -128,10 +128,9 @@
             :aria-activedescendant="highlightedIndex >= 0 ? '{{ field_id }}_option_' + highlightedIndex : null"
             :value="open ? search : displayValue"
             @blur="onBlur"
-            @focus="onFocus"
             @keydown="onKeydown"
-            @click="if (!open) onFocus()"
-            @input="search = $event.target.value"
+            @click="if (!open) openDropdown()"
+            @input="search = $event.target.value; if (!open) openDropdown()"
             {{ if autocomplete }}autocomplete="{{ autocomplete }}"{{ /if }}
             {{ if placeholder }}placeholder="{{ placeholder | trans }}"{{ /if }}
             {{ if required }}required aria-required="true"{{ /if }}
