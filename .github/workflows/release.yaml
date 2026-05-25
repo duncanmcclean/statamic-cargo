@@ -7,14 +7,18 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   release:
     name: Prepare & Create Release
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      issues: write
-      pull-requests: write
+      contents: write # Create releases and upload assets
+      issues: write # Comment on related issues
+      pull-requests: write # Comment on related PRs
     steps:
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -54,8 +58,10 @@ jobs:
 
       - name: Determine prerelease status
         id: prerelease
+        env:
+          REF: ${{ github.ref }}
         run: |
-          if [[ "${{ github.ref }}" == *"-alpha"* ]] || [[ "${{ github.ref }}" == *"-beta"* ]]; then
+          if [[ "$REF" == *"-alpha"* ]] || [[ "$REF" == *"-beta"* ]]; then
             echo "flag=--prerelease" >> $GITHUB_OUTPUT
           else
             echo "flag=" >> $GITHUB_OUTPUT
@@ -66,11 +72,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG_NAME: ${{ github.ref_name }}
           CHANGELOG: ${{ steps.changelog.outputs.text }}
+          PRERELEASE_FLAG: ${{ steps.prerelease.outputs.flag }}
         run: |
           gh release create "$TAG_NAME" \
             --title "$TAG_NAME" \
             --notes "$CHANGELOG" \
-            ${{ steps.prerelease.outputs.flag }} \
+            $PRERELEASE_FLAG \
             ./resources/dist.tar.gz \
             ./resources/dist-checkout.tar.gz
 
