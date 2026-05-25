@@ -1,0 +1,190 @@
+{{#
+    @name Combobox
+    @desc Similar to a <select> element, but with search.
+    @param* name The name of the combobox field.
+    @param* label The label for the combobox field.
+    @param autocomplete The autocomplete attribute for the combobox field.
+    @param placeholder The placeholder text.
+    @param required Boolean. Whether the field is required.
+    @param model The Alpine property to bind the selected value to.
+    @param options The name of an Alpine property containing the options array.
+    @param value_key The property name for option values. Default: `value`
+    @param display_key The property name for option labels. Default: `label`
+#}}
+
+{{ field_id = name | replace('[', '_') | replace(']', '') }}
+{{ unless value_key }}{{ value_key = 'value' }}{{ /unless }}
+{{ unless display_key }}{{ display_key = 'label' }}{{ /unless }}
+
+<div
+    x-data="{
+        open: false,
+        search: '',
+        highlightedIndex: -1,
+
+        get options() {
+            return {{ options }} ?? [];
+        },
+
+        get filtered() {
+            if (!this.search) return this.options;
+
+            const searchQuery = this.search.toLowerCase();
+            return this.options.filter((option) => option.{{ display_key }}.toLowerCase().includes(searchQuery));
+        },
+
+        get displayValue() {
+            const option = this.options.find((option) => option.{{ value_key }} === {{ model }});
+            return option?.{{ display_key }};
+        },
+
+        select(option) {
+            {{ model }} = option.{{ value_key }};
+            this.search = '';
+            this.open = false;
+            this.highlightedIndex = -1;
+        },
+
+        onBlur() {
+            setTimeout(function() {
+                this.open = false;
+                this.search = '';
+                this.highlightedIndex = -1;
+            }.bind(this), 150);
+        },
+
+        onFocus() {
+            this.open = true;
+            this.search = '';
+
+            const selectedIndex = this.options.findIndex((option) => option.{{ value_key }} === {{ model }});
+            this.highlightedIndex = selectedIndex >= 0 ? selectedIndex : -1;
+
+            if (selectedIndex >= 0) {
+                this.$nextTick(function() {
+                    const list = this.$root.querySelector('ul');
+                    const items = list?.querySelectorAll('li[x-on\\:mousedown\\.prevent]');
+                    const item = items?.[selectedIndex];
+                    if (item && list) {
+                        list.scrollTop = item.offsetTop - list.offsetTop;
+                    }
+                }.bind(this));
+            }
+        },
+
+        onKeydown(e) {
+            if (!this.open) {
+                if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                    this.open = true;
+                    e.preventDefault();
+                }
+
+                return;
+            }
+
+            switch (e.key) {
+                case 'ArrowDown':
+                    e.preventDefault();
+                    this.highlightedIndex = Math.min(this.highlightedIndex + 1, this.filtered.length - 1);
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    this.highlightedIndex = Math.max(this.highlightedIndex - 1, 0);
+                    break;
+                case 'Enter':
+                    e.preventDefault();
+                    if (this.highlightedIndex >= 0 && this.filtered[this.highlightedIndex]) {
+                        this.select(this.filtered[this.highlightedIndex]);
+                    }
+                    break;
+                case 'Escape':
+                    this.open = false;
+                    this.search = '';
+                    break;
+                case 'Tab':
+                    e.preventDefault();
+                    if (e.shiftKey) {
+                        this.highlightedIndex = Math.max(this.highlightedIndex - 1, 0);
+                    } else {
+                        this.highlightedIndex = Math.min(this.highlightedIndex + 1, this.filtered.length - 1);
+                    }
+                    break;
+            }
+        },
+    }"
+    class="relative"
+>
+    <label for="{{ field_id }}" class="block text-sm font-medium text-gray-700">{{ label | trans }}</label>
+
+    <div class="relative mt-1">
+        <input
+            type="text"
+            id="{{ field_id }}"
+            :value="open ? search : displayValue"
+            @blur="onBlur"
+            @focus="onFocus"
+            @keydown="onKeydown"
+            @click="if (!open) onFocus()"
+            @input="search = $event.target.value"
+            {{ if autocomplete }}autocomplete="{{ autocomplete }}"{{ /if }}
+            {{ if placeholder }}placeholder="{{ placeholder | trans }}"{{ /if }}
+            {{ if required }}required{{ /if }}
+            :class="{ 'cursor-pointer': !open }"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-secondary focus:ring-secondary sm:text-sm pr-10"
+        >
+
+        <input type="hidden" name="{{ name }}" :value="{{ model }}">
+
+        <button
+            type="button"
+            @click="open = !open"
+            tabindex="-1"
+            class="absolute inset-y-0 right-0 flex items-center pr-2"
+        >
+            <svg class="size-5 text-gray-400" viewBox="0 0 20 20" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M7 7l3-3 3 3m0 6l-3 3-3-3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+
+        <ul
+            x-show="open"
+            x-cloak
+            class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 shadow-lg border border-gray-300 focus:outline-none sm:text-sm"
+        >
+            <template x-for="(option, index) in filtered" :key="option.{{ value_key }}">
+                <li
+                    :class="{
+                        'bg-gray-100 text-gray-900': highlightedIndex === index,
+                        'bg-gray-50': {{ model }} === option.{{ value_key }} && highlightedIndex !== index,
+                    }"
+                    class="relative cursor-pointer select-none py-2 pl-3 pr-9 text-gray-700"
+                    @mousedown.prevent="select(option)"
+                    @mouseenter="highlightedIndex = index"
+                >
+                    <span x-text="option.{{ display_key }}" :class="{ 'font-medium': {{ model }} === option.{{ value_key }} }"></span>
+
+                    <span
+                        x-show="{{ model }} === option.{{ value_key }}"
+                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-secondary"
+                    >
+                        <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 111.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                </li>
+            </template>
+
+            <li x-show="filtered.length === 0" class="py-2 px-3 text-gray-500">
+                {{ 'No results found.' | trans }}
+            </li>
+        </ul>
+    </div>
+
+    <template x-if="errors && errors['{{ name }}']">
+        <ul class="mt-1">
+            <template x-for="error in errors['{{ name }}']">
+                <li class="text-red-600 text-sm" x-text="error"></li>
+            </template>
+        </ul>
+    </template>
+</div>
