@@ -94,8 +94,8 @@ jobs:
           LARAVEL_VERSION: ${{ matrix.laravel }}
           STABILITY: ${{ matrix.stability }}
         run: |
-          composer require "illuminate/contracts:$LARAVEL_VERSION" --no-interaction --no-update
-          composer update --$STABILITY --prefer-dist --no-interaction --no-suggest
+          composer require "illuminate/contracts:${LARAVEL_VERSION}" --no-interaction --no-update
+          composer update "--${STABILITY}" --prefer-dist --no-interaction --no-suggest
 
       - name: Execute tests
         if: steps.should-run-tests.outputs.result == 'true'
