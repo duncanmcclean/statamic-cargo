@@ -120,6 +120,12 @@
         <input
             type="text"
             id="{{ field_id }}"
+            role="combobox"
+            aria-haspopup="listbox"
+            aria-autocomplete="list"
+            :aria-expanded="open"
+            aria-controls="{{ field_id }}_listbox"
+            :aria-activedescendant="highlightedIndex >= 0 ? '{{ field_id }}_option_' + highlightedIndex : null"
             :value="open ? search : displayValue"
             @blur="onBlur"
             @focus="onFocus"
@@ -139,6 +145,7 @@
             type="button"
             @click="open = !open"
             tabindex="-1"
+            aria-label="{{ 'Toggle options' | trans }}"
             class="absolute inset-y-0 right-0 flex items-center pr-2"
         >
             <svg class="size-5 text-gray-400" viewBox="0 0 20 20" fill="none" stroke="currentColor" aria-hidden="true">
@@ -149,10 +156,16 @@
         <ul
             x-show="open"
             x-cloak
+            id="{{ field_id }}_listbox"
+            role="listbox"
+            :aria-label="'{{ label | trans }}'"
             class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 shadow-lg border border-gray-300 focus:outline-none sm:text-sm"
         >
             <template x-for="(option, index) in filtered" :key="option.{{ value_key }}">
                 <li
+                    :id="'{{ field_id }}_option_' + index"
+                    role="option"
+                    :aria-selected="{{ model }} === option.{{ value_key }}"
                     :class="{
                         'bg-gray-100 text-gray-900': highlightedIndex === index,
                         'bg-gray-50': {{ model }} === option.{{ value_key }} && highlightedIndex !== index,
@@ -174,7 +187,7 @@
                 </li>
             </template>
 
-            <li x-show="filtered.length === 0" class="py-2 px-3 text-gray-500">
+            <li x-show="filtered.length === 0" role="status" class="py-2 px-3 text-gray-500">
                 {{ 'No results found.' | trans }}
             </li>
         </ul>
