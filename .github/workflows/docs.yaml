@@ -7,10 +7,17 @@ on:
     paths:
       - 'docs/**'
 
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   update-docs:
     name: 'Update docs'
     runs-on: ubuntu-latest
+    permissions: {}
 
     steps:
       - name: Deploy
