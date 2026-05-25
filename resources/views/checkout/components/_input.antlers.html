@@ -24,14 +24,16 @@
             {{ if placeholder }}placeholder="{{ placeholder | trans }}"{{ /if }}
             {{ if value }}value="{{ value }}"{{ /if }}
             {{ if xBindValue }}:value="{{ xBindValue }}"{{ /if }}
-            {{ if required }}required{{ /if }}
+            {{ if required }}required aria-required="true"{{ /if }}
             {{ if disabled }}disabled readonly{{ /if }}
             class="block w-full rounded-md border-gray-300 shadow-sm focus:border-secondary focus:ring-secondary sm:text-sm disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed"
+            :aria-invalid="errors.hasOwnProperty('{{ name }}') ? 'true' : undefined"
+            :aria-describedby="errors.hasOwnProperty('{{ name }}') ? '{{ name }}-error' : undefined"
         >
     </div>
 
     <template x-if="errors.hasOwnProperty('{{ name }}')">
-        <ul class="mt-1">
+        <ul id="{{ name }}-error" class="mt-1" role="alert" aria-live="assertive">
             <template x-for="error in errors['{{ name }}']">
                 <li class="text-red-600 text-sm" x-text="error"></li>
             </template>

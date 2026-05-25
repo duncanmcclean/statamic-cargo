@@ -11,37 +11,41 @@
         <input type="hidden" name="shipping_method" x-model="selectedShippingMethod">
 
         <template x-if="isFetchingShippingOptions">
-            <div class="py-4 flex flex-col items-center justify-center -mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 h-8 animate-spin text-black mb-4">
+            <div class="py-4 flex flex-col items-center justify-center -mb-6" role="status" aria-live="polite">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 h-8 animate-spin text-black mb-4" aria-hidden="true">
                     <style>@keyframes spinner_svv2{to{transform:rotate(360deg)}}</style>
                     <path d="M10.14 1.16a11 11 0 0 0-9 8.92A1.59 1.59 0 0 0 2.46 12a1.52 1.52 0 0 0 1.65-1.3 8 8 0 0 1 6.66-6.61A1.42 1.42 0 0 0 12 2.69a1.57 1.57 0 0 0-1.86-1.53Z" style="transform-origin:center;animation:spinner_svv2 1.5s infinite linear" fill="currentColor"/>
                 </svg>
-                <span class="text-gray-500 font-medium">{{ 'Loading...' | trans }}</span>
+                <span class="text-gray-500 font-medium">{{ 'Loading shipping options...' | trans }}</span>
             </div>
         </template>
 
-        <p x-show="!isFetchingShippingOptions && shippingOptions.length === 0">{{ "Sorry, we're not able to ship to your address." | trans }}</p>
+        <p x-show="!isFetchingShippingOptions && shippingOptions.length === 0" role="alert">{{ "Sorry, we're not able to ship to your address." | trans }}</p>
 
         <template x-if="!isFetchingShippingOptions && shippingOptions.length > 0">
-            <ul class="flex flex-col space-y-2">
+            <ul class="flex flex-col space-y-2" role="radiogroup" aria-label="{{ 'Shipping options' | trans }}" aria-live="polite">
                 <template x-for="shippingOption in shippingOptions">
-                    <li x-data class="bg-white border border-gray-300 rounded-md text-gray-700 text-sm p-4 flex items-center justify-between cursor-pointer" @click="$refs.shippingOption.click()">
+                    <li x-data class="bg-white border border-gray-300 rounded-md text-gray-700 text-sm p-4 flex items-center justify-between cursor-pointer focus-within:ring-2 focus-within:ring-secondary focus-within:ring-offset-1" :class="{ 'border-secondary': selectedShippingOption === shippingOption.handle }" @click="$refs.shippingOption.click()">
                         <div class="flex items-center space-x-2 flex-1">
                             <input
                                 x-ref="shippingOption"
                                 type="radio"
                                 name="shipping_option"
-                                class="checked:bg-secondary focus:bg-secondary checked:border-secondary focus:border-secondary accent-secondary"
+                                class="checked:bg-secondary focus:bg-secondary checked:border-secondary focus:border-secondary accent-secondary focus:ring-2 focus:ring-secondary focus:ring-offset-1"
                                 :id="shippingOption.handle"
                                 :value="shippingOption.handle"
                                 :checked="selectedShippingOption === shippingOption.handle"
+                                :aria-checked="selectedShippingOption === shippingOption.handle"
                                 @input="selectShippingOption(shippingOption)"
                                 required
                             >
-                            <label class="block text-gray-700 font-semibold flex-1 cursor-pointer" :for="shippingOption.handle" x-text="shippingOption.name"></label>
+                            <label class="block text-gray-700 font-semibold flex-1 cursor-pointer" :for="shippingOption.handle">
+                                <span x-text="shippingOption.name"></span>
+                                <span class="sr-only" x-text="` - ${shippingOption.price}`"></span>
+                            </label>
                         </div>
 
-                        <span x-text="shippingOption.price"></span>
+                        <span x-text="shippingOption.price" aria-hidden="true"></span>
                     </li>
                 </template>
             </ul>

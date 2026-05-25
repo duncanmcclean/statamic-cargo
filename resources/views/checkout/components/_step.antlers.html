@@ -7,16 +7,17 @@
 
 {{ key = {title | slugify} }}
 
-<div id="step-{{ key }}">
+<div id="step-{{ key }}" role="region" aria-label="{{ title | trans }}">
     <template x-if="currentStep !== '{{ key }}'">
         <div class="border-b border-gray-200 pb-4 flex items-center justify-between">
             <h3 class="w-full cursor-auto text-left text-lg font-semibold text-gray-500">{{ title | trans }}</h3>
 
             <button
                 x-show="completedSteps.includes('{{ key }}')"
-                class="text-sm text-secondary font-semibold"
+                class="text-sm text-secondary font-semibold focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 rounded px-2 py-1"
                 :disabled="busy"
                 @click="goToStep('{{ key }}')"
+                aria-label="{{ trans key='Edit :step' step='{title | trans}' }}"
             >
                 {{ 'Edit' | trans }}
             </button>

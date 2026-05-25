@@ -4,7 +4,7 @@
 #}}
 
 <template x-if="cart">
-    <div class="p-8 flex flex-col space-y-6 text-sm">
+    <div class="p-8 flex flex-col space-y-6 text-sm" aria-label="{{ 'Order summary' | trans }}" role="region" aria-live="polite">
         <ul class="flex flex-col space-y-6">
             {{ cart:line_items }}
                 <li class="flex items-center justify-between">
@@ -41,14 +41,18 @@
 
         <template x-if="!cart.discount_code && !cart.is_free">
             {{ cart:update x-data="ApplyDiscountCodeForm" @submit.prevent="applyDiscountCode" }}
+                <label for="discount_code" class="sr-only">{{ 'Discount code' | trans }}</label>
                 <div class="flex items-center">
                     <input
                         type="text"
+                        id="discount_code"
                         name="discount_code"
-                        placeholder="Discount code"
+                        placeholder="{{ 'Discount code' | trans }}"
                         x-model="discountCode"
                         class="block w-full rounded-md border-gray-300 shadow-sm focus:border-secondary focus:ring-secondary sm:text-sm"
                         autocomplete="off"
+                        :aria-invalid="error ? 'true' : 'false'"
+                        :aria-describedby="error ? 'discount-code-error' : null"
                     >
                     <button
                         type="submit"
@@ -60,7 +64,7 @@
                 </div>
 
                 <template x-if="error">
-                    <p class="text-red-600 text-sm mt-1" x-text="error"></p>
+                    <p id="discount-code-error" class="text-red-600 text-sm mt-1" x-text="error" role="alert" aria-live="assertive"></p>
                 </template>
             {{ /cart:update }}
         </template>
@@ -80,8 +84,8 @@
                             {{ cart:update class="flex items-center" x-data="RemoveDiscountCodeForm" @submit.prevent="removeDiscountCode" }}
                                 <input type="hidden" name="discount_code" value="">
 
-                                <button class="text-xs text-gray-500 hover:text-black" title="Remove discount code">
-                                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <button class="text-xs text-gray-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-1 rounded" title="{{ 'Remove discount code' | trans }}" aria-label="{{ 'Remove discount code' | trans }}">
+                                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                                     </svg>
                                 </button>
