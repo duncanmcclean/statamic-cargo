@@ -24,6 +24,7 @@
                     .then(response => response.json())
                     .then(data => {
                         this.cart = data.data;
+                        this.focusInitialInput();
                     })
                     .catch(error => {
                         alert(`{{ 'Something went wrong while getting your cart. Please try again later.' | trans }} ${error}`);
@@ -45,6 +46,7 @@
                     this.completedSteps = this.steps.slice(0, this.steps.indexOf(step));
 
                     document.getElementById(`step-${step}`)?.scrollIntoView({ behavior: 'smooth' });
+                    this.focusInitialInput();
                 });
             },
 
@@ -55,6 +57,16 @@
 
                 this.$nextTick(() => {
                     document.getElementById(`step-${this.currentStep}`)?.scrollIntoView({ behavior: 'smooth' });
+                    this.focusInitialInput();
+                });
+            },
+
+            focusInitialInput() {
+                this.$nextTick(() => {
+                    const currentStep = document.getElementById(`step-${this.currentStep}`);
+                    if (! currentStep) return;
+
+                    currentStep.querySelector('input:not([type="hidden"]), select, textarea, button[type="submit"]')?.focus();
                 });
             },
 
