@@ -21,6 +21,12 @@
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
 <body class="font-sans antialiased">
+    <a href="#checkout-form" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-secondary focus:text-white focus:px-4 focus:py-2 focus:rounded-md focus:font-medium focus:shadow-lg">
+        {{ 'Skip to checkout form' | trans }}
+    </a>
+    <a href="#order-summary" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-48 focus:z-[100] focus:bg-secondary focus:text-white focus:px-4 focus:py-2 focus:rounded-md focus:font-medium focus:shadow-lg">
+        {{ 'Skip to order summary' | trans }}
+    </a>
     <div class="relative md:min-h-screen">
         <div class="hidden md:block fixed top-0 left-0 w-1/2 bg-[#F8FAFC] h-screen"></div>
         <div class="hidden md:block fixed top-0 right-0 w-1/2 bg-white h-screen"></div>
@@ -28,15 +34,15 @@
         {{ partial:checkout/components/banner }}
 
         <div id="Checkout" class="relative flex flex-col-reverse md:flex-row md:min-h-screen max-w-6xl mx-auto">
-            <main class="md:w-3/5 bg-[#F8FAFC] min-h-screen">
+            <main id="checkout-form" class="md:w-3/5 bg-[#F8FAFC] min-h-screen" role="main" aria-label="{{ 'Checkout form' | trans }}">
                 <div class="flex flex-col">
                     {{ partial:checkout/header }}
 
                     <div x-data="{ show: false }" class="md:hidden bg-white border-y border-gray-200">
                         <div class="flex items-center justify-between px-8 py-4">
-                            <button class="text-secondary font-medium text-sm flex items-center w-full" @click="show = !show">
-                                Order summary
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1" :class="{ 'rotate-180': show }">
+                            <button class="text-secondary font-medium text-sm flex items-center w-full focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 rounded" @click="show = !show" :aria-expanded="show" aria-controls="mobile-order-summary">
+                                {{ 'Order summary' | trans }}
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1" :class="{ 'rotate-180': show }" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                 </svg>
                             </button>
@@ -48,7 +54,7 @@
                             {{ /yield:summary_total }}
                         </div>
 
-                        <div x-cloak x-show="show">
+                        <div id="mobile-order-summary" x-cloak x-show="show">
                             {{ yield:sidebar }}
                         </div>
                     </div>
@@ -59,7 +65,7 @@
                 </div>
             </main>
 
-            <aside class="hidden md:block md:w-2/5 min-h-full border-l border-gray-200 bg-white">
+            <aside id="order-summary" class="hidden md:block md:w-2/5 min-h-full border-l border-gray-200 bg-white" aria-label="{{ 'Order summary' | trans }}">
                 <div class="bg-white w-full h-full">
                     {{ yield:sidebar }}
                 </div>

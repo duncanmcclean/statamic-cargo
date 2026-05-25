@@ -16,16 +16,18 @@
             id="{{ name }}"
             name="{{ name }}"
             {{ if autocomplete }}autocomplete="{{ autocomplete }}"{{ /if }}
-            {{ if required }}required{{ /if }}
+            {{ if required }}required aria-required="true"{{ /if }}
             {{ if x-model }}x-model="{{ x-model }}"{{ /if }}
             class="block w-full rounded-md border-gray-300 shadow-sm focus:border-secondary focus:ring-secondary sm:text-sm"
+            :aria-invalid="errors.hasOwnProperty('{{ name }}') ? 'true' : undefined"
+            :aria-describedby="errors.hasOwnProperty('{{ name }}') ? '{{ name }}-error' : undefined"
         >
             {{ slot }}
         </select>
     </div>
 
     <template x-if="errors.hasOwnProperty('{{ name }}')">
-        <ul class="mt-1">
+        <ul id="{{ name }}-error" class="mt-1" role="alert" aria-live="assertive">
             <template x-for="error in errors['{{ name }}']">
                 <li class="text-red-600 text-sm" x-text="error"></li>
             </template>
