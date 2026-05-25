@@ -5,23 +5,26 @@ on:
     tags:
       - "v*"
 
-permissions:
-  contents: write
-  issues: write
-  pull-requests: write
+permissions: {}
 
 jobs:
   release:
     name: Prepare & Create Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
     steps:
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Setup PHP
         uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: 8.4
           extensions: fileinfo, exif, gd, pdo, sqlite, pdo_sqlite, intl
 
       - name: Install composer dependencies
@@ -49,36 +52,27 @@ jobs:
         with:
           version: ${{ github.ref }}
 
+      - name: Determine prerelease status
+        id: prerelease
+        run: |
+          if [[ "${{ github.ref }}" == *"-alpha"* ]] || [[ "${{ github.ref }}" == *"-beta"* ]]; then
+            echo "flag=--prerelease" >> $GITHUB_OUTPUT
+          else
+            echo "flag=" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create release
-        id: create_release
-        uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e # v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          body: ${{ steps.changelog.outputs.text }}
-          prerelease: ${{ contains(github.ref, '-alpha') || contains(github.ref, '-beta') }}
-
-      - name: Upload dist zip to release
-        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./resources/dist.tar.gz
-          asset_name: dist.tar.gz
-          asset_content_type: application/tar+gz
-
-      - name: Upload dist-checkout zip to release
-        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./resources/dist-checkout.tar.gz
-          asset_name: dist-checkout.tar.gz
-          asset_content_type: application/tar+gz
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ github.ref_name }}
+          CHANGELOG: ${{ steps.changelog.outputs.text }}
+        run: |
+          gh release create "$TAG_NAME" \
+            --title "$TAG_NAME" \
+            --notes "$CHANGELOG" \
+            ${{ steps.prerelease.outputs.flag }} \
+            ./resources/dist.tar.gz \
+            ./resources/dist-checkout.tar.gz
 
       - name: Comment on related issues
         uses: duncanmcclean/post-release-comments@ee2d062e73bd6f0898f36ed892953ed88134cc19 # v1.0.6
