@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.7.0 (2026-05-26)
+
+### What's new
+- Make country & state selects searchable in the pre-built checkout [#217](https://github.com/duncanmcclean/statamic-cargo/pull/217) by @duncanmcclean
+
+### What's fixed
+- Focus first input when moving between steps in the pre-built checkout [#218](https://github.com/duncanmcclean/statamic-cargo/pull/218) by @duncanmcclean
+- Various accessibility tweaks to the pre-built checkout [#219](https://github.com/duncanmcclean/statamic-cargo/pull/219) by @duncanmcclean
+- Relationship fieldtype adjustments [#220](https://github.com/duncanmcclean/statamic-cargo/pull/220) by @duncanmcclean
+
+
+
 ## v1.6.4 (2026-05-21)
 
 ### What's fixed
