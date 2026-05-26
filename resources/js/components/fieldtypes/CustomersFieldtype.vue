@@ -74,9 +74,8 @@ function convertToUser() {
                 class="shadow-ui-sm related-item relative z-2 mb-1.5 flex h-full w-full items-center gap-2 rounded-lg border border-gray-200 bg-white px-1.5 py-1.5 text-base last:mb-0 dark:border-x-0 dark:border-t-0 dark:border-white/15 dark:bg-gray-900 dark:inset-shadow-2xs dark:inset-shadow-black"
             >
                 <div class="flex flex-1 items-center p-1">
-                    <Heading v-if="value.invalid" v-tooltip="__('An item with this ID could not be found')">
+                    <Heading v-if="value.invalid" v-tooltip="__('messages.relationship_item_unavailable')" class="text-gray-500 dark:text-gray-400">
                         {{ value.id }}
-                        <Badge pill color="red" :text="__('Invalid')" />
                     </Heading>
 
                     <div v-else>

@@ -36,8 +36,9 @@ function itemUpdated(responseData) {
         <TableCell>
             <div
                 v-if="lineItem.product.invalid"
-                v-tooltip.top="__('A product with this ID could not be found')"
+                v-tooltip.top="__('messages.relationship_item_unavailable')"
                 v-text="lineItem.product.title"
+                class="text-gray-500 dark:text-gray-400"
             />
 
             <a v-else @click.prevent="edit" :href="lineItem.product.edit_url">
