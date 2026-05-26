@@ -57,9 +57,9 @@ function itemUpdated(responseData) {
 		<div class="flex flex-1 items-center justify-between p-1">
 			<div
 				v-if="item.invalid"
-				v-tooltip.top="__('ID not found')"
+				v-tooltip.top="__('messages.relationship_item_unavailable')"
 				v-text="__(item.title)"
-				class="line-clamp-1 text-sm text-gray-600 dark:text-gray-300"
+				class="line-clamp-1 text-sm text-gray-500 dark:text-gray-400"
 			/>
 
 			<div v-else>
