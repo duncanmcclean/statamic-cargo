@@ -37,7 +37,7 @@ class OrdersStore extends BasicStore
         return Order::make()
             ->site($site)
             ->id(Arr::pull($data, 'id'))
-            ->orderNumber((new GetSlugFromPath)($path))
+            ->orderNumber((int) (new GetSlugFromPath)($path))
             ->date($this->getDateFromPath($path))
             ->cart(Arr::pull($data, 'cart'))
             ->status(Arr::pull($data, 'status'))
