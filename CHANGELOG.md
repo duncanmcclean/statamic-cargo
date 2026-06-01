@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.7.1 (2026-06-01)
+
+### What's fixed
+- Fix order number type inconsistency when loading from YAML [#222](https://github.com/duncanmcclean/statamic-cargo/pull/222) by @duncanmcclean
+
+
+
 ## v1.7.0 (2026-05-26)
 
 ### What's new
