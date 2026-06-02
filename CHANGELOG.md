@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.7.2 (2026-06-02)
+
+### What's fixed
+- Fix cart session bleed on login/logout [#224](https://github.com/duncanmcclean/statamic-cargo/pull/224) by @duncanmcclean
+
+
+
 ## v1.7.1 (2026-06-01)
 
 ### What's fixed
