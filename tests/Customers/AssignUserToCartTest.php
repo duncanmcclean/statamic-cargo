@@ -129,6 +129,24 @@ class AssignUserToCartTest extends TestCase
         $this->assertEquals($user->id(), $currentCart->fresh()->customer()->id());
     }
 
+    #[Test]
+    public function cart_belonging_to_another_user_is_not_reassigned()
+    {
+        $userA = User::make()->save();
+        $userB = User::make()->save();
+
+        $cartBelongingToUserA = tap(Cart::make()->customer($userA))->save();
+        Cart::setCurrent($cartBelongingToUserA);
+
+        Auth::login($userB);
+
+        // User A's cart should not have been reassigned to User B.
+        $this->assertEquals($userA->id(), $cartBelongingToUserA->fresh()->customer()->id());
+
+        // User B should not have a current cart.
+        $this->assertFalse(Cart::hasCurrentCart());
+    }
+
     protected function makeCart()
     {
         $cart = tap(Cart::make())->save();

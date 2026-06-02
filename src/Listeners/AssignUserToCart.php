@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Listeners;
 
+use DuncanMcClean\Cargo\Customers\GuestCustomer;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Orders\LineItem;
@@ -23,7 +24,17 @@ class AssignUserToCart
 
         if (! $recentCart) {
             if (Cart::hasCurrentCart()) {
-                Cart::current()->customer(User::fromUser($event->user))->save();
+                $currentCart = Cart::current();
+                $existingCustomer = $currentCart->customer();
+
+                // Don't reassign a cart that already belongs to a different registered user.
+                if ($existingCustomer && ! $existingCustomer instanceof GuestCustomer && $existingCustomer->id() !== $user->id()) {
+                    Cart::forgetCurrentCart();
+
+                    return;
+                }
+
+                $currentCart->customer(User::fromUser($event->user))->save();
             }
 
             return;
