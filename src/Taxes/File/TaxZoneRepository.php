@@ -21,8 +21,19 @@ class TaxZoneRepository implements Contract
         $parse = YAML::file($this->getPath())->parse();
 
         return collect($parse)->map(function ($taxZone, $handle) {
-            return $this->make()->handle((string) $handle)->data($taxZone);
+            return $this->make()->handle((string) $handle)->data($this->normalizeData($taxZone));
         });
+    }
+
+    protected function normalizeData(array $data): array
+    {
+        if (isset($data['rates'])) {
+            $data['rates'] = collect($data['rates'])
+                ->mapWithKeys(fn (int|float|null $rate, int|string $handle) => [(string) $handle => $rate])
+                ->all();
+        }
+
+        return $data;
     }
 
     public function find(string $handle): ?TaxZone
