@@ -35,44 +35,10 @@ class TaxZone implements Augmentable, Contract
         return $this->fluentlyGetOrSet('handle')->args(func_get_args());
     }
 
-    public function get($key, $fallback = null)
-    {
-        $value = $this->data->get($key, $fallback);
-
-        if ($key === 'rates' && is_array($value)) {
-            return $this->normalizeRates($value);
-        }
-
-        return $value;
-    }
-
-    public function data($data = null)
-    {
-        if (func_num_args() === 0) {
-            $data = $this->data;
-
-            if ($data->has('rates')) {
-                $data = $data->put('rates', $this->normalizeRates($data->get('rates')));
-            }
-
-            return $data;
-        }
-
-        $this->data = collect($data);
-
-        return $this;
-    }
-
-    protected function normalizeRates($rates): array
-    {
-        return collect($rates)
-            ->mapWithKeys(fn (int|float|null $rate, int|string $handle) => [(string) $handle => $rate])
-            ->all();
-    }
-
     public function rates(): Collection
     {
         return collect($this->get('rates'))
+            ->mapWithKeys(fn ($rate, $handle) => [(string) $handle => $rate])
             ->reject(fn ($rate) => is_null($rate));
     }
 
