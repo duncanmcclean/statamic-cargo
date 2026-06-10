@@ -26,11 +26,14 @@ class TaxRates extends GroupFieldtype
         return new Fields($fields, $this->field()->parent(), $this->field());
     }
 
-    public function preload()
+    public function preProcess($data)
     {
-        return [
-            'fields' => $this->fields()->toPublishArray(),
-            'meta' => $this->fields()->addValues($this->field->value() ?? $this->defaultGroupData())->meta()->toArray(),
-        ];
+        if (is_null($data)) {
+            return $data;
+        }
+
+        return collect($data)
+            ->mapWithKeys(fn (int|float|null $rate, int|string $handle) => [(string) $handle => $rate])
+            ->all();
     }
 }

@@ -61,4 +61,23 @@ class EditTaxZonesTest extends TestCase
             ->get(cp_route('cargo.tax-zones.edit', $taxZone->handle()))
             ->assertRedirect('/cp');
     }
+
+    #[Test]
+    public function can_edit_tax_zone_with_numeric_tax_class_handle()
+    {
+        TaxClass::make()->handle('21')->set('title', '21%')->save();
+
+        $taxZone = tap(TaxZone::make()->handle('netherlands')->data([
+            'title' => 'Netherlands',
+            'type' => 'countries',
+            'countries' => ['NL'],
+            'rates' => ['21' => 21],
+        ]))->save();
+
+        $this
+            ->actingAs(User::make()->makeSuper()->save())
+            ->get(cp_route('cargo.tax-zones.edit', $taxZone->handle()))
+            ->assertOk()
+            ->assertSee('Netherlands');
+    }
 }
