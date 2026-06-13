@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.7.3 (2026-06-13)
+
+### What's fixed
+- Fix error when editing tax zones with numeric tax class handles [#226](https://github.com/duncanmcclean/statamic-cargo/pull/226) by @duncanmcclean
+- Bump actions/checkout from 6.0.2 to 6.0.3 in the github-actions group [#227](https://github.com/duncanmcclean/statamic-cargo/pull/227) by @dependabot
+
+
+
 ## v1.7.2 (2026-06-02)
 
 ### What's fixed
