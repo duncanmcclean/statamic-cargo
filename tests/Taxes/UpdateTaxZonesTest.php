@@ -84,4 +84,30 @@ class UpdateTaxZonesTest extends TestCase
         $taxZone = TaxZone::find('united-kingdom');
         $this->assertEquals(['standard' => 20, 'reduced' => 5], $taxZone->get('rates'));
     }
+
+    #[Test]
+    public function can_update_tax_zone_with_numeric_tax_class_handle()
+    {
+        TaxClass::make()->handle('21')->set('title', '21%')->save();
+
+        $taxZone = tap(TaxZone::make()->handle('netherlands')->data([
+            'title' => 'Netherlands',
+            'type' => 'countries',
+            'countries' => ['NL'],
+            'rates' => ['21' => 21],
+        ]))->save();
+
+        $this
+            ->actingAs(User::make()->makeSuper()->save())
+            ->patch(cp_route('cargo.tax-zones.update', $taxZone->handle()), [
+                'title' => 'Netherlands',
+                'type' => 'countries',
+                'countries' => ['NL'],
+                'rates' => ['21' => 19],
+            ])
+            ->assertOk();
+
+        $taxZone = TaxZone::find('netherlands');
+        $this->assertEquals(['21' => 19], $taxZone->get('rates'));
+    }
 }
