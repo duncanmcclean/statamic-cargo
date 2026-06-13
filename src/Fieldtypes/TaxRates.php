@@ -5,6 +5,7 @@ namespace DuncanMcClean\Cargo\Fieldtypes;
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use Statamic\Fields\Fields;
 use Statamic\Fieldtypes\Group as GroupFieldtype;
+use Statamic\Support\Str;
 
 class TaxRates extends GroupFieldtype
 {
@@ -28,13 +29,9 @@ class TaxRates extends GroupFieldtype
 
     public function preload()
     {
-        $value = $this->field->value() ?? $this->defaultGroupData();
-
-        if (is_array($value)) {
-            $value = collect($value)
-                ->mapWithKeys(fn (int|float|null $rate, int|string $handle) => [$this->prefixHandle($handle) => $rate])
-                ->all();
-        }
+        $value = collect($this->field->value() ?? $this->defaultGroupData())
+            ->mapWithKeys(fn (int|float|null $rate, int|string $handle) => [$this->prefixHandle($handle) => $rate])
+            ->all();
 
         $fields = $this->fields()->addValues($value);
 
@@ -62,17 +59,13 @@ class TaxRates extends GroupFieldtype
             ->all();
     }
 
-    protected function prefixHandle(int|string $handle): string
+    private function prefixHandle(int|string $handle): string
     {
-        return 'rate_'.$handle;
+        return "rate_{$handle}";
     }
 
-    protected function unprefixHandle(string $handle): string
+    private function unprefixHandle(string $handle): string
     {
-        if (str_starts_with($handle, 'rate_')) {
-            return substr($handle, 5);
-        }
-
-        return $handle;
+        return Str::after($handle, 'rate_');
     }
 }
