@@ -43,8 +43,8 @@ class UpdateTaxZonesTest extends TestCase
                 'type' => 'countries',
                 'countries' => ['GB'],
                 'rates' => [
-                    'standard' => 25,
-                    'reduced' => 5.5,
+                    'rate_standard' => 25,
+                    'rate_reduced' => 5.5,
                 ],
             ])
             ->assertOk();
@@ -75,8 +75,8 @@ class UpdateTaxZonesTest extends TestCase
                 'type' => 'countries',
                 'countries' => ['GB'],
                 'rates' => [
-                    'standard' => 25,
-                    'reduced' => 5.5,
+                    'rate_standard' => 25,
+                    'rate_reduced' => 5.5,
                 ],
             ])
             ->assertRedirect('/cp');
@@ -103,7 +103,7 @@ class UpdateTaxZonesTest extends TestCase
                 'title' => 'Netherlands',
                 'type' => 'countries',
                 'countries' => ['NL'],
-                'rates' => ['21' => 19],
+                'rates' => ['rate_21' => 19],
             ])
             ->assertOk();
 
