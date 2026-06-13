@@ -43,11 +43,7 @@ class TaxRates extends GroupFieldtype
 
     public function preProcess($data)
     {
-        if (is_null($data)) {
-            return $data;
-        }
-
-        return collect($data)
+        return collect($data ?? $this->defaultGroupData())
             ->mapWithKeys(fn (int|float|null $rate, int|string $handle) => [$this->prefixHandle($handle) => $rate])
             ->all();
     }
