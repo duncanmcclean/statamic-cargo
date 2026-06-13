@@ -36,8 +36,8 @@ class StoreTaxZonesTest extends TestCase
                 'type' => 'countries',
                 'countries' => ['GB'],
                 'rates' => [
-                    'standard' => 20,
-                    'reduced' => 5.5,
+                    'rate_standard' => 20,
+                    'rate_reduced' => 5.5,
                 ],
             ])
             ->assertOk()
@@ -66,8 +66,8 @@ class StoreTaxZonesTest extends TestCase
                 'type' => 'countries',
                 'countries' => ['GB'],
                 'rates' => [
-                    'standard' => 20,
-                    'reduced' => 5.5,
+                    'rate_standard' => 20,
+                    'rate_reduced' => 5.5,
                 ],
             ])
             ->assertRedirect('/cp');
@@ -90,8 +90,8 @@ class StoreTaxZonesTest extends TestCase
                 'type' => 'countries',
                 'countries' => ['GB'],
                 'rates' => [
-                    'standard' => 20,
-                    'reduced' => 5.5,
+                    'rate_standard' => 20,
+                    'rate_reduced' => 5.5,
                 ],
             ])
             ->assertSessionHasErrors('type');
@@ -115,8 +115,8 @@ class StoreTaxZonesTest extends TestCase
                 'countries' => ['GB'],
                 'states' => ['GLG', 'SLK'],
                 'rates' => [
-                    'standard' => 20,
-                    'reduced' => 5.5,
+                    'rate_standard' => 20,
+                    'rate_reduced' => 5.5,
                 ],
             ])
             ->assertSessionHasErrors('type');
@@ -140,8 +140,8 @@ class StoreTaxZonesTest extends TestCase
                 'countries' => ['GB'],
                 'postcodes' => ['G*'],
                 'rates' => [
-                    'standard' => 20,
-                    'reduced' => 5.5,
+                    'rate_standard' => 20,
+                    'rate_reduced' => 5.5,
                 ],
             ])
             ->assertSessionHasErrors('type');
