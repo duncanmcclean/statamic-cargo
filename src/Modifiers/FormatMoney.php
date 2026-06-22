@@ -10,7 +10,7 @@ class FormatMoney extends Modifier
 {
     public function index($value, $params, $context)
     {
-        if (! $value  && $value !== 0) {
+        if (! $value && $value !== 0) {
             return $value;
         }
 
