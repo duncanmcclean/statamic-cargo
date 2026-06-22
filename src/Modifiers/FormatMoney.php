@@ -10,8 +10,8 @@ class FormatMoney extends Modifier
 {
     public function index($value, $params, $context)
     {
-        if (! $value && $value !== 0) {
-            return $value;
+        if (is_nullable($value)) {
+            return;
         }
 
         if (! is_numeric($value)) {
