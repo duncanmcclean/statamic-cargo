@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.7.4 (2026-06-22)
+
+### What's fixed
+- Fix passing `0` to `format_money` modifier [#229](https://github.com/duncanmcclean/statamic-cargo/pull/229) by @ogrosko
+- Bump shivammathur/setup-php from 2.37.1 to 2.37.2 in the github-actions group [#228](https://github.com/duncanmcclean/statamic-cargo/pull/228) by @dependabot
+
+
+
 ## v1.7.3 (2026-06-13)
 
 ### What's fixed
