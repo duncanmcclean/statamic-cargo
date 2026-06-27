@@ -3,6 +3,7 @@
 namespace DuncanMcClean\Cargo\Orders\Eloquent;
 
 use Closure;
+use DuncanMcClean\Cargo\Contracts\Orders\Order;
 use DuncanMcClean\Cargo\Contracts\Orders\QueryBuilder;
 use DuncanMcClean\Cargo\Query\Eloquent\QueriesCustomers;
 use Illuminate\Support\Collection;
@@ -53,7 +54,7 @@ class OrderQueryBuilder extends EloquentQueryBuilder implements QueryBuilder
     protected function transform($items, $columns = ['*'])
     {
         return Collection::make($items)->map(function ($model) {
-            return Order::fromModel($model);
+            return app(Order::class)::fromModel($model);
         });
     }
 

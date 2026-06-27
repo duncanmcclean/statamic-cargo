@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Discounts\Eloquent;
 
+use DuncanMcClean\Cargo\Contracts\Discounts\Discount;
 use DuncanMcClean\Cargo\Contracts\Discounts\QueryBuilder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -37,7 +38,7 @@ class DiscountQueryBuilder extends EloquentQueryBuilder implements QueryBuilder
     protected function transform($items, $columns = ['*'])
     {
         return Collection::make($items)->map(function ($model) {
-            return Discount::fromModel($model);
+            return app(Discount::class)::fromModel($model);
         });
     }
 

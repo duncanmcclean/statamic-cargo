@@ -153,14 +153,18 @@ class ServiceProvider extends AddonServiceProvider
 
     protected function bootRepositories(): self
     {
-        collect([
+        $repositories = [
             \DuncanMcClean\Cargo\Contracts\Cart\CartRepository::class => \DuncanMcClean\Cargo\Stache\Repositories\CartRepository::class,
             \DuncanMcClean\Cargo\Contracts\Discounts\DiscountRepository::class => \DuncanMcClean\Cargo\Stache\Repositories\DiscountRepository::class,
             \DuncanMcClean\Cargo\Contracts\Orders\OrderRepository::class => \DuncanMcClean\Cargo\Stache\Repositories\OrderRepository::class,
             \DuncanMcClean\Cargo\Contracts\Products\ProductRepository::class => \DuncanMcClean\Cargo\Products\ProductRepository::class,
             \DuncanMcClean\Cargo\Contracts\Taxes\TaxClassRepository::class => \DuncanMcClean\Cargo\Taxes\File\TaxClassRepository::class,
             \DuncanMcClean\Cargo\Contracts\Taxes\TaxZoneRepository::class => \DuncanMcClean\Cargo\Taxes\File\TaxZoneRepository::class,
-        ])->each(function ($concrete, $abstract) {
+        ];
+
+        $overridden = collect($repositories)->keys()->filter(fn ($abstract) => $this->app->bound($abstract));
+
+        collect($repositories)->each(function ($concrete, $abstract) {
             if (! $this->app->bound($abstract)) {
                 Statamic::repository($abstract, $concrete);
             }
@@ -175,10 +179,12 @@ class ServiceProvider extends AddonServiceProvider
                 return config('statamic.cargo.carts.line_items_model', \DuncanMcClean\Cargo\Cart\Eloquent\LineItemModel::class);
             });
 
-            Statamic::repository(
-                \DuncanMcClean\Cargo\Contracts\Cart\CartRepository::class,
-                \DuncanMcClean\Cargo\Cart\Eloquent\CartRepository::class
-            );
+            if (! $overridden->contains(Contracts\Cart\CartRepository::class)) {
+                Statamic::repository(
+                    \DuncanMcClean\Cargo\Contracts\Cart\CartRepository::class,
+                    \DuncanMcClean\Cargo\Cart\Eloquent\CartRepository::class
+                );
+            }
         }
 
         if (config('statamic.cargo.discounts.driver') === 'eloquent') {
@@ -186,10 +192,12 @@ class ServiceProvider extends AddonServiceProvider
                 return config('statamic.cargo.discounts.model', \DuncanMcClean\Cargo\Discounts\Eloquent\DiscountModel::class);
             });
 
-            Statamic::repository(
-                \DuncanMcClean\Cargo\Contracts\Discounts\DiscountRepository::class,
-                \DuncanMcClean\Cargo\Discounts\Eloquent\DiscountRepository::class
-            );
+            if (! $overridden->contains(Contracts\Discounts\DiscountRepository::class)) {
+                Statamic::repository(
+                    \DuncanMcClean\Cargo\Contracts\Discounts\DiscountRepository::class,
+                    \DuncanMcClean\Cargo\Discounts\Eloquent\DiscountRepository::class
+                );
+            }
         }
 
         if (config('statamic.cargo.orders.driver') === 'eloquent') {
@@ -201,20 +209,28 @@ class ServiceProvider extends AddonServiceProvider
                 return config('statamic.cargo.orders.line_items_model', \DuncanMcClean\Cargo\Orders\Eloquent\LineItemModel::class);
             });
 
-            Statamic::repository(
-                \DuncanMcClean\Cargo\Contracts\Orders\OrderRepository::class,
-                \DuncanMcClean\Cargo\Orders\Eloquent\OrderRepository::class
-            );
+            if (! $overridden->contains(Contracts\Orders\OrderRepository::class)) {
+                Statamic::repository(
+                    \DuncanMcClean\Cargo\Contracts\Orders\OrderRepository::class,
+                    \DuncanMcClean\Cargo\Orders\Eloquent\OrderRepository::class
+                );
+            }
         }
 
-        if (config('cargo.taxes.tax_classes.driver') === 'eloquent') {
+        if (
+            config('statamic.cargo.taxes.tax_classes.driver') === 'eloquent'
+            && ! $overridden->contains(Contracts\Taxes\TaxClassRepository::class)
+        ) {
             Statamic::repository(
                 \DuncanMcClean\Cargo\Contracts\Taxes\TaxClassRepository::class,
                 \DuncanMcClean\Cargo\Taxes\Eloquent\TaxClassRepository::class
             );
         }
 
-        if (config('cargo.taxes.tax_zones.driver') === 'eloquent') {
+        if (
+            config('statamic.cargo.taxes.tax_zones.driver') === 'eloquent'
+            && ! $overridden->contains(Contracts\Taxes\TaxZoneRepository::class)
+        ) {
             Statamic::repository(
                 \DuncanMcClean\Cargo\Contracts\Taxes\TaxZoneRepository::class,
                 \DuncanMcClean\Cargo\Taxes\Eloquent\TaxZoneRepository::class

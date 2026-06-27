@@ -3,6 +3,7 @@
 namespace DuncanMcClean\Cargo\Cart\Eloquent;
 
 use Closure;
+use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Cart\QueryBuilder;
 use DuncanMcClean\Cargo\Query\Eloquent\QueriesCustomers;
 use Illuminate\Support\Collection;
@@ -53,7 +54,7 @@ class CartQueryBuilder extends EloquentQueryBuilder implements QueryBuilder
     protected function transform($items, $columns = ['*'])
     {
         return Collection::make($items)->map(function ($model) {
-            return Cart::fromModel($model);
+            return app(Cart::class)::fromModel($model);
         });
     }
 
