@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.7.6 (2026-06-29)
+
+### What's fixed
+- Clear stale discount_breakdown in ResetTotals [#235](https://github.com/duncanmcclean/statamic-cargo/pull/235) by @v-Woody
+
+
+
 ## v1.7.5 (2026-06-29)
 
 ### What's fixed
