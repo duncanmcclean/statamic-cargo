@@ -18,6 +18,7 @@ class ResetTotals
 
         $cart->remove('shipping_tax_total');
         $cart->remove('shipping_tax_breakdown');
+        $cart->remove('discount_breakdown');
 
         $cart->lineItems()->transform(function (LineItem $lineItem) {
             $lineItem->unitPrice(0);
