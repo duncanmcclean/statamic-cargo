@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.7.5 (2026-06-29)
+
+### What's fixed
+- Fix overriding repositories when storing data in the database [#233](https://github.com/duncanmcclean/statamic-cargo/pull/233) by @duncanmcclean
+- Bump actions/checkout from 6.0.3 to 7.0.0 in the github-actions group [#230](https://github.com/duncanmcclean/statamic-cargo/pull/230) by @dependabot
+
+
+
 ## v1.7.4 (2026-06-22)
 
 ### What's fixed
