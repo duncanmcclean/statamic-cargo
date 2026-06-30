@@ -19,7 +19,8 @@ class Discount extends StacheDiscount
             ->data([
                 ...$model->data ?? [],
                 'updated_at' => $model->updated_at,
-            ]);
+            ])
+            ->syncOriginal();
     }
 
     public static function makeModelFromContract(DiscountContract $source): DiscountModel
