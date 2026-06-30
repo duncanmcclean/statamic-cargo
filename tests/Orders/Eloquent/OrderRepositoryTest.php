@@ -3,10 +3,10 @@
 namespace Tests\Orders\Eloquent;
 
 use DuncanMcClean\Cargo\Events\OrderStatusUpdated;
-use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Orders\Eloquent\OrderModel;
+use DuncanMcClean\Cargo\Orders\OrderStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
