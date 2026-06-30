@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.7.7 (2026-06-30)
+
+### What's fixed
+- Dispatch OrderStatusUpdated event for Eloquent orders [#237](https://github.com/duncanmcclean/statamic-cargo/pull/237) by @duncanmcclean
+
+
+
 ## v1.7.6 (2026-06-29)
 
 ### What's fixed
