@@ -40,7 +40,8 @@ class Order extends StacheOrder
             ->data([
                 ...$model->data ?? [],
                 'updated_at' => $model->updated_at,
-            ]);
+            ])
+            ->syncOriginal();
     }
 
     public static function makeModelFromContract(OrderContract $source): OrderModel

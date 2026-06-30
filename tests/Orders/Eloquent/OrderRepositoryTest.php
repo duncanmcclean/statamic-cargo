@@ -2,10 +2,13 @@
 
 namespace Tests\Orders\Eloquent;
 
+use DuncanMcClean\Cargo\Events\OrderStatusUpdated;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Orders\Eloquent\OrderModel;
+use DuncanMcClean\Cargo\Orders\OrderStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Statamic;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
@@ -128,6 +131,39 @@ class OrderRepositoryTest extends TestCase
         $this->assertNotNull($order->id());
         $this->assertEquals(1, $order->orderNumber());
         $this->assertNotNull($order->date());
+    }
+
+    #[Test]
+    public function order_status_updated_event_is_dispatched_when_status_changes_on_an_order()
+    {
+        Cart::make()->id('abc')->save();
+
+        $model = OrderModel::create([
+            'order_number' => 1234,
+            'date' => now(),
+            'site' => 'default',
+            'cart' => 'abc',
+            'status' => 'payment_pending',
+            'customer' => json_encode(['name' => 'CJ Cregg', 'email' => 'cj.cregg@whitehouse.gov']),
+            'grand_total' => 2500,
+            'sub_total' => 2500,
+            'discount_total' => 0,
+            'tax_total' => 0,
+            'shipping_total' => 0,
+            'data' => ['foo' => 'bar'],
+        ]);
+
+        $order = $this->repo->find($model->id);
+
+        Event::fake();
+
+        $order->status(OrderStatus::PaymentReceived)->save();
+
+        Event::assertDispatched(OrderStatusUpdated::class, function ($event) use ($order) {
+            return $event->order->id() === $order->id()
+                && $event->originalStatus === OrderStatus::PaymentPending
+                && $event->updatedStatus === OrderStatus::PaymentReceived;
+        });
     }
 
     #[Test]
