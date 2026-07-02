@@ -18,6 +18,8 @@ trait HandlesCustomerInformation
             'email' => $request->email,
         ])->filter()->all());
 
+        $customerData = Arr::except($customerData, ['id', 'password', 'password_hash', 'remember_token', 'super', 'roles', 'groups']);
+
         if (! config('statamic.cargo.carts.always_checkout_as_guest') && $user = User::current()) {
             // When a customer is missing from the order, we'll set it to the logged-in user.
             if (! $cart->customer()) {
@@ -28,7 +30,7 @@ trait HandlesCustomerInformation
             if ($customerData) {
                 $user
                     ->email(Arr::get($customerData, 'email', $user->email()))
-                    ->merge(Arr::except($customerData, ['email', 'super', 'roles', 'groups']))
+                    ->merge(Arr::except($customerData, ['email']))
                     ->save();
             }
 

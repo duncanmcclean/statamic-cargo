@@ -282,6 +282,76 @@ class CartControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_does_not_persist_protected_fields_to_the_logged_in_user()
+    {
+        config()->set('statamic.cargo.carts.always_checkout_as_guest', false);
+
+        $cart = $this->makeCart();
+        $cart->customer(null)->save();
+
+        $user = User::make()->email('user@example.com')->save();
+        $id = $user->id();
+
+        $this->actingAs($user)
+            ->from('/cart')
+            ->patch('/!/cargo/cart', [
+                'customer' => [
+                    'name' => 'John Doe',
+                    'company' => 'Acme Inc.',
+                    'super' => true,
+                    'roles' => ['admin'],
+                    'password' => 'p4ssword',
+                    'id' => 'hacked',
+                ],
+            ])
+            ->assertRedirect('/cart');
+
+        $user = User::find($id);
+
+        $this->assertEquals('John Doe', $user->get('name'));
+        $this->assertEquals('Acme Inc.', $user->get('company'));
+        $this->assertEquals($id, $user->id());
+        $this->assertFalse($user->isSuper());
+        $this->assertEmpty($user->roles()->all());
+        $this->assertNull($user->get('password'));
+        $this->assertNull($user->get('password_hash'));
+    }
+
+    #[Test]
+    public function it_does_not_persist_protected_fields_to_a_guest_customer()
+    {
+        config()->set('statamic.cargo.carts.always_checkout_as_guest', true);
+
+        $cart = $this->makeCart();
+        $cart->customer(null)->save();
+
+        $this->from('/cart')
+            ->patch('/!/cargo/cart', [
+                'customer' => [
+                    'name' => 'John Doe',
+                    'email' => 'john@example.com',
+                    'company' => 'Acme Inc.',
+                    'super' => true,
+                    'roles' => ['admin'],
+                    'password' => 'p4ssword',
+                    'id' => 'hacked',
+                ],
+            ])
+            ->assertRedirect('/cart');
+
+        $customer = $cart->fresh()->customer();
+
+        $this->assertInstanceOf(GuestCustomer::class, $customer);
+        $this->assertEquals('John Doe', $customer->name());
+        $this->assertEquals('john@example.com', $customer->email());
+        $this->assertEquals('Acme Inc.', $customer->get('company'));
+        $this->assertNull($customer->get('super'));
+        $this->assertNull($customer->get('roles'));
+        $this->assertNull($customer->get('password'));
+        $this->assertNotEquals('hacked', $customer->id());
+    }
+
+    #[Test]
     public function it_deletes_the_cart()
     {
         $cart = $this->makeCart();
