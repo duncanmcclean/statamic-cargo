@@ -3,9 +3,11 @@
 namespace Tests\Stache\Repositories;
 
 use DuncanMcClean\Cargo\Facades\Cart;
+use Illuminate\Http\Request;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
+use Statamic\Facades\Site;
 use Statamic\Facades\YAML;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
@@ -101,6 +103,53 @@ class CartRepositoryTest extends TestCase
             'quantity' => 1,
             'total' => 2500,
         ], $yaml['line_items'][0]);
+    }
+
+    /**
+     * @see https://github.com/duncanmcclean/statamic-cargo/issues/240
+     */
+    #[Test]
+    public function it_determines_the_cart_site_from_the_referer_header()
+    {
+        $this->setSites([
+            'en' => ['name' => 'English', 'locale' => 'en_US', 'url' => 'http://test.com/'],
+            'nl' => ['name' => 'Dutch', 'locale' => 'nl_NL', 'url' => 'http://test.com/nl/'],
+        ]);
+
+        $request = Request::create('http://test.com/', 'GET');
+        $request->headers->set('referer', 'http://test.com/nl/products');
+        $this->app->instance('request', $request);
+        $this->repo->forgetCurrentCart();
+
+        $cart = $this->repo->current();
+
+        $this->assertEquals('nl', $cart->site()->handle());
+    }
+
+    /**
+     * @see https://github.com/duncanmcclean/statamic-cargo/issues/240
+     */
+    #[Test]
+    public function resolving_the_current_cart_does_not_corrupt_the_current_site()
+    {
+        $this->setSites([
+            'en' => ['name' => 'English', 'locale' => 'en_US', 'url' => 'http://test.com/'],
+            'nl' => ['name' => 'Dutch', 'locale' => 'nl_NL', 'url' => 'http://test.com/nl/'],
+        ]);
+
+        // We're on the English site, having navigated here from a page on the Dutch site.
+        $request = Request::create('http://test.com/', 'GET');
+        $request->headers->set('referer', 'http://test.com/nl/language-switcher');
+        $this->app->instance('request', $request);
+        $this->repo->forgetCurrentCart();
+
+        $this->assertEquals('en', Site::current()->handle());
+
+        // Rendering the cart (eg. a cart partial in the layout) must not repoint
+        // Site::current() at the referer header for the rest of the request.
+        $this->repo->current();
+
+        $this->assertEquals('en', Site::current()->handle());
     }
 
     #[Test]
