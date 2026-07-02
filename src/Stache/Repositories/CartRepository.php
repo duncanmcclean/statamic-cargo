@@ -135,10 +135,6 @@ class CartRepository implements RepositoryContract
 
     private function determineSiteFromRequest(): \Statamic\Sites\Site
     {
-        Site::resolveCurrentUrlUsing(function () {
-            return request()->header('referer');
-        });
-
-        return Site::current();
+        return Site::findByUrl(request()->header('referer')) ?? Site::current();
     }
 }
