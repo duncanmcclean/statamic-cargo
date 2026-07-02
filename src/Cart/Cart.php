@@ -320,7 +320,6 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
     public function fingerprint(): string
     {
         $payload = [
-            'date' => Carbon::now()->timestamp,
             'customer' => $this->customer(),
             'discount_code' => $this->get('discount_code'),
             'line_items' => $this->lineItems()->map->toArray()->all(),
