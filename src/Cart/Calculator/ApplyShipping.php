@@ -10,7 +10,7 @@ class ApplyShipping
     public function handle(Cart $cart, Closure $next)
     {
         $shippingMethod = $cart->shippingMethod();
-        $shippingOption = $cart->shippingOption();
+        $shippingOption = $shippingMethod?->options($cart)->firstWhere('handle', $cart->shippingOption()?->handle());
 
         if (! $shippingMethod || ! $shippingOption) {
             $cart->remove('shipping_method')->remove('shipping_option');
