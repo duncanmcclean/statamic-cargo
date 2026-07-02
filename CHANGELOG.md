@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.7.8 (2026-07-02)
+
+### What's fixed
+- Don't corrupt `Site::current()` when resolving the cart's site [#241](https://github.com/duncanmcclean/statamic-cargo/pull/241) by @duncanmcclean
+- Re-resolve shipping option price when recalculating totals [#242](https://github.com/duncanmcclean/statamic-cargo/pull/242) by @duncanmcclean
+- Don't include the current time in the cart fingerprint [#243](https://github.com/duncanmcclean/statamic-cargo/pull/243) by @duncanmcclean
+- Eager load line items and add indexes to `cargo_orders` table [#244](https://github.com/duncanmcclean/statamic-cargo/pull/244) by @duncanmcclean
+- Harden customer information handling [#245](https://github.com/duncanmcclean/statamic-cargo/pull/245) by @duncanmcclean
+- Bump zizmorcore/zizmor-action from 0.5.6 to 0.5.7 in the github-actions group [#239](https://github.com/duncanmcclean/statamic-cargo/pull/239) by @dependabot
+
+
+
 ## v1.7.7 (2026-06-30)
 
 ### What's fixed
