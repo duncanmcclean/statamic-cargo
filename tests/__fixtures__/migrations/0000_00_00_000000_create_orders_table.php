@@ -14,13 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('cargo_orders', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->unique();
             $table->integer('order_number')->autoIncrement();
-            $table->timestamp('date');
-            $table->string('site');
+            $table->timestamp('date')->index();
+            $table->string('site')->index();
             $table->string('cart')->nullable();
-            $table->string('status');
-            $table->string('customer');
+            $table->string('status')->index();
+            $table->string('customer')->index();
             $table->bigInteger('grand_total');
             $table->bigInteger('sub_total');
             $table->bigInteger('discount_total');
