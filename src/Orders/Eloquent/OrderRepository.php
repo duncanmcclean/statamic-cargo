@@ -13,7 +13,7 @@ class OrderRepository extends Stache\Repositories\OrderRepository implements Rep
 {
     public function query(): QueryBuilder
     {
-        return app(QueryBuilder::class, ['builder' => app('cargo.orders.eloquent.model')::query()]);
+        return app(QueryBuilder::class, ['builder' => app('cargo.orders.eloquent.model')::query()->with('lineItems')]);
     }
 
     public function save(Order $order): void
