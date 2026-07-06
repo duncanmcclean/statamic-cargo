@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.7.9 (2026-07-06)
+
+### What's fixed
+- Make Eloquent cart deletion null-safe [#247](https://github.com/duncanmcclean/statamic-cargo/pull/247) by @v-Woody
+
+
+
 ## v1.7.8 (2026-07-02)
 
 ### What's fixed
