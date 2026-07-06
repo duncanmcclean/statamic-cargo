@@ -47,7 +47,7 @@ class CartRepository extends Stache\Repositories\CartRepository implements Repos
 
     public function delete(Cart $cart): void
     {
-        $cart->model()->delete();
+        $cart->model()?->delete();
     }
 
     public static function bindings(): array

@@ -144,4 +144,18 @@ class CartRepositoryTest extends TestCase
             'site' => 'default',
         ]);
     }
+
+    #[Test]
+    public function can_delete_a_cart_that_has_not_been_saved()
+    {
+        // A cart that was never persisted has no underlying model. This happens when
+        // the current cart cookie references a cart that no longer exists, so
+        // Cart::current() falls back to a fresh, unsaved cart. Deleting it should be
+        // a no-op rather than throwing "Call to a member function delete() on null".
+        $cart = Cart::make();
+
+        $this->assertNull($cart->model());
+
+        $this->repo->delete($cart);
+    }
 }
