@@ -75,7 +75,7 @@ class Stripe extends PaymentGateway
             'customer' => $stripeCustomerId,
             'metadata' => ['cart_id' => $cart->id()],
             'automatic_payment_methods' => ['enabled' => true],
-            'capture_method' => 'manual',
+            'capture_method' => $this->config()->get('capture_method', 'manual'),
         ];
 
         $paymentIntent = PaymentIntent::create($intentData);
@@ -120,7 +120,11 @@ class Stripe extends PaymentGateway
     {
         $paymentIntent = PaymentIntent::retrieve($cart->get('stripe_payment_intent'));
 
-        $paymentIntent->cancel();
+        if ($paymentIntent->status === PaymentIntent::STATUS_SUCCEEDED) {
+            Refund::create(['payment_intent' => $paymentIntent->id]);
+        } else {
+            $paymentIntent->cancel();
+        }
 
         $cart->remove('stripe_payment_intent')->save();
     }

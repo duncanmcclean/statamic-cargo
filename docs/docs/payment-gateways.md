@@ -314,6 +314,24 @@ Stripe::paymentDescription(function (Order $order) {
 });
 ```
 
+### Capture Method
+By default, Cargo authorises payments and captures them separately to ensure customers are only charged once their order has been successfully created. If the checkout process fails, the authorisation is released rather than refunded.
+
+However, not all payment methods support this approach. For example, iDEAL requires the payment to be captured immediately. To support this, you can change the capture method to `automatic` in your config:
+
+```php
+// config/statamic/cargo.php
+
+'stripe' => [
+    'key' => env('STRIPE_KEY'),
+    'secret' => env('STRIPE_SECRET'),
+    'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+    'capture_method' => 'automatic', // [tl! add]
+],
+```
+
+With automatic capture, the payment will be immediately refunded if the checkout fails.
+
 ## Mollie
 ### Payment Form
 :::tip note

@@ -17,6 +17,7 @@ use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Stripe\Charge;
 use Stripe\Customer;
 use Stripe\PaymentIntent;
+use Stripe\Refund;
 use Tests\TestCase;
 
 #[Group('payments')]
@@ -58,7 +59,22 @@ class StripeTest extends TestCase
 
         $this->assertEquals(1000, $stripePaymentIntent->amount);
         $this->assertEquals('requires_payment_method', $stripePaymentIntent->status);
+        $this->assertEquals('manual', $stripePaymentIntent->capture_method);
         $this->assertEquals(['cart_id' => $cart->id()], $stripePaymentIntent->metadata->toArray());
+    }
+
+    #[Test]
+    public function it_can_setup_a_payment_with_a_configured_capture_method()
+    {
+        config()->set('statamic.cargo.payments.gateways.stripe.capture_method', 'automatic');
+
+        $cart = $this->makeCartWithGuestCustomer();
+
+        (new Stripe)->setup($cart);
+
+        $stripePaymentIntent = PaymentIntent::retrieve($cart->get('stripe_payment_intent'));
+
+        $this->assertEquals('automatic', $stripePaymentIntent->capture_method);
     }
 
     #[Test]
@@ -174,6 +190,32 @@ class StripeTest extends TestCase
 
         $stripePaymentIntent = PaymentIntent::retrieve($stripePaymentIntent->id);
         $this->assertEquals('canceled', $stripePaymentIntent->status);
+    }
+
+    #[Test]
+    public function it_refunds_when_cancelling_an_already_captured_payment()
+    {
+        $stripePaymentIntent = PaymentIntent::create([
+            'amount' => 1000,
+            'currency' => 'gbp',
+            'confirm' => true,
+            'payment_method' => 'pm_card_visa',
+            'automatic_payment_methods' => ['enabled' => true, 'allow_redirects' => 'never'],
+        ]);
+
+        $this->assertEquals('succeeded', $stripePaymentIntent->status);
+
+        $cart = $this->makeCartWithGuestCustomer();
+        $cart->set('stripe_payment_intent', $stripePaymentIntent->id)->save();
+
+        (new Stripe)->cancel($cart);
+
+        $cart->fresh();
+        $this->assertFalse($cart->has('stripe_payment_intent'));
+
+        $refunds = Refund::all(['payment_intent' => $stripePaymentIntent->id]);
+        $this->assertCount(1, $refunds->data);
+        $this->assertEquals(1000, $refunds->data[0]->amount);
     }
 
     #[Test]
