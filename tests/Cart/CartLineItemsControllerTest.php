@@ -100,6 +100,25 @@ class CartLineItemsControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_shallow_augments_nested_entries_on_the_line_item_product()
+    {
+        $this->makeCart();
+        $product = $this->makeProductLinkingToNestedPages();
+
+        $response = $this
+            ->postJson('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'quantity' => 1,
+            ])
+            ->assertOk();
+
+        $page = $response->json('data.line_items.0.product.page_builder.0.page.0');
+
+        $this->assertEquals('Page A', $page['title']);
+        $this->assertArrayNotHasKey('page_builder', $page);
+    }
+
+    #[Test]
     public function it_adds_a_product_to_the_cart_and_uses_custom_form_request()
     {
         $cart = $this->makeCart();
@@ -745,6 +764,41 @@ class CartLineItemsControllerTest extends TestCase
         Collection::make('products')->save();
 
         return tap(Entry::make()->collection('products'))->save();
+    }
+
+    protected function makeProductLinkingToNestedPages()
+    {
+        $pages = tap(Collection::make('pages'))->save();
+        $products = tap(Collection::make('products'))->save();
+
+        $pageBuilder = [
+            'type' => 'replicator',
+            'sets' => [
+                'main' => [
+                    'sets' => [
+                        'button' => [
+                            'fields' => [
+                                ['handle' => 'page', 'field' => ['type' => 'entries', 'collections' => ['pages']]],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $pages->entryBlueprint()->ensureField('page_builder', $pageBuilder)->save();
+        $products->entryBlueprint()->ensureField('page_builder', $pageBuilder)->save();
+
+        Entry::make()->collection('pages')->id('page-b')->slug('page-b')->set('title', 'Page B')->save();
+
+        Entry::make()->collection('pages')->id('page-a')->slug('page-a')->set('title', 'Page A')
+            ->set('page_builder', [['type' => 'button', 'page' => ['page-b']]])
+            ->save();
+
+        return tap(
+            Entry::make()->collection('products')
+                ->set('page_builder', [['type' => 'button', 'page' => ['page-a']]])
+        )->save();
     }
 
     protected function makeVariantProduct()
