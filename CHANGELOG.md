@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.7.10 (2026-07-18)
+
+### What's fixed
+- Shallow augment nested entries on line item products [#249](https://github.com/duncanmcclean/statamic-cargo/pull/249) by @duncanmcclean
+
+
+
 ## v1.7.9 (2026-07-06)
 
 ### What's fixed
