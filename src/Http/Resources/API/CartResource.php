@@ -20,7 +20,7 @@ class CartResource extends JsonResource
             ->toArray();
 
         $response['line_items'] = array_map(function ($item) {
-            $item['product'] = $item['product']->value()->toAugmentedArray();
+            $item['product'] = $item['product']->value()->toAugmentedCollection()->withShallowNesting()->toArray();
 
             unset($item['product']['updated_by']);
 
