@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.8.0 (2026-07-18)
+
+### What's new
+- Make Stripe capture method configurable [#251](https://github.com/duncanmcclean/statamic-cargo/pull/251) by @duncanmcclean
+
+
+
 ## v1.7.10 (2026-07-18)
 
 ### What's fixed
