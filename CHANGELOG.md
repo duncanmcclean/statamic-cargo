@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.9.0 (2026-07-24)
+
+### What's new
+- Add Fields filter to orders listing [#258](https://github.com/duncanmcclean/statamic-cargo/pull/258) by @duncanmcclean
+- Add a "Delivered" order status [#257](https://github.com/duncanmcclean/statamic-cargo/pull/257) by @duncanmcclean
+
+### What's fixed
+- Fix incorrect payment status when migrating orders [#256](https://github.com/duncanmcclean/statamic-cargo/pull/256) by @duncanmcclean
+- Bump zizmorcore/zizmor-action from 0.5.7 to 0.6.0 in the github-actions group [#255](https://github.com/duncanmcclean/statamic-cargo/pull/255) by @dependabot
+
+
+
 ## v1.8.0 (2026-07-18)
 
 ### What's new
