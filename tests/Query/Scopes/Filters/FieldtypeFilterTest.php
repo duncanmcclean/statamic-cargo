@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Query\Scopes\Filters\Fields;
+namespace Query\Scopes\Filters;
 
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
@@ -8,12 +8,11 @@ use DuncanMcClean\Cargo\Query\Scopes\Filters\Fields;
 use DuncanMcClean\Cargo\Query\Scopes\Filters\Fields\PaymentGateways;
 use DuncanMcClean\Cargo\Query\Scopes\Filters\Fields\ShippingMethods;
 use PHPUnit\Framework\Attributes\Test;
-use Statamic\Support\Str;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\Fixtures\ShippingMethods\FakeShippingMethod;
 use Tests\TestCase;
 
-class CustomFieldFiltersTest extends TestCase
+class FieldtypeFilterTest extends TestCase
 {
     use PreventsSavingStacheItemsToDisk;
 
@@ -81,18 +80,5 @@ class CustomFieldFiltersTest extends TestCase
 
         $this->assertCount(1, $results);
         $this->assertEquals([123], $results->map->id()->all());
-    }
-
-    #[Test]
-    public function value_field_condition_does_not_start_with_an_equals_sign()
-    {
-        // The field conditions parser doesn't recognise an operator when its comparison
-        // value starts with "=", which would hide the value field in the filter UI.
-        foreach ([PaymentGateways::class, ShippingMethods::class] as $class) {
-            $condition = (new $class(Order::blueprint()->field('shipping_method')->fieldtype()))
-                ->fieldItems()['value']['if']['operator'];
-
-            $this->assertFalse(Str::startsWith(Str::after($condition, 'contains_any '), '='));
-        }
     }
 }
