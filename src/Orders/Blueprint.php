@@ -19,7 +19,7 @@ class Blueprint
                             'fields' => [
                                 [
                                     'handle' => 'status',
-                                    'field' => ['type' => 'order_status', 'display' => __('Order Status'), 'visibility' => 'hidden', 'listable' => true],
+                                    'field' => ['type' => 'order_status', 'display' => __('Order Status'), 'visibility' => 'hidden', 'listable' => true, 'filterable' => false],
                                 ],
                                 [
                                     'handle' => 'order_number',
@@ -27,7 +27,7 @@ class Blueprint
                                 ],
                                 [
                                     'handle' => 'line_items',
-                                    'field' => ['type' => 'line_items', 'display' => __('Line Items'), 'visibility' => 'hidden', 'listable' => 'hidden', 'sortable' => false],
+                                    'field' => ['type' => 'line_items', 'display' => __('Line Items'), 'visibility' => 'hidden', 'listable' => 'hidden', 'sortable' => false, 'filterable' => false],
                                 ],
                             ],
                         ],
@@ -107,7 +107,7 @@ class Blueprint
                                 ],
                                 [
                                     'handle' => 'customer',
-                                    'field' => ['type' => 'customers', 'display' => __('Customer'), 'listable' => true],
+                                    'field' => ['type' => 'customers', 'display' => __('Customer'), 'listable' => true, 'filterable' => false],
                                 ],
                                 [
                                     'handle' => 'grand_total',
