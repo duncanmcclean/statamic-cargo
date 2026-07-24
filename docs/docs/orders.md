@@ -16,6 +16,7 @@ Orders can move between various different statuses:
 * Payment Pending
 * Payment Received
 * Shipped
+* Delivered
 * Returned
 * Cancelled
 
@@ -26,7 +27,7 @@ You can change an order's status manually on the order details page in the Contr
 Sometimes, an order's status may be updated automatically. For example: an order will move to "Payment Received" when a payment has been confirmed.
 
 ### Shipping
-When you change an order's status to "Shipped", Cargo will let you input a "tracking number" for the order and will give you the ability to print/download a packing slip.
+When you change an order's status to "Shipped", Cargo will let you input a "tracking number" for the order and will give you the ability to print/download a packing slip. These remain available once the order is marked as "Delivered".
 
 ![Packing Slip](/images/packing-slip.png)
 
