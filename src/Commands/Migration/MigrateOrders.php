@@ -203,11 +203,11 @@ class MigrateOrders extends Command
 
     private function createOrderFromData(IlluminateCollection $data): OrderContract
     {
-        $status = match ($data->get('order_status')) {
-            'placed' && $data->get('payment_status') === 'paid' => 'payment_received',
-            'placed' => 'payment_pending',
-            'dispatched', 'delivered' => 'shipped',
-            'cancelled' => 'cancelled',
+        $status = match (true) {
+            $data->get('order_status') === 'placed' && $data->get('payment_status') === 'paid' => 'payment_received',
+            $data->get('order_status') === 'placed' => 'payment_pending',
+            in_array($data->get('order_status'), ['dispatched', 'delivered']) => 'shipped',
+            $data->get('order_status') === 'cancelled' => 'cancelled',
         };
 
         $paymentGateway = isset($data->get('gateway')['use'])
