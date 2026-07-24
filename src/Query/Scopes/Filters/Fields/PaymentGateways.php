@@ -18,7 +18,7 @@ class PaymentGateways extends FieldtypeFilter
                 'placeholder' => __('Select Operator'),
                 'options' => [
                     '=' => __('Is'),
-                    '!=' => __('Isn\'t'),
+                    '<>' => __('Isn\'t'),
                     'null' => __('Empty'),
                     'not-null' => __('Not empty'),
                 ],
@@ -31,7 +31,7 @@ class PaymentGateways extends FieldtypeFilter
                     ->mapWithKeys(fn ($gateway) => [$gateway->handle() => $gateway->title()])
                     ->all(),
                 'if' => [
-                    'operator' => 'contains_any =, !=',
+                    'operator' => 'contains_any <>, =',
                 ],
             ],
         ];

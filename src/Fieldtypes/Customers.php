@@ -3,7 +3,6 @@
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
 use DuncanMcClean\Cargo\Customers\GuestCustomer;
-use DuncanMcClean\Cargo\Query\Scopes\Filters\Fields\Customers as CustomersFilter;
 use Statamic\Facades\User;
 use Statamic\Fields\Field;
 use Statamic\Fields\Fieldtype;
@@ -12,11 +11,6 @@ use Statamic\Statamic;
 class Customers extends Fieldtype
 {
     protected $selectable = false;
-
-    public function filter()
-    {
-        return new CustomersFilter($this);
-    }
 
     public function preload()
     {

@@ -107,7 +107,7 @@ class Blueprint
                                 ],
                                 [
                                     'handle' => 'customer',
-                                    'field' => ['type' => 'customers', 'display' => __('Customer'), 'listable' => true],
+                                    'field' => ['type' => 'customers', 'display' => __('Customer'), 'listable' => true, 'filterable' => false],
                                 ],
                                 [
                                     'handle' => 'grand_total',

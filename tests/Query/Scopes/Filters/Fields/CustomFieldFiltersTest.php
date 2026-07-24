@@ -4,11 +4,11 @@ namespace Tests\Query\Scopes\Filters\Fields;
 
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
-use DuncanMcClean\Cargo\Query\Scopes\Filters\Fields\Customers;
+use DuncanMcClean\Cargo\Query\Scopes\Filters\Fields;
 use DuncanMcClean\Cargo\Query\Scopes\Filters\Fields\PaymentGateways;
 use DuncanMcClean\Cargo\Query\Scopes\Filters\Fields\ShippingMethods;
 use PHPUnit\Framework\Attributes\Test;
-use Statamic\Facades\User;
+use Statamic\Support\Str;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\Fixtures\ShippingMethods\FakeShippingMethod;
 use Tests\TestCase;
@@ -47,8 +47,7 @@ class CustomFieldFiltersTest extends TestCase
 
         $query = Order::query();
 
-        (new PaymentGateways(Order::blueprint()->field('payment_gateway')->fieldtype()))
-            ->apply($query, 'payment_gateway', ['operator' => '=', 'value' => 'dummy']);
+        (new Fields)->apply($query, ['payment_gateway' => ['operator' => '=', 'value' => 'dummy']]);
 
         $results = $query->get();
 
@@ -76,8 +75,7 @@ class CustomFieldFiltersTest extends TestCase
 
         $query = Order::query();
 
-        (new ShippingMethods(Order::blueprint()->field('shipping_method')->fieldtype()))
-            ->apply($query, 'shipping_method', ['operator' => '=', 'value' => 'fake_shipping_method']);
+        (new Fields)->apply($query, ['shipping_method' => ['operator' => '=', 'value' => 'fake_shipping_method']]);
 
         $results = $query->get();
 
@@ -86,33 +84,15 @@ class CustomFieldFiltersTest extends TestCase
     }
 
     #[Test]
-    public function customer_field_uses_the_customers_filter()
+    public function value_field_condition_does_not_start_with_an_equals_sign()
     {
-        $filter = Order::blueprint()->field('customer')->fieldtype()->filter();
+        // The field conditions parser doesn't recognise an operator when its comparison
+        // value starts with "=", which would hide the value field in the filter UI.
+        foreach ([PaymentGateways::class, ShippingMethods::class] as $class) {
+            $condition = (new $class(Order::blueprint()->field('shipping_method')->fieldtype()))
+                ->fieldItems()['value']['if']['operator'];
 
-        $this->assertInstanceOf(Customers::class, $filter);
-        $this->assertEquals('users', $filter->fieldItems()['value']['type']);
-    }
-
-    #[Test]
-    public function can_filter_orders_by_customer()
-    {
-        User::make()->id('foo')->email('foo@example.com')->save();
-
-        Cart::make()->id('abc')->save();
-        Cart::make()->id('def')->save();
-
-        Order::make()->id('123')->cart('abc')->customer('foo')->save();
-        Order::make()->id('456')->cart('def')->customer(['name' => 'Bar', 'email' => 'bar@example.com'])->save();
-
-        $query = Order::query();
-
-        (new Customers(Order::blueprint()->field('customer')->fieldtype()))
-            ->apply($query, 'customer', ['operator' => '=', 'value' => 'foo']);
-
-        $results = $query->get();
-
-        $this->assertCount(1, $results);
-        $this->assertEquals([123], $results->map->id()->all());
+            $this->assertFalse(Str::startsWith(Str::after($condition, 'contains_any '), '='));
+        }
     }
 }
