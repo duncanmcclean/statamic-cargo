@@ -26,11 +26,15 @@ function update() {
     updating.value = false;
 }
 
+function hasShipped(status) {
+    return status === 'shipped' || status === 'delivered';
+}
+
 onMounted(() => {
     Statamic.$commandPalette.add({
         text: __('Print Packing Slip'),
         icon: 'download',
-        when: () => props.packingSlipUrl && (props.modelValue === 'shipped' || status.value === 'shipped'),
+        when: () => props.packingSlipUrl && (hasShipped(props.modelValue) || hasShipped(status.value)),
         action: () => window.open(props.packingSlipUrl, '_blank'),
     })
 });
@@ -53,7 +57,7 @@ onMounted(() => {
             <Select class="w-full" :options="statuses" v-model:modelValue="status" />
         </Field>
 
-        <Field v-if="status === 'shipped'" :label="__('Tracking Number')">
+        <Field v-if="hasShipped(status)" :label="__('Tracking Number')">
             <Input v-model:modelValue="trackingNumber" />
         </Field>
 
@@ -69,7 +73,7 @@ onMounted(() => {
             <Button :text="__('Update')" @click="update" />
 
             <Button
-                v-if="status === 'shipped'"
+                v-if="hasShipped(status)"
                 icon="download"
                 size="sm"
                 variant="ghost"

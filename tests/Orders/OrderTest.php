@@ -7,6 +7,7 @@ use DuncanMcClean\Cargo\Customers\GuestCustomer;
 use DuncanMcClean\Cargo\Events\OrderCancelled;
 use DuncanMcClean\Cargo\Events\OrderCreated;
 use DuncanMcClean\Cargo\Events\OrderDeleted;
+use DuncanMcClean\Cargo\Events\OrderDelivered;
 use DuncanMcClean\Cargo\Events\OrderPaymentPending;
 use DuncanMcClean\Cargo\Events\OrderPaymentReceived;
 use DuncanMcClean\Cargo\Events\OrderReturned;
@@ -411,6 +412,19 @@ YAML, file_get_contents($order->path()));
         $order->status(OrderStatus::Shipped)->save();
 
         Event::assertDispatched(OrderShipped::class, function ($event) use ($order) {
+            return $event->order->id() === $order->id();
+        });
+    }
+
+    #[Test]
+    public function order_delivered_event_is_dispatched()
+    {
+        Event::fake();
+
+        $order = tap(Order::make())->save();
+        $order->status(OrderStatus::Delivered)->save();
+
+        Event::assertDispatched(OrderDelivered::class, function ($event) use ($order) {
             return $event->order->id() === $order->id();
         });
     }

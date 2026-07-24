@@ -3,6 +3,7 @@
 namespace DuncanMcClean\Cargo\Orders;
 
 use DuncanMcClean\Cargo\Events\OrderCancelled;
+use DuncanMcClean\Cargo\Events\OrderDelivered;
 use DuncanMcClean\Cargo\Events\OrderPaymentPending;
 use DuncanMcClean\Cargo\Events\OrderPaymentReceived;
 use DuncanMcClean\Cargo\Events\OrderReturned;
@@ -13,6 +14,7 @@ enum OrderStatus: string
     case PaymentPending = 'payment_pending';
     case PaymentReceived = 'payment_received';
     case Shipped = 'shipped';
+    case Delivered = 'delivered';
     case Returned = 'returned';
     case Cancelled = 'cancelled';
 
@@ -22,6 +24,7 @@ enum OrderStatus: string
             self::PaymentPending => __('Payment Pending'),
             self::PaymentReceived => __('Payment Received'),
             self::Shipped => __('Shipped'),
+            self::Delivered => __('Delivered'),
             self::Returned => __('Returned'),
             self::Cancelled => __('Cancelled'),
         };
@@ -33,6 +36,7 @@ enum OrderStatus: string
             self::PaymentPending => OrderPaymentPending::class,
             self::PaymentReceived => OrderPaymentReceived::class,
             self::Shipped => OrderShipped::class,
+            self::Delivered => OrderDelivered::class,
             self::Returned => OrderReturned::class,
             self::Cancelled => OrderCancelled::class,
         };

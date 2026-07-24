@@ -12,6 +12,7 @@ const colour = computed(() => {
 		payment_pending: 'default',
 		payment_received: 'blue',
 		shipped: 'green',
+		delivered: 'emerald',
 		returned: 'orange',
 		cancelled: 'red',
 	};
