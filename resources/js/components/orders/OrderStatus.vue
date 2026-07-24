@@ -19,15 +19,13 @@ const trackingNumber = ref(props.trackingNumber);
 const cancellationReason = ref(props.cancellationReason);
 const updating = ref(false);
 
+const hasShipped = (status) => status === 'shipped' || status === 'delivered';
+
 function update() {
     emit('update:modelValue', status.value);
     emit('update:trackingNumber', trackingNumber.value);
     emit('update:cancellationReason', cancellationReason.value);
     updating.value = false;
-}
-
-function hasShipped(status) {
-    return status === 'shipped' || status === 'delivered';
 }
 
 onMounted(() => {
