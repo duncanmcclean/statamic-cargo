@@ -148,6 +148,18 @@ public function handle(OrderDeleted $event)
 }
 ```
 
+### OrderDelivered
+`DuncanMcClean\Cargo\Events\OrderDelivered`
+
+Dispatched when an order's status is changed to ["Delivered"](/docs/orders#statuses).
+
+```php
+public function handle(OrderDelivered $event)
+{
+	$event->order;
+}
+```
+
 ### OrderPaymentPending
 `DuncanMcClean\Cargo\Events\OrderPaymentPending`
 
