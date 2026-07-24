@@ -27,7 +27,10 @@ class OrderStatus extends Fieldtype
         return [
             'options' => collect(OrderStatusEnum::cases())
                 ->when(! $this->field()->parent()?->get('shipping_method'), function ($collection) {
-                    return $collection->reject(fn ($status) => in_array($status, [OrderStatusEnum::Shipped, OrderStatusEnum::Delivered]));
+                    return $collection->reject(fn ($status) => in_array($status, [
+                        OrderStatusEnum::Shipped,
+                        OrderStatusEnum::Delivered,
+                    ]));
                 })
                 ->map(fn ($status) => [
                     'value' => $status,
