@@ -47,7 +47,8 @@ trait MapsTimelineEvents
         return match ($status) {
             'placed' => 'payment_pending',
             'paid' => 'payment_received',
-            'dispatched', 'delivered' => 'shipped',
+            'dispatched' => 'shipped',
+            'delivered' => 'delivered',
             'cancelled' => 'cancelled',
             'returned' => 'returned',
             default => $status,

@@ -206,7 +206,8 @@ class MigrateOrders extends Command
         $status = match ($data->get('order_status')) {
             'placed' && $data->get('payment_status') === 'paid' => 'payment_received',
             'placed' => 'payment_pending',
-            'dispatched', 'delivered' => 'shipped',
+            'dispatched' => 'shipped',
+            'delivered' => 'delivered',
             'cancelled' => 'cancelled',
         };
 
