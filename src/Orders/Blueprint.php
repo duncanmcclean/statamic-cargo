@@ -27,7 +27,7 @@ class Blueprint
                                 ],
                                 [
                                     'handle' => 'line_items',
-                                    'field' => ['type' => 'line_items', 'display' => __('Line Items'), 'visibility' => 'hidden', 'listable' => 'hidden', 'sortable' => false],
+                                    'field' => ['type' => 'line_items', 'display' => __('Line Items'), 'visibility' => 'hidden', 'listable' => 'hidden', 'sortable' => false, 'filterable' => false],
                                 ],
                             ],
                         ],
