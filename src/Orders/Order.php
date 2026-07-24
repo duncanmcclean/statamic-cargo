@@ -475,6 +475,10 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
             return $this->customer;
         }
 
+        if (in_array($field, ['payment_gateway', 'shipping_method'])) {
+            return $this->get($field);
+        }
+
         if (in_array($method = Str::camel($field), $this->queryableMethods())) {
             return $this->{$method}();
         }

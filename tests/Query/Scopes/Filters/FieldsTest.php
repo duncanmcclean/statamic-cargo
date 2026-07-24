@@ -44,6 +44,7 @@ class FieldsTest extends TestCase
         $this->assertContains('color', $handles);
         $this->assertNotContains('notes', $handles);
         $this->assertNotContains('line_items', $handles);
+        $this->assertNotContains('status', $handles);
     }
 
     #[Test]

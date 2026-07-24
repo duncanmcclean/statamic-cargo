@@ -3,12 +3,18 @@
 namespace DuncanMcClean\Cargo\Fieldtypes;
 
 use DuncanMcClean\Cargo\Facades\ShippingMethod;
+use DuncanMcClean\Cargo\Query\Scopes\Filters\Fields\ShippingMethods as ShippingMethodsFilter;
 use Statamic\Fieldtypes\Relationship;
 
 class ShippingMethods extends Relationship
 {
     protected $selectable = false;
     protected $indexComponent = null;
+
+    public function filter()
+    {
+        return new ShippingMethodsFilter($this);
+    }
 
     protected function toItemArray($id)
     {
