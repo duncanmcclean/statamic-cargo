@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Commands\Migration;
 
+use DuncanMcClean\Cargo\Commands\Migration\Concerns\MapsAddresses;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -15,7 +16,7 @@ use function Laravel\Prompts\confirm;
 
 class MigrateConfigs extends Command
 {
-    use RunsInPlease;
+    use MapsAddresses, RunsInPlease;
 
     protected $signature = 'statamic:cargo:migrate:configs';
 
@@ -73,11 +74,39 @@ class MigrateConfigs extends Command
             'carts.unique_metadata' => config('simple-commerce.cart.unique_metadata', false),
         ];
 
+        if ($defaultTaxAddress = $this->defaultTaxAddress()) {
+            $config['taxes.default_address'] = $defaultTaxAddress;
+        }
+
         ConfigWriter::writeMany('statamic.cargo', $config);
 
         $this->components->info('Updated the [statamic/cargo.php] config file.');
 
         return $this;
+    }
+
+    private function defaultTaxAddress(): ?array
+    {
+        if (config('simple-commerce.tax_engine_config.behaviour.no_address_provided') !== 'default_address') {
+            return null;
+        }
+
+        $defaultAddress = collect(config('simple-commerce.tax_engine_config.default_address'))->filter();
+
+        if (! $defaultAddress->get('country')) {
+            return null;
+        }
+
+        [$country, $state] = $this->mapCountryAndState(
+            $defaultAddress->get('country'),
+            $defaultAddress->get('region')
+        );
+
+        return array_filter([
+            'country' => $country,
+            'state' => $state,
+            'postcode' => $defaultAddress->get('zip_code'),
+        ]);
     }
 
     private function migratePaymentGatewaysConfig(): self

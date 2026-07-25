@@ -119,6 +119,128 @@ class CalculateTaxesTest extends TestCase
     }
 
     #[Test]
+    public function tax_totals_are_zero_when_cart_has_no_address()
+    {
+        $product = Entry::make()->collection('products')->data(['price' => 10000, 'tax_class' => 'standard']);
+        $product->save();
+
+        $cart = Cart::make()->lineItems([
+            ['id' => 'one', 'product' => $product->id(), 'quantity' => 1, 'total' => 10000],
+        ]);
+
+        TaxZone::make()->handle('usa')->data([
+            'title' => 'USA',
+            'type' => 'countries',
+            'countries' => ['USA'],
+            'rates' => ['standard' => 20],
+        ])->save();
+
+        $cart = app(CalculateTaxes::class)->handle($cart, fn ($cart) => $cart);
+
+        $lineItem = $cart->lineItems()->find('one');
+
+        $this->assertNull($lineItem->get('tax_breakdown'));
+
+        $this->assertEquals(0, $lineItem->taxTotal());
+        $this->assertEquals(10000, $lineItem->total());
+        $this->assertEquals(0, $cart->taxTotal());
+    }
+
+    #[Test]
+    public function calculates_tax_against_default_address_when_cart_has_no_address()
+    {
+        config()->set('statamic.cargo.taxes.default_address', ['country' => 'USA', 'state' => 'CA']);
+
+        $product = Entry::make()->collection('products')->data(['price' => 10000, 'tax_class' => 'standard']);
+        $product->save();
+
+        $cart = Cart::make()
+            ->shippingTotal(500)
+            ->lineItems([
+                ['id' => 'one', 'product' => $product->id(), 'quantity' => 1, 'total' => 10000],
+            ])
+            ->data([
+                'shipping_method' => 'paid_shipping',
+                'shipping_option' => 'the_only_option',
+            ]);
+
+        TaxZone::make()->handle('usa')->data([
+            'title' => 'USA',
+            'type' => 'countries',
+            'countries' => ['USA'],
+            'rates' => ['standard' => 20, 'shipping' => 20],
+        ])->save();
+
+        $cart = app(CalculateTaxes::class)->handle($cart, fn ($cart) => $cart);
+
+        $lineItem = $cart->lineItems()->find('one');
+
+        $this->assertEquals([
+            ['rate' => 20, 'description' => 'Standard', 'zone' => 'USA', 'amount' => 2000],
+        ], $lineItem->get('tax_breakdown'));
+
+        $this->assertEquals(2000, $lineItem->taxTotal());
+        $this->assertEquals(12000, $lineItem->total());
+
+        $this->assertEquals([
+            ['rate' => 20, 'description' => 'Shipping', 'zone' => 'USA', 'amount' => 100],
+        ], $cart->get('shipping_tax_breakdown'));
+
+        $this->assertEquals(100, $cart->get('shipping_tax_total'));
+        $this->assertEquals(600, $cart->shippingTotal());
+        $this->assertEquals(2100, $cart->taxTotal());
+    }
+
+    #[Test]
+    public function default_address_is_ignored_when_cart_has_an_address()
+    {
+        config()->set('statamic.cargo.taxes.default_address', ['country' => 'USA', 'state' => 'CA']);
+
+        $product = Entry::make()->collection('products')->data(['price' => 10000, 'tax_class' => 'standard']);
+        $product->save();
+
+        $cart = Cart::make()
+            ->lineItems([
+                ['id' => 'one', 'product' => $product->id(), 'quantity' => 1, 'total' => 10000],
+            ])
+            ->data([
+                'shipping_address' => [
+                    'line_1' => '123 Fake St',
+                    'city' => 'Fakeville',
+                    'postcode' => 'FA 1234',
+                    'country' => 'GBR',
+                    'state' => 'GLG',
+                ],
+            ]);
+
+        TaxZone::make()->handle('usa')->data([
+            'title' => 'USA',
+            'type' => 'countries',
+            'countries' => ['USA'],
+            'rates' => ['standard' => 20],
+        ])->save();
+
+        TaxZone::make()->handle('uk')->data([
+            'title' => 'UK',
+            'type' => 'countries',
+            'countries' => ['GBR'],
+            'rates' => ['standard' => 10],
+        ])->save();
+
+        $cart = app(CalculateTaxes::class)->handle($cart, fn ($cart) => $cart);
+
+        $lineItem = $cart->lineItems()->find('one');
+
+        $this->assertEquals([
+            ['rate' => 10, 'description' => 'Standard', 'zone' => 'UK', 'amount' => 1000],
+        ], $lineItem->get('tax_breakdown'));
+
+        $this->assertEquals(1000, $lineItem->taxTotal());
+        $this->assertEquals(11000, $lineItem->total());
+        $this->assertEquals(1000, $cart->taxTotal());
+    }
+
+    #[Test]
     public function calculates_line_item_tax_when_price_includes_tax()
     {
         config(['statamic.cargo.taxes.price_includes_tax' => true]);

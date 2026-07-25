@@ -227,6 +227,18 @@ By default, prices are **inclusive** of tax. If you would rather them be exclusi
 ],
 ```
 
+Simple Commerce's `default_address` option, used when the customer hadn't provided an address yet, is now configured under `taxes.default_address`:
+
+```php
+// config/statamic/cargo.php
+
+'taxes' => [  
+    'default_address' => [  
+        'country' => 'GBR',  
+    ],  
+],
+```
+
 ### Migrating taxes
 Cargo will have attempted to automatically migrate your tax configuration when you ran the `cargo:migrate` command. 
 
