@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.10.0 (2026-07-25)
+
+### What's new
+- Add a default address for estimating taxes [#260](https://github.com/duncanmcclean/statamic-cargo/pull/260) by @duncanmcclean
+
+
+
 ## v1.9.0 (2026-07-24)
 
 ### What's new
