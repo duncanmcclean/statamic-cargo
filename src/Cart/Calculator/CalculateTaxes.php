@@ -5,19 +5,22 @@ namespace DuncanMcClean\Cargo\Cart\Calculator;
 use Closure;
 use DuncanMcClean\Cargo\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Taxes\Driver as TaxDriver;
+use DuncanMcClean\Cargo\Data\Address;
 use DuncanMcClean\Cargo\Orders\LineItem;
 
 class CalculateTaxes
 {
     public function handle(Cart $cart, Closure $next)
     {
-        if (! $cart->taxableAddress()) {
+        $taxableAddress = $cart->taxableAddress() ?? $this->defaultAddress();
+
+        if (! $taxableAddress) {
             return $next($cart);
         }
 
         $taxBreakdowns = collect();
 
-        $cart->lineItems()->each(function (LineItem $lineItem) use ($cart, &$taxBreakdowns) {
+        $cart->lineItems()->each(function (LineItem $lineItem) use ($taxableAddress, &$taxBreakdowns) {
             $lineItemTotal = $lineItem->total();
 
             if ($lineItem->discountTotal()) {
@@ -25,7 +28,7 @@ class CalculateTaxes
             }
 
             $taxBreakdown = app(TaxDriver::class)
-                ->setAddress($cart->taxableAddress())
+                ->setAddress($taxableAddress)
                 ->setPurchasable($lineItem->variant() ?? $lineItem->product())
                 ->setLineItem($lineItem)
                 ->getBreakdown($lineItemTotal);
@@ -52,7 +55,7 @@ class CalculateTaxes
             $shippingTotal = $cart->shippingTotal();
 
             $shippingTaxBreakdown = app(TaxDriver::class)
-                ->setAddress($cart->taxableAddress())
+                ->setAddress($taxableAddress)
                 ->setPurchasable($shippingOption)
                 ->getBreakdown($shippingTotal);
 
@@ -71,5 +74,16 @@ class CalculateTaxes
         $cart->taxTotal($taxBreakdowns->sum('amount'));
 
         return $next($cart);
+    }
+
+    private function defaultAddress(): ?Address
+    {
+        $address = array_filter(config('statamic.cargo.taxes.default_address') ?? []);
+
+        if (empty($address)) {
+            return null;
+        }
+
+        return Address::make($address);
     }
 }

@@ -41,6 +41,29 @@ By default, prices are **inclusive** of tax. If you would rather them be exclusi
 ],
 ```
 
+## Default Address
+Taxes are calculated based on the customer's shipping (or billing) address. Until the customer provides their address, no taxes will be calculated.
+
+When prices are exclusive of tax, that means customers won't see any tax on the cart until they enter their address. To avoid that, you can configure a default address for Cargo to estimate taxes against:
+
+```php
+// config/statamic/cargo.php
+
+'taxes' => [  
+    'default_address' => [  
+        'country' => 'GBR',  
+        // 'state' => null,
+        // 'postcode' => null,
+    ],  
+],
+```
+
+Only the `country`, `state` and `postcode` are used when matching tax zones. As soon as the customer provides their own address, taxes will be recalculated against it.
+
+:::tip note
+The default address is only used to estimate taxes. Customers still need to provide a real address before they can checkout.
+:::
+
 ## Templating
 You can display the cart's tax total using `{{ cart:tax_total }}`.
 
