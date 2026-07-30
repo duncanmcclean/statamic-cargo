@@ -210,4 +210,30 @@ class ProductVariantsFieldtypeTest extends TestCase
             'product_variants.options.*.size' => ['required', 'min:10', 'max:20'],
         ], $extraRules);
     }
+
+    #[Test]
+    public function can_override_a_default_option_field_via_config()
+    {
+        $optionFields = (new ProductVariants)
+            ->setField(new Field('product_variants', [
+                'option_fields' => [
+                    [
+                        'handle' => 'price',
+                        'field' => [
+                            'type' => 'money',
+                            'display' => 'Price',
+                            'validate' => ['required', 'numeric'],
+                        ],
+                    ],
+                ],
+            ]))
+            ->optionFields();
+
+        $this->assertEquals(['key', 'variant', 'price'], $optionFields->all()->keys()->all());
+
+        $this->assertEquals(
+            ['required', 'numeric'],
+            $optionFields->get('price')->get('validate')
+        );
+    }
 }
