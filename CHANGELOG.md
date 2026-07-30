@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.10.1 (2026-07-30)
+
+### What's fixed
+- Fix duplicate field exception when overriding a default `product_variants` option field [#263](https://github.com/duncanmcclean/statamic-cargo/pull/263) by @duncanmcclean
+- Bump the github-actions group with 2 updates [#262](https://github.com/duncanmcclean/statamic-cargo/pull/262) by @dependabot
+
+
+
 ## v1.10.0 (2026-07-25)
 
 ### What's new
