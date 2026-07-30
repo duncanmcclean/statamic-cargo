@@ -176,6 +176,8 @@ class ProductVariants extends Fieldtype
 
     public function optionFields(): Fields
     {
+        $configuredOptionFields = collect($this->config('option_fields', []));
+
         $fields = collect([
             [
                 'handle' => 'key',
@@ -213,7 +215,8 @@ class ProductVariants extends Fieldtype
                 ],
             ],
         ])
-            ->merge($this->config('option_fields', []))
+            ->reject(fn ($field) => $configuredOptionFields->keyBy('handle')->has($field['handle']))
+            ->merge($configuredOptionFields)
             ->when($this->config('localizable', false), function ($fields) {
                 return $fields->map(function (array $field) {
                     $field['field']['localizable'] = true;
