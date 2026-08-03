@@ -29,6 +29,25 @@ Otherwise, if you purchased Simple Commerce **more than a year ago**, you can mi
 
 Either way, just email [support@builtwithcargo.dev](support@builtwithcargo.dev) with your order number, and I'll send you a coupon code to use at checkout.
 
+## AI Agents
+If you use a coding agent, like Claude Code or Codex, you can hand most of the legwork over to it. Copy the prompt below into your agent of choice:
+
+```
+Please migrate this site from Simple Commerce to Cargo.
+
+First, make sure the working copy is clean and that we're on a branch (not the
+main/master branch). Stop and ask me if either isn't the case.
+
+Then, fetch https://builtwithcargo.dev/docs/migrating-from-simple-commerce.md and
+work through each step in the guide, committing each step separately so we end up
+with a clean, reviewable history.
+
+Report back to me whenever you need me to take some kind of action (like running
+an interative command, or testing something has worked), and again once you're done.
+```
+
+Please review the agent's work carefully before deploying anything - it won't get everything right, especially around your templates and any custom code.
+
 ## Updating
 To upgrade, uninstall Simple Commerce and install Cargo using composer:
 
