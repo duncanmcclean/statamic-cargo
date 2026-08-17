@@ -106,19 +106,20 @@ jobs:
         if: steps.should-run-tests.outputs.result == 'true'
         run: vendor/bin/pest --shard=${{ matrix.shard }}/${{ matrix.shards }} --ci --exclude-group=payments # zizmor: ignore[template-injection] shard is a static list defined in the matrix above
 
-      - name: Execute tests (Payments)
-        run: vendor/bin/phpunit --group=payments
-        if: steps.should-run-tests.outputs.result == 'true'
-          && steps.should-run-payment-tests.outputs.result == 'true'
-          && matrix.php == 8.5 && matrix.laravel == '13.*'
-          && matrix.stability == 'prefer-stable'
-          && matrix.os == 'ubuntu-latest'
-          && matrix.shard == 1
-        env:
-          STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
-          STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
-          MOLLIE_KEY: ${{ secrets.MOLLIE_KEY }}
-          MOLLIE_PROFILE: ${{ secrets.MOLLIE_PROFILE }}
+      # Temporarily disabled due to Mollie failures.
+      # - name: Execute tests (Payments)
+      #   run: vendor/bin/phpunit --group=payments
+      #   if: steps.should-run-tests.outputs.result == 'true'
+      #     && steps.should-run-payment-tests.outputs.result == 'true'
+      #     && matrix.php == 8.5 && matrix.laravel == '13.*'
+      #     && matrix.stability == 'prefer-stable'
+      #     && matrix.os == 'ubuntu-latest'
+      #     && matrix.shard == 1
+      #   env:
+      #     STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
+      #     STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
+      #     MOLLIE_KEY: ${{ secrets.MOLLIE_KEY }}
+      #     MOLLIE_PROFILE: ${{ secrets.MOLLIE_PROFILE }}
 
   php-tests-result:
     name: PHP tests
