@@ -18,7 +18,7 @@ class CartController
     {
         throw_if(! Cart::hasCurrentCart(), NotFoundHttpException::class);
 
-        return new CartResource(Cart::current());
+        return app(CartResource::class)::make(Cart::current());
     }
 
     public function update(UpdateCartRequest $request)
@@ -34,7 +34,7 @@ class CartController
         $cart->save();
 
         if ($request->ajax() || $request->wantsJson()) {
-            return new CartResource($cart->fresh());
+            return app(CartResource::class)::make($cart->fresh());
         }
 
         return $request->_redirect && ! URL::isExternalToApplication($request->_redirect)
