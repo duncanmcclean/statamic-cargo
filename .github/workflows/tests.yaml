@@ -138,8 +138,6 @@ jobs:
         env:
           STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
           STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
-          # The Mollie tests are skipped while these are commented out, since Mollie
-          # keeps revoking sandbox access.
           # MOLLIE_KEY: ${{ secrets.MOLLIE_KEY }}
           # MOLLIE_PROFILE: ${{ secrets.MOLLIE_PROFILE }}
 
