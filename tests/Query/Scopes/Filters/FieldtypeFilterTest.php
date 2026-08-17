@@ -1,6 +1,6 @@
 <?php
 
-namespace Query\Scopes\Filters;
+namespace Tests\Query\Scopes\Filters;
 
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
