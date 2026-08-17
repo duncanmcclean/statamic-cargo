@@ -40,7 +40,7 @@ class CartLineItemsController
         $cart->save();
 
         if ($request->ajax() || $request->wantsJson()) {
-            return new CartResource($cart->fresh());
+            return app(CartResource::class)::make($cart->fresh());
         }
 
         return $request->_redirect && ! URL::isExternalToApplication($request->_redirect)
@@ -82,7 +82,7 @@ class CartLineItemsController
         $cart->save();
 
         if ($request->ajax() || $request->wantsJson()) {
-            return new CartResource($cart->fresh());
+            return app(CartResource::class)::make($cart->fresh());
         }
 
         return $request->_redirect && ! URL::isExternalToApplication($request->_redirect)
@@ -103,7 +103,7 @@ class CartLineItemsController
         $cart->save();
 
         if ($request->ajax() || $request->wantsJson()) {
-            return new CartResource($cart->fresh());
+            return app(CartResource::class)::make($cart->fresh());
         }
 
         return $request->_redirect && ! URL::isExternalToApplication($request->_redirect)

@@ -11,6 +11,7 @@ use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Facades\PaymentGateway;
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use DuncanMcClean\Cargo\Facades\TaxZone;
+use DuncanMcClean\Cargo\Http\Resources\API\Resource;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Orders\OrderStatus as OrderStatusEnum;
 use DuncanMcClean\Cargo\Search\DiscountsProvider;
@@ -120,6 +121,7 @@ class ServiceProvider extends AddonServiceProvider
             ->bootNav()
             ->bootPermissions()
             ->bootRouteBindings()
+            ->bootApiResources()
             ->bootGit()
             ->registerBlueprintNamespace()
             ->registerSearchables()
@@ -365,6 +367,13 @@ class ServiceProvider extends AddonServiceProvider
     private function isFrontendBindingEnabled(): bool
     {
         return config('statamic.routes.bindings', false);
+    }
+
+    private function bootApiResources(): self
+    {
+        Resource::mapDefaults();
+
+        return $this;
     }
 
     protected function bootGit(): self
