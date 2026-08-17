@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.11.0 (2026-08-17)
+
+### What's new
+- Add ability to customize JSON API responses [#266](https://github.com/duncanmcclean/statamic-cargo/pull/266) by @duncanmcclean
+
+### What's fixed
+- Bump zizmorcore/zizmor-action from 0.6.1 to 0.6.2 in the github-actions group [#265](https://github.com/duncanmcclean/statamic-cargo/pull/265) by @dependabot
+
+
+
 ## v1.10.1 (2026-07-30)
 
 ### What's fixed
