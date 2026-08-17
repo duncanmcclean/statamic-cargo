@@ -112,6 +112,7 @@ jobs:
           && steps.should-run-payment-tests.outputs.result == 'true'
           && matrix.php == 8.5 && matrix.laravel == '13.*'
           && matrix.stability == 'prefer-stable'
+          && matrix.os == 'ubuntu-latest'
           && matrix.shard == 1
         env:
           STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
