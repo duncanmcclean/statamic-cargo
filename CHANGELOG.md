@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.11.1 (2026-08-18)
+
+### What's fixed
+- Fix timezone drift on `date` when saving Eloquent orders [#269](https://github.com/duncanmcclean/statamic-cargo/pull/269) by @duncanmcclean
+
+
+
 ## v1.11.0 (2026-08-17)
 
 ### What's new
