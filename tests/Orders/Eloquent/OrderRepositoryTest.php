@@ -8,6 +8,7 @@ use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Orders\Eloquent\OrderModel;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Statamic;
@@ -131,6 +132,39 @@ class OrderRepositoryTest extends TestCase
         $this->assertNotNull($order->id());
         $this->assertEquals(1, $order->orderNumber());
         $this->assertNotNull($order->date());
+    }
+
+    #[Test]
+    public function date_does_not_shift_when_app_timezone_is_not_utc()
+    {
+        config()->set('app.timezone', 'Europe/Berlin');
+        date_default_timezone_set('Europe/Berlin');
+
+        $date = Carbon::parse('2025-08-18 10:00:00', 'UTC');
+
+        $order = Order::make()
+            ->site('default')
+            ->cart('abc')
+            ->status('payment_pending')
+            ->date($date)
+            ->customer(['name' => 'CJ Cregg', 'email' => 'cj.cregg@whitehouse.gov'])
+            ->grandTotal(2500)
+            ->subTotal(2500)
+            ->discountTotal(0)
+            ->taxTotal(0)
+            ->shippingTotal(0);
+
+        $this->repo->save($order);
+
+        $this->assertTrue($order->date()->equalTo($date));
+
+        $order = $this->repo->find($order->id());
+
+        $this->assertTrue($order->date()->equalTo($date));
+
+        $this->repo->save($order);
+
+        $this->assertTrue($order->date()->equalTo($date));
     }
 
     #[Test]
