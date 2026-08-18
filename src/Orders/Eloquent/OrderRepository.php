@@ -21,7 +21,7 @@ class OrderRepository extends Stache\Repositories\OrderRepository implements Rep
         $model = $order->toModel();
 
         if (! $order->date()) {
-            $model->date = Carbon::now('UTC');
+            $model->date = Carbon::now();
         }
 
         $model->save();

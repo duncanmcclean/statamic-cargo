@@ -56,7 +56,7 @@ class Order extends StacheOrder
 
         $attributes = [
             'site' => $source->site()->handle(),
-            'date' => $source->date(),
+            'date' => $source->date()?->copy()->setTimezone(config('app.timezone')),
             'cart' => $source->cart(),
             'status' => $source->status()->value,
             'customer' => $customer,
