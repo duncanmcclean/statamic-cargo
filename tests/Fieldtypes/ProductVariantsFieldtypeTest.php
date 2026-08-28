@@ -80,6 +80,28 @@ class ProductVariantsFieldtypeTest extends TestCase
     }
 
     #[Test]
+    public function can_process_with_falsy_values()
+    {
+        $process = (new ProductVariants)
+            ->setField(new Field('product_variants', [
+                'option_fields' => [
+                    ['handle' => 'stock', 'field' => ['type' => 'integer']],
+                    ['handle' => 'featured', 'field' => ['type' => 'toggle']],
+                ],
+            ]))
+            ->process([
+                'variants' => [['name' => 'Colour', 'values' => ['Red']]],
+                'options' => [
+                    ['key' => 'Red', 'variant' => 'Red', 'price' => '0.00', 'stock' => 0, 'featured' => false],
+                ],
+            ]);
+
+        $this->assertSame(0, $process['options'][0]['price']);
+        $this->assertSame(0, $process['options'][0]['stock']);
+        $this->assertSame(false, $process['options'][0]['featured']);
+    }
+
+    #[Test]
     public function can_process_with_no_variants_and_no_options()
     {
         $process = (new ProductVariants)
