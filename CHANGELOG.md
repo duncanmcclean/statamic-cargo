@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.11.2 (2026-08-28)
+
+### What's fixed
+- Fix falsy values being dropped from product variant options [#270](https://github.com/duncanmcclean/statamic-cargo/pull/270) by @duncanmcclean
+
+
+
 ## v1.11.1 (2026-08-18)
 
 ### What's fixed
