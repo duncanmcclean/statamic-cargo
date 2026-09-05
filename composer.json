@@ -14,16 +14,6 @@
         }
     },
     "extra": {
-        "download-dist": [
-            {
-                "url": "https://github.com/duncanmcclean/statamic-cargo/releases/download/{$version}/dist.tar.gz",
-                "path": "resources/dist"
-            },
-            {
-                "url": "https://github.com/duncanmcclean/statamic-cargo/releases/download/{$version}/dist-checkout.tar.gz",
-                "path": "resources/dist-checkout"
-            }
-        ],
         "statamic": {
             "name": "Cargo",
             "slug": "cargo",
@@ -45,7 +35,6 @@
         "laravel/framework": "^12.0 || ^13.0",
         "mollie/mollie-api-php": "^3.0",
         "moneyphp/money": "^4.5",
-        "pixelfear/composer-dist-plugin": "^0.1.0",
         "statamic/cms": "^6.20",
         "stillat/proteus": "^4.2.1",
         "stripe/stripe-php": "^16.4",
@@ -63,8 +52,7 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true,
-            "pixelfear/composer-dist-plugin": true
+            "pestphp/pest-plugin": true
         }
     },
     "minimum-stability": "dev",
