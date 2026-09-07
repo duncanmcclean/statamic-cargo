@@ -7,12 +7,13 @@ use DuncanMcClean\Cargo\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Taxes\Driver as TaxDriver;
 use DuncanMcClean\Cargo\Data\Address;
 use DuncanMcClean\Cargo\Orders\LineItem;
+use Illuminate\Support\Arr;
 
 class CalculateTaxes
 {
     public function handle(Cart $cart, Closure $next)
     {
-        $taxableAddress = $cart->taxableAddress() ?? $this->defaultAddress();
+        $taxableAddress = $cart->taxableAddress() ?? $this->defaultAddress($cart);
 
         if (! $taxableAddress) {
             return $next($cart);
@@ -76,9 +77,15 @@ class CalculateTaxes
         return $next($cart);
     }
 
-    private function defaultAddress(): ?Address
+    private function defaultAddress(Cart $cart): ?Address
     {
-        $address = array_filter(config('statamic.cargo.taxes.default_address') ?? []);
+        $defaultAddress = config('statamic.cargo.taxes.default_address') ?? [];
+
+        if (isset($defaultAddress[$cart->site()->handle()])) {
+            $defaultAddress = $defaultAddress[$cart->site()->handle()];
+        }
+
+        $address = array_filter(Arr::only($defaultAddress, ['country', 'state', 'postcode']));
 
         if (empty($address)) {
             return null;

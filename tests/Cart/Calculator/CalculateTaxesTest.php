@@ -14,6 +14,7 @@ use DuncanMcClean\Cargo\Shipping\ShippingOption;
 use DuncanMcClean\Cargo\Taxes\TaxCalculation;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
@@ -189,6 +190,82 @@ class CalculateTaxesTest extends TestCase
         $this->assertEquals(100, $cart->get('shipping_tax_total'));
         $this->assertEquals(600, $cart->shippingTotal());
         $this->assertEquals(2100, $cart->taxTotal());
+    }
+
+    #[Test]
+    #[DataProvider('siteDefaultAddressProvider')]
+    public function calculates_tax_against_site_default_address_when_cart_has_no_address(string $site, array $defaultAddress, string $expectedZone, int $expectedRate, int $expectedAmount)
+    {
+        $this->setSites([
+            'ie' => ['name' => 'Ireland', 'locale' => 'en_IE', 'url' => 'http://test.com/ie/'],
+            'uk' => ['name' => 'United Kingdom', 'locale' => 'en_GB', 'url' => 'http://test.com/'],
+            'us' => ['name' => 'United States', 'locale' => 'en_US', 'url' => 'http://test.com/us/'],
+        ]);
+
+        config()->set('statamic.cargo.taxes.default_address', $defaultAddress);
+
+        $product = Entry::make()->collection('products')->data(['price' => 10000, 'tax_class' => 'standard']);
+        $product->save();
+
+        $cart = Cart::make()
+            ->site($site)
+            ->lineItems([
+                ['id' => 'one', 'product' => $product->id(), 'quantity' => 1, 'total' => 10000],
+            ]);
+
+        TaxZone::make()->handle('ireland')->data([
+            'title' => 'Ireland',
+            'type' => 'countries',
+            'countries' => ['IRL'],
+            'rates' => ['standard' => 23],
+        ])->save();
+
+        TaxZone::make()->handle('uk')->data([
+            'title' => 'UK',
+            'type' => 'countries',
+            'countries' => ['GBR'],
+            'rates' => ['standard' => 20],
+        ])->save();
+
+        TaxZone::make()->handle('usa')->data([
+            'title' => 'USA',
+            'type' => 'countries',
+            'countries' => ['USA'],
+            'rates' => ['standard' => 10],
+        ])->save();
+
+        $cart = app(CalculateTaxes::class)->handle($cart, fn ($cart) => $cart);
+
+        $lineItem = $cart->lineItems()->find('one');
+
+        $this->assertEquals([
+            ['rate' => $expectedRate, 'description' => 'Standard', 'zone' => $expectedZone, 'amount' => $expectedAmount],
+        ], $lineItem->get('tax_breakdown'));
+
+        $this->assertEquals($expectedAmount, $lineItem->taxTotal());
+        $this->assertEquals(10000 + $expectedAmount, $lineItem->total());
+        $this->assertEquals($expectedAmount, $cart->taxTotal());
+    }
+
+    public static function siteDefaultAddressProvider(): array
+    {
+        return [
+            'irish site' => [
+                'ie',
+                ['ie' => ['country' => 'IRL'], 'uk' => ['country' => 'GBR']],
+                'Ireland', 23, 2300,
+            ],
+            'uk site' => [
+                'uk',
+                ['ie' => ['country' => 'IRL'], 'uk' => ['country' => 'GBR']],
+                'UK', 20, 2000,
+            ],
+            'site without its own default address falls back to top-level address' => [
+                'us',
+                ['country' => 'USA', 'ie' => ['country' => 'IRL']],
+                'USA', 10, 1000,
+            ],
+        ];
     }
 
     #[Test]
