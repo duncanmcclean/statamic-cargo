@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.12.0 (2026-09-07)
+
+### What's new
+- Add support for per-site default tax addresses [#275](https://github.com/duncanmcclean/statamic-cargo/pull/275) by @duncanmcclean
+
+
+
 ## v1.11.2 (2026-08-28)
 
 ### What's fixed
