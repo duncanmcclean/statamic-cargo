@@ -1,0 +1,11 @@
+{
+  "resources/css/checkout.css": {
+    "file": "assets/checkout-B_MHxxy6.css",
+    "name": "checkout",
+    "names": [
+      "checkout.css"
+    ],
+    "src": "resources/css/checkout.css",
+    "isEntry": true
+  }
+}
