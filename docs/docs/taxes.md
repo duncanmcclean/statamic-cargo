@@ -58,7 +58,7 @@ When prices are exclusive of tax, that means customers won't see any tax on the 
 ],
 ```
 
-Only the `country`, `state` and `postcode` are used when matching tax zones. As soon as the customer provides their own address, taxes will be recalculated against it.
+Only the `country`, `state` and `postcode` are used when matching tax zones. The `country` should be a three-letter [ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) code (eg. `GBR`, not `GB`). As soon as the customer provides their own address, taxes will be recalculated against it.
 
 :::tip note
 The default address is only used to estimate taxes. Customers still need to provide a real address before they can checkout.
