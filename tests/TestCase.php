@@ -58,6 +58,7 @@ abstract class TestCase extends AddonTestCase
             OrderServiceProvider::class,
             PaymentServiceProvider::class,
             ShippingServiceProvider::class,
+            \Stillat\Proteus\WriterServiceProvider::class,
         ]);
     }
 

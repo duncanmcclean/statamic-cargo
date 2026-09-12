@@ -16,8 +16,10 @@ class CodeInjection
         $useLines = array_filter($lines, fn ($line) => Str::startsWith($line, 'use '));
         $originalUseLines = $useLines;
 
-        foreach ($imports as $import) {
-            $useLines[] = "use $import;";
+        foreach ($imports as $class => $alias) {
+            $useLines[] = is_string($class)
+                ? "use $class as $alias;"
+                : "use $alias;";
         }
 
         // Filter out duplicate imports.

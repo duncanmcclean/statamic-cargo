@@ -1,0 +1,30 @@
+<x-mail::message>
+# Order #{{ $order->orderNumber }} has been shipped
+
+Good news! Your order is on its way.
+
+<x-mail::panel>
+@if($order->shippingOption)
+**Shipping Option:** {{ $order->shippingOption()->name() }}
+@endif
+
+@if($order->tracking_number)
+**Tracking Number:** {{ $order->tracking_number }}
+@endif
+
+@if($order->hasShippingAddress())
+**Shipping Address:** {{ $order->shippingAddress() }}
+@endif
+</x-mail::panel>
+
+<x-mail::table>
+| Item Description   |      Quantity |
+| :----------------- | ------------: |
+@foreach($order->lineItems() as $lineItem)
+| {{ $lineItem->product()->title }} | {{ $lineItem->quantity }} |
+@endforeach
+</x-mail::table>
+
+Thank you for your order!<br>
+{{ config('app.name') }}
+</x-mail::message>
