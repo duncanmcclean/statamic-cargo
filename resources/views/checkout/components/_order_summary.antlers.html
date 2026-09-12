@@ -43,6 +43,16 @@
         <span>{{ sub_total }}</span>
     </div>
 
+    {{ if shipping_option }}
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-1">
+                <span>{{ 'Shipping' | trans }}</span>
+                <span class="text-xs text-gray-500">({{ shipping_option:name }})</span>
+            </div>
+            <span>{{ shipping_option:price }}</span>
+        </div>
+    {{ /if }}
+
     {{ if discounts }}
         {{ discounts }}
             <div class="flex items-center justify-between">
@@ -53,16 +63,6 @@
                 <span>-{{ amount }}</span>
             </div>
         {{ /discounts }}
-    {{ /if }}
-
-    {{ if shipping_option }}
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-1">
-                <span>{{ 'Shipping' | trans }}</span>
-                <span class="text-xs text-gray-500">({{ shipping_option:name }})</span>
-            </div>
-            <span>{{ shipping_option:price }}</span>
-        </div>
     {{ /if }}
 
     {{ if !config:statamic:cargo:taxes:price_includes_tax }}

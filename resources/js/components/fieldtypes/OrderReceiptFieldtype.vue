@@ -46,15 +46,6 @@ function lineItemUpdated(lineItem) {
                     <TableCell class="font-medium">{{ __('Subtotal') }}</TableCell>
                     <TableCell class="text-right">{{ value.totals.sub_total }}</TableCell>
                 </TableRow>
-                <TableRow v-for="discount in value.discounts">
-                    <TableCell />
-                    <TableCell />
-                    <TableCell>
-                        <strong class="mb-1 block font-medium">{{ __('Discount') }}</strong>
-                        <Description :text="discount.description" />
-                    </TableCell>
-                    <TableCell class="text-right">-{{ discount.amount }}</TableCell>
-                </TableRow>
                 <TableRow v-if="value.shipping">
                     <TableCell />
                     <TableCell />
@@ -63,6 +54,15 @@ function lineItemUpdated(lineItem) {
                         <Description :text="value.shipping.name" />
                     </TableCell>
                     <TableCell class="text-right">{{ value.shipping.price }}</TableCell>
+                </TableRow>
+                <TableRow v-for="discount in value.discounts">
+                    <TableCell />
+                    <TableCell />
+                    <TableCell>
+                        <strong class="mb-1 block font-medium">{{ __('Discount') }}</strong>
+                        <Description :text="discount.description" />
+                    </TableCell>
+                    <TableCell class="text-right">-{{ discount.amount }}</TableCell>
                 </TableRow>
                 <TableRow v-if="value.taxes">
                     <TableCell />
