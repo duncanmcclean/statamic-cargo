@@ -76,6 +76,23 @@ PHP, File::get($this->file));
     }
 
     #[Test]
+    public function it_preserves_windows_line_endings()
+    {
+        File::put($this->file, str_replace("\n", "\r\n", File::get($this->file)));
+
+        CodeInjection::injectImports($this->file, [
+            'Illuminate\Support\Facades\Event',
+            'Illuminate\Support\Facades\Mail',
+        ]);
+
+        $contents = File::get($this->file);
+
+        $this->assertStringContainsString("use Illuminate\\Support\\Facades\\Event;\r\nuse Illuminate\\Support\\Facades\\Mail;\r\nuse Illuminate\\Support\\ServiceProvider;\r\n", $contents);
+        $this->assertStringNotContainsString("\r\r", $contents);
+        $this->assertEquals(0, substr_count(str_replace("\r\n", '', $contents), "\n"));
+    }
+
+    #[Test]
     public function it_does_not_duplicate_existing_imports()
     {
         CodeInjection::injectImports($this->file, [
