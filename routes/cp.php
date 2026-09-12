@@ -16,8 +16,9 @@ Route::name('cargo.')->group(function () {
     Route::resource('discounts', DiscountController::class)->except(['show', 'destroy']);
     Route::resource('orders', OrderController::class)->only(['index', 'edit', 'update']);
 
+    Route::resource('tax-classes', TaxClassController::class)->except('show');
+
     if (Cargo::usingDefaultTaxDriver()) {
-        Route::resource('tax-classes', TaxClassController::class)->except('show');
         Route::resource('tax-zones', TaxZoneController::class)->except('show');
     }
 

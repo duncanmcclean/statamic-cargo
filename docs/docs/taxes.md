@@ -233,5 +233,5 @@ public function boot(): void
 ```
 
 :::tip note
-The "Tax Class" and "Tax Zone" features will be unavailable unless your custom tax driver extends Cargo's `DefaultTaxDriver` class.
+Tax Zones are only available when using Cargo's default tax driver. Tax Classes are always available, so your driver can use the product's tax class to decide how it should be taxed (for example, mapping it to a third-party service's product tax codes).
 :::
