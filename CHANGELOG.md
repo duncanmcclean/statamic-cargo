@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.13.0 (2026-09-12)
+
+### What's new
+- Publish an "order shipped" email during install [#278](https://github.com/duncanmcclean/statamic-cargo/pull/278) by @duncanmcclean
+- Support metadata fields on line items [#280](https://github.com/duncanmcclean/statamic-cargo/pull/280) by @duncanmcclean
+- Add "Free Shipping" discount type [#281](https://github.com/duncanmcclean/statamic-cargo/pull/281) by @duncanmcclean
+
+### What's fixed
+- Always make Tax Classes available, regardless of tax driver [#282](https://github.com/duncanmcclean/statamic-cargo/pull/282) by @duncanmcclean
+- Show shipping before discounts in order summaries [#283](https://github.com/duncanmcclean/statamic-cargo/pull/283) by @duncanmcclean
+- Bump zizmorcore/zizmor-action from 0.6.2 to 0.6.3 in the github-actions group [#277](https://github.com/duncanmcclean/statamic-cargo/pull/277) by @dependabot
+
+
+
 ## v1.12.0 (2026-09-07)
 
 ### What's new
