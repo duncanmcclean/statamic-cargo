@@ -152,48 +152,82 @@ class InstallCommand extends Command
 
     private function publishMailables(): self
     {
-        $mailablePath = app_path('Mail/OrderConfirmation.php');
-        $mailableViewPath = resource_path('views/emails/order-confirmation.blade.php');
+        $publishedOrderConfirmation = $this->publishMailable(
+            mailable: 'OrderConfirmation',
+            view: 'order-confirmation',
+            imports: [
+                'App\Mail\OrderConfirmation',
+                'DuncanMcClean\Cargo\Events\OrderPaymentReceived',
+            ],
+            listener: <<<'PHP'
+    Event::listen(OrderPaymentReceived::class, function ($event) {
+            Mail::to($event->order->customer())
+                ->locale($event->order->site()->shortLocale())
+                ->send(new OrderConfirmation($event->order));
+        });
+PHP,
+        );
 
-        if (File::exists($mailablePath) && File::exists($mailableViewPath)) {
+        $publishedOrderShipped = $this->publishMailable(
+            mailable: 'OrderShipped',
+            view: 'order-shipped',
+            imports: [
+                'App\Mail\OrderShipped',
+                'DuncanMcClean\Cargo\Events\OrderShipped' => 'OrderShippedEvent',
+            ],
+            listener: <<<'PHP'
+    Event::listen(OrderShippedEvent::class, function ($event) {
+            Mail::to($event->order->customer())
+                ->locale($event->order->site()->shortLocale())
+                ->send(new OrderShipped($event->order));
+        });
+PHP,
+        );
+
+        if (! $publishedOrderConfirmation && ! $publishedOrderShipped) {
             return $this;
         }
 
+        $this->components->info("Mailables published. You'll find them in <comment>app/Mail</comment> and <comment>resources/views/emails</comment>.");
+
+        return $this;
+    }
+
+    private function publishMailable(string $mailable, string $view, array $imports, string $listener): bool
+    {
+        $mailablePath = app_path("Mail/{$mailable}.php");
+        $mailableViewPath = resource_path("views/emails/{$view}.blade.php");
+
+        if (File::exists($mailablePath) && File::exists($mailableViewPath)) {
+            return false;
+        }
+
         File::ensureDirectoryExists(app_path('Mail'));
-        File::put($mailablePath, File::get(__DIR__.'/stubs/install/OrderConfirmation.php.stub'));
+        File::put($mailablePath, File::get(__DIR__."/stubs/install/{$mailable}.php.stub"));
 
         File::ensureDirectoryExists(resource_path('views/emails'));
-        File::put($mailableViewPath, File::get(__DIR__.'/stubs/install/order-confirmation.blade.php.stub'));
+        File::put($mailableViewPath, File::get(__DIR__."/stubs/install/{$view}.blade.php.stub"));
 
         CodeInjection::injectImports(
             file: app_path('Providers/AppServiceProvider.php'),
             imports: [
                 'Illuminate\Support\Facades\Event',
                 'Illuminate\Support\Facades\Mail',
-                'App\Mail\OrderConfirmation',
-                'DuncanMcClean\Cargo\Events\OrderPaymentReceived',
+                ...$imports,
             ],
         );
 
         try {
-            CodeInjection::injectIntoAppServiceProviderBoot($code = <<<'PHP'
-    Event::listen(OrderPaymentReceived::class, function ($event) {
-            Mail::to($event->order->customer())
-                ->locale($event->order->site()->shortLocale())
-                ->send(new OrderConfirmation($event->order));
-        });
-PHP);
+            CodeInjection::injectIntoAppServiceProviderBoot($listener);
         } catch (\Exception $e) {
             if ($e->getMessage() !== 'Code has already been injected.') {
                 $this->components->warn('Failed to inject code into AppServiceProvider. Please add the following to the <comment>boot</comment> method manually:');
-                $this->line($code);
+                $this->line($listener);
                 $this->newLine();
             }
         }
 
-        $this->components->info("Mailables published. You'll find them in <comment>app/Mail</comment> and <comment>resources/views/emails</comment>.");
-
-        return $this;
+        return true;
     }
 
     private function publishPrebuiltCheckout(): self

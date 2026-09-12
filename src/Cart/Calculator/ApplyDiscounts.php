@@ -42,10 +42,19 @@ class ApplyDiscounts
                     return;
                 }
 
+                $shippingAmount = min($discount->discountType()->calculateShipping($cart), $cart->shippingTotal());
+                $cart->shippingTotal($cart->shippingTotal() - $shippingAmount);
+
+                $amount = $lineItems->sum() + $shippingAmount;
+
+                if ($amount === 0) {
+                    return;
+                }
+
                 return (array) DiscountCalculation::make(
                     discount: $discount->handle(),
                     description: $discount->get('discount_code') ?? $discount->title(),
-                    amount: $lineItems->sum(),
+                    amount: $amount,
                 );
             })
             ->filter();

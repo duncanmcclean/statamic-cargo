@@ -26,6 +26,11 @@ abstract class DiscountType
 
     abstract public function calculate(Cart $cart, LineItem $lineItem): int;
 
+    public function calculateShipping(Cart $cart): int
+    {
+        return 0;
+    }
+
     public function isValidForLineItem(Cart $cart, LineItem $lineItem): bool
     {
         if ($this->discount->get('start_date') !== null) {

@@ -2,7 +2,6 @@
 
 namespace DuncanMcClean\Cargo\Listeners;
 
-use DuncanMcClean\Cargo\Cargo;
 use Statamic\Events\EntryBlueprintFound;
 use Statamic\Facades\AssetContainer;
 use Statamic\Fields\Blueprint;
@@ -27,7 +26,7 @@ class EnsureProductFields
             ], 'sidebar');
         }
 
-        if (Cargo::usingDefaultTaxDriver() && ! $event->blueprint->hasField('tax_class')) {
+        if (! $event->blueprint->hasField('tax_class')) {
             $event->blueprint->ensureField('tax_class', [
                 'type' => 'tax_classes',
                 'display' => __('Tax Class'),

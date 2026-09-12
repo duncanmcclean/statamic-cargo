@@ -121,6 +121,69 @@ class ApplyDiscountsTest extends TestCase
         $this->assertEquals(2500, $cart->lineItems()->find('abc')->discountTotal());
     }
 
+    #[Test]
+    public function applies_free_shipping_discount_to_shipping_total()
+    {
+        $this->makeProduct('123')->set('price', 2500)->save();
+
+        Discount::make()->handle('a')->title('Discount A')->type('percentage_off')->set('percentage_off', 10)->save();
+        Discount::make()->handle('b')->title('Free Shipping')->type('free_shipping')->save();
+
+        $cart = Cart::make()->shippingTotal(500)->lineItems([
+            ['id' => 'abc', 'product' => '123', 'quantity' => 1, 'total' => 2500],
+        ]);
+
+        $cart = app(ApplyDiscounts::class)->handle($cart, fn ($cart) => $cart);
+
+        $this->assertEquals([
+            ['discount' => 'a', 'description' => 'Discount A', 'amount' => 250],
+            ['discount' => 'b', 'description' => 'Free Shipping', 'amount' => 500],
+        ], $cart->get('discount_breakdown'));
+
+        $this->assertEquals(750, $cart->discountTotal());
+        $this->assertEquals(0, $cart->shippingTotal());
+        $this->assertEquals(250, $cart->lineItems()->find('abc')->discountTotal());
+    }
+
+    #[Test]
+    public function ensures_shipping_discounts_do_not_exceed_shipping_total()
+    {
+        $this->makeProduct('123')->set('price', 2500)->save();
+
+        Discount::make()->handle('a')->title('Free Shipping A')->type('free_shipping')->save();
+        Discount::make()->handle('b')->title('Free Shipping B')->type('free_shipping')->save();
+
+        $cart = Cart::make()->shippingTotal(500)->lineItems([
+            ['id' => 'abc', 'product' => '123', 'quantity' => 1, 'total' => 2500],
+        ]);
+
+        $cart = app(ApplyDiscounts::class)->handle($cart, fn ($cart) => $cart);
+
+        $this->assertEquals([
+            ['discount' => 'a', 'description' => 'Free Shipping A', 'amount' => 500],
+        ], $cart->get('discount_breakdown'));
+
+        $this->assertEquals(500, $cart->discountTotal());
+        $this->assertEquals(0, $cart->shippingTotal());
+    }
+
+    #[Test]
+    public function discounts_which_do_not_discount_anything_are_not_applied()
+    {
+        $this->makeProduct('123')->set('price', 2500)->save();
+
+        Discount::make()->handle('a')->title('Free Shipping')->type('free_shipping')->save();
+
+        $cart = Cart::make()->lineItems([
+            ['id' => 'abc', 'product' => '123', 'quantity' => 1, 'total' => 2500],
+        ]);
+
+        $cart = app(ApplyDiscounts::class)->handle($cart, fn ($cart) => $cart);
+
+        $this->assertNull($cart->get('discount_breakdown'));
+        $this->assertEquals(0, $cart->discountTotal());
+    }
+
     protected function makeProduct($id = null)
     {
         Collection::make('products')->save();

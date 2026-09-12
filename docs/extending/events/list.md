@@ -98,6 +98,20 @@ public function handle(DiscountSaved $event)
 }
 ```
 
+### LineItemBlueprintFound
+`DuncanMcClean\Cargo\Events\LineItemBlueprintFound`
+
+Dispatched when Cargo gets the [line item blueprint](/docs/orders#line-items).
+
+You may modify the blueprint here, in the same way as `OrderBlueprintFound`.
+
+```php
+public function handle(LineItemBlueprintFound $event)
+{
+	$event->blueprint->ensureField('engraving', ['type' => 'text', 'display' => 'Engraving Text']);
+}
+```
+
 ### OrderBlueprintFound
 `DuncanMcClean\Cargo\Events\OrderBlueprintFound`
 

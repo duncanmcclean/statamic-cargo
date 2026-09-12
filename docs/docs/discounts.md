@@ -22,7 +22,11 @@ Discounts can be configured using various conditions and limitations. Most of th
 
 ![Discount Create Form](/images/discount-publish-form.png)
 
-Cargo supports "Amount off" and "Percentage off" discount types out-of-the-box, with more on the way. If you need to, you can also [build your own discount type](#building-your-own-discount-type).
+Cargo supports three discount types out-of-the-box. If you need to, you can also [build your own discount type](#building-your-own-discount-type).
+
+* **Amount off**: takes a fixed amount off the cart, split proportionally across the eligible line items.
+* **Percentage off**: takes a percentage off each eligible line item.
+* **Free Shipping**: removes the cost of the customer's selected shipping option. When the discount is limited to specific products, the cart only needs to contain one of them. It won't do anything until the customer has selected a shipping option, and no tax will be charged on the discounted shipping.
 
 ## Redeem discount codes
 You can redeem discount codes using the `{{ cart:update }}` form. Simply provide a `discount_code` input so the customer can enter their discount code.
@@ -117,5 +121,7 @@ class AmountOff extends DiscountType
 ```
 
 As you might expect, the `calculate` method should calculate the discount amount for a line item, returning it as an integer (in pence).
+
+If your discount type should also discount shipping, override the `calculateShipping` method. It receives the cart and should return the amount to take off the shipping total, again as an integer (in pence).
 
 The `fieldItems` method allows you to define any config fields for the discount type. You can then access them using `$this->discount->get('field_handle')`.

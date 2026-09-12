@@ -11,6 +11,11 @@ If you need to add additional fields to orders, you can do so by updating the Or
 
 The blueprint only contains your custom fields. They'll be merged with Cargo's built-in order blueprint.
 
+### Line Items
+Line items have their own blueprint, also found on the "Blueprints" page. Add fields here for any extra data you store on line items, like engraving text or uploaded artwork.
+
+Any data passed to the [`{{ cart:add }}`](/frontend/tags/cart#adding-to-the-cart) tag or the [JSON API](/frontend/json-api/endpoints#add-a-line-item) is saved on the line item. Data with a matching blueprint field is shown on the order in the Control Panel and on packing slips, using the field's display name and fieldtype.
+
 ## Statuses
 Orders can move between various different statuses:
 * Payment Pending

@@ -11,13 +11,16 @@ class CodeInjection
     {
         $contents = File::get($file);
 
-        $lines = explode("\n", $contents);
+        $lineEnding = Str::contains($contents, "\r\n") ? "\r\n" : "\n";
+        $lines = explode($lineEnding, $contents);
 
         $useLines = array_filter($lines, fn ($line) => Str::startsWith($line, 'use '));
         $originalUseLines = $useLines;
 
-        foreach ($imports as $import) {
-            $useLines[] = "use $import;";
+        foreach ($imports as $class => $alias) {
+            $useLines[] = is_string($class)
+                ? "use $class as $alias;"
+                : "use $alias;";
         }
 
         // Filter out duplicate imports.
@@ -31,7 +34,7 @@ class CodeInjection
         $lastUseLine = array_key_last($originalUseLines);
 
         // Replace everything in between the first and last "use " lines with the new imports.
-        $contents = implode("\n", array_merge(
+        $contents = implode($lineEnding, array_merge(
             array_slice($lines, 0, $firstUseLine),
             $useLines,
             array_slice($lines, $lastUseLine + 1)

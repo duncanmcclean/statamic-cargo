@@ -10,6 +10,7 @@ class DiscountServiceProvider extends AddonServiceProvider
     protected array $discountTypes = [
         Types\AmountOff::class,
         Types\PercentageOff::class,
+        Types\FreeShipping::class,
     ];
 
     public function bootAddon()

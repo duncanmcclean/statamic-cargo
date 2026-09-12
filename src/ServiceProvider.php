@@ -257,13 +257,13 @@ class ServiceProvider extends AddonServiceProvider
                 ->icon('shopping-store-discount-percent')
                 ->can('view discounts');
 
-            if (Cargo::usingDefaultTaxDriver()) {
-                $nav->create(__('Tax Classes'))
-                    ->section('Store')
-                    ->route('cargo.tax-classes.index')
-                    ->icon(Cargo::svg('tax-classes'))
-                    ->can('manage taxes');
+            $nav->create(__('Tax Classes'))
+                ->section('Store')
+                ->route('cargo.tax-classes.index')
+                ->icon(Cargo::svg('tax-classes'))
+                ->can('manage taxes');
 
+            if (Cargo::usingDefaultTaxDriver()) {
                 $nav->create(__('Tax Zones'))
                     ->section('Store')
                     ->route('cargo.tax-zones.index')
@@ -299,9 +299,7 @@ class ServiceProvider extends AddonServiceProvider
                     ]);
                 });
 
-                if (Cargo::usingDefaultTaxDriver()) {
-                    Permission::register('manage taxes')->label(__('Manage Taxes'));
-                }
+                Permission::register('manage taxes')->label(__('Manage Taxes'));
             });
         });
 
@@ -405,7 +403,17 @@ class ServiceProvider extends AddonServiceProvider
         Blueprint::addNamespace('cargo', __DIR__.'/../resources/blueprints');
 
         if (! Blueprint::find('cargo::order')) {
-            Blueprint::make('order')->setNamespace('cargo')->save();
+            Blueprint::make('order')
+                ->setNamespace('cargo')
+                ->setContents(['title' => __('Order')])
+                ->save();
+        }
+
+        if (! Blueprint::find('cargo::line_item')) {
+            Blueprint::make('line_item')
+                ->setNamespace('cargo')
+                ->setContents(['title' => __('Line Item')])
+                ->save();
         }
 
         return $this;
