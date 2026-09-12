@@ -22,11 +22,11 @@ $downloadUrl = URL::signedRoute('statamic.cargo.download', [
 |                    |               |
 | -----------------: | ------------: |
 | **Subtotal** | {{ $order->sub_total }} |
-@if($order->discounts)
-| **Discounts** | -{{ $order->discount_total }}|
-@endif
 @if($order->shippingOption)
 | **Shipping** ({{ $order->shippingOption()->name }}) | {{ $order->shipping_total }} |
+@endif
+@if($order->discounts)
+| **Discounts** | -{{ $order->discount_total }}|
 @endif
 @unless(config('statamic.cargo.taxes.price_includes_tax'))
 | **Taxes** | {{ $order->tax_total }} |
