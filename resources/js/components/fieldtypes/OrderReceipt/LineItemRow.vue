@@ -1,6 +1,7 @@
 <script setup>
 import { TableRow, TableCell } from '@statamic/cms/ui';
 import { InlineEditForm } from '@statamic/cms';
+import LineItemMetadata from './LineItemMetadata.vue';
 import { ref } from 'vue';
 
 const emit = defineEmits(['updated']);
@@ -32,7 +33,7 @@ function itemUpdated(responseData) {
 </script>
 
 <template>
-    <TableRow>
+    <TableRow :class="{ 'border-b-0!': lineItem.metadata.length }">
         <TableCell>
             <div
                 v-if="lineItem.product.invalid"
@@ -59,4 +60,6 @@ function itemUpdated(responseData) {
             @closed="isEditing = false"
         />
     </TableRow>
+
+    <LineItemMetadata v-if="lineItem.metadata.length" :metadata="lineItem.metadata" />
 </template>

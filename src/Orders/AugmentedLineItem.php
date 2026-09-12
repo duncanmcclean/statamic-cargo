@@ -3,6 +3,7 @@
 namespace DuncanMcClean\Cargo\Orders;
 
 use Statamic\Data\AbstractAugmented;
+use Statamic\Fields\Field;
 use Statamic\Fields\Value;
 use Statamic\Support\Str;
 
@@ -28,7 +29,17 @@ class AugmentedLineItem extends AbstractAugmented
         return [
             'id',
             'has_downloads',
+            'metadata',
         ];
+    }
+
+    public function metadata(): array
+    {
+        return $this->data->metadata()->map(fn (Field $field) => [
+            'handle' => $field->handle(),
+            'display' => $field->display(),
+            'value' => $this->get($field->handle()),
+        ])->values()->all();
     }
 
     public function get($handle): Value
