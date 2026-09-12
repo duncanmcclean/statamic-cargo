@@ -150,8 +150,8 @@ class Calculator
             ->through([  
                 ResetTotals::class,  
                 CalculateLineItems::class,  
-                ApplyCouponDiscounts::class,  
                 ApplyShipping::class,  
+                ApplyDiscounts::class,  
                 CalculateTaxes::class,  
 
 				// Your custom calculator...

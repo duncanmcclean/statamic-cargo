@@ -18,8 +18,10 @@ class CalculateTotals
             $total += $cart->lineItems()->map->taxTotal()->sum();
         }
 
-        // Apply any discounts to the total before adding shipping.
-        $total = $total - $cart->discountTotal();
+        // Apply any line item discounts to the total before adding shipping.
+        // Shipping discounts are already reflected in the shipping total,
+        // so we don't need to do anything about them here.
+        $total = $total - $cart->lineItems()->map->discountTotal()->sum();
 
         // Add shipping costs to the total
         $total += $cart->shippingTotal();
