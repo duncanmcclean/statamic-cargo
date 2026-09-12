@@ -75,7 +75,35 @@ class CalculateTotalsTest extends TestCase
     }
 
     #[Test]
-    public function discount_total_is_subtracted_from_grand_total()
+    public function line_item_discounts_are_subtracted_from_grand_total()
+    {
+        config()->set('statamic.cargo.taxes.price_includes_tax', true);
+
+        $cart = Cart::make()
+            ->lineItems([
+                [
+                    'product' => 'product-id',
+                    'quantity' => 1,
+                    'unit_price' => 500,
+                    'sub_total' => 500,
+                    'tax_total' => 20,
+                    'discount_total' => 400,
+                    'total' => 500,
+                ],
+            ])
+            ->subTotal(500)
+            ->shippingTotal(500)
+            ->set('shipping_tax_total', 20)
+            ->taxTotal(40)
+            ->discountTotal(400);
+
+        $cart = app(CalculateTotals::class)->handle($cart, fn ($cart) => $cart);
+
+        $this->assertEquals(600, $cart->grandTotal());
+    }
+
+    #[Test]
+    public function shipping_discounts_are_not_subtracted_from_grand_total_again()
     {
         config()->set('statamic.cargo.taxes.price_includes_tax', true);
 
@@ -91,13 +119,12 @@ class CalculateTotalsTest extends TestCase
                 ],
             ])
             ->subTotal(500)
-            ->shippingTotal(500)
-            ->set('shipping_tax_total', 20)
-            ->taxTotal(40)
-            ->discountTotal(400);
+            ->shippingTotal(0)
+            ->taxTotal(20)
+            ->discountTotal(500);
 
         $cart = app(CalculateTotals::class)->handle($cart, fn ($cart) => $cart);
 
-        $this->assertEquals(600, $cart->grandTotal());
+        $this->assertEquals(500, $cart->grandTotal());
     }
 }

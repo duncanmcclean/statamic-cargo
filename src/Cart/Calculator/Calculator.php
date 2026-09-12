@@ -13,8 +13,8 @@ class Calculator
             ->through([
                 ResetTotals::class,
                 CalculateLineItems::class,
-                ApplyDiscounts::class,
                 ApplyShipping::class,
+                ApplyDiscounts::class,
                 CalculateTaxes::class,
                 CalculateTotals::class,
             ])
