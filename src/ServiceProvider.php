@@ -405,7 +405,17 @@ class ServiceProvider extends AddonServiceProvider
         Blueprint::addNamespace('cargo', __DIR__.'/../resources/blueprints');
 
         if (! Blueprint::find('cargo::order')) {
-            Blueprint::make('order')->setNamespace('cargo')->save();
+            Blueprint::make('order')
+                ->setNamespace('cargo')
+                ->setContents(['title' => __('Order')])
+                ->save();
+        }
+
+        if (! Blueprint::find('cargo::line_item')) {
+            Blueprint::make('line_item')
+                ->setNamespace('cargo')
+                ->setContents(['title' => __('Line Item')])
+                ->save();
         }
 
         return $this;

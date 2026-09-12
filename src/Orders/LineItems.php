@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Orders;
 
+use DuncanMcClean\Cargo\Events\LineItemBlueprintFound;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Statamic\Facades\Stache;
@@ -77,6 +78,10 @@ class LineItems extends Collection
 
     public static function blueprint()
     {
-        return (new LineItemBlueprint)();
+        $blueprint = (new LineItemBlueprint)();
+
+        LineItemBlueprintFound::dispatch($blueprint);
+
+        return $blueprint;
     }
 }
