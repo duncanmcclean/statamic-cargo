@@ -100,7 +100,12 @@
                 {{ order:line_items }}
                     {{ if product:type !== 'digital' }}
                         <tr>
-                            <td class="text-sm">{{ product:title }}</td>
+                            <td class="text-sm">
+                                {{ product:title }}
+                                {{ metadata }}
+                                    <div class="text-xs text-gray-600">{{ display }}: {{ value }}</div>
+                                {{ /metadata }}
+                            </td>
                             <td class="text-sm text-right w-20">{{ quantity }}</td>
                         </tr>
                     {{ /if }}

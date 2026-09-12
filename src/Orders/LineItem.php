@@ -5,10 +5,12 @@ namespace DuncanMcClean\Cargo\Orders;
 use DuncanMcClean\Cargo\Contracts\Products\Product as ProductContract;
 use DuncanMcClean\Cargo\Facades\Product;
 use DuncanMcClean\Cargo\Products\ProductVariant;
+use Illuminate\Support\Collection;
 use Statamic\Contracts\Data\Augmented;
 use Statamic\Data\ContainsData;
 use Statamic\Data\HasAugmentedInstance;
 use Statamic\Fields\Blueprint as StatamicBlueprint;
+use Statamic\Fields\Field;
 use Statamic\Support\Traits\FluentlyGetsAndSets;
 
 class LineItem
@@ -151,6 +153,13 @@ class LineItem
     public function blueprint(): StatamicBlueprint
     {
         return LineItems::blueprint();
+    }
+
+    public function metadata(): Collection
+    {
+        return $this->blueprint()->fields()->all()
+            ->filter(fn (Field $field) => $this->has($field->handle()))
+            ->map(fn (Field $field) => $field->newInstance()->setValue($this->get($field->handle()))->setParent($this));
     }
 
     public function fileData(): array

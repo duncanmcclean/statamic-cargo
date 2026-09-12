@@ -5,6 +5,7 @@ namespace DuncanMcClean\Cargo\Fieldtypes;
 use DuncanMcClean\Cargo\Orders\LineItem;
 use DuncanMcClean\Cargo\Orders\LineItems;
 use DuncanMcClean\Cargo\Support\Money;
+use Statamic\Fields\Field;
 use Statamic\Fields\Fieldtype;
 
 class OrderReceipt extends Fieldtype
@@ -36,6 +37,12 @@ class OrderReceipt extends Fieldtype
                 'quantity' => $lineItem->quantity(),
                 'sub_total' => Money::format($lineItem->subTotal(), $order->site()),
                 'total' => Money::format($lineItem->total(), $order->site()),
+                'metadata' => $lineItem->metadata()->map(fn (Field $field) => [
+                    'handle' => $field->handle(),
+                    'display' => $field->display(),
+                    'fieldtype' => $field->type(),
+                    'value' => $field->preProcessIndex()->value(),
+                ])->values()->all(),
             ])->all(),
             'discounts' => collect($order->get('discount_breakdown'))->map(fn ($discount) => [
                 'discount' => $discount['discount'],
