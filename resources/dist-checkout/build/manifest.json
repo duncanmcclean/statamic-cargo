@@ -1,0 +1,11 @@
+{
+  "resources/css/checkout.css": {
+    "file": "assets/checkout-CvEcMP7n.css",
+    "name": "checkout",
+    "names": [
+      "checkout.css"
+    ],
+    "src": "resources/css/checkout.css",
+    "isEntry": true
+  }
+}
