@@ -78,7 +78,7 @@ PHP, File::get($this->file));
     #[Test]
     public function it_preserves_windows_line_endings()
     {
-        File::put($this->file, str_replace("\n", "\r\n", File::get($this->file)));
+        File::put($this->file, preg_replace('/\r?\n/', "\r\n", File::get($this->file)));
 
         CodeInjection::injectImports($this->file, [
             'Illuminate\Support\Facades\Event',
