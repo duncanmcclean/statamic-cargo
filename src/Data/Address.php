@@ -3,7 +3,6 @@
 namespace DuncanMcClean\Cargo\Data;
 
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Facades\File;
 use Statamic\Dictionaries\Item;
 use Statamic\Facades\Blueprint;
 use Statamic\Facades\Dictionary;
@@ -43,13 +42,7 @@ class Address implements Arrayable, Stringable
             return null;
         }
 
-        $states = File::json(__DIR__.'/../../resources/json/states.json');
-
-        if (! isset($states[$country])) {
-            return null;
-        }
-
-        return collect($states[$country])->firstWhere('code', $state);
+        return States::byCountry($country)->firstWhere('code', $state);
     }
 
     public function toArray(): array

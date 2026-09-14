@@ -68,6 +68,24 @@ class AddressTest extends TestCase
     }
 
     #[Test]
+    public function state_name_is_translated()
+    {
+        app()->setLocale('de');
+
+        $address = Address::make([
+            'name' => 'Max Mustermann',
+            'line_1' => 'Marienplatz 8',
+            'city' => 'München',
+            'postcode' => 80331,
+            'country' => 'DEU',
+            'state' => 'BY',
+        ]);
+
+        $this->assertEquals('Bayern', $address->state()['name']);
+        $this->assertEquals('Max Mustermann, Marienplatz 8, München, 80331, Deutschland, Bayern', $address->__toString());
+    }
+
+    #[Test]
     public function can_add_fields_via_hook()
     {
         Address::hook('fields', function ($payload, $next) {

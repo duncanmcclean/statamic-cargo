@@ -4,6 +4,7 @@ namespace DuncanMcClean\Cargo\Data;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Lang;
 
 class States
 {
@@ -15,7 +16,17 @@ class States
 
         $states = (new self)->getStates();
 
-        return collect($states[$country] ?? []);
+        return collect($states[$country] ?? [])
+            ->map(function (array $state) use ($country) {
+                $key = "cargo::states.{$country}.{$state['code']}";
+
+                return [
+                    ...$state,
+                    'name' => Lang::has($key) ? __($key) : $state['name'],
+                ];
+            })
+            ->sortBy('name')
+            ->values();
     }
 
     private function getStates(): array
