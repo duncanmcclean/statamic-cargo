@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.13.1 (2026-09-14)
+
+### What's fixed
+- Compare order dates by value in dirty state checks [#286](https://github.com/duncanmcclean/statamic-cargo/pull/286) by @duncanmcclean
+
+
+
 ## v1.13.0 (2026-09-12)
 
 ### What's new
