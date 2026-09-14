@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.13.2 (2026-09-14)
+
+### What's fixed
+- Translate state names [#289](https://github.com/duncanmcclean/statamic-cargo/pull/289) by @duncanmcclean
+
+
+
 ## v1.13.1 (2026-09-14)
 
 ### What's fixed
