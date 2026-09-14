@@ -146,6 +146,25 @@ class TimelineEventsTest extends TestCase
         ], $order->timelineEvents()->toArray());
     }
 
+    /**
+     * @see https://github.com/duncanmcclean/statamic-cargo/issues/285
+     */
+    #[Test]
+    public function order_updated_event_is_not_recorded_when_nothing_has_changed()
+    {
+        Carbon::setTestNow(Carbon::parse('2025-01-15 12:00:00'));
+
+        $order = $this->makeOrder();
+
+        Carbon::setTestNow(Carbon::parse('2025-01-15 14:00:00'));
+
+        $order->date($order->date()->copy())->save();
+
+        $this->assertEquals([
+            ['datetime' => '2025-01-15 12:00:00', 'type' => 'order_created', 'user' => null, 'metadata' => []],
+        ], $order->fresh()->timelineEvents()->toArray());
+    }
+
     #[Test]
     public function order_updated_event_is_not_recorded_when_order_was_just_created()
     {

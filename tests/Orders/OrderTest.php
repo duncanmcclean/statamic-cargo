@@ -98,6 +98,29 @@ class OrderTest extends TestCase
         ];
     }
 
+    /**
+     * @see https://github.com/duncanmcclean/statamic-cargo/issues/285
+     */
+    #[Test]
+    public function date_is_not_dirty_when_set_to_the_same_moment()
+    {
+        $order = Order::make()->date(Carbon::parse('2025-04-05 12:41:24'))->syncOriginal();
+
+        $order->date(Carbon::parse('2025-04-05 12:41:24'));
+
+        $this->assertFalse($order->isDirty('date'));
+    }
+
+    #[Test]
+    public function date_is_dirty_when_changed()
+    {
+        $order = Order::make()->date(Carbon::parse('2025-04-05 12:41:24'))->syncOriginal();
+
+        $order->date(Carbon::parse('2025-04-05 12:41:25'));
+
+        $this->assertTrue($order->isDirty('date'));
+    }
+
     #[Test]
     public function can_get_and_set_guest_customer()
     {

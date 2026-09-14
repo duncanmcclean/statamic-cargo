@@ -428,7 +428,7 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
     {
         return array_merge([
             'order_number' => $this->orderNumber(),
-            'date' => $this->date(),
+            'date' => $this->date()?->format('Y-m-d H:i:s'),
             'cart' => $this->cart(),
             'status' => $this->status()?->value,
             'customer' => $this->customer()?->id(),
