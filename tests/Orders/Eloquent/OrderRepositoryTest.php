@@ -200,6 +200,33 @@ class OrderRepositoryTest extends TestCase
         });
     }
 
+    /**
+     * @see https://github.com/duncanmcclean/statamic-cargo/issues/285
+     */
+    #[Test]
+    public function order_updated_timeline_event_is_not_recorded_when_nothing_has_changed()
+    {
+        Carbon::setTestNow(Carbon::parse('2025-01-15 12:00:00'));
+
+        Cart::make()->id('abc')->save();
+
+        $order = Order::make()
+            ->site('default')
+            ->cart('abc')
+            ->status('payment_pending')
+            ->customer(['name' => 'CJ Cregg', 'email' => 'cj.cregg@whitehouse.gov']);
+
+        $order->save();
+
+        Carbon::setTestNow(Carbon::parse('2025-01-15 14:00:00'));
+
+        $order->save();
+
+        $this->assertEquals([
+            ['datetime' => '2025-01-15 12:00:00', 'type' => 'order_created', 'user' => null, 'metadata' => []],
+        ], $order->fresh()->timelineEvents()->toArray());
+    }
+
     #[Test]
     public function can_delete_an_order()
     {
