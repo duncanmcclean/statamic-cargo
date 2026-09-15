@@ -153,7 +153,7 @@ class ProductVariants extends Fieldtype
                 'field' => [
                     'type' => 'text',
                     'listable' => 'hidden',
-                    'display' => 'Name',
+                    'display' => __('Name'),
                     'width' => 50,
                     'input_type' => 'text',
                     'validate' => ['required'],
@@ -164,7 +164,7 @@ class ProductVariants extends Fieldtype
                 'field' => [
                     'type' => 'taggable',
                     'listable' => 'hidden',
-                    'display' => 'Values',
+                    'display' => __('Values'),
                     'width' => 50,
                     'validate' => ['required'],
                 ],
@@ -184,7 +184,7 @@ class ProductVariants extends Fieldtype
                 'field' => [
                     'type' => 'hidden',
                     'listable' => 'hidden',
-                    'display' => 'Key',
+                    'display' => __('Key'),
                     'visibility' => 'hidden',
                     'always_save' => true,
                     'read_only' => true,
@@ -196,7 +196,7 @@ class ProductVariants extends Fieldtype
                 'field' => [
                     'type' => 'textarea',
                     'listable' => 'hidden',
-                    'display' => 'Variant',
+                    'display' => __('Variant'),
                     'read_only' => true,
                     'visibility' => 'hidden',
                     'always_save' => true,
@@ -209,7 +209,7 @@ class ProductVariants extends Fieldtype
                     'type' => 'money',
                     'read_only' => false,
                     'listable' => 'hidden',
-                    'display' => 'Price',
+                    'display' => __('Price'),
                     'validate' => ['required'],
                     'width' => $this->config('columns', 2) === 1 ? 50 : 100,
                 ],

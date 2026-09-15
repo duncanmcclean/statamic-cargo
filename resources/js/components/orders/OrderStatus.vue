@@ -51,7 +51,7 @@ onMounted(() => {
     </div>
 
     <div v-else class="flex flex-col space-y-6">
-        <Field label="Status">
+        <Field :label="__('Status')">
             <Select class="w-full" :options="statuses" v-model:modelValue="status" />
         </Field>
 

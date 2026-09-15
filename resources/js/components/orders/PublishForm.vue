@@ -122,7 +122,7 @@ function actionCompleted(successful = null, response) {
             </Dropdown>
         </ItemActions>
 
-        <Button variant="primary" text="Save" @click="save" :disabled="saving" />
+        <Button variant="primary" :text="__('Save')" @click="save" :disabled="saving" />
     </Header>
 
     <PublishContainer
