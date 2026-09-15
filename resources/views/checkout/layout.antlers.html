@@ -14,7 +14,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ title }} - {{ site:name }}</title>
+    <title>{{ title | trans }} - {{ site:name }}</title>
     {{ stack:header_scripts }}
     {{ vite directory="checkout-build" hot="public/checkout-build/hot" src="resources/css/checkout.css" }}
     <style>[x-cloak] { display: none !important; }</style>

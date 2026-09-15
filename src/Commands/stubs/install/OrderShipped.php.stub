@@ -25,7 +25,7 @@ class OrderShipped extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Order #{$this->order->orderNumber()} has been shipped",
+            subject: __('Order #:orderNumber has been shipped', ['orderNumber' => $this->order->orderNumber()]),
         );
     }
 
