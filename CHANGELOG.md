@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.13.3 (2026-09-17)
+
+### What's fixed
+- Add French translations [#291](https://github.com/duncanmcclean/statamic-cargo/pull/291) by @florianbouvot
+- Bump zizmorcore/zizmor-action from 0.6.3 to 0.6.4 in the github-actions group [#292](https://github.com/duncanmcclean/statamic-cargo/pull/292) by @dependabot
+
+
+
 ## v1.13.2 (2026-09-14)
 
 ### What's fixed
