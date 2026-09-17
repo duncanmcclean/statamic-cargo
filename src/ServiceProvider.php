@@ -89,6 +89,8 @@ class ServiceProvider extends AddonServiceProvider
 
     public function bootAddon()
     {
+        $this->loadJsonTranslationsFrom(__DIR__.'/../lang');
+
         $this->mergeConfigFrom(__DIR__.'/../config/cargo.php', 'statamic.cargo');
 
         $this->publishes([

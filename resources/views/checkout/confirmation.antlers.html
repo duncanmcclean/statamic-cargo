@@ -10,7 +10,7 @@
     <div>
         <div class="mb-12">
             <h1 class="text-2xl font-semibold text-gray-900 mb-4">{{ 'Thanks for your order!' | trans }}</h1>
-            <p class="mb-4">Your order number is <strong>#{{ order_number }}</strong>. We'll send you a confirmation email once we've finished processing your payment.</p>
+            <p class="mb-4">{{ trans key="Your order number is :orderNumber." orderNumber="<strong>#{order_number}</strong>" }} {{ trans key="We'll send you a confirmation email once we've finished processing your payment." }}</p>
 
             <a class="text-secondary hover:text-secondary/90 font-medium" href="{{ link to="/" }}">→ {{ 'Go to the homepage' | trans }}</a>
         </div>
