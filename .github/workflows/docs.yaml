@@ -21,6 +21,6 @@ jobs:
 
     steps:
       - name: Deploy
-        uses: jbrooksuk/laravel-forge-action@b0fbd1a7486a4776d7eb35e1a088bce4b6a6352f # v1.0.4
+        uses: jbrooksuk/laravel-forge-action@916b17213d00299c2f2e9462df2bb36504ebf974 # v2.0.0
         with:
           trigger_url: ${{ secrets.DOCS_TRIGGER_URL }}
