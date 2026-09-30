@@ -14,17 +14,17 @@ php artisan vendor:publish --tag=cargo-prebuilt-checkout
 Then, add the following to your `routes/web.php` file:
 
 ```php
-Route::statamic('checkout', 'checkout.index', ['title' => 'Checkout', 'layout' => 'checkout.layout'])  
-	->name('checkout');  
-		  
-Route::statamic('checkout/confirmation', 'checkout.confirmation', ['title' => 'Order Confirmation', 'layout' => 'checkout.layout'])  
-	->name('checkout.confirmation')  
+Route::statamic('checkout', 'checkout.index', ['title' => 'Checkout', 'layout' => 'checkout.layout'])
+	->name('checkout');
+
+Route::statamic('checkout/confirmation', 'checkout.confirmation', ['title' => 'Order Confirmation', 'layout' => 'checkout.layout'])
+	->name('checkout.confirmation')
 	->middleware('signed');
 ```
 
 You can find the pre-built checkout views in `resources/views/checkout`, and you can access the checkout page at `/checkout` (assuming you have something in your cart).
 
-**You own the published code**, meaning you can make any modifications you want, without needing to worry about your changes being overwritten by updates. 
+**You own the published code**, meaning you can make any modifications you want, without needing to worry about your changes being overwritten by updates.
 
 ![FREEDOM!!! 🏴󠁧󠁢󠁳󠁣󠁴󠁿](/images/braveheart-freedom.gif)
 
@@ -35,7 +35,7 @@ If you're curious, here's a brief rundown of how the pre-built Checkout page wor
 * Most of the JavaScript heavy lifting happens in `resources/views/checkout/js/checkout.antlers.html`.
 	* It handles the checkout step logic, sending requests and maintaining the `cart` state used for pre-filling inputs and displaying totals in the cart summary.
 * Every checkout step uses a `step` partial which registers the step in JS and renders the step contents inside a `{{ cart:update }}` form.
-	* Ultimately, the `{{ cart:update }}` tag outputs a standard `<form>` element. 
+	* Ultimately, the `{{ cart:update }}` tag outputs a standard `<form>` element.
 	* However, when the form is submitted, JavaScript takes over and sends the request over AJAX (to prevent a full-page reload from happening).
 	* Then, when a response comes back, the `cart` object in Alpine's data will be updated.
 * When you reach the shipping option or payment steps, they both make AJAX requests to get the available shipping options / payment gateways.
@@ -62,27 +62,42 @@ To add your own step, simply [create a partial](https://statamic.dev/tags/partia
 All steps should be wrapped in the provided `step` partial, like this:
 
 ```antlers
-{{ partial:checkout/step title="Gift" }}  
-    <h2 class="mb-2">If this is a gift, let us know the name of the recipient and we can include a special gift note with the order.</h2>  
-  
-    <div class="flex flex-col space-y-4">  
-        {{ partial:checkout/input  
-            name="gift_recipient"  
-            label="Gift Recipient"  
-            type="text"  
-            placeholder="John"  
-        }}  
-    </div>  
-  
-    {{ slot:footer }}  
-        {{ partial:checkout/button label="Continue to Payment" }}  
-    {{ /slot:footer }}  
+{{ partial:checkout/step title="Gift" }}
+    <h2 class="mb-2">If this is a gift, let us know the name of the recipient and we can include a special gift note with the order.</h2>
+
+    <div class="flex flex-col space-y-4">
+        {{ partial:checkout/input
+            name="gift_recipient"
+            label="Gift Recipient"
+            type="text"
+            placeholder="John"
+        }}
+    </div>
+
+    {{ slot:footer }}
+        {{ partial:checkout/button label="Continue to Payment" }}
+    {{ /slot:footer }}
 {{ /partial:checkout/step }}
 ```
 
 You should make sure to pass a `title` parameter to the partial, then provide the contents for the step inside the `{{ partial }}` tag.
 
 By default, all steps are wrapped in the `{{ cart:update }}` tag, meaning whenever you submit the step, it'll make an AJAX request and update Alpine's `cart` object (you can read more about this under [How it works](#how-it-works)). You can provide the `formless` parameter to opt-out of this behaviour.
+
+#### Countries
+By default, the country dropdowns list every country. If you only sell to certain countries, you can limit the address dropdown by passing the `countries` parameter to the `address` partial in `resources/views/checkout/steps/_shipping_address.antlers.html` and `resources/views/checkout/steps/_billing_address.antlers.html`:
+
+```antlers
+{{ partial:checkout/components/address type="shipping" countries="GBR|IRL" }}
+```
+
+Countries must be in [ISO3](https://www.iso.org/obp/ui#iso:pub:PUB500001:en) format, separated by pipes.
+
+You may also pre-select a country using the `default_country` parameter:
+
+```antlers
+{{ partial:checkout/components/address type="shipping" countries="GBR|IRL" default_country="GBR" }}
+```
 
 #### Using your own Tailwind CSS build
 When you publish the pre-built checkout flow, a compiled `.css` file will be copied into your site's `public` directory.

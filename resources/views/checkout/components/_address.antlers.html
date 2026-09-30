@@ -2,6 +2,8 @@
     @name Address
     @desc Renders address form fields.
     @param* type The type of address. Options: shipping, billing.
+    @param countries Limit the available countries by providing a pipe-separated list of ISO3 country codes (eg GBR|IRL).
+    @param default_country The ISO3 code of the country to pre-select (eg. GBR).
 #}}
 
 <div x-data="{{ type | ucfirst }}Address" class="flex flex-col space-y-6">
@@ -85,14 +87,19 @@
                 country: null,
                 state: null,
                 countries: [
-                    {{ dictionary:countries emojis="false" }}
+                    {{ dictionary:countries emojis="false" value:in="{countries}" }}
                         { value: {{ value | to_json }}, label: {{ label | to_json }} },
                     {{ /dictionary:countries }}
                 ],
                 states: [],
 
                 init() {
-                    this.country = this.cart.{{ type }}_address?.country?.value;
+                    this.country = this.cart.{{ type }}_address?.country?.value || '{{ default_country }}';
+
+                    if (!this.country && this.countries.length === 1) {
+                        this.country = this.countries[0].value;
+                    }
+
                     this.state = this.cart.{{ type }}_address?.state?.code;
 
                     if (this.country) this.fetchStates();
