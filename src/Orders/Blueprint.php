@@ -162,42 +162,43 @@ class Blueprint
 
         $customBlueprint = BlueprintFacade::find('cargo::order');
 
-        foreach (Arr::get($customBlueprint->contents(), 'tabs') as $tabHandle => $tab) {
-            if (isset($contents['tabs'][$tabHandle])) {
-                // Merge fields in existing sections.
-                $sections = array_map(function ($section) use ($tab): array {
-                    $fields = $section['fields'];
-                    $display = $section['display'] ?? null;
-
-                    collect($tab['sections'])
-                        ->filter(fn ($section) => $section['display'] === $display)
-                        ->each(function ($customSection) use (&$fields): void {
-                            $fields = [
-                                ...$fields,
-                                ...$customSection['fields'],
-                            ];
-                        });
-
-                    return ['display' => $display, 'fields' => $fields];
-                }, $contents['tabs'][$tabHandle]['sections']);
-
-                // Merge new sections.
-                collect($tab['sections'])
-                    ->reject(fn ($section) => collect($sections)->contains('display', $section['display']))
-                    ->each(function ($section) use (&$sections): void {
-                        $sections[] = $section;
-                    });
-
-                $contents['tabs'][$tabHandle]['sections'] = $sections;
+        foreach (Arr::get($customBlueprint->contents(), 'tabs') as $tabHandle => $customTab) {
+            if (! isset($contents['tabs'][$tabHandle])) {
+                $contents['tabs'][$tabHandle] = $customTab;
 
                 continue;
             }
 
-            $contents['tabs'][$tabHandle] = $tab;
+            $contents['tabs'][$tabHandle]['sections'] = $this->mergeSections(
+                $contents['tabs'][$tabHandle]['sections'],
+                $customTab['sections']
+            );
         }
 
         return BlueprintFacade::make()
             ->setHandle('orders')
             ->setContents($contents);
+    }
+
+    private function mergeSections(array $sections, array $customSections): array
+    {
+        foreach ($customSections as $customSection) {
+            $matchingSection = collect($sections)->search(
+                fn (array $section) => ($section['display'] ?? null) === ($customSection['display'] ?? null)
+            );
+
+            if ($matchingSection === false) {
+                $sections[] = $customSection;
+
+                continue;
+            }
+
+            $sections[$matchingSection]['fields'] = [
+                ...$sections[$matchingSection]['fields'],
+                ...$customSection['fields'],
+            ];
+        }
+
+        return $sections;
     }
 }
