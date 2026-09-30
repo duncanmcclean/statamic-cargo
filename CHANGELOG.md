@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.14.0 (2026-09-30)
+
+### What's new
+- Add countries and default country parameters to prebuilt checkout [#297](https://github.com/duncanmcclean/statamic-cargo/pull/297) by @duncanmcclean
+
+### What's fixed
+- Fix error when custom order blueprint has sections without a display [#296](https://github.com/duncanmcclean/statamic-cargo/pull/296) by @duncanmcclean
+- Bump jbrooksuk/laravel-forge-action from 1.0.4 to 2.0.0 in the github-actions group [#294](https://github.com/duncanmcclean/statamic-cargo/pull/294) by @dependabot
+
+
+
 ## v1.13.3 (2026-09-17)
 
 ### What's fixed
