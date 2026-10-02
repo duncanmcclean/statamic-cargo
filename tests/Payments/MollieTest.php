@@ -3,6 +3,7 @@
 namespace Tests\Payments;
 
 use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
+use DuncanMcClean\Cargo\Exceptions\PreventCheckout;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
@@ -10,6 +11,7 @@ use DuncanMcClean\Cargo\Payments\Gateways\Mollie;
 use Exception;
 use Mockery;
 use Mollie\Api\MollieApiClient;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
@@ -330,6 +332,41 @@ class MollieTest extends TestCase
             'order_id' => $order->id(),
             'order_number' => $order->orderNumber(),
         ], (array) $molliePayment->metadata);
+    }
+
+    #[Test]
+    #[DataProvider('mismatchedPaymentAmountProvider')]
+    public function it_cant_process_a_payment_when_the_payment_amount_does_not_match_the_order(array $amount)
+    {
+        $molliePayment = $this->mollie->payments->create([
+            'description' => 'Test payment',
+            'amount' => $amount,
+            'redirectUrl' => 'https://example.com/redirect',
+            'metadata' => ['cart_id' => 'foo', 'cart_fingerprint' => 'original'],
+        ]);
+
+        $order = $this->makeOrder();
+        $order->set('mollie_payment_id', $molliePayment->id)->save();
+
+        try {
+            (new Mollie)->process($order);
+
+            $this->fail('Expected a PreventCheckout exception.');
+        } catch (PreventCheckout $e) {
+            $this->assertEquals('The amount paid does not match the order total.', $e->getMessage());
+        }
+
+        $molliePayment = $this->mollie->payments->get($molliePayment->id);
+        $this->assertEquals('Test payment', $molliePayment->description);
+    }
+
+    public static function mismatchedPaymentAmountProvider(): array
+    {
+        return [
+            'amount is lower than the order total' => [['currency' => 'GBP', 'value' => '5.00']],
+            'amount is higher than the order total' => [['currency' => 'GBP', 'value' => '15.00']],
+            'currency is different' => [['currency' => 'EUR', 'value' => '10.00']],
+        ];
     }
 
     #[Test]

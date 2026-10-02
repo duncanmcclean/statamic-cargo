@@ -119,6 +119,22 @@ class CheckoutTest extends TestCase
     }
 
     #[Test]
+    public function cant_checkout_when_payment_gateway_prevents_checkout_during_processing()
+    {
+        PreventingPaymentGateway::register();
+        config()->set('statamic.cargo.payments.gateways', ['preventing' => []]);
+
+        $cart = $this->makeCart();
+
+        $this
+            ->get('/!/cargo/payments/preventing/checkout')
+            ->assertSessionHasErrors(['checkout' => 'The amount paid does not match the order total.']);
+
+        $this->assertNull(Facades\Order::query()->where('cart', $cart->id())->first());
+        $this->assertTrue(PreventingPaymentGateway::$cancelled);
+    }
+
+    #[Test]
     public function ensure_product_stock_field_is_updated()
     {
         Event::fake(ProductStockLow::class);
@@ -297,6 +313,22 @@ class CheckoutTest extends TestCase
     }
 
     #[Test]
+    public function action_deletes_order_when_payment_gateway_prevents_checkout_during_processing()
+    {
+        $cart = $this->makeCart();
+
+        try {
+            app(CreateOrderFromCart::class)->handle($cart, new PreventingPaymentGateway);
+
+            $this->fail('Expected a PreventCheckout exception.');
+        } catch (PreventCheckout $e) {
+            $this->assertEquals('The amount paid does not match the order total.', $e->getMessage());
+        }
+
+        $this->assertNull(Facades\Order::query()->where('cart', $cart->id())->first());
+    }
+
+    #[Test]
     public function order_status_is_not_overwritten_when_webhook_fires_during_process()
     {
         $cart = $this->makeCart();
@@ -403,6 +435,43 @@ class WebhookRacingPaymentGateway extends PaymentGateway
     public function cancel(\DuncanMcClean\Cargo\Contracts\Cart\Cart $cart): void
     {
         //
+    }
+
+    public function webhook(Request $request): Response
+    {
+        return response();
+    }
+
+    public function refund(Order $order, int $amount): void
+    {
+        //
+    }
+}
+
+class PreventingPaymentGateway extends PaymentGateway
+{
+    public static $handle = 'preventing';
+
+    public static bool $cancelled = false;
+
+    public function setup(\DuncanMcClean\Cargo\Contracts\Cart\Cart $cart): array
+    {
+        return [];
+    }
+
+    public function process(Order $order): void
+    {
+        throw new PreventCheckout('The amount paid does not match the order total.');
+    }
+
+    public function capture(Order $order): void
+    {
+        //
+    }
+
+    public function cancel(\DuncanMcClean\Cargo\Contracts\Cart\Cart $cart): void
+    {
+        static::$cancelled = true;
     }
 
     public function webhook(Request $request): Response
