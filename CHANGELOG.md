@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.14.1 (2026-10-02)
+
+### What's fixed
+- Offer to handle Simple Commerce migrations [#299](https://github.com/duncanmcclean/statamic-cargo/pull/299) by @duncanmcclean
+- Tidy up payment handling in the Mollie & Stripe gateways [#300](https://github.com/duncanmcclean/statamic-cargo/pull/300) by @duncanmcclean
+
+
+
 ## v1.14.0 (2026-09-30)
 
 ### What's new
