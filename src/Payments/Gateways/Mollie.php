@@ -135,6 +135,10 @@ class Mollie extends PaymentGateway
             throw new PreventCheckout(__('Payment was cancelled.'));
         }
 
+        if ((array) $payment->amount != $this->formatAmount(site: $order->site(), amount: $order->grandTotal())) {
+            throw new PreventCheckout(__('The amount paid does not match the order total.'));
+        }
+
         $this->mollie->payments->update($payment->id, [
             'description' => static::$paymentDescriptionResolver
                 ? call_user_func(static::$paymentDescriptionResolver, $order)
@@ -155,9 +159,15 @@ class Mollie extends PaymentGateway
     {
         $payment = $this->mollie->payments->get($cart->get('mollie_payment_id'));
 
-        $payment->isCancelable
-            ? $this->mollie->payments->cancel($payment->id)
-            : $this->refund($cart->order(), $cart->order()->grandTotal());
+        if ($payment->isCancelable) {
+            $this->mollie->payments->cancel($payment->id);
+
+            return;
+        }
+
+        if ($payment->isPaid() && ! $payment->hasRefunds()) {
+            $this->mollie->payments->refund($payment, ['amount' => (array) $payment->amount]);
+        }
     }
 
     public function webhook(Request $request): Response

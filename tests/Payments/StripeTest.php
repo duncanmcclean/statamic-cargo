@@ -3,11 +3,13 @@
 namespace Tests\Payments;
 
 use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
+use DuncanMcClean\Cargo\Exceptions\PreventCheckout;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Payments\Gateways\Stripe;
 use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
@@ -149,6 +151,36 @@ class StripeTest extends TestCase
             'order_id' => $order->id(),
             'order_number' => $order->orderNumber(),
         ], $stripePaymentIntent->metadata->toArray());
+    }
+
+    #[Test]
+    #[DataProvider('mismatchedPaymentIntentProvider')]
+    public function it_cant_process_a_payment_when_the_payment_intent_does_not_match_the_order(int $amount, string $currency)
+    {
+        $stripePaymentIntent = PaymentIntent::create(['amount' => $amount, 'currency' => $currency]);
+
+        $order = $this->makeOrder();
+        $order->set('stripe_payment_intent', $stripePaymentIntent->id)->save();
+
+        try {
+            (new Stripe)->process($order);
+
+            $this->fail('Expected a PreventCheckout exception.');
+        } catch (PreventCheckout $e) {
+            $this->assertEquals('The amount paid does not match the order total.', $e->getMessage());
+        }
+
+        $stripePaymentIntent = PaymentIntent::retrieve($stripePaymentIntent->id);
+        $this->assertNull($stripePaymentIntent->description);
+    }
+
+    public static function mismatchedPaymentIntentProvider(): array
+    {
+        return [
+            'amount is lower than the order total' => [500, 'gbp'],
+            'amount is higher than the order total' => [1500, 'gbp'],
+            'currency is different' => [1000, 'eur'],
+        ];
     }
 
     #[Test]
@@ -411,6 +443,54 @@ class StripeTest extends TestCase
         $this->assertEquals('cancelled', $order->status()->value);
         $this->assertEquals('stripe', $order->get('payment_gateway'));
         $this->assertEquals('Order cannot be created without an address.', $order->get('cancellation_reason'));
+    }
+
+    #[Test]
+    public function it_creates_cancelled_order_when_webhook_is_received_for_cart_whose_total_has_changed()
+    {
+        $stripePaymentIntent = PaymentIntent::create([
+            'amount' => 1000,
+            'currency' => 'gbp',
+            'payment_method_types' => ['card'],
+            'capture_method' => 'manual',
+        ]);
+
+        $stripePaymentIntent->confirm(['payment_method' => 'pm_card_visa']);
+
+        $cart = $this->makeCartWithGuestCustomer();
+        $cart->data([
+            'shipping_address' => [
+                'line_1' => '123 Fake St',
+                'city' => 'Fakeville',
+                'postcode' => 'FA 1234',
+                'country' => 'GBR',
+            ],
+        ])->save();
+        $cart->lineItems()->update($cart->lineItems()->first()->id(), ['quantity' => 91]);
+        $cart->set('stripe_payment_intent', $stripePaymentIntent->id)->save();
+
+        $this
+            ->post(
+                uri: '/!/cargo/payments/stripe/webhook',
+                data: [
+                    'type' => 'payment_intent.amount_capturable_updated',
+                    'data' => [
+                        'object' => [
+                            'id' => $stripePaymentIntent->id,
+                        ],
+                    ],
+                ]
+            )
+            ->assertOk();
+
+        $orders = Order::query()->where('cart', $cart->id())->get();
+
+        $this->assertCount(1, $orders);
+        $this->assertEquals('cancelled', $orders->first()->status()->value);
+        $this->assertEquals('The amount paid does not match the order total.', $orders->first()->get('cancellation_reason'));
+
+        $stripePaymentIntent = PaymentIntent::retrieve($stripePaymentIntent->id);
+        $this->assertEquals('canceled', $stripePaymentIntent->status);
     }
 
     #[Test]

@@ -49,7 +49,14 @@ class CreateOrderFromCart
                 $order->status(OrderStatus::PaymentReceived)->save();
             } else {
                 $order->set('payment_gateway', $paymentGateway::handle())->save();
-                $paymentGateway->process($order);
+
+                try {
+                    $paymentGateway->process($order);
+                } catch (PreventCheckout $e) {
+                    $order->delete();
+
+                    throw $e;
+                }
             }
 
             app(UpdateStock::class)->handle($order);

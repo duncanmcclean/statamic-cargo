@@ -6,6 +6,7 @@ use Closure;
 use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Orders\Order;
+use DuncanMcClean\Cargo\Exceptions\PreventCheckout;
 use DuncanMcClean\Cargo\Facades;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Support\Money;
@@ -90,7 +91,16 @@ class Stripe extends PaymentGateway
 
     public function process(Order $order): void
     {
-        PaymentIntent::update($order->get('stripe_payment_intent'), [
+        $paymentIntent = PaymentIntent::retrieve($order->get('stripe_payment_intent'));
+
+        if (
+            $paymentIntent->amount !== $order->grandTotal()
+            || $paymentIntent->currency !== Str::lower($order->site()->attribute('currency'))
+        ) {
+            throw new PreventCheckout(__('The amount paid does not match the order total.'));
+        }
+
+        PaymentIntent::update($paymentIntent->id, [
             'description' => static::$paymentDescriptionResolver
                 ? call_user_func(static::$paymentDescriptionResolver, $order)
                 : __('Order #:orderNumber', ['orderNumber' => $order->orderNumber()]),

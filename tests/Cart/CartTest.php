@@ -3,10 +3,12 @@
 namespace Tests\Cart;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart as CartContract;
+use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
 use DuncanMcClean\Cargo\Events\CartCreated;
 use DuncanMcClean\Cargo\Events\CartDeleted;
 use DuncanMcClean\Cargo\Events\CartSaved;
 use DuncanMcClean\Cargo\Facades\Cart;
+use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use DuncanMcClean\Cargo\Facades\TaxZone;
 use DuncanMcClean\Cargo\Shipping\ShippingOption;
@@ -212,6 +214,24 @@ class CartTest extends TestCase
         $this->assertInstanceOf(ShippingOption::class, $cart->shippingOption());
         $this->assertEquals('Standard Shipping', $cart->shippingOption()->name());
         $this->assertEquals(500, $cart->shippingOption()->price());
+    }
+
+    #[Test]
+    public function it_returns_the_order()
+    {
+        $cart = tap(Cart::make())->save();
+        $order = tap(Order::makeFromCart($cart))->save();
+
+        $this->assertInstanceOf(OrderContract::class, $cart->order());
+        $this->assertEquals($order->id(), $cart->order()->id());
+    }
+
+    #[Test]
+    public function it_returns_null_when_the_cart_has_no_order()
+    {
+        $cart = tap(Cart::make())->save();
+
+        $this->assertNull($cart->order());
     }
 
     #[Test]

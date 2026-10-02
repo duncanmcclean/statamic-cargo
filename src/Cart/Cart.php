@@ -303,9 +303,9 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
         ])->all();
     }
 
-    public function order(): OrderContract
+    public function order(): ?OrderContract
     {
-        return Order::query()->where('cart', $this->id)->get();
+        return Order::query()->where('cart', $this->id)->first();
     }
 
     public function recalculate(): void
