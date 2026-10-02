@@ -29,6 +29,13 @@ Otherwise, if you purchased Simple Commerce **more than a year ago**, you can mi
 
 Either way, just email [support@builtwithcargo.dev](support@builtwithcargo.dev) with your order number, and I'll send you a coupon code to use at checkout.
 
+## Need a hand?
+If you'd rather not tackle the migration yourself, I can do it for you. 
+
+I'll handle migrating your data, updating your templates and any custom code, and making sure everything works before you deploy.
+
+If that sounds good, email [support@builtwithcargo.dev](mailto:support@builtwithcargo.dev) with a bit about your site, and I'll get back to you with pricing and availability.
+
 ## AI Agents
 If you use a coding agent, like Claude Code or Codex, you can hand most of the legwork over to it. Copy the prompt below into your agent of choice:
 
