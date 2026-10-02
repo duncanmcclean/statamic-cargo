@@ -22,8 +22,7 @@ jobs:
       contents: read
 
     outputs:
-      php: ${{ steps.changed-files.outputs.php_any_modified }}
-      payments: ${{ steps.changed-files.outputs.payments_any_modified }}
+      php: ${{ steps.changed-files.outputs.any_modified }}
 
     steps:
       - name: Checkout code
@@ -35,23 +34,16 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
         with:
-          files_yaml: |
-            php:
-              - config
-              - lang
-              - routes
-              - src
-              - tests
-              - composer.json
-              - phpunit.xml
-              - .github/workflows/tests.yaml
-              - '**.php'
-            payments:
-              - .github/workflows/tests.yaml
-              - src/Payments
-              - src/Http/Controllers/Payments
-              - tests/Payments
-              - composer.json
+          files: |
+            config
+            lang
+            routes
+            src
+            tests
+            composer.json
+            phpunit.xml
+            .github/workflows/tests.yaml
+            **.php
 
   php_tests:
     needs: changes
@@ -107,7 +99,7 @@ jobs:
   # need to run against the whole matrix.
   payment_tests:
     needs: changes
-    if: needs.changes.outputs.payments == 'true'
+    if: needs.changes.outputs.php == 'true'
 
     runs-on: ubuntu-latest
     permissions:
