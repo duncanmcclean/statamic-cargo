@@ -5,7 +5,27 @@ on:
     branches:
       - main
       - '*.x'
+    paths:
+      - 'config/**'
+      - 'lang/**'
+      - 'routes/**'
+      - 'src/**'
+      - 'tests/**'
+      - '**.php'
+      - composer.json
+      - phpunit.xml
+      - .github/workflows/tests.yaml
   pull_request:
+    paths:
+      - 'config/**'
+      - 'lang/**'
+      - 'routes/**'
+      - 'src/**'
+      - 'tests/**'
+      - '**.php'
+      - composer.json
+      - phpunit.xml
+      - .github/workflows/tests.yaml
 
 permissions: {}
 
@@ -48,44 +68,19 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
-        with:
-          files: |
-            config
-            lang
-            routes
-            src
-            tests
-            composer.json
-            phpunit.xml
-            .github/workflows/tests.yaml
-            **.php
-
-      - name: Determine whether tests should run
-        id: should-run-tests
-        if: steps.changed-files.outputs.any_modified == 'true' || github.event_name == 'schedule'
-        run: |
-          echo "result=true" >> $GITHUB_OUTPUT
-          echo "result=true" >> $env:GITHUB_OUTPUT
-
       - name: Setup PHP
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        if: steps.should-run-tests.outputs.result == 'true'
         with:
           php-version: ${{ matrix.php }}
           extensions: fileinfo, exif, gd, pdo, sqlite, pdo_sqlite, intl, zip
 
       - name: Install dependencies
-        if: steps.should-run-tests.outputs.result == 'true'
         # zizmor: ignore[template-injection] - matrix values are defined in this file, not attacker-controlled
         run: |
           composer require "illuminate/contracts:${{ matrix.laravel }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-suggest
 
       - name: Execute tests
-        if: steps.should-run-tests.outputs.result == 'true'
         run: vendor/bin/pest --shard=${{ matrix.shard }}/${{ matrix.shards }} --ci --exclude-group=payments # zizmor: ignore[template-injection] shard is a static list defined in the matrix above
 
   # The payment tests only cover the payment gateway implementations, so they don't
@@ -105,50 +100,19 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
-        with:
-          files: |
-            .github/workflows/tests.yaml
-            src/Payments
-            src/Http/Controllers/Payments
-            tests/Payments
-            composer.json
-
-      - name: Determine whether payment tests should run
-        id: should-run-payment-tests
-        if: steps.changed-files.outputs.any_modified == 'true' || github.event_name == 'schedule'
-        run: echo "result=true" >> $GITHUB_OUTPUT
-
       - name: Setup PHP
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        if: steps.should-run-payment-tests.outputs.result == 'true'
         with:
           php-version: 8.5
           extensions: fileinfo, exif, gd, pdo, sqlite, pdo_sqlite, intl, zip
 
       - name: Install dependencies
-        if: steps.should-run-payment-tests.outputs.result == 'true'
         run: composer update --prefer-stable --prefer-dist --no-interaction --no-suggest
 
       - name: Execute tests
-        if: steps.should-run-payment-tests.outputs.result == 'true'
         run: vendor/bin/phpunit --group=payments
         env:
           STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
           STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
           # MOLLIE_KEY: ${{ secrets.MOLLIE_KEY }}
           # MOLLIE_PROFILE: ${{ secrets.MOLLIE_PROFILE }}
-
-  php-tests-result:
-    name: PHP tests
-    runs-on: ubuntu-latest
-    needs: [php_tests]
-    if: always()
-    permissions: {}
-
-    steps:
-      - name: Fail if any shard failed
-        if: needs.php_tests.result != 'success' && needs.php_tests.result != 'skipped'
-        run: exit 1
