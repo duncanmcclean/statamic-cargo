@@ -5,7 +5,27 @@ on:
     branches:
       - main
       - '*.x'
+    paths:
+      - 'config/**'
+      - 'lang/**'
+      - 'routes/**'
+      - 'src/**'
+      - 'tests/**'
+      - '**.php'
+      - composer.json
+      - phpunit.xml
+      - .github/workflows/tests.yaml
   pull_request:
+    paths:
+      - 'config/**'
+      - 'lang/**'
+      - 'routes/**'
+      - 'src/**'
+      - 'tests/**'
+      - '**.php'
+      - composer.json
+      - phpunit.xml
+      - .github/workflows/tests.yaml
 
 permissions: {}
 
@@ -14,40 +34,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  changes:
-    name: Detect changes
-    if: "!contains(github.event.head_commit.message, 'changelog')"
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    outputs:
-      php: ${{ steps.changed-files.outputs.any_modified }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
-        with:
-          files: |
-            config
-            lang
-            routes
-            src
-            tests
-            composer.json
-            phpunit.xml
-            .github/workflows/tests.yaml
-            **.php
-
   php_tests:
-    needs: changes
-    if: needs.changes.outputs.php == 'true'
+    if: "!contains(github.event.head_commit.message, 'changelog')"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -98,8 +86,7 @@ jobs:
   # The payment tests only cover the payment gateway implementations, so they don't
   # need to run against the whole matrix.
   payment_tests:
-    needs: changes
-    if: needs.changes.outputs.php == 'true'
+    if: "!contains(github.event.head_commit.message, 'changelog')"
 
     runs-on: ubuntu-latest
     permissions:
@@ -129,15 +116,3 @@ jobs:
           STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
           # MOLLIE_KEY: ${{ secrets.MOLLIE_KEY }}
           # MOLLIE_PROFILE: ${{ secrets.MOLLIE_PROFILE }}
-
-  php-tests-result:
-    name: PHP tests
-    runs-on: ubuntu-latest
-    needs: [changes, php_tests]
-    if: always()
-    permissions: {}
-
-    steps:
-      - name: Fail if change detection or any shard failed
-        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
-        run: exit 1
