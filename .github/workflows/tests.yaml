@@ -14,8 +14,48 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  php_tests:
+  changes:
+    name: Detect changes
     if: "!contains(github.event.head_commit.message, 'changelog')"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    outputs:
+      php: ${{ steps.changed-files.outputs.php_any_modified }}
+      payments: ${{ steps.changed-files.outputs.payments_any_modified }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
+        with:
+          files_yaml: |
+            php:
+              - config
+              - lang
+              - routes
+              - src
+              - tests
+              - composer.json
+              - phpunit.xml
+              - .github/workflows/tests.yaml
+              - '**.php'
+            payments:
+              - .github/workflows/tests.yaml
+              - src/Payments
+              - src/Http/Controllers/Payments
+              - tests/Payments
+              - composer.json
+
+  php_tests:
+    needs: changes
+    if: needs.changes.outputs.php == 'true'
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -48,50 +88,26 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
-        with:
-          files: |
-            config
-            lang
-            routes
-            src
-            tests
-            composer.json
-            phpunit.xml
-            .github/workflows/tests.yaml
-            **.php
-
-      - name: Determine whether tests should run
-        id: should-run-tests
-        if: steps.changed-files.outputs.any_modified == 'true' || github.event_name == 'schedule'
-        run: |
-          echo "result=true" >> $GITHUB_OUTPUT
-          echo "result=true" >> $env:GITHUB_OUTPUT
-
       - name: Setup PHP
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        if: steps.should-run-tests.outputs.result == 'true'
         with:
           php-version: ${{ matrix.php }}
           extensions: fileinfo, exif, gd, pdo, sqlite, pdo_sqlite, intl, zip
 
       - name: Install dependencies
-        if: steps.should-run-tests.outputs.result == 'true'
         # zizmor: ignore[template-injection] - matrix values are defined in this file, not attacker-controlled
         run: |
           composer require "illuminate/contracts:${{ matrix.laravel }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-suggest
 
       - name: Execute tests
-        if: steps.should-run-tests.outputs.result == 'true'
         run: vendor/bin/pest --shard=${{ matrix.shard }}/${{ matrix.shards }} --ci --exclude-group=payments # zizmor: ignore[template-injection] shard is a static list defined in the matrix above
 
   # The payment tests only cover the payment gateway implementations, so they don't
   # need to run against the whole matrix.
   payment_tests:
-    if: "!contains(github.event.head_commit.message, 'changelog')"
+    needs: changes
+    if: needs.changes.outputs.payments == 'true'
 
     runs-on: ubuntu-latest
     permissions:
@@ -105,35 +121,16 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
-        with:
-          files: |
-            .github/workflows/tests.yaml
-            src/Payments
-            src/Http/Controllers/Payments
-            tests/Payments
-            composer.json
-
-      - name: Determine whether payment tests should run
-        id: should-run-payment-tests
-        if: steps.changed-files.outputs.any_modified == 'true' || github.event_name == 'schedule'
-        run: echo "result=true" >> $GITHUB_OUTPUT
-
       - name: Setup PHP
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        if: steps.should-run-payment-tests.outputs.result == 'true'
         with:
           php-version: 8.5
           extensions: fileinfo, exif, gd, pdo, sqlite, pdo_sqlite, intl, zip
 
       - name: Install dependencies
-        if: steps.should-run-payment-tests.outputs.result == 'true'
         run: composer update --prefer-stable --prefer-dist --no-interaction --no-suggest
 
       - name: Execute tests
-        if: steps.should-run-payment-tests.outputs.result == 'true'
         run: vendor/bin/phpunit --group=payments
         env:
           STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
@@ -144,11 +141,11 @@ jobs:
   php-tests-result:
     name: PHP tests
     runs-on: ubuntu-latest
-    needs: [php_tests]
+    needs: [changes, php_tests]
     if: always()
     permissions: {}
 
     steps:
-      - name: Fail if any shard failed
-        if: needs.php_tests.result != 'success' && needs.php_tests.result != 'skipped'
+      - name: Fail if change detection or any shard failed
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
         run: exit 1
