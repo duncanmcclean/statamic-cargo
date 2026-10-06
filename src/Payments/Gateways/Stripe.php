@@ -93,6 +93,16 @@ class Stripe extends PaymentGateway
     {
         $paymentIntent = PaymentIntent::retrieve($order->get('stripe_payment_intent'));
 
+        $successfulStatuses = [
+            PaymentIntent::STATUS_SUCCEEDED,
+            PaymentIntent::STATUS_PROCESSING,
+            PaymentIntent::STATUS_REQUIRES_CAPTURE,
+        ];
+
+        if (! in_array($paymentIntent->status, $successfulStatuses)) {
+            throw new PreventCheckout(__('Payment was unsuccessful.'));
+        }
+
         if (
             $paymentIntent->amount !== $order->grandTotal()
             || $paymentIntent->currency !== Str::lower($order->site()->attribute('currency'))
@@ -185,6 +195,15 @@ class Stripe extends PaymentGateway
 
             if ($order && $order->status() === OrderStatus::PaymentPending) {
                 $order->status(OrderStatus::PaymentReceived)->save();
+            }
+        }
+
+        if (in_array($request->type, [Event::PAYMENT_INTENT_PAYMENT_FAILED, Event::PAYMENT_INTENT_CANCELED])) {
+            $paymentIntent = PaymentIntent::retrieve($request->data['object']['id']);
+            $order = Facades\Order::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
+
+            if ($order && $order->status() === OrderStatus::PaymentPending) {
+                $order->status(OrderStatus::Cancelled)->save();
             }
         }
 
