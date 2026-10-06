@@ -7,6 +7,7 @@ use DuncanMcClean\Cargo\Http\Requests\CustomizableFormRequest;
 use Illuminate\Support\Traits\Localizable;
 use Illuminate\Validation\Rule;
 use Statamic\Facades\Site;
+use Statamic\Rules\EmailWithoutPathCharacters;
 
 class AddLineItemRequest extends CustomizableFormRequest
 {
@@ -49,6 +50,8 @@ class AddLineItemRequest extends CustomizableFormRequest
                 },
             ],
             'quantity' => ['nullable', 'integer', 'gt:0'],
+            'customer.email' => ['nullable', 'email:filter', new EmailWithoutPathCharacters],
+            'email' => ['nullable', 'email:filter', new EmailWithoutPathCharacters],
         ];
     }
 

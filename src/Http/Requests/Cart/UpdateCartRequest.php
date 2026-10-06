@@ -12,6 +12,7 @@ use Illuminate\Validation\ValidationException;
 use Statamic\Exceptions\NotFoundHttpException;
 use Statamic\Facades\Site;
 use Statamic\Facades\URL;
+use Statamic\Rules\EmailWithoutPathCharacters;
 
 class UpdateCartRequest extends CustomizableFormRequest
 {
@@ -83,11 +84,11 @@ class UpdateCartRequest extends CustomizableFormRequest
             'customer.name' => ['nullable', 'string'],
             'customer.first_name' => ['nullable', 'string'],
             'customer.last_name' => ['nullable', 'string'],
-            'customer.email' => ['nullable', 'email:filter'],
+            'customer.email' => ['nullable', 'email:filter', new EmailWithoutPathCharacters],
             'name' => ['nullable', 'string'],
             'first_name' => ['nullable', 'string'],
             'last_name' => ['nullable', 'string'],
-            'email' => ['nullable', 'email:filter'],
+            'email' => ['nullable', 'email:filter', new EmailWithoutPathCharacters],
             'discount_code' => ['nullable', 'string', new ValidDiscountCode],
             'shipping_method' => ['nullable', 'string'],
             'shipping_option' => ['nullable', 'string'],
