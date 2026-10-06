@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.14.2 (2026-10-06)
+
+### What's fixed
+- Harden email address validation [#304](https://github.com/duncanmcclean/statamic-cargo/pull/304) by @duncanmcclean
+- Don't save customer information onto line items when updating them [#305](https://github.com/duncanmcclean/statamic-cargo/pull/305) by @duncanmcclean
+- Prevent checkout when Stripe payment was unsuccessful [#306](https://github.com/duncanmcclean/statamic-cargo/pull/306) by @duncanmcclean
+- Cancel orders when Mollie payments fail or expire [#308](https://github.com/duncanmcclean/statamic-cargo/pull/308) by @duncanmcclean
+- Restore stock when orders are cancelled [#307](https://github.com/duncanmcclean/statamic-cargo/pull/307) by @duncanmcclean
+
+
+
 ## v1.14.1 (2026-10-02)
 
 ### What's fixed
