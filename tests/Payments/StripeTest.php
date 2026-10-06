@@ -132,7 +132,13 @@ class StripeTest extends TestCase
     #[Test]
     public function it_can_process_a_payment()
     {
-        $stripePaymentIntent = PaymentIntent::create(['amount' => 1000, 'currency' => 'gbp']);
+        $stripePaymentIntent = PaymentIntent::create([
+            'amount' => 1000,
+            'currency' => 'gbp',
+            'payment_method_types' => ['card'],
+        ]);
+
+        $stripePaymentIntent->confirm(['payment_method' => 'pm_card_visa']);
 
         $order = $this->makeOrder();
 
@@ -157,7 +163,13 @@ class StripeTest extends TestCase
     #[DataProvider('mismatchedPaymentIntentProvider')]
     public function it_cant_process_a_payment_when_the_payment_intent_does_not_match_the_order(int $amount, string $currency)
     {
-        $stripePaymentIntent = PaymentIntent::create(['amount' => $amount, 'currency' => $currency]);
+        $stripePaymentIntent = PaymentIntent::create([
+            'amount' => $amount,
+            'currency' => $currency,
+            'payment_method_types' => ['card'],
+        ]);
+
+        $stripePaymentIntent->confirm(['payment_method' => 'pm_card_visa']);
 
         $order = $this->makeOrder();
         $order->set('stripe_payment_intent', $stripePaymentIntent->id)->save();
@@ -181,6 +193,29 @@ class StripeTest extends TestCase
             'amount is higher than the order total' => [1500, 'gbp'],
             'currency is different' => [1000, 'eur'],
         ];
+    }
+
+    /**
+     * @see https://github.com/duncanmcclean/statamic-cargo/issues/303
+     */
+    #[Test]
+    public function it_cant_process_a_payment_when_the_payment_was_unsuccessful()
+    {
+        $stripePaymentIntent = PaymentIntent::create(['amount' => 1000, 'currency' => 'gbp']);
+
+        $order = $this->makeOrder();
+        $order->set('stripe_payment_intent', $stripePaymentIntent->id)->save();
+
+        try {
+            (new Stripe)->process($order);
+
+            $this->fail('Expected a PreventCheckout exception.');
+        } catch (PreventCheckout $e) {
+            $this->assertEquals('Payment was unsuccessful.', $e->getMessage());
+        }
+
+        $stripePaymentIntent = PaymentIntent::retrieve($stripePaymentIntent->id);
+        $this->assertNull($stripePaymentIntent->description);
     }
 
     #[Test]
@@ -328,6 +363,44 @@ class StripeTest extends TestCase
 
         $order->fresh();
         $this->assertEquals('payment_received', $order->status()->value);
+    }
+
+    /**
+     * @see https://github.com/duncanmcclean/statamic-cargo/issues/303
+     */
+    #[Test]
+    #[DataProvider('unsuccessfulPaymentWebhookEventProvider')]
+    public function it_cancels_the_order_when_an_unsuccessful_payment_webhook_event_is_received(string $event)
+    {
+        $stripePaymentIntent = PaymentIntent::create(['amount' => 1000, 'currency' => 'gbp']);
+
+        $order = $this->makeOrder();
+        $order->set('stripe_payment_intent', $stripePaymentIntent->id)->save();
+
+        $this
+            ->post(
+                uri: '/!/cargo/payments/stripe/webhook',
+                data: [
+                    'type' => $event,
+                    'data' => [
+                        'object' => [
+                            'id' => $stripePaymentIntent->id,
+                        ],
+                    ],
+                ],
+            )
+            ->assertOk();
+
+        $order->fresh();
+        $this->assertEquals('cancelled', $order->status()->value);
+    }
+
+    public static function unsuccessfulPaymentWebhookEventProvider(): array
+    {
+        return [
+            'payment failed' => ['payment_intent.payment_failed'],
+            'payment canceled' => ['payment_intent.canceled'],
+        ];
     }
 
     #[Test]
