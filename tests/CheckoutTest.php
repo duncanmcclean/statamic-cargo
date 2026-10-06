@@ -220,6 +220,118 @@ class CheckoutTest extends TestCase
         Event::assertDispatched(ProductNoStockRemaining::class);
     }
 
+    /**
+     * @see https://github.com/duncanmcclean/statamic-cargo/issues/303
+     */
+    #[Test]
+    public function stock_is_restored_when_order_is_cancelled()
+    {
+        $cart = $this->makeCart();
+        $cart->lineItems()->update(123, ['quantity' => 2]);
+        $cart->save();
+
+        $product = Entry::find('product-1');
+        $product->set('stock', 10);
+        $product->save();
+
+        $this
+            ->get('/!/cargo/payments/fake/checkout')
+            ->assertRedirect();
+
+        $this->assertEquals(8, $product->fresh()->get('stock'));
+
+        Facades\Order::query()->where('cart', $cart->id())->first()->status(OrderStatus::Cancelled)->save();
+
+        $this->assertEquals(10, $product->fresh()->get('stock'));
+    }
+
+    /**
+     * @see https://github.com/duncanmcclean/statamic-cargo/issues/303
+     */
+    #[Test]
+    public function product_variant_stock_is_restored_when_order_is_cancelled()
+    {
+        $cart = $this->makeCart();
+        $cart->lineItems()->update(123, ['quantity' => 2, 'variant' => 'Red']);
+        $cart->save();
+
+        $product = Entry::find('product-1');
+        $product->set('product_variants', [
+            'variants' => [['name' => 'Colour', 'values' => ['Red']]],
+            'options' => [['key' => 'Red', 'variant' => 'Red', 'price' => 2550, 'stock' => 10]],
+        ]);
+        $product->save();
+
+        $product->blueprint()->ensureField('product_variants', [
+            'type' => 'product_variants',
+            'option_fields' => [
+                [
+                    'handle' => 'stock',
+                    'field' => ['type' => 'integer'],
+                ],
+            ],
+        ])->save();
+
+        $this
+            ->get('/!/cargo/payments/fake/checkout')
+            ->assertRedirect();
+
+        $this->assertEquals(8, Arr::get($product->fresh()->get('product_variants'), 'options.0.stock'));
+
+        Facades\Order::query()->where('cart', $cart->id())->first()->status(OrderStatus::Cancelled)->save();
+
+        $this->assertEquals(10, Arr::get($product->fresh()->get('product_variants'), 'options.0.stock'));
+    }
+
+    /**
+     * @see https://github.com/duncanmcclean/statamic-cargo/issues/303
+     */
+    #[Test]
+    public function stock_is_updated_again_when_cancelled_order_is_reinstated()
+    {
+        $cart = $this->makeCart();
+        $cart->lineItems()->update(123, ['quantity' => 2]);
+        $cart->save();
+
+        $product = Entry::find('product-1');
+        $product->set('stock', 10);
+        $product->save();
+
+        $this
+            ->get('/!/cargo/payments/fake/checkout')
+            ->assertRedirect();
+
+        $order = Facades\Order::query()->where('cart', $cart->id())->first();
+
+        $order->status(OrderStatus::Cancelled)->save();
+        $this->assertEquals(10, $product->fresh()->get('stock'));
+
+        $order->status(OrderStatus::PaymentReceived)->save();
+        $this->assertEquals(8, $product->fresh()->get('stock'));
+
+        $order->status(OrderStatus::Cancelled)->save();
+        $this->assertEquals(10, $product->fresh()->get('stock'));
+    }
+
+    /**
+     * @see https://github.com/duncanmcclean/statamic-cargo/issues/303
+     */
+    #[Test]
+    public function stock_is_not_restored_when_order_is_created_as_cancelled()
+    {
+        $cart = $this->makeCart();
+        $cart->lineItems()->update(123, ['quantity' => 2]);
+        $cart->save();
+
+        $product = Entry::find('product-1');
+        $product->set('stock', 10);
+        $product->save();
+
+        Facades\Order::makeFromCart($cart)->status(OrderStatus::Cancelled)->save();
+
+        $this->assertEquals(10, $product->fresh()->get('stock'));
+    }
+
     #[Test]
     public function it_dispatches_discount_redeemed_event_and_updates_redemption_counts()
     {
