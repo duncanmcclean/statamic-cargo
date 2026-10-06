@@ -406,7 +406,7 @@ class MollieTest extends TestCase
             ->post('/!/cargo/payments/mollie/webhook', ['id' => $molliePayment->id])
             ->assertOk();
 
-        $this->assertNull(Order::find($order->id()));
+        $this->assertEquals(OrderStatus::Cancelled, $order->fresh()->status());
     }
 
     #[Test]

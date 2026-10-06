@@ -135,6 +135,10 @@ class Mollie extends PaymentGateway
             throw new PreventCheckout(__('Payment was cancelled.'));
         }
 
+        if (in_array($payment->status, [PaymentStatus::FAILED, PaymentStatus::EXPIRED])) {
+            throw new PreventCheckout(__('Payment was unsuccessful.'));
+        }
+
         if ((array) $payment->amount != $this->formatAmount(site: $order->site(), amount: $order->grandTotal())) {
             throw new PreventCheckout(__('The amount paid does not match the order total.'));
         }
@@ -175,8 +179,10 @@ class Mollie extends PaymentGateway
         $payment = $this->mollie->payments->get($request->id);
         $order = Facades\Order::query()->where('mollie_payment_id', $payment->id)->first();
 
-        if ($payment->status === PaymentStatus::CANCELED) {
-            $order?->delete();
+        if (in_array($payment->status, [PaymentStatus::CANCELED, PaymentStatus::FAILED, PaymentStatus::EXPIRED])) {
+            if ($order && $order->status() === OrderStatus::PaymentPending) {
+                $order->status(OrderStatus::Cancelled)->save();
+            }
         }
 
         if ($payment->status === PaymentStatus::PAID) {
