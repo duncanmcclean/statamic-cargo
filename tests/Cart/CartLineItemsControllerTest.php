@@ -685,6 +685,26 @@ class CartLineItemsControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_doesnt_add_customer_information_to_line_item_data_when_updating_a_line_item()
+    {
+        $cart = $this->makeCartWithLineItems();
+
+        $this
+            ->patch('/!/cargo/cart/line-items/line-item-1', [
+                'first_name' => 'Jane',
+                'last_name' => 'Doe',
+                'email' => 'jane.doe@example.com',
+            ])
+            ->assertRedirect();
+
+        $data = $cart->fresh()->lineItems()->first()->data();
+
+        $this->assertFalse($data->has('first_name'));
+        $this->assertFalse($data->has('last_name'));
+        $this->assertFalse($data->has('email'));
+    }
+
+    #[Test]
     public function it_doesnt_update_a_line_item_when_quantity_is_less_than_zero()
     {
         $cart = $this->makeCartWithLineItems();
