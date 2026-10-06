@@ -364,6 +364,23 @@ class CartLineItemsControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_doesnt_add_a_product_to_the_cart_when_customer_email_contains_path_characters()
+    {
+        $cart = $this->makeCart();
+        $product = $this->makeProduct();
+
+        $this
+            ->post('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'customer' => ['email' => 'users/admin@example.com'],
+            ])
+            ->assertSessionHasErrors('customer.email');
+
+        $this->assertCount(0, $cart->fresh()->lineItems());
+        $this->assertEquals('john.doe@example.com', $cart->fresh()->customer()->email());
+    }
+
+    #[Test]
     public function it_doesnt_add_a_product_to_the_cart_when_the_customer_is_missing_the_prerequisite_product()
     {
         $user = User::make()->save();

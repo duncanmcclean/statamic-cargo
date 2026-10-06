@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Statamic\Facades\User;
 use Statamic\Http\Controllers\CP\CpController;
+use Statamic\Rules\EmailWithoutPathCharacters;
 
 class ConvertGuestCustomerController extends CpController
 {
@@ -16,7 +17,7 @@ class ConvertGuestCustomerController extends CpController
         $this->authorize('create', \Statamic\Contracts\Auth\User::class);
 
         $validated = $request->validate([
-            'email' => ['required', 'email'],
+            'email' => ['required', 'email', new EmailWithoutPathCharacters],
             'order_id' => ['required', 'string'],
         ]);
 

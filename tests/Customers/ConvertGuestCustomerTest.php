@@ -56,6 +56,22 @@ class ConvertGuestCustomerTest extends TestCase
     }
 
     #[Test]
+    public function it_cant_convert_a_guest_customer_to_a_user_when_email_contains_path_characters(): void
+    {
+        $order = tap(Order::make()->customer(['name' => 'CJ Cregg', 'email' => 'cj.cregg@example.com']))->save();
+
+        $this
+            ->actingAs(User::make()->makeSuper()->save())
+            ->postJson(cp_route('cargo.fieldtypes.convert-guest-customer'), [
+                'email' => 'users/admin@example.com',
+                'order_id' => $order->id(),
+            ])
+            ->assertJsonValidationErrors('email');
+
+        $this->assertNull(User::findByEmail('users/admin@example.com'));
+    }
+
+    #[Test]
     public function it_cant_convert_a_guest_customer_to_a_user_when_logged_in_user_doesnt_have_permission(): void
     {
         $orderA = tap(Order::make()->customer(['name' => 'CJ Cregg', 'email' => 'cj.cregg@example.com']))->save();

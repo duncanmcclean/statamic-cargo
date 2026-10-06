@@ -35,7 +35,7 @@
         "laravel/framework": "^12.0 || ^13.0",
         "mollie/mollie-api-php": "^3.0",
         "moneyphp/money": "^4.5",
-        "statamic/cms": "^6.20",
+        "statamic/cms": "^6.35.1",
         "stillat/proteus": "^4.2.1",
         "stripe/stripe-php": "^16.4",
         "ext-zip": "*"

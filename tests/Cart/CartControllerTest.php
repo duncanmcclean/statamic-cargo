@@ -200,6 +200,22 @@ class CartControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_throws_validation_error_when_customer_email_contains_path_characters()
+    {
+        $cart = $this->makeCart();
+        $cart->customer(null)->save();
+
+        $this
+            ->from('/cart')
+            ->patch('/!/cargo/cart', [
+                'customer' => ['email' => 'users/admin@example.com'],
+            ])
+            ->assertSessionHasErrors('customer.email');
+
+        $this->assertNull($cart->fresh()->customer());
+    }
+
+    #[Test]
     public function it_assigns_logged_in_user_to_cart_by_default()
     {
         config()->set('statamic.cargo.carts.always_checkout_as_guest', false);
