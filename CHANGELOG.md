@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.14.3 (2026-10-07)
+
+### What's fixed
+- Delete line items when deleting Eloquent orders [#311](https://github.com/duncanmcclean/statamic-cargo/pull/311) by @duncanmcclean
+
+
+
 ## v1.14.2 (2026-10-06)
 
 ### What's fixed
