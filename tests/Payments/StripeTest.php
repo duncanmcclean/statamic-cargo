@@ -626,6 +626,9 @@ class StripeTest extends TestCase
 
     private function makeOrder(): OrderContract
     {
+        Collection::make('products')->save();
+        Entry::make()->id('product-id')->collection('products')->data(['price' => 1000])->save();
+
         $order = Order::make()
             ->status(OrderStatus::PaymentPending)
             ->grandTotal(1000)
