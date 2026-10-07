@@ -53,6 +53,7 @@ class OrderRepository extends Stache\Repositories\OrderRepository implements Rep
 
     public function delete(Order $order): void
     {
+        $order->model()->lineItems()->delete();
         $order->model()->delete();
     }
 
