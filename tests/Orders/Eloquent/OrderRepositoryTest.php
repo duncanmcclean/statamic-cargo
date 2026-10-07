@@ -234,7 +234,8 @@ class OrderRepositoryTest extends TestCase
             ->id('123')
             ->site('default')
             ->cart('abc')
-            ->customer(['name' => 'CJ Cregg', 'email' => 'cj.cregg@whitehouse.gov']);
+            ->customer(['name' => 'CJ Cregg', 'email' => 'cj.cregg@whitehouse.gov'])
+            ->lineItems([['id' => '456', 'product' => 'abc', 'quantity' => 1, 'total' => 2500]]);
 
         $order->save();
 
@@ -245,5 +246,7 @@ class OrderRepositoryTest extends TestCase
             'site' => 'default',
             'cart' => 'abc',
         ]);
+
+        $this->assertDatabaseMissing('cargo_order_line_items', ['id' => '456']);
     }
 }
