@@ -5,6 +5,7 @@ use DuncanMcClean\Cargo\Http\Controllers\CP\Discounts\DiscountActionController;
 use DuncanMcClean\Cargo\Http\Controllers\CP\Discounts\DiscountController;
 use DuncanMcClean\Cargo\Http\Controllers\CP\Fieldtypes\ConvertGuestCustomerController;
 use DuncanMcClean\Cargo\Http\Controllers\CP\Fieldtypes\StateFieldtypeController;
+use DuncanMcClean\Cargo\Http\Controllers\CP\Orders\ExportOrdersController;
 use DuncanMcClean\Cargo\Http\Controllers\CP\Orders\OrderActionController;
 use DuncanMcClean\Cargo\Http\Controllers\CP\Orders\OrderController;
 use DuncanMcClean\Cargo\Http\Controllers\CP\Orders\PackingSlipController;
@@ -31,6 +32,7 @@ Route::name('cargo.')->group(function () {
         Route::post('actions', [OrderActionController::class, 'run'])->name('actions.run');
         Route::post('actions/list', [OrderActionController::class, 'bulkActions'])->name('actions.bulk');
 
+        Route::get('export', ExportOrdersController::class)->name('export');
         Route::get('{order}/packing-slip', PackingSlipController::class)->name('packing-slip');
     });
 

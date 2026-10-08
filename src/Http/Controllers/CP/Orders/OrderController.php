@@ -6,6 +6,7 @@ use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Http\Resources\CP\Orders\Order as OrderResource;
 use DuncanMcClean\Cargo\Http\Resources\CP\Orders\Orders;
+use DuncanMcClean\Cargo\Orders\CsvExporter;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Statamic\Facades\Action;
@@ -65,6 +66,10 @@ class OrderController extends CpController
             'columns' => $columns,
             'filters' => Scope::filters('orders'),
             'actionUrl' => cp_route('cargo.orders.actions.run'),
+            'exportUrl' => cp_route('cargo.orders.export'),
+            'exportColumns' => CsvExporter::columns()
+                ->map(fn (string $title, string $handle) => ['handle' => $handle, 'title' => $title])
+                ->values(),
             'editBlueprintUrl' => cp_route('blueprints.additional.edit', ['cargo', 'order']),
             'canEditBlueprint' => User::current()->can('configure fields'),
         ]);
