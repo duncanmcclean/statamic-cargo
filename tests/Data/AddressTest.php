@@ -30,6 +30,18 @@ class AddressTest extends TestCase
     }
 
     #[Test]
+    public function country_name_follows_the_current_locale()
+    {
+        $address = Address::make(['country' => 'DEU']);
+
+        $this->assertEquals('Germany', $address->country()->extra()['name']);
+
+        app()->setLocale('de');
+
+        $this->assertEquals('Deutschland', $address->country()->extra()['name']);
+    }
+
+    #[Test]
     public function can_get_state()
     {
         $address = Address::make([
