@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.15.0 (2026-10-08)
+
+### What's new
+- Export orders as CSV [#314](https://github.com/duncanmcclean/statamic-cargo/pull/314) by @duncanmcclean
+
+### What's fixed
+- Cache country lookups in addresses [#315](https://github.com/duncanmcclean/statamic-cargo/pull/315) by @duncanmcclean
+
+
+
 ## v1.14.3 (2026-10-07)
 
 ### What's fixed
