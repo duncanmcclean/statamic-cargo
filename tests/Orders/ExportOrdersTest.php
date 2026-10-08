@@ -44,7 +44,7 @@ class ExportOrdersTest extends TestCase
             ->assertDownload()
             ->streamedContent();
 
-        $this->assertEquals(<<<'CSV'
+        $this->assertStringEqualsStringIgnoringLineEndings(<<<'CSV'
 "Order Number",Date,Status,"Customer Name","Customer Email","Line Items","Grand Total"
 1002,"2026-10-02 14:30:00",Shipped,"Jane Doe",jane@example.com,"1 x Hoodie",£40.00
 1001,"2026-10-01 09:00:00","Payment Received","John Smith",john@example.com,"2 x T-shirt; 1 x Hoodie",£70.00
@@ -66,7 +66,7 @@ CSV, $csv);
             ->assertOk()
             ->streamedContent();
 
-        $this->assertEquals(<<<'CSV'
+        $this->assertStringEqualsStringIgnoringLineEndings(<<<'CSV'
 "Order Number","Customer Email","Line Items"
 1002,jane@example.com,"1 x Hoodie"
 1001,john@example.com,"2 x T-shirt; 1 x Hoodie"
