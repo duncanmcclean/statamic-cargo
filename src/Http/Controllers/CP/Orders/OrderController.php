@@ -6,8 +6,8 @@ use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Http\Resources\CP\Orders\Order as OrderResource;
 use DuncanMcClean\Cargo\Http\Resources\CP\Orders\Orders;
+use DuncanMcClean\Cargo\Orders\CsvExporter;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Statamic\Facades\Action;
 use Statamic\Facades\Scope;
@@ -19,14 +19,16 @@ use Statamic\Query\Scopes\Filters\Concerns\QueriesFilters;
 
 class OrderController extends CpController
 {
-    use ExtractsFromOrderFields, QueriesFilters;
+    use ExtractsFromOrderFields, QueriesFilters, QueriesOrderSearch;
 
     public function index(FilteredRequest $request)
     {
         $this->authorize('index', OrderContract::class, __('You are not authorized to view orders.'));
 
         if ($request->wantsJson()) {
-            $query = $this->indexQuery();
+            $query = Order::query();
+
+            $this->applyOrderSearch($query, request('search'));
 
             $activeFilterBadges = $this->queryFilters($query, $request->filters);
 
@@ -64,41 +66,13 @@ class OrderController extends CpController
             'columns' => $columns,
             'filters' => Scope::filters('orders'),
             'actionUrl' => cp_route('cargo.orders.actions.run'),
+            'exportUrl' => cp_route('cargo.orders.export'),
+            'exportColumns' => CsvExporter::columns()
+                ->map(fn (string $title, string $handle) => ['handle' => $handle, 'title' => $title])
+                ->values(),
             'editBlueprintUrl' => cp_route('blueprints.additional.edit', ['cargo', 'order']),
             'canEditBlueprint' => User::current()->can('configure fields'),
         ]);
-    }
-
-    protected function indexQuery()
-    {
-        $query = Order::query();
-
-        if ($search = request('search')) {
-            $query
-                ->where('id', $search)
-                ->orWhere('date', 'LIKE', '%'.$search.'%')
-                ->orWhere('order_number', 'LIKE', '%'.Str::remove('#', $search).'%')
-                ->orWhere(function ($query) use ($search) {
-                    $users = User::query()
-                        ->where('email', 'LIKE', '%'.$search.'%')
-                        ->when(User::blueprint()->hasField('first_name'), function ($query) use ($search) {
-                            foreach (explode(' ', $search) as $word) {
-                                $query
-                                    ->orWhere('first_name', 'LIKE', '%'.$word.'%')
-                                    ->orWhere('last_name', 'LIKE', '%'.$word.'%');
-                            }
-                        }, function ($query) use ($search) {
-                            $query->orWhere('name', 'LIKE', '%'.$search.'%');
-                        })
-                        ->pluck('id')
-                        ->all();
-
-                    $query->whereIn('customer', $users);
-                })
-                ->orWhere('customer', "guest::$search%");
-        }
-
-        return $query;
     }
 
     public function edit(Request $request, $order)
