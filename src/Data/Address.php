@@ -4,6 +4,7 @@ namespace DuncanMcClean\Cargo\Data;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Statamic\Dictionaries\Item;
+use Statamic\Facades\Blink;
 use Statamic\Facades\Blueprint;
 use Statamic\Facades\Dictionary;
 use Statamic\Fields\Field;
@@ -30,7 +31,10 @@ class Address implements Arrayable, Stringable
             return null;
         }
 
-        return Dictionary::find('countries')->get($country);
+        return Blink::once(
+            'cargo-country-'.app()->getLocale().'-'.$country,
+            fn () => Dictionary::find('countries')->get($country)
+        );
     }
 
     public function state(): ?array
