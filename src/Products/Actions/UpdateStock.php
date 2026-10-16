@@ -53,12 +53,14 @@ class UpdateStock
 
                 $product->set('product_variants', $productVariants)->save();
 
-                if ($product->stock() < config('statamic.cargo.products.low_stock_threshold')) {
-                    ProductStockLow::dispatch($product->variant($lineItem->variant()->key()));
+                $variant = $product->variant($lineItem->variant()->key());
+
+                if ($variant->stock() < config('statamic.cargo.products.low_stock_threshold')) {
+                    ProductStockLow::dispatch($variant);
                 }
 
-                if ($product->stock() === 0) {
-                    ProductNoStockRemaining::dispatch($product->variant($lineItem->variant()->key()));
+                if ($variant->stock() === 0) {
+                    ProductNoStockRemaining::dispatch($variant);
                 }
             }
         });

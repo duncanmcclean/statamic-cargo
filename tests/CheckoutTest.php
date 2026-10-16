@@ -220,6 +220,68 @@ class CheckoutTest extends TestCase
         Event::assertDispatched(ProductNoStockRemaining::class);
     }
 
+    #[Test]
+    public function it_does_not_dispatch_stock_low_event_when_variant_stock_is_above_threshold()
+    {
+        Event::fake([ProductStockLow::class, ProductNoStockRemaining::class]);
+
+        config()->set('statamic.cargo.products.low_stock_threshold', 5);
+
+        $this->makeVariantProductWithStock(10);
+
+        $this
+            ->get('/!/cargo/payments/fake/checkout')
+            ->assertRedirect();
+
+        Event::assertNotDispatched(ProductStockLow::class);
+        Event::assertNotDispatched(ProductNoStockRemaining::class);
+    }
+
+    #[Test]
+    public function it_dispatches_no_stock_remaining_event_when_variant_stock_is_zero()
+    {
+        Event::fake([ProductStockLow::class, ProductNoStockRemaining::class]);
+
+        config()->set('statamic.cargo.products.low_stock_threshold', 5);
+
+        $product = $this->makeVariantProductWithStock(2);
+
+        $this
+            ->get('/!/cargo/payments/fake/checkout')
+            ->assertRedirect();
+
+        $this->assertEquals(0, Arr::get($product->fresh()->get('product_variants'), 'options.0.stock'));
+
+        Event::assertDispatched(ProductStockLow::class, fn ($event) => $event->product->key() === 'Red' && $event->product->stock() === 0);
+        Event::assertDispatched(ProductNoStockRemaining::class, fn ($event) => $event->product->key() === 'Red');
+    }
+
+    private function makeVariantProductWithStock(int $stock)
+    {
+        $cart = $this->makeCart();
+        $cart->lineItems()->update(123, ['quantity' => 2, 'variant' => 'Red']);
+        $cart->save();
+
+        $product = Entry::find('product-1');
+        $product->set('product_variants', [
+            'variants' => [['name' => 'Colour', 'values' => ['Red']]],
+            'options' => [['key' => 'Red', 'variant' => 'Red', 'price' => 2550, 'stock' => $stock]],
+        ]);
+        $product->save();
+
+        $product->blueprint()->ensureField('product_variants', [
+            'type' => 'product_variants',
+            'option_fields' => [
+                [
+                    'handle' => 'stock',
+                    'field' => ['type' => 'integer'],
+                ],
+            ],
+        ])->save();
+
+        return $product;
+    }
+
     /**
      * @see https://github.com/duncanmcclean/statamic-cargo/issues/303
      */
