@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.15.1 (2026-10-16)
+
+### What's fixed
+- Check the variant's stock when dispatching stock events for variants [#318](https://github.com/duncanmcclean/statamic-cargo/pull/318) by @DanielDarrenJones
+- Allow an empty tax class field to pass validation [#319](https://github.com/duncanmcclean/statamic-cargo/pull/319) by @DanielDarrenJones
+- Return no tax class for variants of products without one [#320](https://github.com/duncanmcclean/statamic-cargo/pull/320) by @DanielDarrenJones
+- Bump the github-actions group with 2 updates [#317](https://github.com/duncanmcclean/statamic-cargo/pull/317) by @dependabot
+
+
+
 ## v1.15.0 (2026-10-08)
 
 ### What's new
