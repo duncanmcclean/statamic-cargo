@@ -4,6 +4,7 @@ namespace DuncanMcClean\Cargo\Fieldtypes;
 
 use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Facades\TaxClass;
+use Illuminate\Support\Arr;
 use Statamic\Facades\User;
 use Statamic\Fieldtypes\Relationship;
 
@@ -93,14 +94,13 @@ class TaxClasses extends Relationship
     {
         return [
             function ($attribute, $value, $fail) {
-                $handle = is_array($value) ? ($value[0] ?? null) : $value;
+                $handle = Arr::first(Arr::wrap($value));
 
-                // Nothing selected: whether that's allowed is up to the field's own rules (eg. required).
-                if (blank($handle)) {
+                if (! $handle) {
                     return;
                 }
 
-                if (! TaxClass::find((string) $handle)) {
+                if (! TaxClass::find($handle)) {
                     $fail(__('cargo::validation.tax_class_invalid'));
                 }
             },
