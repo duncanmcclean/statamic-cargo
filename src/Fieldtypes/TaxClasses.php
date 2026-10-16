@@ -93,7 +93,14 @@ class TaxClasses extends Relationship
     {
         return [
             function ($attribute, $value, $fail) {
-                if (! TaxClass::find($value[0])) {
+                $handle = is_array($value) ? ($value[0] ?? null) : $value;
+
+                // Nothing selected: whether that's allowed is up to the field's own rules (eg. required).
+                if (blank($handle)) {
+                    return;
+                }
+
+                if (! TaxClass::find((string) $handle)) {
                     $fail(__('cargo::validation.tax_class_invalid'));
                 }
             },
