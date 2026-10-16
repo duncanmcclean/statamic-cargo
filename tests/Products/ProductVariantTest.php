@@ -2,6 +2,7 @@
 
 namespace Tests\Products;
 
+use DuncanMcClean\Cargo\Facades\Product;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
@@ -52,5 +53,22 @@ class ProductVariantTest extends TestCase
 
         $this->assertEquals(['key', 'variant', 'price'], $blueprint->fields()->all()->keys()->all());
         $this->assertEquals(['required', 'numeric'], $blueprint->field('price')->get('validate'));
+    }
+
+    #[Test]
+    public function purchasable_tax_class_is_null_when_the_product_has_no_tax_class()
+    {
+        $product = Entry::make()
+            ->collection('products')
+            ->data([
+                'product_variants' => [
+                    'variants' => [['name' => 'Colour', 'values' => ['Red']]],
+                    'options' => [['key' => 'Red', 'variant' => 'Red', 'price' => 1000]],
+                ],
+            ]);
+
+        $product->save();
+
+        $this->assertNull(Product::find($product->id())->variant('Red')->purchasableTaxClass());
     }
 }
