@@ -159,26 +159,6 @@ class CheckoutTest extends TestCase
     }
 
     #[Test]
-    public function ensure_product_variant_stock_field_is_updated()
-    {
-        Event::fake(ProductStockLow::class);
-
-        config()->set('statamic.cargo.products.low_stock_threshold', 10);
-
-        $product = $this->makeVariantProductWithStock(10);
-
-        $this
-            ->get('/!/cargo/payments/fake/checkout')
-            ->assertRedirect();
-
-        $productVariant = Arr::get($product->fresh()->get('product_variants'), 'options.0');
-
-        $this->assertEquals(8, $productVariant['stock']);
-
-        Event::assertDispatched(ProductStockLow::class);
-    }
-
-    #[Test]
     public function it_dispatches_no_stock_remaining_event_when_stock_is_zero()
     {
         Event::fake([ProductStockLow::class, ProductNoStockRemaining::class]);
@@ -202,13 +182,33 @@ class CheckoutTest extends TestCase
     }
 
     #[Test]
+    public function ensure_product_variant_stock_field_is_updated()
+    {
+        Event::fake(ProductStockLow::class);
+
+        config()->set('statamic.cargo.products.low_stock_threshold', 10);
+
+        $product = $this->makeVariantProductWithStock(stock: 10);
+
+        $this
+            ->get('/!/cargo/payments/fake/checkout')
+            ->assertRedirect();
+
+        $productVariant = Arr::get($product->fresh()->get('product_variants'), 'options.0');
+
+        $this->assertEquals(8, $productVariant['stock']);
+
+        Event::assertDispatched(ProductStockLow::class);
+    }
+
+    #[Test]
     public function it_does_not_dispatch_stock_low_event_when_variant_stock_is_above_threshold()
     {
         Event::fake([ProductStockLow::class, ProductNoStockRemaining::class]);
 
         config()->set('statamic.cargo.products.low_stock_threshold', 5);
 
-        $this->makeVariantProductWithStock(10);
+        $this->makeVariantProductWithStock(stock: 10);
 
         $this
             ->get('/!/cargo/payments/fake/checkout')
@@ -225,7 +225,7 @@ class CheckoutTest extends TestCase
 
         config()->set('statamic.cargo.products.low_stock_threshold', 5);
 
-        $product = $this->makeVariantProductWithStock(2);
+        $product = $this->makeVariantProductWithStock(stock: 2);
 
         $this
             ->get('/!/cargo/payments/fake/checkout')
