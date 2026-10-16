@@ -159,45 +159,6 @@ class CheckoutTest extends TestCase
     }
 
     #[Test]
-    public function ensure_product_variant_stock_field_is_updated()
-    {
-        Event::fake(ProductStockLow::class);
-
-        config()->set('statamic.cargo.products.low_stock_threshold', 10);
-
-        $cart = $this->makeCart();
-        $cart->lineItems()->update(123, ['quantity' => 2, 'variant' => 'Red']);
-        $cart->save();
-
-        $product = Entry::find('product-1');
-        $product->set('product_variants', [
-            'variants' => [['name' => 'Colour', 'values' => ['Red']]],
-            'options' => [['key' => 'Red', 'variant' => 'Red', 'price' => 2550, 'stock' => 10]],
-        ]);
-        $product->save();
-
-        $product->blueprint()->ensureField('product_variants', [
-            'type' => 'product_variants',
-            'option_fields' => [
-                [
-                    'handle' => 'stock',
-                    'field' => ['type' => 'integer'],
-                ],
-            ],
-        ])->save();
-
-        $this
-            ->get('/!/cargo/payments/fake/checkout')
-            ->assertRedirect();
-
-        $productVariant = Arr::get($product->fresh()->get('product_variants'), 'options.0');
-
-        $this->assertEquals(8, $productVariant['stock']);
-
-        Event::assertDispatched(ProductStockLow::class);
-    }
-
-    #[Test]
     public function it_dispatches_no_stock_remaining_event_when_stock_is_zero()
     {
         Event::fake([ProductStockLow::class, ProductNoStockRemaining::class]);
@@ -221,13 +182,33 @@ class CheckoutTest extends TestCase
     }
 
     #[Test]
+    public function ensure_product_variant_stock_field_is_updated()
+    {
+        Event::fake(ProductStockLow::class);
+
+        config()->set('statamic.cargo.products.low_stock_threshold', 10);
+
+        $product = $this->makeVariantProductWithStock(stock: 10);
+
+        $this
+            ->get('/!/cargo/payments/fake/checkout')
+            ->assertRedirect();
+
+        $productVariant = Arr::get($product->fresh()->get('product_variants'), 'options.0');
+
+        $this->assertEquals(8, $productVariant['stock']);
+
+        Event::assertDispatched(ProductStockLow::class);
+    }
+
+    #[Test]
     public function it_does_not_dispatch_stock_low_event_when_variant_stock_is_above_threshold()
     {
         Event::fake([ProductStockLow::class, ProductNoStockRemaining::class]);
 
         config()->set('statamic.cargo.products.low_stock_threshold', 5);
 
-        $this->makeVariantProductWithStock(10);
+        $this->makeVariantProductWithStock(stock: 10);
 
         $this
             ->get('/!/cargo/payments/fake/checkout')
@@ -244,7 +225,7 @@ class CheckoutTest extends TestCase
 
         config()->set('statamic.cargo.products.low_stock_threshold', 5);
 
-        $product = $this->makeVariantProductWithStock(2);
+        $product = $this->makeVariantProductWithStock(stock: 2);
 
         $this
             ->get('/!/cargo/payments/fake/checkout')
@@ -254,32 +235,6 @@ class CheckoutTest extends TestCase
 
         Event::assertDispatched(ProductStockLow::class, fn ($event) => $event->product->key() === 'Red' && $event->product->stock() === 0);
         Event::assertDispatched(ProductNoStockRemaining::class, fn ($event) => $event->product->key() === 'Red');
-    }
-
-    private function makeVariantProductWithStock(int $stock)
-    {
-        $cart = $this->makeCart();
-        $cart->lineItems()->update(123, ['quantity' => 2, 'variant' => 'Red']);
-        $cart->save();
-
-        $product = Entry::find('product-1');
-        $product->set('product_variants', [
-            'variants' => [['name' => 'Colour', 'values' => ['Red']]],
-            'options' => [['key' => 'Red', 'variant' => 'Red', 'price' => 2550, 'stock' => $stock]],
-        ]);
-        $product->save();
-
-        $product->blueprint()->ensureField('product_variants', [
-            'type' => 'product_variants',
-            'option_fields' => [
-                [
-                    'handle' => 'stock',
-                    'field' => ['type' => 'integer'],
-                ],
-            ],
-        ])->save();
-
-        return $product;
     }
 
     /**
@@ -540,6 +495,32 @@ class CheckoutTest extends TestCase
         Cart::setCurrent($cart);
 
         return $cart;
+    }
+
+    private function makeVariantProductWithStock(int $stock)
+    {
+        $cart = $this->makeCart();
+        $cart->lineItems()->update(123, ['quantity' => 2, 'variant' => 'Red']);
+        $cart->save();
+
+        $product = Entry::find('product-1');
+        $product->set('product_variants', [
+            'variants' => [['name' => 'Colour', 'values' => ['Red']]],
+            'options' => [['key' => 'Red', 'variant' => 'Red', 'price' => 2550, 'stock' => $stock]],
+        ]);
+        $product->save();
+
+        $product->blueprint()->ensureField('product_variants', [
+            'type' => 'product_variants',
+            'option_fields' => [
+                [
+                    'handle' => 'stock',
+                    'field' => ['type' => 'integer'],
+                ],
+            ],
+        ])->save();
+
+        return $product;
     }
 }
 
