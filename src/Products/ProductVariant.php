@@ -113,7 +113,11 @@ class ProductVariant implements Augmentable, Purchasable
 
     public function purchasableTaxClass(): ?TaxClassContract
     {
-        return TaxClass::find($this->product()->value('tax_class'));
+        if (! $taxClass = $this->product()->value('tax_class')) {
+            return null;
+        }
+
+        return TaxClass::find($taxClass);
     }
 
     public function blueprint()
