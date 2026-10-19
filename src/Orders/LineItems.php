@@ -62,7 +62,19 @@ class LineItems extends Collection
         $count = $this->count();
 
         $this->items = $this
-            ->reject(fn (LineItem $lineItem) => $lineItem->product && is_null($lineItem->product()))
+            ->reject(function (LineItem $lineItem) {
+                if (! $lineItem->product) {
+                    return false;
+                }
+
+                if (! $product = $lineItem->product()) {
+                    return true;
+                }
+
+                // A variant product needs a variant that still exists, or the line item can't be priced.
+                return $product->isVariantProduct()
+                    && (! $lineItem->variant || ! $product->variant($lineItem->variant));
+            })
             ->values()
             ->all();
 
