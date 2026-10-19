@@ -314,6 +314,21 @@ Stripe::paymentDescription(function (Order $order) {
 });
 ```
 
+### Payment Intent Hooks
+If you need to change the parameters Cargo sends to Stripe when it creates or updates a payment intent, you can use the `creating-payment-intent` and `updating-payment-intent` hooks in your `AppServiceProvider`. `$payload->params` holds the parameters, which you can change, add to or remove from, and `$payload->cart` is the cart. Assign the parameters back to `$payload->params` and return `$next($payload)`:
+
+```php
+use DuncanMcClean\Cargo\Payments\Gateways\Stripe;
+
+Stripe::hook('creating-payment-intent', function ($payload, $next) {
+    $params = $payload->params;
+    $params['statement_descriptor_suffix'] = 'ACME';
+    $payload->params = $params;
+
+    return $next($payload);
+});
+```
+
 ### Capture Method
 By default, Cargo authorises payments and captures them separately to ensure customers are only charged once their order has been successfully created. If the checkout process fails, the authorisation is released rather than refunded.
 
@@ -375,6 +390,21 @@ use DuncanMcClean\Cargo\Payments\Gateways\Mollie;
 
 Mollie::paymentDescription(function (Order $order) {
     return "Acme Store - {$order->orderNumber()}";
+});
+```
+
+### Payment Hooks
+If you need to change the parameters Cargo sends to Mollie when it creates a payment, you can use the `creating-payment` hook in your `AppServiceProvider`. `$payload->params` holds the parameters, which you can change, add to or remove from, and `$payload->cart` is the cart. Assign the parameters back to `$payload->params` and return `$next($payload)`:
+
+```php
+use DuncanMcClean\Cargo\Payments\Gateways\Mollie;
+
+Mollie::hook('creating-payment', function ($payload, $next) {
+    $params = $payload->params;
+    $params['metadata']['source'] = 'my-addon';
+    $payload->params = $params;
+
+    return $next($payload);
 });
 ```
 

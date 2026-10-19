@@ -113,6 +113,62 @@ class StripeTest extends TestCase
     }
 
     #[Test]
+    public function the_payment_intent_can_be_changed_with_a_hook_when_it_is_created()
+    {
+        $cart = $this->makeCartWithGuestCustomer();
+        $stripeCustomer = Customer::create(['email' => 'guest@example.com']);
+
+        Stripe::hook('creating-payment-intent', function ($payload, $next) use (&$hookedCart, $stripeCustomer) {
+            $hookedCart = $payload->cart;
+
+            $params = $payload->params;
+            $params['customer'] = $stripeCustomer->id;
+            $params['setup_future_usage'] = 'off_session';
+            $params['metadata']['source'] = 'hook';
+            $payload->params = $params;
+
+            return $next($payload);
+        });
+
+        (new Stripe)->setup($cart);
+
+        $this->assertEquals($cart->id(), $hookedCart->id());
+
+        $stripePaymentIntent = PaymentIntent::retrieve($cart->fresh()->get('stripe_payment_intent'));
+
+        $this->assertEquals($stripeCustomer->id, $stripePaymentIntent->customer);
+        $this->assertEquals('off_session', $stripePaymentIntent->setup_future_usage);
+        $this->assertEquals('hook', $stripePaymentIntent->metadata->source);
+        $this->assertEquals($cart->id(), $stripePaymentIntent->metadata->cart_id);
+    }
+
+    #[Test]
+    public function the_payment_intent_can_be_changed_with_a_hook_when_it_is_updated()
+    {
+        $cart = $this->makeCartWithGuestCustomer();
+
+        (new Stripe)->setup($cart);
+
+        Stripe::hook('updating-payment-intent', function ($payload, $next) use (&$hookedCart) {
+            $hookedCart = $payload->cart;
+
+            $params = $payload->params;
+            $params['metadata'] = ['source' => 'hook'];
+            $payload->params = $params;
+
+            return $next($payload);
+        });
+
+        (new Stripe)->setup($cart->fresh());
+
+        $this->assertEquals($cart->id(), $hookedCart->id());
+
+        $stripePaymentIntent = PaymentIntent::retrieve($cart->fresh()->get('stripe_payment_intent'));
+
+        $this->assertEquals('hook', $stripePaymentIntent->metadata->source);
+    }
+
+    #[Test]
     public function setup_returns_existing_payment_intent_if_one_exists()
     {
         $stripePaymentIntent = PaymentIntent::create(['amount' => 1000, 'currency' => 'gbp']);

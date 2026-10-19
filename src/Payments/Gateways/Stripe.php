@@ -59,10 +59,15 @@ class Stripe extends PaymentGateway
         }
 
         if ($cart->get('stripe_payment_intent')) {
-            $paymentIntent = PaymentIntent::update($cart->get('stripe_payment_intent'), [
-                'amount' => $cart->grandTotal(),
-                'customer' => $stripeCustomerId,
-            ]);
+            $params = $this->runHooksWith('updating-payment-intent', [
+                'cart' => $cart,
+                'params' => [
+                    'amount' => $cart->grandTotal(),
+                    'customer' => $stripeCustomerId,
+                ],
+            ])->params;
+
+            $paymentIntent = PaymentIntent::update($cart->get('stripe_payment_intent'), $params);
 
             return [
                 'api_key' => $this->config()->get('key'),
@@ -78,6 +83,11 @@ class Stripe extends PaymentGateway
             'automatic_payment_methods' => ['enabled' => true],
             'capture_method' => $this->config()->get('capture_method', 'manual'),
         ];
+
+        $intentData = $this->runHooksWith('creating-payment-intent', [
+            'cart' => $cart,
+            'params' => $intentData,
+        ])->params;
 
         $paymentIntent = PaymentIntent::create($intentData);
 
