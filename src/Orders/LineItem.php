@@ -130,6 +130,19 @@ class LineItem
             ->args(func_get_args());
     }
 
+    public function isValid(): bool
+    {
+        if (! $product = $this->product()) {
+            return false;
+        }
+
+        if ($product->isVariantProduct()) {
+            return $this->variant() !== null;
+        }
+
+        return true;
+    }
+
     public function hasDownloads(): bool
     {
         return $this->variant()?->has('downloads') ?? $this->product()?->has('downloads') ?? false;
