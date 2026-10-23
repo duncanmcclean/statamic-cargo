@@ -15,6 +15,7 @@ use DuncanMcClean\Cargo\Support\Money;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
+use Mollie\Api\Exceptions\ApiException;
 use Mollie\Api\MollieApiClient;
 use Mollie\Api\Types\PaymentStatus;
 use Statamic\Contracts\Auth\User;
@@ -176,7 +177,15 @@ class Mollie extends PaymentGateway
 
     public function webhook(Request $request): Response
     {
-        $payment = $this->mollie->payments->get($request->id);
+        try {
+            $payment = $this->mollie->payments->get($request->id);
+        } catch (ApiException $e) {
+            if ($e->getCode() === 404) {
+                return response('Webhook received', 200);
+            }
+
+            throw $e;
+        }
         $order = Facades\Order::query()->where('mollie_payment_id', $payment->id)->first();
 
         if (in_array($payment->status, [PaymentStatus::CANCELED, PaymentStatus::FAILED, PaymentStatus::EXPIRED])) {

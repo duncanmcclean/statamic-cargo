@@ -456,6 +456,14 @@ class MollieTest extends TestCase
     }
 
     #[Test]
+    public function it_handles_webhook_for_payment_that_doesnt_exist()
+    {
+        $this
+            ->post('/!/cargo/payments/mollie/webhook', ['id' => 'tr_doesnotexist123'])
+            ->assertOk();
+    }
+
+    #[Test]
     public function it_refunds_a_payment()
     {
         // TODO: Figure out how to create a "paid" payment in Mollie in order to test this.
