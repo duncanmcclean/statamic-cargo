@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Cache;
 use Statamic\Fields\Blueprint as StatamicBlueprint;
 use Statamic\Stache\Stache;
 use Statamic\Support\Traits\Hookable;
-use Throwable;
 
 class OrderRepository implements RepositoryContract
 {
@@ -98,27 +97,17 @@ class OrderRepository implements RepositoryContract
             $order->date(Carbon::now('UTC'));
         }
 
-        if ($order->orderNumber()) {
-            $this->store->save($order);
+        if (! $order->orderNumber()) {
+            Cache::lock('cargo-order-number', 5)->block(5, function () use ($order) {
+                $order->orderNumber($this->generateOrderNumber($order));
+
+                $this->store->save($order);
+            });
 
             return;
         }
 
-        // Hold the lock until the order is saved, so a checkout running at the same time can't
-        // read the same "last order" and be given the same number. Wait for it, rather than
-        // carrying on without a number when another checkout has it.
-        Cache::lock('cargo-order-number', 30)->block(10, function () use ($order) {
-            $order->orderNumber($this->generateOrderNumber($order));
-
-            try {
-                $this->store->save($order);
-            } catch (Throwable $e) {
-                // The number wasn't used, so don't keep it: saving again should get a new one.
-                $order->orderNumber(null);
-
-                throw $e;
-            }
-        });
+        $this->store->save($order);
     }
 
     public function delete(Order $order): void

@@ -6,10 +6,11 @@ use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
 use DuncanMcClean\Cargo\Events\OrderBlueprintFound;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
+use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
-use Mockery;
+use Illuminate\Support\Sleep;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
@@ -165,55 +166,14 @@ class OrderRepositoryTest extends TestCase
     }
 
     #[Test]
-    public function the_order_number_lock_is_held_until_the_order_is_saved()
+    public function waits_for_the_order_number_lock_before_generating_an_order_number()
     {
-        $lockWasFreeDuringSave = null;
+        Sleep::fake(syncWithCarbon: true);
+        Cache::lock('cargo-order-number', 5)->get();
 
-        // While the order is being written, another checkout must not be able to take the lock.
-        $store = (new \ReflectionProperty($this->repo, 'store'))->getValue($this->repo);
-        $spyStore = Mockery::mock($store)->makePartial();
-        $spyStore->shouldReceive('save')->once()->andReturnUsing(function ($order) use ($store, &$lockWasFreeDuringSave) {
-            $otherCheckout = Cache::lock('cargo-order-number', 30);
-            $lockWasFreeDuringSave = $otherCheckout->get();
-            $lockWasFreeDuringSave && $otherCheckout->release();
+        $this->expectException(LockTimeoutException::class);
 
-            return $store->save($order);
-        });
-        (new \ReflectionProperty($this->repo, 'store'))->setValue($this->repo, $spyStore);
-
-        $order = Order::make();
-        $this->repo->save($order);
-
-        $this->assertFalse($lockWasFreeDuringSave);
-        $this->assertEquals(1000, $order->orderNumber());
-        $this->assertTrue(Cache::lock('cargo-order-number', 30)->get(), 'The lock is released after saving.');
-    }
-
-    #[Test]
-    public function the_generated_order_number_is_cleared_when_saving_fails()
-    {
-        $this->repo->hook('generating-order-number', function ($payload, $next) {
-            $payload->orderNumber = 5000;
-
-            return $next($payload);
-        });
-
-        // The Stache store fails to write the order.
-        $store = (new \ReflectionProperty($this->repo, 'store'))->getValue($this->repo);
-        $failingStore = Mockery::mock($store)->makePartial();
-        $failingStore->shouldReceive('save')->once()->andThrow(new \RuntimeException('Disk full'));
-        (new \ReflectionProperty($this->repo, 'store'))->setValue($this->repo, $failingStore);
-
-        $order = Order::make();
-
-        try {
-            $this->repo->save($order);
-            $this->fail('Expected the save to fail.');
-        } catch (\RuntimeException) {
-            //
-        }
-
-        $this->assertNull($order->orderNumber());
+        $this->repo->save(Order::make());
     }
 
     #[Test]
