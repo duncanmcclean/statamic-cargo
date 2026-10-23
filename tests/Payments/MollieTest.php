@@ -387,14 +387,6 @@ class MollieTest extends TestCase
     }
 
     #[Test]
-    public function it_acknowledges_a_webhook_for_a_payment_that_does_not_exist()
-    {
-        $this
-            ->post('/!/cargo/payments/mollie/webhook', ['id' => 'tr_doesnotexist123'])
-            ->assertOk();
-    }
-
-    #[Test]
     public function it_receives_a_webhook_with_cancelled_payment()
     {
         // TODO: Figure out how to create a "cancelled" payment in Mollie in order to test this.
@@ -461,6 +453,14 @@ class MollieTest extends TestCase
             ->assertOk();
 
         $this->assertEquals(1000, $order->fresh()->get('amount_refunded'));
+    }
+
+    #[Test]
+    public function it_handles_webhook_for_payment_that_doesnt_exist()
+    {
+        $this
+            ->post('/!/cargo/payments/mollie/webhook', ['id' => 'tr_doesnotexist123'])
+            ->assertOk();
     }
 
     #[Test]
