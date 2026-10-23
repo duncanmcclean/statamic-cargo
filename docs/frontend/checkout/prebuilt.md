@@ -42,7 +42,7 @@ If you're curious, here's a brief rundown of how the pre-built Checkout page wor
 	* We're not using the equivalent Antlers tags for this as the available options could change from when the page is loaded vs when the customer is presented with the options.
 		* For example: some shipping options may only be available for certain areas, but when the page is loaded, we don't have the customer's address yet so we need to fetch them later.
 
-### Customization
+### Customisation
 #### Header / Logo
 You can customise the header, including the logo, by editing the `resources/views/checkout/_header.antlers.html` view:
 
