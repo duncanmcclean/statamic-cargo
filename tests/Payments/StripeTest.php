@@ -20,6 +20,7 @@ use Stripe\Charge;
 use Stripe\Customer;
 use Stripe\PaymentIntent;
 use Stripe\Refund;
+use Stripe\Util\ApiVersion;
 use Tests\TestCase;
 
 #[Group('payments')]
@@ -42,6 +43,23 @@ class StripeTest extends TestCase
         ]]);
 
         \Stripe\Stripe::setApiKey(config('statamic.cargo.payments.gateways.stripe.secret'));
+    }
+
+    protected function tearDown(): void
+    {
+        \Stripe\Stripe::setApiVersion(ApiVersion::CURRENT);
+
+        parent::tearDown();
+    }
+
+    #[Test]
+    public function it_uses_the_configured_api_version()
+    {
+        config()->set('statamic.cargo.payments.gateways.stripe.version', '2024-06-20');
+
+        new Stripe;
+
+        $this->assertSame('2024-06-20', \Stripe\Stripe::getApiVersion());
     }
 
     #[Test]
