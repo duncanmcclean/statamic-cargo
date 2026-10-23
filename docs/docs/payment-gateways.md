@@ -303,7 +303,7 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 ```
 
 ### Payment Description
-By default, the payment description will be `Order #1234`. If necessary, you can customize this by calling the `Stripe::paymentDescription()` hook in your `AppServiceProvider`:
+By default, the payment description will be `Order #1234`. If necessary, you can customise this by calling the `Stripe::paymentDescription()` hook in your `AppServiceProvider`:
 
 ```php
 use DuncanMcClean\Cargo\Contracts\Orders\Order;
@@ -311,21 +311,6 @@ use DuncanMcClean\Cargo\Payments\Gateways\Stripe;
 
 Stripe::paymentDescription(function (Order $order) {
     return "Acme Store - {$order->orderNumber()}";
-});
-```
-
-### Payment Intent Hooks
-If you need to change the parameters Cargo sends to Stripe when it creates or updates a payment intent, you can use the `creating-payment-intent` and `updating-payment-intent` hooks in your `AppServiceProvider`. `$payload->params` holds the parameters, which you can change, add to or remove from, and `$payload->cart` is the cart. Assign the parameters back to `$payload->params` and return `$next($payload)`:
-
-```php
-use DuncanMcClean\Cargo\Payments\Gateways\Stripe;
-
-Stripe::hook('creating-payment-intent', function ($payload, $next) {
-    $params = $payload->params;
-    $params['statement_descriptor_suffix'] = 'ACME';
-    $payload->params = $params;
-
-    return $next($payload);
 });
 ```
 
@@ -346,6 +331,23 @@ However, not all payment methods support this approach. For example, iDEAL requi
 ```
 
 With automatic capture, the payment will be immediately refunded if the checkout fails.
+
+### Customise the payment intent
+If you need to customise more than just the description and capture method, you may use a hook to modify [the payment intent](https://docs.stripe.com/api/payment_intents/create).
+
+You can define the `creating-payment-intent` and `updating-payment-intent` hooks in your `AppServiceProvider`. `$payload->cart` is the [`Cart`](/extending/php-apis/carts) object, and `$payload->params` are the parameters, which you can change, add to or remove from. Assign parameters back to `$payload->params` and return `$next($payload)`:
+
+```php
+use DuncanMcClean\Cargo\Payments\Gateways\Stripe;
+
+Stripe::hook('creating-payment-intent', function ($payload, $next) {
+    $params = $payload->params;
+    $params['statement_descriptor_suffix'] = 'ACME';
+    $payload->params = $params;
+
+    return $next($payload);
+});
+```
 
 ## Mollie
 ### Payment Form
@@ -382,7 +384,7 @@ You can workaround this by setting up a tunneling service, like [Expose](https:/
 You will need to update the `APP_URL` key in your `.env` while your tunnel is active, so the gateway points towards the tunnel.
 
 ### Payment Description
-By default, the payment description will be `Order #1234`. If necessary, you can customize this by calling the `Mollie::paymentDescription()` hook in your `AppServiceProvider`:
+By default, the payment description will be `Order #1234`. If necessary, you can customise this by calling the `Mollie::paymentDescription()` hook in your `AppServiceProvider`:
 
 ```php
 use DuncanMcClean\Cargo\Contracts\Orders\Order;
@@ -393,8 +395,10 @@ Mollie::paymentDescription(function (Order $order) {
 });
 ```
 
-### Payment Hooks
-If you need to change the parameters Cargo sends to Mollie when it creates a payment, you can use the `creating-payment` hook in your `AppServiceProvider`. `$payload->params` holds the parameters, which you can change, add to or remove from, and `$payload->cart` is the cart. Assign the parameters back to `$payload->params` and return `$next($payload)`:
+### Customise the payment
+If you need to customise the payload used to [create payments](https://docs.mollie.com/reference/create-payment), you may define the `creating-payment` hook in your `AppServiceProvider`.
+
+`$payload->cart` is the [`Cart`](/extending/php-apis/carts) object, and `$payload->params` are the parameters, which you can change, add to or remove from. Assign parameters back to `$payload->params` and return `$next($payload)`:
 
 ```php
 use DuncanMcClean\Cargo\Payments\Gateways\Mollie;
