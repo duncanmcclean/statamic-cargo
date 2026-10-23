@@ -6,17 +6,30 @@ use DuncanMcClean\Cargo\Discounts\Types\PercentageOff;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Discount;
 use PHPUnit\Framework\Attributes\Test;
+use Statamic\Facades\Collection;
+use Statamic\Facades\Entry;
+use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
 
 class PercentageOffTest extends TestCase
 {
+    use PreventsSavingStacheItemsToDisk;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Collection::make('products')->save();
+        Entry::make()->id('product-id')->collection('products')->save();
+    }
+
     #[Test]
     public function it_calculates_percentage_off_discount()
     {
         $discount = Discount::make()->type('percentage_off')->set('percentage_off', 10);
 
         $cart = Cart::make();
-        $cart->lineItems()->create(['id' => 'abc', 'total' => 2599]);
+        $cart->lineItems()->create(['id' => 'abc', 'product' => 'product-id', 'total' => 2599]);
 
         $lineItem = $cart->lineItems()->find('abc');
 
@@ -31,8 +44,8 @@ class PercentageOffTest extends TestCase
         $discount = Discount::make()->type('percentage_off')->set('percentage_off', 10);
 
         $cart = Cart::make();
-        $cart->lineItems()->create(['id' => 'line1', 'total' => 1000]);
-        $cart->lineItems()->create(['id' => 'line2', 'total' => 2000]);
+        $cart->lineItems()->create(['id' => 'line1', 'product' => 'product-id', 'total' => 1000]);
+        $cart->lineItems()->create(['id' => 'line2', 'product' => 'product-id', 'total' => 2000]);
 
         $discountType = (new PercentageOff)->setDiscount($discount);
 
