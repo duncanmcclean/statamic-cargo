@@ -63,7 +63,7 @@ To use the Dummy gateway, copy and paste this template into your checkout flow:
     <div class="grid grid-cols-2 gap-4 mb-4">  
         <input type="text" name="cardholder" placeholder="Name on Card" value="{{ Statamic::tag('cart:customer:name') }}" required>  
         <input type="text" name="card_number" placeholder="Card Number" value="4242 4242 4242 4242" required>  
-        <input type="text" name="card_expiry" placeholder="Expiry" value="{{ now()->format('m') }}/{{ now()->addYear()->format('m') }}" required>  
+        <input type="text" name="card_expiry" placeholder="Expiry" value="{{ now()->format('m') }}/{{ now()->addYear()->format('y') }}" required>  
         <input type="text" name="card_cvc" placeholder="CVC" value="123" required>  
     </div>  
   
@@ -245,7 +245,11 @@ To use the Stripe gateway, copy and paste this template into your checkout flow:
         });  
   
         // This point will only be reached if there is an immediate error when  
-        // confirming the payment. Otherwise, your customer will be redirected to        // your `return_url`. For some payment methods like iDEAL, your customer will        // be redirected to an intermediate site first to authorize the payment, then        // redirected to the `return_url`.        if (error.type === "card_error" || error.type === "validation_error") {  
+        // confirming the payment. Otherwise, your customer will be redirected to  
+        // your `return_url`. For some payment methods like iDEAL, your customer will  
+        // be redirected to an intermediate site first to authorize the payment, then  
+        // redirected to the `return_url`.  
+        if (error.type === "card_error" || error.type === "validation_error") {  
             showMessage(error.message);  
         } else {  
             showMessage("An unexpected error occurred.");  
