@@ -135,6 +135,29 @@ class OrderRepositoryTest extends TestCase
     }
 
     #[Test]
+    public function can_save_and_find_an_order_with_a_stored_product_title_and_variant_name()
+    {
+        $order = Order::make()
+            ->customer(['name' => 'CJ Cregg', 'email' => 'cj.cregg@whitehouse.gov'])
+            ->lineItems([
+                ['id' => '123', 'product' => 'abc', 'variant' => 'Small', 'product_title' => 'Hoodie', 'variant_name' => 'Small', 'quantity' => 1, 'total' => 2500],
+            ]);
+
+        $this->repo->save($order);
+
+        $this->assertDatabaseHas('cargo_order_line_items', [
+            'order_id' => $order->id(),
+            'data->product_title' => 'Hoodie',
+            'data->variant_name' => 'Small',
+        ]);
+
+        $lineItem = $this->repo->find($order->id())->lineItems()->first();
+
+        $this->assertEquals('Hoodie', $lineItem->productTitle());
+        $this->assertEquals('Small', $lineItem->variantName());
+    }
+
+    #[Test]
     public function date_does_not_shift_when_app_timezone_is_not_utc()
     {
         config()->set('app.timezone', 'Europe/Berlin');

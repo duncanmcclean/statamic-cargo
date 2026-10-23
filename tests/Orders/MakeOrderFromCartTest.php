@@ -71,6 +71,36 @@ class MakeOrderFromCartTest extends TestCase
     }
 
     #[Test]
+    public function it_stores_the_product_title_and_variant_name_on_line_items()
+    {
+        $product = tap(Entry::make()->collection('products')->data(['title' => 'T-shirt', 'price' => 1500]))->save();
+
+        $variantProduct = tap(Entry::make()->collection('products')->data([
+            'title' => 'Hoodie',
+            'product_variants' => [
+                'variants' => [['name' => 'Size', 'values' => ['Small']]],
+                'options' => [['key' => 'Small', 'variant' => 'Small', 'price' => 3000]],
+            ],
+        ]))->save();
+
+        $cart = Cart::make()->lineItems([
+            ['id' => '1', 'product' => $product->id(), 'quantity' => 1],
+            ['id' => '2', 'product' => $variantProduct->id(), 'variant' => 'Small', 'quantity' => 1],
+        ]);
+
+        $order = Order::makeFromCart($cart);
+
+        $this->assertEquals('T-shirt', $order->lineItems()->find('1')->get('product_title'));
+        $this->assertNull($order->lineItems()->find('1')->get('variant_name'));
+
+        $this->assertEquals('Hoodie', $order->lineItems()->find('2')->get('product_title'));
+        $this->assertEquals('Small', $order->lineItems()->find('2')->get('variant_name'));
+
+        $this->assertNull($cart->lineItems()->find('2')->get('product_title'));
+        $this->assertNull($cart->lineItems()->find('2')->get('variant_name'));
+    }
+
+    #[Test]
     public function it_adds_the_new_customer_flag_when_its_the_customers_first_order()
     {
         $user = User::make()->id('user-123')->email('first.time@example.com')->save();

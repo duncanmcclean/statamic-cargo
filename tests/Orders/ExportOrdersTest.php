@@ -75,6 +75,30 @@ CSV, $csv);
     }
 
     #[Test]
+    public function can_export_orders_with_deleted_products()
+    {
+        Order::make()
+            ->orderNumber(1003)
+            ->customer(['name' => 'John Smith', 'email' => 'john@example.com'])
+            ->lineItems([
+                ['id' => 'one', 'product' => 'beanie', 'variant' => 'Large', 'product_title' => 'Beanie', 'variant_name' => 'Large', 'quantity' => 1, 'total' => 1500],
+            ])
+            ->save();
+
+        $csv = $this
+            ->actingAs(User::make()->makeSuper()->save())
+            ->get(cp_route('cargo.orders.export', ['columns' => 'order_number,line_items']))
+            ->assertOk()
+            ->streamedContent();
+
+        $this->assertStringEqualsStringIgnoringLineEndings(<<<'CSV'
+"Order Number","Line Items"
+1003,"1 x Beanie (Large)"
+
+CSV, $csv);
+    }
+
+    #[Test]
     public function exports_every_column_when_none_are_selected()
     {
         $this->makeOrders();

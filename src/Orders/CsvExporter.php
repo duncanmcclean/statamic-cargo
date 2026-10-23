@@ -96,10 +96,10 @@ class CsvExporter
     {
         return $order->lineItems()
             ->map(function (LineItem $lineItem) {
-                $title = $lineItem->product()?->get('title');
+                $title = $lineItem->productTitle();
 
-                if ($variant = $lineItem->variant()) {
-                    $title .= " ({$variant->name()})";
+                if ($variantName = $lineItem->variantName()) {
+                    $title .= " ({$variantName})";
                 }
 
                 return "{$lineItem->quantity()} x {$title}";

@@ -42,10 +42,15 @@ function itemUpdated(responseData) {
                 class="text-gray-500 dark:text-gray-400"
             />
 
-            <a v-else @click.prevent="edit" :href="lineItem.product.edit_url">
+            <a v-else-if="lineItem.product.edit_url" @click.prevent="edit" :href="lineItem.product.edit_url">
                 {{ lineItem.product.title }}
                 <span v-if="lineItem.variant" class="text-sm" v-text="`(${lineItem.variant.name})`"></span>
             </a>
+
+            <div v-else>
+                {{ lineItem.product.title }}
+                <span v-if="lineItem.variant" class="text-sm" v-text="`(${lineItem.variant.name})`"></span>
+            </div>
         </TableCell>
         <TableCell>{{ lineItem.unit_price }}</TableCell>
         <TableCell>{{ lineItem.quantity }}</TableCell>

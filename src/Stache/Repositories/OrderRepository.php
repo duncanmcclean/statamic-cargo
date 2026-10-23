@@ -10,6 +10,7 @@ use DuncanMcClean\Cargo\Customers\GuestCustomer;
 use DuncanMcClean\Cargo\Events\OrderBlueprintFound;
 use DuncanMcClean\Cargo\Exceptions\OrderNotFound;
 use DuncanMcClean\Cargo\Orders\Blueprint;
+use DuncanMcClean\Cargo\Orders\LineItem;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Statamic\Fields\Blueprint as StatamicBlueprint;
@@ -64,6 +65,11 @@ class OrderRepository implements RepositoryContract
     {
         $data = $cart->data();
 
+        $lineItems = $cart->lineItems()->map(fn (LineItem $lineItem) => (clone $lineItem)->merge(array_filter([
+            'product_title' => $lineItem->productTitle(),
+            'variant_name' => $lineItem->variantName(),
+        ])));
+
         if ($cart->customer() && ! $cart->customer() instanceof GuestCustomer) {
             $hasExistingOrders = $this->query()
                 ->where('customer', $cart->customer()->getKey())
@@ -78,7 +84,7 @@ class OrderRepository implements RepositoryContract
             ->cart($cart->id())
             ->site($cart->site())
             ->customer($cart->customer())
-            ->lineItems($cart->lineItems())
+            ->lineItems($lineItems)
             ->grandTotal($cart->grandTotal())
             ->subTotal($cart->subTotal())
             ->discountTotal($cart->discountTotal())

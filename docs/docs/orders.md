@@ -16,6 +16,25 @@ Line items have their own blueprint, also found on the "Blueprints" page. Add fi
 
 Any data passed to the [`{{ cart:add }}`](/frontend/tags/cart#adding-to-the-cart) tag or the [JSON API](/frontend/json-api/endpoints#add-a-line-item) is saved on the line item. Data with a matching blueprint field is shown on the order in the Control Panel and on packing slips, using the field's display name and fieldtype.
 
+When an order is created, Cargo stores the product's title and the variant's name on each line item. That way, you can still see what was purchased, even after the product or variant has been deleted.
+
+When displaying line items in your templates or emails, use `product_title` and `variant_name`. They'll return the current title & name, falling back to the stored ones when the product or variant no longer exists:
+
+::tabs
+::tab antlers
+```antlers
+{{ order:line_items }}
+	{{ quantity }}x {{ product_title }} {{ if variant_name }}({{ variant_name }}){{ /if }}
+{{ /order:line_items }}
+```
+::tab blade
+```blade
+@foreach($order->lineItems() as $lineItem)
+	{{ $lineItem->quantity }}x {{ $lineItem->productTitle() }} @if($lineItem->variantName()) ({{ $lineItem->variantName() }}) @endif
+@endforeach
+```
+::
+
 ## Statuses
 Orders can move between various different statuses:
 * Payment Pending
