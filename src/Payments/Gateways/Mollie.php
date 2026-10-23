@@ -62,7 +62,7 @@ class Mollie extends PaymentGateway
             $cart->customer()->set('mollie_customer_id', $mollieCustomerId)->save();
         }
 
-        $payment = $this->mollie->payments->create([
+        $params = [
             'description' => config('app.name'),
             'amount' => $this->formatAmount(site: $cart->site(), amount: $cart->grandTotal()),
             'redirectUrl' => $this->checkoutUrl(),
@@ -121,7 +121,14 @@ class Mollie extends PaymentGateway
                 'cart_fingerprint' => $cart->fingerprint(),
             ],
             'customerId' => $mollieCustomerId,
-        ]);
+        ];
+
+        $params = $this->runHooksWith('creating-payment', [
+            'cart' => $cart,
+            'params' => $params,
+        ])->params;
+
+        $payment = $this->mollie->payments->create($params);
 
         $cart->set('mollie_payment_id', $payment->id)->save();
 

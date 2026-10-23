@@ -304,6 +304,33 @@ class MollieTest extends TestCase
     }
 
     #[Test]
+    public function create_payment_payload_can_be_modified_by_a_hook()
+    {
+        [$cart] = $this->makeCartAndUser();
+
+        Mollie::hook('creating-payment', function ($payload, $next) use (&$hookedCart) {
+            $hookedCart = $payload->cart;
+
+            $params = $payload->params;
+            $params['sequenceType'] = 'first';
+            $params['metadata']['source'] = 'hook';
+            $payload->params = $params;
+
+            return $next($payload);
+        });
+
+        (new Mollie)->setup($cart);
+
+        $this->assertEquals($cart->id(), $hookedCart->id());
+
+        $payment = $this->mollie->payments->get($cart->fresh()->get('mollie_payment_id'));
+
+        $this->assertEquals('first', $payment->sequenceType);
+        $this->assertEquals('hook', $payment->metadata->source);
+        $this->assertEquals($cart->id(), $payment->metadata->cart_id);
+    }
+
+    #[Test]
     public function it_can_process_a_payment()
     {
         $molliePayment = $this->mollie->payments->create([

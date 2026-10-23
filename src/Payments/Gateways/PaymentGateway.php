@@ -15,10 +15,11 @@ use Illuminate\Support\Collection;
 use Statamic\Extend\HasHandle;
 use Statamic\Extend\HasTitle;
 use Statamic\Extend\RegistersItself;
+use Statamic\Support\Traits\Hookable;
 
 abstract class PaymentGateway
 {
-    use HasHandle, HasTitle, RegistersItself;
+    use HasHandle, HasTitle, Hookable, RegistersItself;
 
     public function isAvailable(Cart $cart): bool
     {

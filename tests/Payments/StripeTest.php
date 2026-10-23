@@ -148,6 +148,62 @@ class StripeTest extends TestCase
     }
 
     #[Test]
+    public function create_payment_intent_payload_can_be_modified_by_a_hook()
+    {
+        $cart = $this->makeCartWithGuestCustomer();
+        $stripeCustomer = Customer::create(['email' => 'guest@example.com']);
+
+        Stripe::hook('creating-payment-intent', function ($payload, $next) use (&$hookedCart, $stripeCustomer) {
+            $hookedCart = $payload->cart;
+
+            $params = $payload->params;
+            $params['customer'] = $stripeCustomer->id;
+            $params['setup_future_usage'] = 'off_session';
+            $params['metadata']['source'] = 'hook';
+            $payload->params = $params;
+
+            return $next($payload);
+        });
+
+        (new Stripe)->setup($cart);
+
+        $this->assertEquals($cart->id(), $hookedCart->id());
+
+        $stripePaymentIntent = PaymentIntent::retrieve($cart->fresh()->get('stripe_payment_intent'));
+
+        $this->assertEquals($stripeCustomer->id, $stripePaymentIntent->customer);
+        $this->assertEquals('off_session', $stripePaymentIntent->setup_future_usage);
+        $this->assertEquals('hook', $stripePaymentIntent->metadata->source);
+        $this->assertEquals($cart->id(), $stripePaymentIntent->metadata->cart_id);
+    }
+
+    #[Test]
+    public function update_payment_intent_payload_can_be_modified_by_a_hook()
+    {
+        $cart = $this->makeCartWithGuestCustomer();
+
+        (new Stripe)->setup($cart);
+
+        Stripe::hook('updating-payment-intent', function ($payload, $next) use (&$hookedCart) {
+            $hookedCart = $payload->cart;
+
+            $params = $payload->params;
+            $params['metadata'] = ['source' => 'hook'];
+            $payload->params = $params;
+
+            return $next($payload);
+        });
+
+        (new Stripe)->setup($cart->fresh());
+
+        $this->assertEquals($cart->id(), $hookedCart->id());
+
+        $stripePaymentIntent = PaymentIntent::retrieve($cart->fresh()->get('stripe_payment_intent'));
+
+        $this->assertEquals('hook', $stripePaymentIntent->metadata->source);
+    }
+
+    #[Test]
     public function it_can_process_a_payment()
     {
         $stripePaymentIntent = PaymentIntent::create([
