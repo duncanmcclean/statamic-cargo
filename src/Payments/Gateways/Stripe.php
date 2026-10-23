@@ -38,7 +38,7 @@ class Stripe extends PaymentGateway
             appPartnerId: 'pp_partner_Jnvy4cdwcRmxfh'
         );
 
-        if ($version = $this->config()->has('version')) {
+        if ($version = $this->config()->get('version')) {
             \Stripe\Stripe::setApiVersion($version);
         }
     }
