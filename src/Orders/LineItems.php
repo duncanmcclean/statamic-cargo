@@ -62,7 +62,7 @@ class LineItems extends Collection
         $count = $this->count();
 
         $this->items = $this
-            ->reject(fn (LineItem $lineItem) => $lineItem->product && is_null($lineItem->product()))
+            ->filter->isValid()
             ->values()
             ->all();
 

@@ -354,6 +354,70 @@ class CartTest extends TestCase
         $this->assertEquals(3000, $cart->grandTotal());
     }
 
+    #[Test]
+    public function deleted_variants_are_filtered_out_and_totals_are_recalculated()
+    {
+        Collection::make('products')->save();
+
+        $product = Entry::make()->collection('products')->id('product-with-variants')->data(['product_variants' => [
+            'variants' => [['name' => 'Size', 'values' => ['Small', 'Large']]],
+            'options' => [
+                ['key' => 'Small', 'variant' => 'Small', 'price' => 1000],
+                ['key' => 'Large', 'variant' => 'Large', 'price' => 2000],
+            ],
+        ]]);
+        $product->save();
+
+        $cart = Cart::make()
+            ->id('cart-with-deleted-variant')
+            ->site('default')
+            ->lineItems([
+                ['id' => 'line-small', 'product' => 'product-with-variants', 'variant' => 'Small', 'quantity' => 1],
+                ['id' => 'line-large', 'product' => 'product-with-variants', 'variant' => 'Large', 'quantity' => 1],
+            ]);
+
+        $cart->save();
+
+        $this->assertEquals(3000, $cart->grandTotal());
+
+        $product->set('product_variants', [
+            'variants' => [['name' => 'Size', 'values' => ['Large']]],
+            'options' => [['key' => 'Large', 'variant' => 'Large', 'price' => 2000]],
+        ])->save();
+
+        $cart = Cart::find('cart-with-deleted-variant');
+
+        $this->assertCount(1, $cart->lineItems());
+        $this->assertNull($cart->lineItems()->find('line-small'));
+        $this->assertNotNull($cart->lineItems()->find('line-large'));
+        $this->assertEquals(2000, $cart->grandTotal());
+    }
+
+    #[Test]
+    public function line_items_for_variant_products_without_a_variant_are_filtered_out()
+    {
+        Collection::make('products')->save();
+
+        Entry::make()->collection('products')->id('variant-product')->data(['product_variants' => [
+            'variants' => [['name' => 'Size', 'values' => ['Small']]],
+            'options' => [['key' => 'Small', 'variant' => 'Small', 'price' => 1000]],
+        ]])->save();
+
+        Entry::make()->collection('products')->id('standard-product')->data(['price' => 500])->save();
+
+        $cart = Cart::make()
+            ->id('cart-with-missing-variant')
+            ->site('default')
+            ->lineItems([
+                ['id' => 'line-without-variant', 'product' => 'variant-product', 'quantity' => 1],
+                ['id' => 'line-standard', 'product' => 'standard-product', 'quantity' => 1],
+            ]);
+
+        $this->assertCount(1, $cart->lineItems());
+        $this->assertNull($cart->lineItems()->find('line-without-variant'));
+        $this->assertNotNull($cart->lineItems()->find('line-standard'));
+    }
+
     protected function makeProduct($id = null)
     {
         Collection::make('products')->save();

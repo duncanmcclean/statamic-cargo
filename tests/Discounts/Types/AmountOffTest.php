@@ -6,17 +6,30 @@ use DuncanMcClean\Cargo\Discounts\Types\AmountOff;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Discount;
 use PHPUnit\Framework\Attributes\Test;
+use Statamic\Facades\Collection;
+use Statamic\Facades\Entry;
+use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\TestCase;
 
 class AmountOffTest extends TestCase
 {
+    use PreventsSavingStacheItemsToDisk;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Collection::make('products')->save();
+        Entry::make()->id('product-id')->collection('products')->save();
+    }
+
     #[Test]
     public function it_calculates_amount_off_discount()
     {
         $discount = Discount::make()->type('amount_off')->set('amount_off', 299);
 
         $cart = Cart::make();
-        $cart->lineItems()->create(['id' => 'abc', 'total' => 2599]);
+        $cart->lineItems()->create(['id' => 'abc', 'product' => 'product-id', 'total' => 2599]);
 
         $lineItem = $cart->lineItems()->find('abc');
 
@@ -31,8 +44,8 @@ class AmountOffTest extends TestCase
         $discount = Discount::make()->type('amount_off')->set('amount_off', 100);
 
         $cart = Cart::make();
-        $cart->lineItems()->create(['id' => 'line1', 'total' => 1000]);
-        $cart->lineItems()->create(['id' => 'line2', 'total' => 1000]);
+        $cart->lineItems()->create(['id' => 'line1', 'product' => 'product-id', 'total' => 1000]);
+        $cart->lineItems()->create(['id' => 'line2', 'product' => 'product-id', 'total' => 1000]);
 
         $discountType = (new AmountOff)->setDiscount($discount);
 
@@ -51,8 +64,8 @@ class AmountOffTest extends TestCase
         $discount = Discount::make()->type('amount_off')->set('amount_off', 100);
 
         $cart = Cart::make();
-        $cart->lineItems()->create(['id' => 'line1', 'total' => 1000]); // 25%
-        $cart->lineItems()->create(['id' => 'line2', 'total' => 3000]); // 75%
+        $cart->lineItems()->create(['id' => 'line1', 'product' => 'product-id', 'total' => 1000]); // 25%
+        $cart->lineItems()->create(['id' => 'line2', 'product' => 'product-id', 'total' => 3000]); // 75%
 
         $discountType = (new AmountOff)->setDiscount($discount);
 
@@ -76,9 +89,9 @@ class AmountOffTest extends TestCase
         $discount = Discount::make()->type('amount_off')->set('amount_off', 1000);
 
         $cart = Cart::make();
-        $cart->lineItems()->create(['id' => 'line1', 'total' => 3333]);
-        $cart->lineItems()->create(['id' => 'line2', 'total' => 3333]);
-        $cart->lineItems()->create(['id' => 'line3', 'total' => 3334]);
+        $cart->lineItems()->create(['id' => 'line1', 'product' => 'product-id', 'total' => 3333]);
+        $cart->lineItems()->create(['id' => 'line2', 'product' => 'product-id', 'total' => 3333]);
+        $cart->lineItems()->create(['id' => 'line3', 'product' => 'product-id', 'total' => 3334]);
 
         $discountType = (new AmountOff)->setDiscount($discount);
 
