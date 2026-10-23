@@ -43,6 +43,6 @@ During the migration process, you'll be asked if you'd like to import existing d
 php please cargo:database --all --import
 ```
 
-## Customizing Models & Tables
+## Customising Models & Tables
 
-Each repository allows you to customize the Eloquent model and database table used. You can do this by updating the relevant keys in your `cargo.php` config file. See the individual docs pages for more details.
+Each repository allows you to customise the Eloquent model and database table used. You can do this by updating the relevant keys in your `cargo.php` config file. See the individual docs pages for more details.
