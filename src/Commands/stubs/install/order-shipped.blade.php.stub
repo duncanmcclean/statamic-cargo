@@ -21,7 +21,7 @@
 | {{ __('Item Description') }}   |      {{ __('Quantity') }} |
 | :----------------- | ------------: |
 @foreach($order->lineItems() as $lineItem)
-| {{ $lineItem->product()->title }} | {{ $lineItem->quantity }} |
+| {{ $lineItem->productTitle() }} | {{ $lineItem->quantity }} |
 @endforeach
 </x-mail::table>
 

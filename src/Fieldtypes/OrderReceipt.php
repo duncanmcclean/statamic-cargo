@@ -23,15 +23,10 @@ class OrderReceipt extends Fieldtype
 
         return [
             'line_items' => $order->lineItems()->map(fn (LineItem $lineItem) => [
-                'product' => $lineItem->product() ? [
-                    'id' => $lineItem->product()->id(),
-                    'reference' => $lineItem->product()->reference(),
-                    'title' => $lineItem->product()->value('title'),
-                    'edit_url' => $lineItem->product()->editUrl(),
-                ] : ['id' => $lineItem->product, 'title' => $lineItem->product, 'invalid' => true],
-                'variant' => $lineItem->variant() ? [
-                    'key' => $lineItem->variant()->key(),
-                    'name' => $lineItem->variant()->name(),
+                'product' => $this->product($lineItem),
+                'variant' => $lineItem->variantName() ? [
+                    'key' => $lineItem->variant,
+                    'name' => $lineItem->variantName(),
                 ] : null,
                 'unit_price' => Money::format($lineItem->unitPrice(), $order->site()),
                 'quantity' => $lineItem->quantity(),
@@ -72,6 +67,24 @@ class OrderReceipt extends Fieldtype
                 'amount_refunded' => Money::format($order->get('amount_refunded'), $order->site()),
             ],
         ];
+    }
+
+    private function product(LineItem $lineItem): array
+    {
+        if ($product = $lineItem->product()) {
+            return [
+                'id' => $product->id(),
+                'reference' => $product->reference(),
+                'title' => $product->value('title'),
+                'edit_url' => $product->editUrl(),
+            ];
+        }
+
+        if ($deletedProductTitle = $lineItem->productTitle()) {
+            return ['id' => $lineItem->product, 'title' => $deletedProductTitle];
+        }
+
+        return ['id' => $lineItem->product, 'title' => $lineItem->product, 'invalid' => true];
     }
 
     public function process($data): null

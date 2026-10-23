@@ -195,6 +195,30 @@ class ProductDownloadTest extends TestCase
             ->assertNotFound();
     }
 
+    #[Test]
+    public function throws_404_when_product_has_been_deleted()
+    {
+        $product = $this->makeProductWithDownloads(['one.png']);
+        $this->makeOrderWithLineItem($product);
+
+        $product->delete();
+
+        $this
+            ->get($this->generateDownloadUrl('order-id', 'line-item-id'))
+            ->assertNotFound();
+    }
+
+    #[Test]
+    public function throws_404_when_variant_has_been_deleted()
+    {
+        $product = $this->makeVariantProductWithDownloads(['one.png']);
+        $this->makeOrderWithLineItem($product, ['variant' => 'Deluxe']);
+
+        $this
+            ->get($this->generateDownloadUrl('order-id', 'line-item-id'))
+            ->assertNotFound();
+    }
+
     private function makeProductWithDownloads(array $downloads = [])
     {
         $collection = tap(Collection::make('products'))->save();

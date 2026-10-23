@@ -88,6 +88,16 @@ class LineItem
             ->args(func_get_args());
     }
 
+    public function productTitle(): ?string
+    {
+        return $this->product()?->value('title') ?? $this->get('product_title');
+    }
+
+    public function variantName(): ?string
+    {
+        return $this->variant()?->name() ?? $this->get('variant_name');
+    }
+
     public function quantity($quantity = null)
     {
         return $this

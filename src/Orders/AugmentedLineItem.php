@@ -28,6 +28,8 @@ class AugmentedLineItem extends AbstractAugmented
     {
         return [
             'id',
+            'product_title',
+            'variant_name',
             'has_downloads',
             'metadata',
         ];
