@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.16.0 (2026-10-23)
+
+### What's new
+- Add hooks for the Stripe payment intent and Mollie payment payloads [#324](https://github.com/duncanmcclean/statamic-cargo/pull/324) by @DanielDarrenJones
+
+### What's fixed
+- Acknowledge Mollie webhooks for payments that don't exist [#327](https://github.com/duncanmcclean/statamic-cargo/pull/327) by @DanielDarrenJones
+- Remove cart line items whose variant no longer exists [#328](https://github.com/duncanmcclean/statamic-cargo/pull/328) by @DanielDarrenJones
+- Wait for the order number lock and hold it until the order is saved [#326](https://github.com/duncanmcclean/statamic-cargo/pull/326) by @DanielDarrenJones
+- Use the configured Stripe API version [#325](https://github.com/duncanmcclean/statamic-cargo/pull/325) by @DanielDarrenJones
+- Use British spelling of customise in the docs [#330](https://github.com/duncanmcclean/statamic-cargo/pull/330) by @duncanmcclean
+- Fix the Stripe and Dummy Blade templates in the payment gateway docs [#331](https://github.com/duncanmcclean/statamic-cargo/pull/331) by @duncanmcclean
+- Show product titles on orders after products are deleted [#332](https://github.com/duncanmcclean/statamic-cargo/pull/332) by @duncanmcclean
+- Bump the github-actions group with 2 updates [#329](https://github.com/duncanmcclean/statamic-cargo/pull/329) by @dependabot
+
+
+
 ## v1.15.1 (2026-10-16)
 
 ### What's fixed
