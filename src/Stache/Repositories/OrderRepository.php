@@ -98,7 +98,13 @@ class OrderRepository implements RepositoryContract
         }
 
         if (! $order->orderNumber()) {
-            $order->orderNumber($this->generateOrderNumber($order));
+            Cache::lock('cargo-order-number', 5)->block(5, function () use ($order) {
+                $order->orderNumber($this->generateOrderNumber($order));
+
+                $this->store->save($order);
+            });
+
+            return;
         }
 
         $this->store->save($order);
@@ -111,18 +117,16 @@ class OrderRepository implements RepositoryContract
 
     private function generateOrderNumber(Order $order): int
     {
-        return Cache::lock('cargo-order-number', 5)->get(function () use ($order) {
-            $orderNumber = config('statamic.cargo.minimum_order_number', 1000);
+        $orderNumber = config('statamic.cargo.minimum_order_number', 1000);
 
-            if ($lastOrder = $this->query()->orderByDesc('order_number')->first()) {
-                $orderNumber = (int) $lastOrder->orderNumber() + 1;
-            }
+        if ($lastOrder = $this->query()->orderByDesc('order_number')->first()) {
+            $orderNumber = (int) $lastOrder->orderNumber() + 1;
+        }
 
-            return $this->runHooks('generating-order-number', (object) [
-                'order' => $order,
-                'orderNumber' => $orderNumber,
-            ])->orderNumber;
-        });
+        return $this->runHooks('generating-order-number', (object) [
+            'order' => $order,
+            'orderNumber' => $orderNumber,
+        ])->orderNumber;
     }
 
     public function blueprint(): StatamicBlueprint

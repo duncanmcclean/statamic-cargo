@@ -6,8 +6,11 @@ use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
 use DuncanMcClean\Cargo\Events\OrderBlueprintFound;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
+use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Sleep;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
@@ -160,6 +163,17 @@ class OrderRepositoryTest extends TestCase
         $this->repo->save($order);
 
         $this->assertEquals(1003, $order->orderNumber());
+    }
+
+    #[Test]
+    public function waits_for_the_order_number_lock_before_generating_an_order_number()
+    {
+        Sleep::fake(syncWithCarbon: true);
+        Cache::lock('cargo-order-number', 5)->get();
+
+        $this->expectException(LockTimeoutException::class);
+
+        $this->repo->save(Order::make());
     }
 
     #[Test]
