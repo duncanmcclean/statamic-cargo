@@ -258,33 +258,6 @@ class MollieTest extends TestCase
     }
 
     #[Test]
-    public function the_payment_can_be_changed_with_a_hook_when_it_is_created()
-    {
-        [$cart] = $this->makeCartAndUser();
-
-        Mollie::hook('creating-payment', function ($payload, $next) use (&$hookedCart) {
-            $hookedCart = $payload->cart;
-
-            $params = $payload->params;
-            $params['sequenceType'] = 'first';
-            $params['metadata']['source'] = 'hook';
-            $payload->params = $params;
-
-            return $next($payload);
-        });
-
-        (new Mollie)->setup($cart);
-
-        $this->assertEquals($cart->id(), $hookedCart->id());
-
-        $payment = $this->mollie->payments->get($cart->fresh()->get('mollie_payment_id'));
-
-        $this->assertEquals('first', $payment->sequenceType);
-        $this->assertEquals('hook', $payment->metadata->source);
-        $this->assertEquals($cart->id(), $payment->metadata->cart_id);
-    }
-
-    #[Test]
     public function setup_returns_existing_payment_if_one_exists()
     {
         $molliePayment = $this->mollie->payments->create([
@@ -328,6 +301,33 @@ class MollieTest extends TestCase
 
         $originalPayment = $this->mollie->payments->get($originalPayment->id);
         $this->assertEquals('Outdated payment', $originalPayment->description);
+    }
+
+    #[Test]
+    public function create_payment_payload_can_be_modified_by_a_hook()
+    {
+        [$cart] = $this->makeCartAndUser();
+
+        Mollie::hook('creating-payment', function ($payload, $next) use (&$hookedCart) {
+            $hookedCart = $payload->cart;
+
+            $params = $payload->params;
+            $params['sequenceType'] = 'first';
+            $params['metadata']['source'] = 'hook';
+            $payload->params = $params;
+
+            return $next($payload);
+        });
+
+        (new Mollie)->setup($cart);
+
+        $this->assertEquals($cart->id(), $hookedCart->id());
+
+        $payment = $this->mollie->payments->get($cart->fresh()->get('mollie_payment_id'));
+
+        $this->assertEquals('first', $payment->sequenceType);
+        $this->assertEquals('hook', $payment->metadata->source);
+        $this->assertEquals($cart->id(), $payment->metadata->cart_id);
     }
 
     #[Test]

@@ -113,7 +113,24 @@ class StripeTest extends TestCase
     }
 
     #[Test]
-    public function the_payment_intent_can_be_changed_with_a_hook_when_it_is_created()
+    public function setup_returns_existing_payment_intent_if_one_exists()
+    {
+        $stripePaymentIntent = PaymentIntent::create(['amount' => 1000, 'currency' => 'gbp']);
+
+        $cart = $this->makeCartWithGuestCustomer();
+        $cart->set('stripe_payment_intent', $stripePaymentIntent->id)->save();
+
+        $setup = (new Stripe)->setup($cart);
+
+        $this->assertEquals($stripePaymentIntent->client_secret, $setup['client_secret']);
+
+        $cart->fresh();
+
+        $this->assertEquals($stripePaymentIntent->id, $cart->get('stripe_payment_intent'));
+    }
+
+    #[Test]
+    public function create_payment_intent_payload_can_be_modified_by_a_hook()
     {
         $cart = $this->makeCartWithGuestCustomer();
         $stripeCustomer = Customer::create(['email' => 'guest@example.com']);
@@ -143,7 +160,7 @@ class StripeTest extends TestCase
     }
 
     #[Test]
-    public function the_payment_intent_can_be_changed_with_a_hook_when_it_is_updated()
+    public function update_payment_intent_payload_can_be_modified_by_a_hook()
     {
         $cart = $this->makeCartWithGuestCustomer();
 
@@ -166,23 +183,6 @@ class StripeTest extends TestCase
         $stripePaymentIntent = PaymentIntent::retrieve($cart->fresh()->get('stripe_payment_intent'));
 
         $this->assertEquals('hook', $stripePaymentIntent->metadata->source);
-    }
-
-    #[Test]
-    public function setup_returns_existing_payment_intent_if_one_exists()
-    {
-        $stripePaymentIntent = PaymentIntent::create(['amount' => 1000, 'currency' => 'gbp']);
-
-        $cart = $this->makeCartWithGuestCustomer();
-        $cart->set('stripe_payment_intent', $stripePaymentIntent->id)->save();
-
-        $setup = (new Stripe)->setup($cart);
-
-        $this->assertEquals($stripePaymentIntent->client_secret, $setup['client_secret']);
-
-        $cart->fresh();
-
-        $this->assertEquals($stripePaymentIntent->id, $cart->get('stripe_payment_intent'));
     }
 
     #[Test]
