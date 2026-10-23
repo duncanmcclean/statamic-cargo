@@ -180,8 +180,6 @@ class Mollie extends PaymentGateway
         try {
             $payment = $this->mollie->payments->get($request->id);
         } catch (ApiException $e) {
-            // Mollie retries a webhook until it gets a 2xx response, so acknowledge payments
-            // that don't exist (for example, from another site or another API key).
             if ($e->getCode() === 404) {
                 return response('Webhook received', 200);
             }
