@@ -84,7 +84,9 @@ Before shipping methods will show up during the checkout process, you need to ad
 ```
 
 ## Third-party shipping methods
-Right now, there aren't any shipping methods built by the community. But, when there are, we'll list them here. Check back soon!
+Shipping methods built by the community:
+
+* [Australia Post](https://statamic.com/addons/mity-digital/australia-post-shipping-for-cargo) by Mity Digital
 
 If you've created a custom shipping method others can use, please [let us know](mailto:support@builtwithcargo.dev) and we'll update the list.
 
