@@ -7,6 +7,7 @@ When you're selling physical products, you need a way to ship those products out
 
 Cargo allows you to define shipping methods, which can each provide multiple shipping options. These options can then be selected by the customer during checkout.
 
+## Build your own
 Most of the time, you will want to create your own shipping method. To do this, run the following command:
 
 ```
@@ -81,6 +82,35 @@ Before shipping methods will show up during the checkout process, you need to ad
 		'royal_mail' => []
 	],
 ],
+```
+
+Shipping methods often have things like API keys, or other options you may need to provide, which you can do via the config array:
+
+```php
+// config/statamic/cargo.php
+
+'shipping' => [
+	'methods' => [
+		'royal_mail' => [
+			'api_key' => env('ROYAL_MAIL_API_KEY'),
+			'free_shipping_threshold' => 5000,
+		],
+	],
+],
+```
+
+Obviously, any sensitive values should be stored in your `.env` file and ignored by Git.
+
+You can then access these values in your shipping method using `$this->config()`, which returns a collection:
+
+```php
+public function options(Cart $cart): Collection
+{
+	$apiKey = $this->config()->get('api_key');
+	$freeShippingThreshold = $this->config()->get('free_shipping_threshold');
+
+	// ...
+}
 ```
 
 ## Third-party shipping methods
