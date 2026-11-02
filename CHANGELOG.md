@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.16.1 (2026-11-02)
+
+### What's fixed
+- Recreate Stripe customers and payment intents that no longer exist [#338](https://github.com/duncanmcclean/statamic-cargo/pull/338) by @duncanmcclean
+
+
+
 ## v1.16.0 (2026-10-23)
 
 ### What's new
