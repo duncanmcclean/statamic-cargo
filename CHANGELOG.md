@@ -3,8 +3,6 @@
 ## v1.16.1 (2026-11-02)
 
 ### What's fixed
-- Add Australia Post to the list of third-party shipping methods [#335](https://github.com/duncanmcclean/statamic-cargo/pull/335) by @duncanmcclean
-- Document shipping method config options [#336](https://github.com/duncanmcclean/statamic-cargo/pull/336) by @duncanmcclean
 - Recreate Stripe customers and payment intents that no longer exist [#338](https://github.com/duncanmcclean/statamic-cargo/pull/338) by @duncanmcclean
 
 
