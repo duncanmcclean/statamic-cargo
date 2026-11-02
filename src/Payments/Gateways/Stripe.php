@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
 use Statamic\Contracts\Auth\User;
 use Stripe\Customer;
 use Stripe\Event;
+use Stripe\Exception\InvalidRequestException;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\PaymentIntent;
 use Stripe\Refund;
@@ -47,6 +48,11 @@ class Stripe extends PaymentGateway
     {
         $stripeCustomerId = $cart->customer()?->get('stripe_customer_id');
 
+        if ($stripeCustomerId && ! $this->stripeCustomerExists($stripeCustomerId)) {
+            $stripeCustomerId = null;
+            $cart->remove('stripe_payment_intent');
+        }
+
         if (! $stripeCustomerId && $cart->customer() instanceof User) {
             $stripeCustomer = Customer::create([
                 'name' => $cart->customer()->name(),
@@ -69,12 +75,18 @@ class Stripe extends PaymentGateway
                 'params' => $paymentIntentData,
             ])->params;
 
-            $paymentIntent = PaymentIntent::update($cart->get('stripe_payment_intent'), $paymentIntentData);
+            try {
+                $paymentIntent = PaymentIntent::update($cart->get('stripe_payment_intent'), $paymentIntentData);
 
-            return [
-                'api_key' => $this->config()->get('key'),
-                'client_secret' => $paymentIntent->client_secret,
-            ];
+                return [
+                    'api_key' => $this->config()->get('key'),
+                    'client_secret' => $paymentIntent->client_secret,
+                ];
+            } catch (InvalidRequestException $exception) {
+                if ($exception->getStripeCode() !== 'resource_missing') {
+                    throw $exception;
+                }
+            }
         }
 
         $paymentIntentData = [
@@ -99,6 +111,19 @@ class Stripe extends PaymentGateway
             'api_key' => $this->config()->get('key'),
             'client_secret' => $paymentIntent->client_secret,
         ];
+    }
+
+    private function stripeCustomerExists(string $stripeCustomerId): bool
+    {
+        try {
+            return ! Customer::retrieve($stripeCustomerId)->isDeleted();
+        } catch (InvalidRequestException $exception) {
+            if ($exception->getStripeCode() !== 'resource_missing') {
+                throw $exception;
+            }
+
+            return false;
+        }
     }
 
     public function process(Order $order): void
