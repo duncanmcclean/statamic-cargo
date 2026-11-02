@@ -48,7 +48,7 @@ class Stripe extends PaymentGateway
     {
         $stripeCustomerId = $cart->customer()?->get('stripe_customer_id');
 
-        if ($stripeCustomerId && ! $this->stripeCustomerExists($stripeCustomerId)) {
+        if ($stripeCustomerId && $this->stripeCustomerIsMissing($stripeCustomerId)) {
             $stripeCustomerId = null;
             $cart->remove('stripe_payment_intent');
         }
@@ -113,16 +113,16 @@ class Stripe extends PaymentGateway
         ];
     }
 
-    private function stripeCustomerExists(string $stripeCustomerId): bool
+    private function stripeCustomerIsMissing(string $stripeCustomerId): bool
     {
         try {
-            return ! Customer::retrieve($stripeCustomerId)->isDeleted();
+            return Customer::retrieve($stripeCustomerId)->isDeleted();
         } catch (InvalidRequestException $exception) {
             if ($exception->getStripeCode() !== 'resource_missing') {
                 throw $exception;
             }
 
-            return false;
+            return true;
         }
     }
 
