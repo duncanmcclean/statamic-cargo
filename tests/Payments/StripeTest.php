@@ -130,6 +130,59 @@ class StripeTest extends TestCase
         $this->assertEquals($stripeCustomer->id, $user->get('stripe_customer_id'));
     }
 
+    /**
+     * @see https://github.com/duncanmcclean/statamic-cargo/issues/337
+     */
+    #[Test]
+    public function it_creates_a_new_customer_when_the_existing_customer_no_longer_exists()
+    {
+        [$cart, $user] = $this->makeCartAndUser();
+        $user->set('stripe_customer_id', 'cus_doesnotexist')->save();
+
+        (new Stripe)->setup($cart);
+
+        $user = $user->fresh();
+        $this->assertNotEquals('cus_doesnotexist', $user->get('stripe_customer_id'));
+
+        $stripePaymentIntent = PaymentIntent::retrieve($cart->fresh()->get('stripe_payment_intent'));
+        $this->assertEquals($user->get('stripe_customer_id'), $stripePaymentIntent->customer);
+    }
+
+    /**
+     * @see https://github.com/duncanmcclean/statamic-cargo/issues/337
+     */
+    #[Test]
+    public function it_creates_a_new_customer_when_the_existing_customer_has_been_deleted()
+    {
+        $stripeCustomer = Customer::create([
+            'name' => 'David Hasselhoff',
+            'email' => 'david@hasselhoff.com',
+        ]);
+
+        $stripePaymentIntent = PaymentIntent::create([
+            'amount' => 1000,
+            'currency' => 'gbp',
+            'customer' => $stripeCustomer->id,
+        ]);
+
+        $stripeCustomer->delete();
+
+        [$cart, $user] = $this->makeCartAndUser();
+        $user->set('stripe_customer_id', $stripeCustomer->id)->save();
+        $cart->set('stripe_payment_intent', $stripePaymentIntent->id)->save();
+
+        (new Stripe)->setup($cart);
+
+        $user = $user->fresh();
+        $this->assertNotEquals($stripeCustomer->id, $user->get('stripe_customer_id'));
+
+        $cart = $cart->fresh();
+        $this->assertNotEquals($stripePaymentIntent->id, $cart->get('stripe_payment_intent'));
+
+        $stripePaymentIntent = PaymentIntent::retrieve($cart->get('stripe_payment_intent'));
+        $this->assertEquals($user->get('stripe_customer_id'), $stripePaymentIntent->customer);
+    }
+
     #[Test]
     public function setup_returns_existing_payment_intent_if_one_exists()
     {
@@ -145,6 +198,25 @@ class StripeTest extends TestCase
         $cart->fresh();
 
         $this->assertEquals($stripePaymentIntent->id, $cart->get('stripe_payment_intent'));
+    }
+
+    /**
+     * @see https://github.com/duncanmcclean/statamic-cargo/issues/337
+     */
+    #[Test]
+    public function setup_creates_a_new_payment_intent_when_the_existing_one_no_longer_exists()
+    {
+        $cart = $this->makeCartWithGuestCustomer();
+        $cart->set('stripe_payment_intent', 'pi_doesnotexist')->save();
+
+        $setup = (new Stripe)->setup($cart);
+
+        $cart->fresh();
+
+        $this->assertNotEquals('pi_doesnotexist', $cart->get('stripe_payment_intent'));
+
+        $stripePaymentIntent = PaymentIntent::retrieve($cart->get('stripe_payment_intent'));
+        $this->assertEquals($stripePaymentIntent->client_secret, $setup['client_secret']);
     }
 
     #[Test]
