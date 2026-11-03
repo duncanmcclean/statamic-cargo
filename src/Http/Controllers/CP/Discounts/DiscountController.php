@@ -96,10 +96,18 @@ class DiscountController extends CpController
     {
         $this->authorize('create', DiscountContract::class);
 
-        return PublishForm::make(Discount::blueprint())
-            ->icon('shopping-store-discount-percent')
-            ->title(__('Create Discount'))
-            ->submittingTo(cp_route('cargo.discounts.store'), 'POST');
+        $blueprint = Discount::blueprint();
+        $fields = $blueprint->fields()->preProcess();
+
+        return Inertia::render('cargo::Discounts/Create', [
+            'blueprint' => $blueprint->toPublishArray(),
+            'title' => __('Create Discount'),
+            'values' => $fields->values(),
+            'meta' => $fields->meta(),
+            'submitUrl' => cp_route('cargo.discounts.store'),
+            'createAnotherUrl' => cp_route('cargo.discounts.create'),
+            'listingUrl' => cp_route('cargo.discounts.index'),
+        ]);
     }
 
     public function store(Request $request)
@@ -122,14 +130,25 @@ class DiscountController extends CpController
     {
         $this->authorize('view', $discount);
 
-        return PublishForm::make(Discount::blueprint())
-            ->icon('shopping-store-discount-percent')
-            ->title($discount->title())
-            ->values($discount->data()->merge([
+        $blueprint = Discount::blueprint();
+
+        $fields = $blueprint
+            ->fields()
+            ->addValues($discount->data()->merge([
                 'title' => $discount->title(),
                 'type' => $discount->type(),
             ])->all())
-            ->submittingTo($discount->updateUrl());
+            ->preProcess();
+
+        return Inertia::render('cargo::Discounts/Edit', [
+            'blueprint' => $blueprint->toPublishArray(),
+            'title' => $discount->title(),
+            'values' => $fields->values(),
+            'meta' => $fields->meta(),
+            'submitUrl' => $discount->updateUrl(),
+            'createAnotherUrl' => cp_route('cargo.discounts.create'),
+            'listingUrl' => cp_route('cargo.discounts.index'),
+        ]);
     }
 
     public function update(Request $request, $discount)
