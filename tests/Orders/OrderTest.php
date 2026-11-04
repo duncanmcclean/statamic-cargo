@@ -385,6 +385,27 @@ YAML, file_get_contents($order->path()));
     }
 
     #[Test]
+    #[DataProvider('hasBeenPaidProvider')]
+    public function can_check_if_order_has_been_paid(OrderStatus $status, bool $expected)
+    {
+        $order = Order::make()->status($status);
+
+        $this->assertSame($expected, $order->hasBeenPaid());
+    }
+
+    public static function hasBeenPaidProvider(): array
+    {
+        return [
+            'payment pending' => [OrderStatus::PaymentPending, false],
+            'payment received' => [OrderStatus::PaymentReceived, true],
+            'shipped' => [OrderStatus::Shipped, true],
+            'delivered' => [OrderStatus::Delivered, true],
+            'returned' => [OrderStatus::Returned, false],
+            'cancelled' => [OrderStatus::Cancelled, false],
+        ];
+    }
+
+    #[Test]
     public function order_status_updated_event_is_dispatched()
     {
         Event::fake();

@@ -31,7 +31,7 @@ class Mollie extends PaymentGateway
 
     public function __construct()
     {
-        $this->mollie = new MollieApiClient;
+        $this->mollie = app(MollieApiClient::class);
         $this->mollie->setApiKey($this->config()->get('api_key'));
         $this->mollie->addVersionString('Statamic/'.Statamic::version());
         $this->mollie->addVersionString('Cargo/'.Cargo::version());
@@ -145,6 +145,10 @@ class Mollie extends PaymentGateway
 
         if (in_array($payment->status, [PaymentStatus::FAILED, PaymentStatus::EXPIRED])) {
             throw new PreventCheckout(__('Payment was unsuccessful.'));
+        }
+
+        if (! in_array($payment->status, [PaymentStatus::PAID, PaymentStatus::AUTHORIZED, PaymentStatus::PENDING])) {
+            throw new PreventCheckout(__('Payment has not been completed.'));
         }
 
         if ((array) $payment->amount != $this->formatAmount(site: $order->site(), amount: $order->grandTotal())) {
