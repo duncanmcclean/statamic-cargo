@@ -278,6 +278,9 @@ return [
         | Determines which payment gateways should be available during checkout.
         | Each payment gateway may have its own configuration options.
         |
+        | The Dummy gateway marks every order as paid without taking payment,
+        | so it only works outside of production. Remove it before going live.
+        |
         */
 
         'gateways' => [

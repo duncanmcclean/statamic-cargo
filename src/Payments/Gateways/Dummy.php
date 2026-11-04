@@ -5,12 +5,18 @@ namespace DuncanMcClean\Cargo\Payments\Gateways;
 use DuncanMcClean\Cargo\Cargo;
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Orders\Order;
+use DuncanMcClean\Cargo\Exceptions\PreventCheckout;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class Dummy extends PaymentGateway
 {
+    public function isAvailable(Cart $cart): bool
+    {
+        return ! app()->isProduction();
+    }
+
     public function setup(Cart $cart): array
     {
         return [];
@@ -18,6 +24,11 @@ class Dummy extends PaymentGateway
 
     public function process(Order $order): void
     {
+        throw_if(
+            app()->isProduction(),
+            new PreventCheckout(__('The Dummy payment gateway cannot be used in production.'))
+        );
+
         $order->status(OrderStatus::PaymentReceived)->save();
     }
 
