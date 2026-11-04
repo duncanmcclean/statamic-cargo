@@ -5,6 +5,7 @@ namespace DuncanMcClean\Cargo\Cart\Calculator;
 use Closure;
 use DuncanMcClean\Cargo\Cart\Cart;
 use DuncanMcClean\Cargo\Orders\LineItem;
+use Illuminate\Validation\ValidationException;
 
 class CalculateLineItems
 {
@@ -21,8 +22,16 @@ class CalculateLineItems
                 $product->isVariantProduct() => $product->variant($lineItem->variant()->key())->price(),
             };
 
+            $subTotal = $price * $lineItem->quantity();
+
+            if (abs($subTotal) >= PHP_INT_MAX) {
+                throw ValidationException::withMessages([
+                    'quantity' => __('cargo::validation.line_item_total_too_large'),
+                ]);
+            }
+
             $lineItem->unitPrice($price);
-            $lineItem->subTotal($price * $lineItem->quantity());
+            $lineItem->subTotal($subTotal);
             $lineItem->total($lineItem->subTotal());
         });
 

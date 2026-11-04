@@ -152,6 +152,18 @@ return [
 
         'unique_metadata' => false,
 
+        /*
+        |--------------------------------------------------------------------------
+        | Maximum Line Item Quantity
+        |--------------------------------------------------------------------------
+        |
+        | The maximum quantity of a single product a customer can have in their cart.
+        | Requests to add or update a line item beyond this limit will be rejected.
+        |
+        */
+
+        'max_line_item_quantity' => 1000,
+
     ],
 
     'orders' => [
