@@ -36,6 +36,17 @@ Cargo will automatically inject the product `id` from [the context](https://stat
 
 This example only scratches the surface of what you can do using the cart tag. To find out more, see the [Cart Tag](/docs/tags/cart) page.
 
+### Maximum quantity
+To stop customers (or bots) adding absurd quantities to their cart, Cargo limits each line item to 1,000 units. If your store needs to allow larger orders, you can change the limit in the `cargo.php` config file:
+
+```php
+// config/statamic/cargo.php
+
+'carts' => [
+    'max_line_item_quantity' => 1000,
+],
+```
+
 ## Storage
 Out of the box, carts are stored as YAML files in the `content/cargo/carts` directory. If you wish, you can change the directory in the `cargo.php` config file:
 

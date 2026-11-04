@@ -398,6 +398,63 @@ class CartLineItemsControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_doesnt_add_a_product_to_the_cart_when_quantity_exceeds_the_maximum()
+    {
+        $cart = $this->makeCart();
+        $product = $this->makeProduct();
+
+        $this
+            ->post('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'quantity' => 1001,
+            ])
+            ->assertSessionHasErrors('quantity');
+
+        $this->assertCount(0, $cart->fresh()->lineItems());
+    }
+
+    #[Test]
+    public function it_doesnt_add_a_product_to_the_cart_when_the_resulting_quantity_exceeds_the_maximum()
+    {
+        $cart = $this->makeCart();
+        $product = $this->makeProduct();
+
+        $cart->lineItems()->create([
+            'product' => $product->id(),
+            'quantity' => 999,
+        ]);
+
+        $cart->save();
+
+        $this
+            ->post('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'quantity' => 2,
+            ])
+            ->assertSessionHasErrors('quantity');
+
+        $this->assertEquals(999, $cart->fresh()->lineItems()->first()->quantity());
+    }
+
+    #[Test]
+    public function the_maximum_quantity_is_configurable()
+    {
+        config()->set('statamic.cargo.carts.max_line_item_quantity', 5);
+
+        $cart = $this->makeCart();
+        $product = $this->makeProduct();
+
+        $this
+            ->post('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'quantity' => 6,
+            ])
+            ->assertSessionHasErrors('quantity');
+
+        $this->assertCount(0, $cart->fresh()->lineItems());
+    }
+
+    #[Test]
     public function it_doesnt_add_a_product_to_the_cart_when_customer_email_contains_path_characters()
     {
         $cart = $this->makeCart();
@@ -783,6 +840,20 @@ class CartLineItemsControllerTest extends TestCase
 
         $this->assertCount(1, $cart->lineItems());
         $this->assertEquals(1, $cart->lineItems()->first()->quantity()); // It should still be 1.
+    }
+
+    #[Test]
+    public function it_doesnt_update_a_line_item_when_quantity_exceeds_the_maximum()
+    {
+        $cart = $this->makeCartWithLineItems();
+
+        $this
+            ->patch('/!/cargo/cart/line-items/line-item-1', [
+                'quantity' => 1001,
+            ])
+            ->assertSessionHasErrors('quantity');
+
+        $this->assertEquals(1, $cart->fresh()->lineItems()->first()->quantity());
     }
 
     #[Test]
