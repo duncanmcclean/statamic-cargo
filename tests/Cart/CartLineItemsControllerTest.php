@@ -5,7 +5,9 @@ namespace Tests\Cart;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
+use Statamic\Events\UserBlueprintFound;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
 use Statamic\Facades\User;
@@ -378,6 +380,71 @@ class CartLineItemsControllerTest extends TestCase
 
         $this->assertCount(0, $cart->fresh()->lineItems());
         $this->assertEquals('john.doe@example.com', $cart->fresh()->customer()->email());
+    }
+
+    #[Test]
+    public function it_only_persists_updatable_fields_to_the_logged_in_user_when_adding_a_line_item()
+    {
+        config()->set('statamic.cargo.carts.always_checkout_as_guest', false);
+        $this->addCompanyFieldToUserBlueprint();
+
+        $cart = $this->makeCart();
+        $cart->customer(null)->save();
+        $product = $this->makeProduct();
+
+        $user = User::make()->email('user@example.com')->save();
+        $id = $user->id();
+
+        $this->actingAs($user)
+            ->post('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'customer' => [
+                    'name' => 'John Doe',
+                    'company' => 'Acme Inc.',
+                    'favourite_colour' => 'Blue',
+                    'super' => true,
+                    'roles' => ['admin'],
+                    'password' => 'p4ssword',
+                    'two_factor_secret' => 'secret',
+                    'id' => 'hacked',
+                ],
+            ])
+            ->assertRedirect();
+
+        $user = User::find($id);
+
+        $this->assertCount(1, $cart->fresh()->lineItems());
+        $this->assertEquals('John Doe', $user->get('name'));
+        $this->assertEquals('Acme Inc.', $user->get('company'));
+        $this->assertNull($user->get('favourite_colour'));
+        $this->assertFalse($user->isSuper());
+        $this->assertEmpty($user->roles()->all());
+        $this->assertNull($user->get('password'));
+        $this->assertNull($user->get('password_hash'));
+        $this->assertNull($user->get('two_factor_secret'));
+    }
+
+    #[Test]
+    public function it_doesnt_add_a_product_to_the_cart_when_logged_in_user_changes_their_email_to_another_users_email()
+    {
+        config()->set('statamic.cargo.carts.always_checkout_as_guest', false);
+
+        $cart = $this->makeCart();
+        $cart->customer(null)->save();
+        $product = $this->makeProduct();
+
+        User::make()->email('other@example.com')->save();
+        $user = User::make()->email('user@example.com')->save();
+
+        $this->actingAs($user)
+            ->post('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'customer' => ['email' => 'other@example.com'],
+            ])
+            ->assertSessionHasErrors('customer.email');
+
+        $this->assertCount(0, $cart->fresh()->lineItems());
+        $this->assertEquals('user@example.com', User::find($user->id())->email());
     }
 
     #[Test]
@@ -767,6 +834,13 @@ class CartLineItemsControllerTest extends TestCase
             ->from('/cart')
             ->delete('/!/cargo/cart/line-items/line-item-1', ['_redirect' => 'https://evil.com/path'])
             ->assertRedirect('/cart');
+    }
+
+    private function addCompanyFieldToUserBlueprint(): void
+    {
+        Event::listen(UserBlueprintFound::class, function (UserBlueprintFound $event) {
+            $event->blueprint->ensureField('company', ['type' => 'text']);
+        });
     }
 
     protected function makeCart()
