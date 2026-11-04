@@ -32,7 +32,6 @@ use Statamic\Data\HasAugmentedInstance;
 use Statamic\Data\HasDirtyState;
 use Statamic\Data\TracksQueriedColumns;
 use Statamic\Data\TracksQueriedRelations;
-use Statamic\Facades\Blueprint;
 use Statamic\Facades\Site;
 use Statamic\Facades\Stache;
 use Statamic\Facades\User;
@@ -299,17 +298,11 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
 
     public function updatableFields(): array
     {
-        $customFields = Blueprint::find('cargo::order')->fields()->all()->keys()->all();
-
-        return [
-            'customer',
-            'shipping_address',
-            'billing_address',
-            'discount_code',
-            'shipping_method',
-            'shipping_option',
-            ...$customFields,
-        ];
+        return $this->blueprint()->fields()->all()->map->handle()->except([
+            'id', 'status', 'order_number', 'date', 'line_items', 'receipt', 'timeline',
+            'shipping_details', 'payment_details', 'payment_gateway', 'tracking_number', 'cancellation_reason',
+            'discount_total', 'grand_total', 'shipping_total', 'shipping_tax_total', 'sub_total', 'tax_total',
+        ])->all();
     }
 
     public function order(): ?OrderContract

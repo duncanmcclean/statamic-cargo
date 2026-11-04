@@ -19,9 +19,9 @@ class PaymentDetailsFieldtypeTest extends TestCase
 
         $fieldtype = (new PaymentDetails)->setField((new Field('payment_details', ['type' => 'payment_details']))->setParent($order));
 
-        $this->assertEquals([
-            'text' => 'pi_123',
-            'url' => 'https://dashboard.stripe.com/payments/pi_123',
-        ], $fieldtype->preProcess(null)['details']['Payment ID']);
+        $this->assertEquals(
+            '<a href="https://dashboard.stripe.com/payments/pi_123" target="_blank">pi_123</a>',
+            $fieldtype->preProcess(null)['details']['Payment ID']
+        );
     }
 }

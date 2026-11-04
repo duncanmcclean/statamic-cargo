@@ -50,15 +50,12 @@ public function fieldtypeDetails(Order $order): array
 {  
 	return [
 		__('Delivery Due') => 'Tomorrow',
-		__('Tracking Number') => [
-			'text' => $order->get('tracking_number'),
-			'url' => "https://example.com/track/{$order->get('tracking_number')}",
-		],
+		__('Tracking Number') => Html::link("https://example.com/track/{$order->get('tracking_number')}", $order->get('tracking_number')),
 	];
 }
 ```
 
-Each detail should be a plain string. To display a link, return an array with `text` and `url` keys instead. HTML isn't rendered.
+Details are escaped before they're displayed. To render HTML, like a link, return an `HtmlString` (eg. using `Html::link()`).
 
 Cargo will automatically register any shipping methods in the `app/ShippingMethods` directory. 
 

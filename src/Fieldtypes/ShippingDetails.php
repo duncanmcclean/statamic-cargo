@@ -36,7 +36,7 @@ class ShippingDetails extends Fieldtype
             'has_shipping_option' => true,
             'name' => $order->shippingOption()->name(),
             'handle' => $order->shippingOption()->handle(),
-            'details' => $order->shippingMethod()->fieldtypeDetails($order),
+            'details' => collect($order->shippingMethod()->fieldtypeDetails($order))->map(fn ($detail) => e($detail))->all(),
             'shipping_method' => [
                 'name' => $order->shippingMethod()->title(),
                 'handle' => $order->shippingMethod()->handle(),
