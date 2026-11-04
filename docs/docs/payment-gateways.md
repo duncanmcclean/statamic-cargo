@@ -37,7 +37,7 @@ Sensitive values should be stored in your `.env` file, which should be ignored b
 Like the name suggests, the Dummy payment gateway exists to make it easy to get up and running with Cargo, without fussing about setting up and configuring a payment gateway.
 
 :::tip warning
-The Dummy gateway marks every order as paid without taking any payment, so it's only intended for local development and testing. It's unavailable when your app is running in the `production` environment, and any attempt to check out with it will be rejected. Remember to remove it from your config before going live.
+The Dummy gateway marks every order as paid without taking any payment, so it's only intended for local development and testing. Remember to remove it from your config before going live.
 :::
 
 ### Payment Form
