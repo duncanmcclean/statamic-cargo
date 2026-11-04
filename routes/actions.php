@@ -15,16 +15,21 @@ Route::name('cargo.')->group(function () {
         ->prefix('cart')
         ->group(function () {
             Route::get('/', [CartController::class, 'index'])->name('index');
-            Route::patch('/', [CartController::class, 'update'])->name('update');
-            Route::delete('/', [CartController::class, 'destroy'])->name('destroy');
 
-            Route::post('line-items', [CartLineItemsController::class, 'store'])->name('line-items.store');
-            Route::patch('line-items/{lineItem}', [CartLineItemsController::class, 'update'])->name('line-items.update');
-            Route::delete('line-items/{lineItem}', [CartLineItemsController::class, 'destroy'])->name('line-items.destroy');
+            Route::middleware('throttle:cargo.cart')->group(function () {
+                Route::patch('/', [CartController::class, 'update'])->middleware('throttle:cargo.discount-codes')->name('update');
+                Route::delete('/', [CartController::class, 'destroy'])->name('destroy');
 
-            Route::get('shipping', CartShippingController::class)->name('shipping');
-            Route::get('payment-gateways', CartPaymentGatewaysController::class)->name('payment-gateways');
-            Route::match(['get', 'post'], 'checkout', CheckoutController::class)->name('checkout');
+                Route::post('line-items', [CartLineItemsController::class, 'store'])->name('line-items.store');
+                Route::patch('line-items/{lineItem}', [CartLineItemsController::class, 'update'])->name('line-items.update');
+                Route::delete('line-items/{lineItem}', [CartLineItemsController::class, 'destroy'])->name('line-items.destroy');
+            });
+
+            Route::middleware('throttle:cargo.checkout')->group(function () {
+                Route::get('shipping', CartShippingController::class)->name('shipping');
+                Route::get('payment-gateways', CartPaymentGatewaysController::class)->name('payment-gateways');
+                Route::match(['get', 'post'], 'checkout', CheckoutController::class)->name('checkout');
+            });
         });
 
     Route::name('payments.')
@@ -32,7 +37,7 @@ Route::name('cargo.')->group(function () {
         ->withoutMiddleware(['App\Http\Middleware\VerifyCsrfToken', 'Illuminate\Foundation\Http\Middleware\VerifyCsrfToken', 'Illuminate\Foundation\Http\Middleware\PreventRequestForgery'])
         ->group(function () {
             Route::post('{paymentGateway}/webhook', WebhookController::class)->name('webhook');
-            Route::match(['get', 'post'], '{paymentGateway}/checkout', CheckoutController::class)->name('checkout');
+            Route::match(['get', 'post'], '{paymentGateway}/checkout', CheckoutController::class)->middleware('throttle:cargo.checkout')->name('checkout');
         });
 
     Route::get('states', StateController::class)->name('states');

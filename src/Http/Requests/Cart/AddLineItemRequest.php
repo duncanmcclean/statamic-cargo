@@ -4,6 +4,7 @@ namespace DuncanMcClean\Cargo\Http\Requests\Cart;
 
 use DuncanMcClean\Cargo\Facades\Product;
 use DuncanMcClean\Cargo\Http\Requests\CustomizableFormRequest;
+use DuncanMcClean\Cargo\Rules\UniqueCustomerEmail;
 use Illuminate\Support\Traits\Localizable;
 use Illuminate\Validation\Rule;
 use Statamic\Facades\Site;
@@ -48,8 +49,8 @@ class AddLineItemRequest extends CustomizableFormRequest
                 },
             ],
             'quantity' => ['nullable', 'integer', 'gt:0'],
-            'customer.email' => ['nullable', 'email:filter', new EmailWithoutPathCharacters],
-            'email' => ['nullable', 'email:filter', new EmailWithoutPathCharacters],
+            'customer.email' => ['nullable', 'email:filter', new EmailWithoutPathCharacters, new UniqueCustomerEmail],
+            'email' => ['nullable', 'email:filter', new EmailWithoutPathCharacters, new UniqueCustomerEmail],
         ];
     }
 

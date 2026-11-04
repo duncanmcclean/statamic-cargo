@@ -36,6 +36,17 @@ Cargo will automatically inject the product `id` from [the context](https://stat
 
 This example only scratches the surface of what you can do using the cart tag. To find out more, see the [Cart Tag](/docs/tags/cart) page.
 
+### Maximum quantity
+To stop customers (or bots) adding absurd quantities to their cart, Cargo limits each line item to 1,000 units. If your store needs to allow larger orders, you can change the limit in the `cargo.php` config file:
+
+```php
+// config/statamic/cargo.php
+
+'carts' => [
+    'max_line_item_quantity' => 1000,
+],
+```
+
 ## Storage
 Out of the box, carts are stored as YAML files in the `content/cargo/carts` directory. If you wish, you can change the directory in the `cargo.php` config file:
 
@@ -172,3 +183,29 @@ $this->app->bind(
     \App\Cargo\Calculator::class  
 );
 ```
+
+## Rate limiting
+Cargo's cart and checkout endpoints are rate limited by IP address to help protect against abuse, like brute-forcing discount codes. The limits apply to both the [cart tags](/frontend/tags/cart) and the [JSON API](/frontend/json-api/introduction):
+
+| Limiter | Default | Routes |
+| --- | --- | --- |
+| `cargo.cart` | 60 per minute | Updating or deleting the cart, adding, updating or removing line items |
+| `cargo.discount-codes` | 10 per minute | Cart updates which include a `discount_code` |
+| `cargo.checkout` | 30 per minute | Shipping options, payment gateways and checkout |
+
+You can customise any of these limits by redefining the named rate limiter in your `AppServiceProvider`'s `boot` method:
+
+```php
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
+
+public function boot()
+{
+    RateLimiter::for('cargo.cart', function (Request $request) {
+        return Limit::perMinute(120)->by($request->ip());
+    });
+}
+```
+
+Consult the [Laravel documentation](https://laravel.com/docs/master/routing#rate-limiting) to learn more about defining rate limiters.

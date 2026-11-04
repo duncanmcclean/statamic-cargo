@@ -80,6 +80,21 @@ class CheckoutTest extends TestCase
     }
 
     #[Test]
+    public function cant_checkout_with_unavailable_payment_gateway()
+    {
+        UnavailablePaymentGateway::register();
+        config()->set('statamic.cargo.payments.gateways', ['unavailable' => []]);
+
+        $cart = $this->makeCart();
+
+        $this
+            ->get('/!/cargo/payments/unavailable/checkout')
+            ->assertNotFound();
+
+        $this->assertNull(Facades\Order::query()->where('cart', $cart->id())->first());
+    }
+
+    #[Test]
     public function cant_checkout_without_customer_information()
     {
         $cart = $this->makeCart();
@@ -561,6 +576,16 @@ class FakePaymentGateway extends PaymentGateway
     public function refund(Order $order, int $amount): void
     {
         //
+    }
+}
+
+class UnavailablePaymentGateway extends FakePaymentGateway
+{
+    public static $handle = 'unavailable';
+
+    public function isAvailable(\DuncanMcClean\Cargo\Contracts\Cart\Cart $cart): bool
+    {
+        return false;
     }
 }
 

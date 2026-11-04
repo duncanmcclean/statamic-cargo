@@ -36,7 +36,7 @@ You can also specify a limit on how many times a customer can download the files
 
 ![Download fields on the product publish form](/images/product-downloads.png)
 
-After an order has been created, you may loop through the order's downloads like this:
+Once payment has been received, you may loop through the order's downloads like this:
 
 ::tabs
 ::tab antlers

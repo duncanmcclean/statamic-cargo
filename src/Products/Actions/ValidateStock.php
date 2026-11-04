@@ -17,6 +17,13 @@ class ValidateStock
     ): void {
         $product = $product ?? $lineItem?->product();
         $quantity = (int) ($quantity ?? $lineItem?->quantity() ?? 1);
+        $maxQuantity = config('statamic.cargo.carts.max_line_item_quantity', 1000);
+
+        if ($quantity > $maxQuantity) {
+            throw ValidationException::withMessages([
+                'quantity' => __('cargo::validation.quantity_exceeds_maximum', ['max' => $maxQuantity]),
+            ]);
+        }
 
         if (
             $product->isStandardProduct()
