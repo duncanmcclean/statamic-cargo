@@ -300,11 +300,15 @@ It should point to `https://your-store.com/!/cargo/payments/stripe/webhook`, and
 
 ![Screenshot of setting up a webhook in the Stripe dashboard](/images/stripe-setup-webhook.png)
 
-For additional security, we recommend copying the "Webhook Secret" into your `.env` file:
+Once created, copy the webhook's "Signing secret" into your `.env` file:
 
 ```
 STRIPE_WEBHOOK_SECRET=whsec_...
 ```
+
+:::tip warning
+You should **always** set a webhook secret in production. Cargo uses it to verify that webhook requests genuinely came from Stripe. Without it, anyone who knows your webhook URL can send fake events to your store, and Cargo will log a warning every time a webhook is received.
+:::
 
 ### Payment Description
 By default, the payment description will be `Order #1234`. If necessary, you can customise this by calling the `Stripe::paymentDescription()` hook in your `AppServiceProvider`:
