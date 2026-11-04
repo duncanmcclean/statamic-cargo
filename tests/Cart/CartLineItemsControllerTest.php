@@ -166,6 +166,40 @@ class CartLineItemsControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_ignores_reserved_keys_when_adding_a_product_to_the_cart()
+    {
+        $cart = $this->makeCart();
+        $product = $this->makeProduct();
+        $product->set('price', 1500)->save();
+
+        $this
+            ->post('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'quantity' => 1,
+                'id' => 'attacker-chosen-id',
+                'unit_price' => 1,
+                'sub_total' => 1,
+                'tax_total' => 1,
+                'discount_total' => 1,
+                'total' => 1,
+                'download_count' => -1000,
+                'product_title' => 'Not the real title',
+                'variant_name' => 'Not the real variant',
+                'tax_breakdown' => [['rate' => 99]],
+                'note' => 'Please wrap it in birthday paper.',
+            ])
+            ->assertRedirect();
+
+        $lineItem = $cart->fresh()->lineItems()->first();
+
+        $this->assertNotEquals('attacker-chosen-id', $lineItem->id());
+        $this->assertEquals(1500, $lineItem->unitPrice());
+        $this->assertEquals(1500, $lineItem->subTotal());
+        $this->assertEquals(1500, $lineItem->total());
+        $this->assertEquals(['note' => 'Please wrap it in birthday paper.'], $lineItem->data()->all());
+    }
+
+    #[Test]
     public function it_adds_a_variant_product_to_the_cart()
     {
         $cart = $this->makeCart();
@@ -682,6 +716,36 @@ class CartLineItemsControllerTest extends TestCase
         $this->assertEquals(1, $cart->lineItems()->first()->quantity());
         $this->assertEquals('baz', $cart->lineItems()->first()->data()->get('foo'));
         $this->assertEquals('qux', $cart->lineItems()->first()->data()->get('baz'));
+    }
+
+    #[Test]
+    public function it_ignores_reserved_keys_when_updating_a_line_item()
+    {
+        $cart = $this->makeCartWithLineItems();
+
+        $this
+            ->patch('/!/cargo/cart/line-items/line-item-1', [
+                'id' => 'attacker-chosen-id',
+                'unit_price' => 1,
+                'sub_total' => 1,
+                'tax_total' => 1,
+                'discount_total' => 1,
+                'total' => 1,
+                'download_count' => -1000,
+                'product_title' => 'Not the real title',
+                'variant_name' => 'Not the real variant',
+                'tax_breakdown' => [['rate' => 99]],
+                'foo' => 'baz',
+            ])
+            ->assertRedirect();
+
+        $lineItem = $cart->fresh()->lineItems()->first();
+
+        $this->assertEquals('line-item-1', $lineItem->id());
+        $this->assertEquals(0, $lineItem->unitPrice());
+        $this->assertEquals(0, $lineItem->discountTotal());
+        $this->assertEquals(0, $lineItem->total());
+        $this->assertEquals(['foo' => 'baz', 'baz' => 'qux'], $lineItem->data()->all());
     }
 
     #[Test]

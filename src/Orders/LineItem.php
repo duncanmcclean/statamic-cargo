@@ -168,6 +168,11 @@ class LineItem
         return ['id', 'product', 'variant', 'quantity', 'unit_price', 'sub_total', 'tax_total', 'discount_total', 'total'];
     }
 
+    public static function reservedKeys(): array
+    {
+        return ['id', 'unit_price', 'sub_total', 'tax_total', 'discount_total', 'total', 'download_count', 'product_title', 'variant_name', 'tax_breakdown'];
+    }
+
     public function newAugmentedInstance(): Augmented
     {
         return new AugmentedLineItem($this);
