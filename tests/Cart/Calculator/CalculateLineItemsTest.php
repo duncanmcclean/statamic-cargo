@@ -4,6 +4,7 @@ namespace Tests\Cart\Calculator;
 
 use DuncanMcClean\Cargo\Cart\Calculator\CalculateLineItems;
 use DuncanMcClean\Cargo\Facades\Cart;
+use Illuminate\Validation\ValidationException;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
@@ -128,5 +129,20 @@ class CalculateLineItemsTest extends TestCase
 
         $this->assertEquals(1234, $cart->lineItems()->find('a')->unitPrice());
         $this->assertEquals(2468, $cart->lineItems()->find('a')->total());
+    }
+
+    #[Test]
+    public function it_throws_when_the_line_item_total_would_overflow()
+    {
+        Collection::make('products')->save();
+        $product = tap(Entry::make()->collection('products')->data(['price' => 1000]))->save();
+
+        $cart = Cart::make()->lineItems([
+            ['id' => 'a', 'product' => $product->id(), 'quantity' => 18446744073709556],
+        ]);
+
+        $this->expectException(ValidationException::class);
+
+        (new CalculateLineItems)->handle($cart, fn ($cart) => $cart);
     }
 }

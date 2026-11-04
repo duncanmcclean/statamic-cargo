@@ -5,6 +5,7 @@ namespace DuncanMcClean\Cargo\Http\Requests\Cart;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Http\Requests\CustomizableFormRequest;
+use DuncanMcClean\Cargo\Rules\UniqueCustomerEmail;
 use DuncanMcClean\Cargo\Rules\ValidDiscountCode;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Support\Traits\Localizable;
@@ -84,11 +85,11 @@ class UpdateCartRequest extends CustomizableFormRequest
             'customer.name' => ['nullable', 'string'],
             'customer.first_name' => ['nullable', 'string'],
             'customer.last_name' => ['nullable', 'string'],
-            'customer.email' => ['nullable', 'email:filter', new EmailWithoutPathCharacters],
+            'customer.email' => ['nullable', 'email:filter', new EmailWithoutPathCharacters, new UniqueCustomerEmail],
             'name' => ['nullable', 'string'],
             'first_name' => ['nullable', 'string'],
             'last_name' => ['nullable', 'string'],
-            'email' => ['nullable', 'email:filter', new EmailWithoutPathCharacters],
+            'email' => ['nullable', 'email:filter', new EmailWithoutPathCharacters, new UniqueCustomerEmail],
             'discount_code' => ['nullable', 'string', new ValidDiscountCode],
             'shipping_method' => ['nullable', 'string'],
             'shipping_option' => ['nullable', 'string'],

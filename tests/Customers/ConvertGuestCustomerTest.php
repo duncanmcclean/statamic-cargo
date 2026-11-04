@@ -3,7 +3,9 @@
 namespace Tests\Customers;
 
 use DuncanMcClean\Cargo\Facades\Order;
+use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
+use Statamic\Events\UserBlueprintFound;
 use Statamic\Facades\Role;
 use Statamic\Facades\User;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
@@ -35,6 +37,42 @@ class ConvertGuestCustomerTest extends TestCase
         $this->assertEquals($user, $orderA->fresh()->customer());
         $this->assertEquals($user, $orderB->fresh()->customer());
         $this->assertEquals($user, $orderC->fresh()->customer());
+    }
+
+    #[Test]
+    public function it_only_copies_updatable_fields_when_converting_a_guest_customer_to_a_user(): void
+    {
+        Event::listen(UserBlueprintFound::class, function (UserBlueprintFound $event) {
+            $event->blueprint->ensureField('company', ['type' => 'text']);
+        });
+
+        $order = tap(Order::make()->customer([
+            'name' => 'CJ Cregg',
+            'email' => 'cj.cregg@example.com',
+            'company' => 'The White House',
+            'favourite_colour' => 'Blue',
+            'super' => true,
+            'roles' => ['admin'],
+            'password' => 'p4ssword',
+        ]))->save();
+
+        $this
+            ->actingAs(User::make()->makeSuper()->save())
+            ->post(cp_route('cargo.fieldtypes.convert-guest-customer'), [
+                'email' => 'cj.cregg@example.com',
+                'order_id' => $order->id(),
+            ])
+            ->assertOk();
+
+        $user = User::findByEmail('cj.cregg@example.com');
+
+        $this->assertEquals('CJ Cregg', $user->get('name'));
+        $this->assertEquals('The White House', $user->get('company'));
+        $this->assertNull($user->get('favourite_colour'));
+        $this->assertFalse($user->isSuper());
+        $this->assertEmpty($user->roles()->all());
+        $this->assertNull($user->get('password'));
+        $this->assertNull($user->get('password_hash'));
     }
 
     #[Test]

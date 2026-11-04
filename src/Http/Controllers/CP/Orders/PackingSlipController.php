@@ -4,6 +4,7 @@ namespace DuncanMcClean\Cargo\Http\Controllers\CP\Orders;
 
 use Illuminate\Http\Request;
 use Statamic\Http\Controllers\CP\CpController;
+use Statamic\View\Cascade;
 
 class PackingSlipController extends CpController
 {
@@ -12,7 +13,7 @@ class PackingSlipController extends CpController
         $this->authorize('edit', $order);
 
         return view('cargo::packing-slip', [
-            'config' => config()->all(),
+            'config' => Cascade::config(),
             'order' => $order,
         ]);
     }

@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Http\Controllers\CP\Fieldtypes;
 
+use DuncanMcClean\Cargo\Customers\CustomerFields;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Fieldtypes\Customers;
 use Illuminate\Http\Request;
@@ -26,9 +27,11 @@ class ConvertGuestCustomerController extends CpController
         $user = User::query()->where('email', $validated['email'])->first();
 
         if (! $user) {
+            $data = Arr::only($order->customer()->toArray(), CustomerFields::updatable());
+
             $user = User::make()
                 ->email($validated['email'])
-                ->data(Arr::except($order->customer()->toArray(), ['email']));
+                ->data(Arr::except($data, ['email']));
 
             $user->save();
         }

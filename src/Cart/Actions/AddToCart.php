@@ -22,6 +22,13 @@ class AddToCart
             $data = collect();
         }
 
+        $quantity = $quantity ?? 1;
+        $existingLineItem = $this->findExistingLineItem($cart, $product, $variant, $data);
+
+        if ($existingLineItem) {
+            $quantity += (int) $existingLineItem->quantity();
+        }
+
         app(ValidateStock::class)->handle(
             product: $product,
             variant: $variant,
@@ -30,27 +37,23 @@ class AddToCart
 
         app(PrerequisiteProductsCheck::class)->handle($cart, $product);
 
-        $productAlreadyInCart = $this->isProductAlreadyInCart($cart, $product, $variant, $data);
-
-        if ($productAlreadyInCart->count() > 0) {
-            $lineItem = $productAlreadyInCart->first();
-
+        if ($existingLineItem) {
             $cart->lineItems()->update(
-                id: $lineItem->id(),
-                data: $lineItem->data()->merge($data)->merge([
-                    'quantity' => (int) $lineItem->quantity() + ($quantity ?? 1),
+                id: $existingLineItem->id(),
+                data: $existingLineItem->data()->merge($data)->merge([
+                    'quantity' => $quantity,
                 ])->all()
             );
         } else {
             $cart->lineItems()->create($data->merge([
                 'product' => $product->id(),
                 'variant' => $variant?->key(),
-                'quantity' => $quantity ?? 1,
+                'quantity' => $quantity,
             ])->all());
         }
     }
 
-    private function isProductAlreadyInCart(Cart $cart, Product $product, ?ProductVariant $variant, Collection $data): Collection
+    private function findExistingLineItem(Cart $cart, Product $product, ?ProductVariant $variant, Collection $data): ?LineItem
     {
         return $cart->lineItems()
             ->where('product', $product->id())
@@ -65,6 +68,7 @@ class AddToCart
 
                     return true;
                 });
-            });
+            })
+            ->first();
     }
 }

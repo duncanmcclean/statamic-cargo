@@ -163,6 +163,15 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
             ->args(func_get_args());
     }
 
+    public function isPaid(): bool
+    {
+        return in_array($this->status(), [
+            OrderStatus::PaymentReceived,
+            OrderStatus::Shipped,
+            OrderStatus::Delivered,
+        ]);
+    }
+
     public function customer($customer = null)
     {
         return $this

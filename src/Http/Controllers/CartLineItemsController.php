@@ -8,8 +8,10 @@ use DuncanMcClean\Cargo\Facades\Product;
 use DuncanMcClean\Cargo\Http\Requests\Cart\AddLineItemRequest;
 use DuncanMcClean\Cargo\Http\Requests\Cart\UpdateLineItemRequest;
 use DuncanMcClean\Cargo\Http\Resources\API\CartResource;
+use DuncanMcClean\Cargo\Orders\LineItem;
 use DuncanMcClean\Cargo\Products\Actions\ValidateStock;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Statamic\Exceptions\NotFoundHttpException;
 use Statamic\Facades\URL;
 
@@ -23,9 +25,7 @@ class CartLineItemsController
         $product = Product::find($request->product);
         $variant = $request->variant ? $product->variant($request->variant) : null;
 
-        $data = $request->collect()->except([
-            '_token', '_method', '_redirect', '_error_redirect', 'product', 'variant', 'quantity', 'first_name', 'last_name', 'email', 'customer',
-        ]);
+        $data = $this->lineItemData($request);
 
         app(AddToCart::class)->handle(
             $cart,
@@ -55,9 +55,7 @@ class CartLineItemsController
 
         throw_if(! $lineItem, NotFoundHttpException::class);
 
-        $data = $request->collect()->except([
-            '_token', '_method', '_redirect', '_error_redirect', 'product', 'variant', 'quantity', 'first_name', 'last_name', 'email', 'customer',
-        ]);
+        $data = $this->lineItemData($request);
 
         $variant = $lineItem->variant();
 
@@ -88,6 +86,13 @@ class CartLineItemsController
         return $request->_redirect && ! URL::isExternalToApplication($request->_redirect)
             ? redirect($request->_redirect)
             : back();
+    }
+
+    private function lineItemData(Request $request): Collection
+    {
+        return $request->collect()
+            ->except(['_token', '_method', '_redirect', '_error_redirect', 'product', 'variant', 'quantity', 'first_name', 'last_name', 'email', 'customer'])
+            ->except(LineItem::reservedKeys());
     }
 
     public function destroy(Request $request, string $lineItem)

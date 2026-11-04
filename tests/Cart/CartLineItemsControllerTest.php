@@ -5,7 +5,9 @@ namespace Tests\Cart;
 use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
+use Statamic\Events\UserBlueprintFound;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
 use Statamic\Facades\User;
@@ -163,6 +165,40 @@ class CartLineItemsControllerTest extends TestCase
             'note' => 'This is a present for my friend. Please wrap it in birthday paper.',
             'message' => 'Happy Birthday, friend!',
         ], $cart->lineItems()->first()->data()->all());
+    }
+
+    #[Test]
+    public function it_ignores_reserved_keys_when_adding_a_product_to_the_cart()
+    {
+        $cart = $this->makeCart();
+        $product = $this->makeProduct();
+        $product->set('price', 1500)->save();
+
+        $this
+            ->post('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'quantity' => 1,
+                'id' => 'attacker-chosen-id',
+                'unit_price' => 1,
+                'sub_total' => 1,
+                'tax_total' => 1,
+                'discount_total' => 1,
+                'total' => 1,
+                'download_count' => -1000,
+                'product_title' => 'Not the real title',
+                'variant_name' => 'Not the real variant',
+                'tax_breakdown' => [['rate' => 99]],
+                'note' => 'Please wrap it in birthday paper.',
+            ])
+            ->assertRedirect();
+
+        $lineItem = $cart->fresh()->lineItems()->first();
+
+        $this->assertNotEquals('attacker-chosen-id', $lineItem->id());
+        $this->assertEquals(1500, $lineItem->unitPrice());
+        $this->assertEquals(1500, $lineItem->subTotal());
+        $this->assertEquals(1500, $lineItem->total());
+        $this->assertEquals(['note' => 'Please wrap it in birthday paper.'], $lineItem->data()->all());
     }
 
     #[Test]
@@ -364,6 +400,63 @@ class CartLineItemsControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_doesnt_add_a_product_to_the_cart_when_quantity_exceeds_the_maximum()
+    {
+        $cart = $this->makeCart();
+        $product = $this->makeProduct();
+
+        $this
+            ->post('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'quantity' => 1001,
+            ])
+            ->assertSessionHasErrors('quantity');
+
+        $this->assertCount(0, $cart->fresh()->lineItems());
+    }
+
+    #[Test]
+    public function it_doesnt_add_a_product_to_the_cart_when_the_resulting_quantity_exceeds_the_maximum()
+    {
+        $cart = $this->makeCart();
+        $product = $this->makeProduct();
+
+        $cart->lineItems()->create([
+            'product' => $product->id(),
+            'quantity' => 999,
+        ]);
+
+        $cart->save();
+
+        $this
+            ->post('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'quantity' => 2,
+            ])
+            ->assertSessionHasErrors('quantity');
+
+        $this->assertEquals(999, $cart->fresh()->lineItems()->first()->quantity());
+    }
+
+    #[Test]
+    public function the_maximum_quantity_is_configurable()
+    {
+        config()->set('statamic.cargo.carts.max_line_item_quantity', 5);
+
+        $cart = $this->makeCart();
+        $product = $this->makeProduct();
+
+        $this
+            ->post('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'quantity' => 6,
+            ])
+            ->assertSessionHasErrors('quantity');
+
+        $this->assertCount(0, $cart->fresh()->lineItems());
+    }
+
+    #[Test]
     public function it_doesnt_add_a_product_to_the_cart_when_customer_email_contains_path_characters()
     {
         $cart = $this->makeCart();
@@ -378,6 +471,74 @@ class CartLineItemsControllerTest extends TestCase
 
         $this->assertCount(0, $cart->fresh()->lineItems());
         $this->assertEquals('john.doe@example.com', $cart->fresh()->customer()->email());
+    }
+
+    #[Test]
+    public function it_only_persists_updatable_fields_to_the_logged_in_user_when_adding_a_line_item()
+    {
+        config()->set('statamic.cargo.carts.always_checkout_as_guest', false);
+
+        Event::listen(UserBlueprintFound::class, function (UserBlueprintFound $event) {
+            $event->blueprint->ensureField('company', ['type' => 'text']);
+        });
+
+        $cart = $this->makeCart();
+        $cart->customer(null)->save();
+        $product = $this->makeProduct();
+
+        $user = User::make()->email('user@example.com')->save();
+        $id = $user->id();
+
+        $this->actingAs($user)
+            ->post('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'customer' => [
+                    'name' => 'John Doe',
+                    'company' => 'Acme Inc.',
+                    'favourite_colour' => 'Blue',
+                    'super' => true,
+                    'roles' => ['admin'],
+                    'password' => 'p4ssword',
+                    'two_factor_secret' => 'secret',
+                    'id' => 'hacked',
+                ],
+            ])
+            ->assertRedirect();
+
+        $user = User::find($id);
+
+        $this->assertCount(1, $cart->fresh()->lineItems());
+        $this->assertEquals('John Doe', $user->get('name'));
+        $this->assertEquals('Acme Inc.', $user->get('company'));
+        $this->assertNull($user->get('favourite_colour'));
+        $this->assertFalse($user->isSuper());
+        $this->assertEmpty($user->roles()->all());
+        $this->assertNull($user->get('password'));
+        $this->assertNull($user->get('password_hash'));
+        $this->assertNull($user->get('two_factor_secret'));
+    }
+
+    #[Test]
+    public function it_doesnt_add_a_product_to_the_cart_when_logged_in_user_changes_their_email_to_another_users_email()
+    {
+        config()->set('statamic.cargo.carts.always_checkout_as_guest', false);
+
+        $cart = $this->makeCart();
+        $cart->customer(null)->save();
+        $product = $this->makeProduct();
+
+        User::make()->email('other@example.com')->save();
+        $user = User::make()->email('user@example.com')->save();
+
+        $this->actingAs($user)
+            ->post('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'customer' => ['email' => 'other@example.com'],
+            ])
+            ->assertSessionHasErrors('customer.email');
+
+        $this->assertCount(0, $cart->fresh()->lineItems());
+        $this->assertEquals('user@example.com', User::find($user->id())->email());
     }
 
     #[Test]
@@ -685,6 +846,36 @@ class CartLineItemsControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_ignores_reserved_keys_when_updating_a_line_item()
+    {
+        $cart = $this->makeCartWithLineItems();
+
+        $this
+            ->patch('/!/cargo/cart/line-items/line-item-1', [
+                'id' => 'attacker-chosen-id',
+                'unit_price' => 1,
+                'sub_total' => 1,
+                'tax_total' => 1,
+                'discount_total' => 1,
+                'total' => 1,
+                'download_count' => -1000,
+                'product_title' => 'Not the real title',
+                'variant_name' => 'Not the real variant',
+                'tax_breakdown' => [['rate' => 99]],
+                'foo' => 'baz',
+            ])
+            ->assertRedirect();
+
+        $lineItem = $cart->fresh()->lineItems()->first();
+
+        $this->assertEquals('line-item-1', $lineItem->id());
+        $this->assertEquals(0, $lineItem->unitPrice());
+        $this->assertEquals(0, $lineItem->discountTotal());
+        $this->assertEquals(0, $lineItem->total());
+        $this->assertEquals(['foo' => 'baz', 'baz' => 'qux'], $lineItem->data()->all());
+    }
+
+    #[Test]
     public function it_doesnt_add_customer_information_to_line_item_data_when_updating_a_line_item()
     {
         $cart = $this->makeCartWithLineItems();
@@ -719,6 +910,20 @@ class CartLineItemsControllerTest extends TestCase
 
         $this->assertCount(1, $cart->lineItems());
         $this->assertEquals(1, $cart->lineItems()->first()->quantity()); // It should still be 1.
+    }
+
+    #[Test]
+    public function it_doesnt_update_a_line_item_when_quantity_exceeds_the_maximum()
+    {
+        $cart = $this->makeCartWithLineItems();
+
+        $this
+            ->patch('/!/cargo/cart/line-items/line-item-1', [
+                'quantity' => 1001,
+            ])
+            ->assertSessionHasErrors('quantity');
+
+        $this->assertEquals(1, $cart->fresh()->lineItems()->first()->quantity());
     }
 
     #[Test]

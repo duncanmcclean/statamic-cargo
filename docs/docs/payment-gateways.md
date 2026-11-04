@@ -36,6 +36,10 @@ Sensitive values should be stored in your `.env` file, which should be ignored b
 ## Dummy
 Like the name suggests, the Dummy payment gateway exists to make it easy to get up and running with Cargo, without fussing about setting up and configuring a payment gateway.
 
+:::tip warning
+The Dummy gateway marks every order as paid without taking any payment, so it's only intended for local development and testing. Remember to remove it from your config before going live.
+:::
+
 ### Payment Form
 :::tip note
 You don't need to copy this into your project if you're using the [built-in checkout flow](/frontend/checkout/prebuilt), as you'll already have it.
@@ -300,11 +304,15 @@ It should point to `https://your-store.com/!/cargo/payments/stripe/webhook`, and
 
 ![Screenshot of setting up a webhook in the Stripe dashboard](/images/stripe-setup-webhook.png)
 
-For additional security, we recommend copying the "Webhook Secret" into your `.env` file:
+Once created, copy the webhook's "Signing secret" into your `.env` file:
 
 ```
 STRIPE_WEBHOOK_SECRET=whsec_...
 ```
+
+:::tip warning
+You should **always** set a webhook secret in production. Cargo uses it to verify that webhook requests genuinely came from Stripe. Without it, anyone who knows your webhook URL can send fake events to your store, and Cargo will log a warning every time a webhook is received.
+:::
 
 ### Payment Description
 By default, the payment description will be `Order #1234`. If necessary, you can customise this by calling the `Stripe::paymentDescription()` hook in your `AppServiceProvider`:

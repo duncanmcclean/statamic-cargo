@@ -22,8 +22,11 @@ use DuncanMcClean\Cargo\Stache\Query\OrderQueryBuilder;
 use DuncanMcClean\Cargo\Stache\Stores\CartsStore;
 use DuncanMcClean\Cargo\Stache\Stores\DiscountsStore;
 use DuncanMcClean\Cargo\Stache\Stores\OrdersStore;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Console\AboutCommand;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Statamic\Console\Commands\Multisite as MultisiteCommand;
@@ -123,6 +126,7 @@ class ServiceProvider extends AddonServiceProvider
             ->bootNav()
             ->bootPermissions()
             ->bootRouteBindings()
+            ->bootRateLimiters()
             ->bootApiResources()
             ->bootGit()
             ->registerBlueprintNamespace()
@@ -367,6 +371,25 @@ class ServiceProvider extends AddonServiceProvider
     private function isFrontendBindingEnabled(): bool
     {
         return config('statamic.routes.bindings', false);
+    }
+
+    private function bootRateLimiters(): self
+    {
+        RateLimiter::for('cargo.cart', function (Request $request) {
+            return Limit::perMinute(60)->by($request->ip());
+        });
+
+        RateLimiter::for('cargo.discount-codes', function (Request $request) {
+            return $request->filled('discount_code')
+                ? Limit::perMinute(10)->by($request->ip())
+                : Limit::none();
+        });
+
+        RateLimiter::for('cargo.checkout', function (Request $request) {
+            return Limit::perMinute(30)->by($request->ip());
+        });
+
+        return $this;
     }
 
     private function bootApiResources(): self

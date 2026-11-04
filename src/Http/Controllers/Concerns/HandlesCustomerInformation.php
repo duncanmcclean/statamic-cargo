@@ -3,6 +3,7 @@
 namespace DuncanMcClean\Cargo\Http\Controllers\Concerns;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
+use DuncanMcClean\Cargo\Customers\CustomerFields;
 use Illuminate\Http\Request;
 use Statamic\Facades\User;
 use Statamic\Support\Arr;
@@ -18,7 +19,7 @@ trait HandlesCustomerInformation
             'email' => $request->email,
         ])->filter()->all());
 
-        $customerData = Arr::except($customerData, ['id', 'password', 'password_hash', 'remember_token', 'super', 'roles', 'groups']);
+        $customerData = Arr::only($customerData, CustomerFields::updatable());
 
         if (! config('statamic.cargo.carts.always_checkout_as_guest') && $user = User::current()) {
             // When a customer is missing from the order, we'll set it to the logged-in user.

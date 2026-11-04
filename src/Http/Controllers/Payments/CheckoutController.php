@@ -20,7 +20,7 @@ class CheckoutController
         if ($cart->isPaid()) {
             $paymentGateway = PaymentGateway::find($paymentGateway);
 
-            throw_if(! $paymentGateway, NotFoundHttpException::class);
+            throw_if(! $paymentGateway || ! $paymentGateway->isAvailable($cart), NotFoundHttpException::class);
         } else {
             $paymentGateway = null;
         }

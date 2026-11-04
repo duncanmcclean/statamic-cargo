@@ -2,12 +2,14 @@
 
 return [
     'invalid_discount_code' => 'Invalid discount code.',
+    'line_item_total_too_large' => 'The total for this product is too large to be calculated.',
     'no_physical_products' => 'This cart does not contain any physical products.',
     'prerequisite_product' => 'Before purchasing this product, you must purchase :product first.',
     'prerequisite_product_logged_out' => 'This product requires another product to be purchased first. Please login or register to continue.',
     'product_not_found' => 'The product is invalid.',
     'product_out_of_stock' => 'This product is currently out of stock. Please try again later.',
     'products_no_longer_available' => 'One or more items in your cart are no longer available.',
+    'quantity_exceeds_maximum' => 'You cannot have more than :max of this product in your cart.',
     'refund_greater_than_remaining' => 'You cannot refund more than the remaining amount.',
     'refund_greater_than_zero' => 'You must enter an amount greater than 0.',
     'shipping_address_missing' => 'Shipping address is missing from the cart.',

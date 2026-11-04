@@ -60,6 +60,10 @@ class AugmentedOrder extends AugmentedCart
 
     public function downloads(): LineItems
     {
+        if (! $this->data->isPaid()) {
+            return new LineItems;
+        }
+
         return $this->data->lineItems()
             ->filter(fn (LineItem $lineItem) => $lineItem->variant()?->has('downloads') ?? $lineItem->product()?->has('downloads'))
             ->map(fn (LineItem $lineItem) => [

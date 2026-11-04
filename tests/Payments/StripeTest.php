@@ -9,6 +9,7 @@ use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Payments\Gateways\Stripe;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -436,11 +437,27 @@ class StripeTest extends TestCase
     {
         Config::set('statamic.cargo.payments.gateways.stripe.webhook_secret', 'whsec_test_secret');
 
+        Log::shouldReceive('warning')->never();
+
         $this
             ->post(uri: '/!/cargo/payments/stripe/webhook', headers: [
                 'Stripe-Signature' => 'invalid-signature',
             ])
             ->assertForbidden();
+    }
+
+    #[Test]
+    public function it_logs_a_warning_when_the_webhook_secret_is_not_configured()
+    {
+        Config::set('statamic.cargo.payments.gateways.stripe.webhook_secret', null);
+
+        Log::shouldReceive('warning')
+            ->once()
+            ->withArgs(fn (string $message) => str_contains($message, 'webhook_secret'));
+
+        $this
+            ->post(uri: '/!/cargo/payments/stripe/webhook', data: ['type' => 'unhandled.event'])
+            ->assertOk();
     }
 
     #[Test]
@@ -563,6 +580,8 @@ class StripeTest extends TestCase
         $order = $this->makeOrder();
         $order->set('stripe_payment_intent', $stripePaymentIntent->id)->save();
 
+        Refund::create(['payment_intent' => $stripePaymentIntent->id, 'amount' => 750]);
+
         $this
             ->post(
                 uri: '/!/cargo/payments/stripe/webhook',
@@ -571,8 +590,7 @@ class StripeTest extends TestCase
                     'data' => [
                         'object' => [
                             'id' => $stripePaymentIntent->latest_charge,
-                            'payment_intent' => $stripePaymentIntent->id,
-                            'amount_refunded' => 750,
+                            'amount_refunded' => 0,
                         ],
                     ],
                 ],
