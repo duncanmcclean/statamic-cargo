@@ -2,108 +2,97 @@
 
 namespace DuncanMcClean\Cargo\Http\Requests;
 
-use DuncanMcClean\Cargo\Exceptions\FormRequestDoesNotExist;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 
 abstract class CustomizableFormRequest extends FormRequest
 {
-    private ?FormRequest $customFormRequestInstance = null;
+    protected string $form;
+
+    private ?FormRequest $customFormRequest = null;
+
+    private bool $resolvedCustomFormRequest = false;
 
     public function authorize(): bool
     {
-        if ($this->hasCustomFormRequest()) {
-            return $this->resolveCustomFormRequest()->authorize();
-        }
-
-        return true;
+        return $this->customFormRequest()?->authorize() ?? true;
     }
 
-    public function rules(): array
+    protected function validationRules(): array
     {
-        if ($this->hasCustomFormRequest()) {
-            return $this->resolveCustomFormRequest()->rules();
+        $rules = parent::validationRules();
+
+        foreach ($this->customFormRequest()?->rules() ?? [] as $attribute => $customRules) {
+            $rules[$attribute] = array_merge(
+                $this->explodeRules($rules[$attribute] ?? []),
+                $this->explodeRules($customRules)
+            );
         }
 
-        return [];
+        return $rules;
+    }
+
+    private function explodeRules(mixed $rules): array
+    {
+        return is_string($rules) ? explode('|', $rules) : Arr::wrap($rules);
     }
 
     public function messages(): array
     {
-        if ($this->hasCustomFormRequest()) {
-            return $this->resolveCustomFormRequest()->messages();
-        }
-
-        return [];
+        return $this->customFormRequest()?->messages() ?? [];
     }
 
     public function attributes(): array
     {
-        if ($this->hasCustomFormRequest()) {
-            return $this->resolveCustomFormRequest()->attributes();
-        }
-
-        return [];
+        return $this->customFormRequest()?->attributes() ?? [];
     }
 
     protected function prepareForValidation(): void
     {
-        if (! $this->hasCustomFormRequest()) {
-            return;
-        }
+        $customFormRequest = $this->customFormRequest();
 
-        $customRequest = $this->resolveCustomFormRequest();
-
-        if (method_exists($customRequest, 'prepareForValidation')) {
-            $customRequest->prepareForValidation();
-            $this->merge($customRequest->all());
+        if ($customFormRequest && method_exists($customFormRequest, 'prepareForValidation')) {
+            $customFormRequest->prepareForValidation();
+            $this->merge($customFormRequest->all());
         }
     }
 
     public function withValidator(Validator $validator): void
     {
-        if (! $this->hasCustomFormRequest()) {
-            return;
-        }
+        $customFormRequest = $this->customFormRequest();
 
-        $customRequest = $this->resolveCustomFormRequest();
-
-        if (method_exists($customRequest, 'withValidator')) {
-            $customRequest->withValidator($validator);
+        if ($customFormRequest && method_exists($customFormRequest, 'withValidator')) {
+            $customFormRequest->withValidator($validator);
         }
     }
 
     protected function passedValidation(): void
     {
-        if (! $this->hasCustomFormRequest()) {
-            return;
-        }
+        $customFormRequest = $this->customFormRequest();
 
-        $customRequest = $this->resolveCustomFormRequest();
-
-        if (method_exists($customRequest, 'passedValidation')) {
-            $customRequest->passedValidation();
+        if ($customFormRequest && method_exists($customFormRequest, 'passedValidation')) {
+            $customFormRequest->passedValidation();
         }
     }
 
-    protected function hasCustomFormRequest(): bool
+    private function customFormRequest(): ?FormRequest
     {
-        return $this->has('_request');
-    }
-
-    protected function resolveCustomFormRequest(): FormRequest
-    {
-        if ($this->customFormRequestInstance) {
-            return $this->customFormRequestInstance;
+        if ($this->resolvedCustomFormRequest) {
+            return $this->customFormRequest;
         }
 
-        $formRequest = decrypt($this->input('_request'));
+        $this->resolvedCustomFormRequest = true;
 
-        if (! class_exists($formRequest)) {
-            throw new FormRequestDoesNotExist("Form Request [{$formRequest}] does not exist.");
+        $token = $this->decodeFormRequestToken();
+        $class = Arr::get($token, 'class');
+
+        if (! is_string($class) || ! is_subclass_of($class, FormRequest::class) || Arr::get($token, 'form') !== $this->form) {
+            return null;
         }
 
-        return $this->customFormRequestInstance = app($formRequest, [
+        return $this->customFormRequest = app($class, [
             $this->query(),
             $this->all(),
             $this->attributes->all(),
@@ -112,5 +101,20 @@ abstract class CustomizableFormRequest extends FormRequest
             $this->server->all(),
             $this->content,
         ]);
+    }
+
+    private function decodeFormRequestToken(): array
+    {
+        if (! is_string($this->input('_request'))) {
+            return [];
+        }
+
+        try {
+            $token = decrypt($this->input('_request'));
+        } catch (DecryptException) {
+            return [];
+        }
+
+        return is_array($token) ? $token : [];
     }
 }

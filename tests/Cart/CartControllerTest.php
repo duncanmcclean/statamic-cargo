@@ -157,7 +157,7 @@ class CartControllerTest extends TestCase
         $this
             ->from('/cart')
             ->patch('/!/cargo/cart', [
-                '_request' => encrypt('Tests\Cart\CartFormRequest'),
+                '_request' => encrypt(['class' => CartFormRequest::class, 'form' => 'cart:update']),
                 'foo' => 'bar',
             ])
             ->assertSessionHasErrors('baz');
@@ -166,6 +166,41 @@ class CartControllerTest extends TestCase
 
         $this->assertNull($cart->get('foo'));
         $this->assertNull($cart->get('baz'));
+    }
+
+    #[Test]
+    public function it_doesnt_update_the_cart_when_discount_code_fails_cargo_rules_with_custom_form_request()
+    {
+        $cart = $this->makeCart();
+
+        $this
+            ->from('/cart')
+            ->patch('/!/cargo/cart', [
+                '_request' => encrypt(['class' => CartFormRequest::class, 'form' => 'cart:update']),
+                'discount_code' => 'FOOBARZ',
+                'baz' => 'qux',
+            ])
+            ->assertSessionHasErrors('discount_code')
+            ->assertSessionDoesntHaveErrors('baz');
+
+        $this->assertNull($cart->fresh()->get('discount_code'));
+    }
+
+    #[Test]
+    public function it_updates_the_cart_and_ignores_custom_form_request_generated_for_another_form()
+    {
+        $cart = $this->makeCart();
+
+        $this
+            ->from('/cart')
+            ->patch('/!/cargo/cart', [
+                '_request' => encrypt(['class' => CartFormRequest::class, 'form' => 'cart:add']),
+                'customer' => ['name' => 'Jane Doe'],
+            ])
+            ->assertRedirect('/cart')
+            ->assertSessionHasNoErrors();
+
+        $this->assertEquals('Jane Doe', $cart->fresh()->customer()->name());
     }
 
     #[Test]
@@ -564,7 +599,7 @@ class CartFormRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'bar.required' => 'The baz thingy should be here...',
+            'baz.required' => 'The baz thingy should be here...',
         ];
     }
 }

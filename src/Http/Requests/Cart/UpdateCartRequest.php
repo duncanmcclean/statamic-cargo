@@ -19,17 +19,15 @@ class UpdateCartRequest extends CustomizableFormRequest
 {
     use Localizable;
 
+    protected string $form = 'cart:update';
+
     private $cachedFields;
 
     public function authorize(): bool
     {
         throw_if(! Cart::hasCurrentCart(), NotFoundHttpException::class);
 
-        if ($this->hasCustomFormRequest()) {
-            return $this->resolveCustomFormRequest()->authorize();
-        }
-
-        return true;
+        return parent::authorize();
     }
 
     protected function getRedirectUrl()
@@ -47,10 +45,6 @@ class UpdateCartRequest extends CustomizableFormRequest
 
     public function rules(): array
     {
-        if ($this->hasCustomFormRequest()) {
-            return $this->resolveCustomFormRequest()->rules();
-        }
-
         $fields = $this->getFormFields();
 
         return $fields

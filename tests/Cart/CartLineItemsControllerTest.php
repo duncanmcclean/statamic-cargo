@@ -6,6 +6,7 @@ use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Order;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Event;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Events\UserBlueprintFound;
 use Statamic\Facades\Collection;
@@ -128,7 +129,7 @@ class CartLineItemsControllerTest extends TestCase
 
         $this
             ->post('/!/cargo/cart/line-items', [
-                '_request' => encrypt('Tests\Cart\CartLineItemsFormRequest'),
+                '_request' => encrypt(['class' => CartLineItemsFormRequest::class, 'form' => 'cart:add']),
                 'product' => $product->id(),
                 'quantity' => 1,
             ])
@@ -137,6 +138,119 @@ class CartLineItemsControllerTest extends TestCase
         $cart = $cart->fresh();
 
         $this->assertCount(0, $cart->lineItems());
+    }
+
+    #[Test]
+    public function it_adds_a_product_to_the_cart_when_it_passes_the_custom_form_request()
+    {
+        $cart = $this->makeCart();
+        $product = $this->makeProduct();
+
+        $this
+            ->post('/!/cargo/cart/line-items', [
+                '_request' => encrypt(['class' => CartLineItemsFormRequest::class, 'form' => 'cart:add']),
+                'product' => $product->id(),
+                'quantity' => 2,
+                'gift_note' => 'Happy Birthday!',
+            ])
+            ->assertRedirect()
+            ->assertSessionHasNoErrors();
+
+        $cart = $cart->fresh();
+
+        $this->assertCount(1, $cart->lineItems());
+        $this->assertEquals(2, $cart->lineItems()->first()->quantity());
+    }
+
+    #[Test]
+    #[DataProvider('invalidQuantityProvider')]
+    public function it_doesnt_add_a_product_to_the_cart_when_quantity_fails_cargo_or_custom_form_request_rules($quantity)
+    {
+        $cart = $this->makeCart();
+        $product = $this->makeProduct();
+
+        $this
+            ->post('/!/cargo/cart/line-items', [
+                '_request' => encrypt(['class' => CartLineItemsFormRequest::class, 'form' => 'cart:add']),
+                'product' => $product->id(),
+                'quantity' => $quantity,
+                'gift_note' => 'Happy Birthday!',
+            ])
+            ->assertSessionHasErrors('quantity')
+            ->assertSessionDoesntHaveErrors('gift_note');
+
+        $cart = $cart->fresh();
+
+        $this->assertCount(0, $cart->lineItems());
+    }
+
+    public static function invalidQuantityProvider(): array
+    {
+        return [
+            'fails cargo rules' => [-5],
+            'fails custom form request rules' => [10],
+        ];
+    }
+
+    #[Test]
+    public function it_doesnt_add_a_product_to_the_cart_when_the_product_fails_cargo_rules_with_custom_form_request()
+    {
+        $cart = $this->makeCart();
+
+        $this
+            ->post('/!/cargo/cart/line-items', [
+                '_request' => encrypt(['class' => CartLineItemsFormRequest::class, 'form' => 'cart:add']),
+                'product' => 'does-not-exist',
+                'quantity' => 1,
+                'gift_note' => 'Happy Birthday!',
+            ])
+            ->assertSessionHasErrors('product');
+
+        $cart = $cart->fresh();
+
+        $this->assertCount(0, $cart->lineItems());
+    }
+
+    #[Test]
+    #[DataProvider('ignoredFormRequestProvider')]
+    public function it_adds_a_product_to_the_cart_and_ignores_custom_form_request_it_cant_use($request)
+    {
+        $cart = $this->makeCart();
+        $product = $this->makeProduct();
+
+        $this
+            ->post('/!/cargo/cart/line-items', [
+                '_request' => $request(),
+                'product' => $product->id(),
+                'quantity' => -5,
+            ])
+            ->assertSessionHasErrors('quantity')
+            ->assertSessionDoesntHaveErrors(['_request', 'gift_note']);
+
+        $this
+            ->post('/!/cargo/cart/line-items', [
+                '_request' => $request(),
+                'product' => $product->id(),
+                'quantity' => 1,
+            ])
+            ->assertRedirect()
+            ->assertSessionHasNoErrors();
+
+        $cart = $cart->fresh();
+
+        $this->assertCount(1, $cart->lineItems());
+    }
+
+    public static function ignoredFormRequestProvider(): array
+    {
+        return [
+            'not encrypted' => [fn () => 'not-encrypted'],
+            'not a string' => [fn () => ['foo' => 'bar']],
+            'legacy token' => [fn () => encrypt(CartLineItemsFormRequest::class)],
+            'class does not exist' => [fn () => encrypt(['class' => 'App\\Http\\Requests\\DoesNotExist', 'form' => 'cart:add'])],
+            'class is not a form request' => [fn () => encrypt(['class' => \stdClass::class, 'form' => 'cart:add'])],
+            'generated for another form' => [fn () => encrypt(['class' => CartLineItemsFormRequest::class, 'form' => 'cart:update'])],
+        ];
     }
 
     #[Test]
@@ -756,7 +870,7 @@ class CartLineItemsControllerTest extends TestCase
 
         $this
             ->patch('/!/cargo/cart/line-items/line-item-1', [
-                '_request' => encrypt('Tests\Cart\CartLineItemsFormRequest'),
+                '_request' => encrypt(['class' => CartLineItemsFormRequest::class, 'form' => 'cart:update_line_item']),
                 'quantity' => 3,
             ])
             ->assertSessionHasErrors('gift_note');
@@ -766,6 +880,43 @@ class CartLineItemsControllerTest extends TestCase
         $this->assertCount(1, $cart->lineItems());
 
         $this->assertEquals(1, $cart->lineItems()->first()->quantity());
+    }
+
+    #[Test]
+    public function it_doesnt_update_a_line_item_when_quantity_fails_cargo_rules_with_custom_form_request()
+    {
+        $cart = $this->makeCartWithLineItems();
+
+        $this
+            ->patch('/!/cargo/cart/line-items/line-item-1', [
+                '_request' => encrypt(['class' => CartLineItemsFormRequest::class, 'form' => 'cart:update_line_item']),
+                'quantity' => -5,
+                'gift_note' => 'Happy Birthday!',
+            ])
+            ->assertSessionHasErrors('quantity')
+            ->assertSessionDoesntHaveErrors('gift_note');
+
+        $cart = $cart->fresh();
+
+        $this->assertEquals(1, $cart->lineItems()->first()->quantity());
+    }
+
+    #[Test]
+    public function it_updates_a_line_item_and_ignores_custom_form_request_generated_for_another_form()
+    {
+        $cart = $this->makeCartWithLineItems();
+
+        $this
+            ->patch('/!/cargo/cart/line-items/line-item-1', [
+                '_request' => encrypt(['class' => CartLineItemsFormRequest::class, 'form' => 'cart:add']),
+                'quantity' => 3,
+            ])
+            ->assertRedirect()
+            ->assertSessionHasNoErrors();
+
+        $cart = $cart->fresh();
+
+        $this->assertEquals(3, $cart->lineItems()->first()->quantity());
     }
 
     #[Test]
@@ -1083,13 +1234,14 @@ class CartLineItemsFormRequest extends FormRequest
     {
         return [
             'gift_note' => 'required',
+            'quantity' => 'max:5',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'bar.required' => 'Remember to leave a gift note.',
+            'gift_note.required' => 'Remember to leave a gift note.',
         ];
     }
 }

@@ -19,10 +19,11 @@ trait GetsFormRequests
     /**
      * Parse form request class.
      *
-     * @param  string  $redirect
+     * @param  string  $formRequest
+     * @param  string  $form
      * @return string
      */
-    protected function parseFormRequest($formRequest)
+    protected function parseFormRequest($formRequest, $form)
     {
         if (! Str::contains($formRequest, 'App\\')) {
             $formRequest = 'App\\Http\\Requests\\'.$formRequest;
@@ -32,6 +33,6 @@ trait GetsFormRequests
             throw new \Exception("Form Request [{$formRequest}] does not exist.");
         }
 
-        return encrypt($formRequest);
+        return encrypt(['class' => $formRequest, 'form' => $form]);
     }
 }
