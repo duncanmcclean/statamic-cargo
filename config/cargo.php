@@ -278,6 +278,10 @@ return [
         | Determines which payment gateways should be available during checkout.
         | Each payment gateway may have its own configuration options.
         |
+        | Stripe's webhook secret should always be set in production. Without
+        | it, webhook requests can't be verified as genuine, meaning anyone
+        | could send fake events to your store.
+        |
         */
 
         'gateways' => [

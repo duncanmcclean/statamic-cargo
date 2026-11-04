@@ -13,8 +13,10 @@ use DuncanMcClean\Cargo\Support\Money;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Statamic\Contracts\Auth\User;
+use Stripe\Charge;
 use Stripe\Customer;
 use Stripe\Event;
 use Stripe\Exception\InvalidRequestException;
@@ -199,6 +201,8 @@ class Stripe extends PaymentGateway
             } catch (SignatureVerificationException $exception) {
                 throw new AccessDeniedHttpException($exception->getMessage(), $exception);
             }
+        } else {
+            Log::warning('Stripe webhook received without a webhook secret configured, so the request could not be verified as genuine. Set [webhook_secret] in your Cargo config.');
         }
 
         if ($request->type === Event::PAYMENT_INTENT_AMOUNT_CAPTURABLE_UPDATED) {
@@ -245,13 +249,10 @@ class Stripe extends PaymentGateway
         }
 
         if ($request->type === Event::CHARGE_REFUNDED) {
-            $paymentIntent = PaymentIntent::retrieve($request->data['object']['payment_intent']);
+            $charge = Charge::retrieve($request->data['object']['id']);
+            $order = Facades\Order::query()->where('stripe_payment_intent', $charge->payment_intent)->first();
 
-            if ($paymentIntent) {
-                $order = Facades\Order::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
-
-                $order?->set('amount_refunded', $request->data['object']['amount_refunded'])->save();
-            }
+            $order?->set('amount_refunded', $charge->amount_refunded)->save();
         }
 
         return response('Webhook received', 200);
