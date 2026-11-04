@@ -15,7 +15,6 @@ use DuncanMcClean\Cargo\Events\CartSaved;
 use DuncanMcClean\Cargo\Facades;
 use DuncanMcClean\Cargo\Facades\Cart as CartFacade;
 use DuncanMcClean\Cargo\Facades\Order;
-use DuncanMcClean\Cargo\Orders\Blueprint;
 use DuncanMcClean\Cargo\Orders\HasTotals;
 use DuncanMcClean\Cargo\Orders\LineItems;
 use DuncanMcClean\Cargo\Payments\Gateways\PaymentGateway;
@@ -33,6 +32,7 @@ use Statamic\Data\HasAugmentedInstance;
 use Statamic\Data\HasDirtyState;
 use Statamic\Data\TracksQueriedColumns;
 use Statamic\Data\TracksQueriedRelations;
+use Statamic\Facades\Blueprint;
 use Statamic\Facades\Site;
 use Statamic\Facades\Stache;
 use Statamic\Facades\User;
@@ -299,9 +299,7 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
 
     public function updatableFields(): array
     {
-        $customFields = $this->blueprint()->fields()->all()->keys()
-            ->diff((new Blueprint)->defaultFieldHandles())
-            ->all();
+        $customFields = Blueprint::find('cargo::order')->fields()->all()->keys()->all();
 
         return [
             'customer',
