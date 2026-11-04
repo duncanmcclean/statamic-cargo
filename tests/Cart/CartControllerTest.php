@@ -118,8 +118,8 @@ class CartControllerTest extends TestCase
     }
 
     #[Test]
-    #[DataProvider('adminOnlyFieldsProvider')]
-    public function it_doesnt_update_admin_only_fields(string $field, string $value)
+    #[DataProvider('fieldsCustomersCantUpdateProvider')]
+    public function it_ignores_fields_customers_cant_update(string $field, string $value)
     {
         $cart = $this->makeCart();
 
@@ -132,7 +132,7 @@ class CartControllerTest extends TestCase
         $this->assertNull($cart->fresh()->get($field));
     }
 
-    public static function adminOnlyFieldsProvider(): array
+    public static function fieldsCustomersCantUpdateProvider(): array
     {
         return [
             'status' => ['status', 'payment_received'],
