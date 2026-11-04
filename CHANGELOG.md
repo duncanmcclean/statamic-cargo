@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.17.0 (2026-11-04)
+
+### What's new
+- Add save button options to discounts [#340](https://github.com/duncanmcclean/statamic-cargo/pull/340) by @duncanmcclean
+- Add a maximum line item quantity [#347](https://github.com/duncanmcclean/statamic-cargo/pull/347) by @duncanmcclean
+
+### What's fixed
+- Only pass relevant config to the packing slip view [#342](https://github.com/duncanmcclean/statamic-cargo/pull/342) by @duncanmcclean
+- Improve Stripe refund webhook handling [#344](https://github.com/duncanmcclean/statamic-cargo/pull/344) by @duncanmcclean
+- Respect payment gateway availability during checkout [#343](https://github.com/duncanmcclean/statamic-cargo/pull/343) by @duncanmcclean
+- Tidy up line item metadata handling [#345](https://github.com/duncanmcclean/statamic-cargo/pull/345) by @duncanmcclean
+- Rate limit frontend cart and checkout endpoints [#346](https://github.com/duncanmcclean/statamic-cargo/pull/346) by @duncanmcclean
+- Only accept updatable customer fields from the frontend [#348](https://github.com/duncanmcclean/statamic-cargo/pull/348) by @duncanmcclean
+- Improve handling of downloads and incomplete Mollie payments [#350](https://github.com/duncanmcclean/statamic-cargo/pull/350) by @duncanmcclean
+- Improve how custom form requests are validated [#351](https://github.com/duncanmcclean/statamic-cargo/pull/351) by @duncanmcclean
+- Tighten frontend cart updates [#349](https://github.com/duncanmcclean/statamic-cargo/pull/349) by @duncanmcclean
+
+
+
 ## v1.16.1 (2026-11-02)
 
 ### What's fixed
