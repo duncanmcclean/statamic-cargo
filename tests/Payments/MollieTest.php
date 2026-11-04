@@ -10,7 +10,14 @@ use DuncanMcClean\Cargo\Orders\OrderStatus;
 use DuncanMcClean\Cargo\Payments\Gateways\Mollie;
 use Exception;
 use Mockery;
+use Mollie\Api\Fake\MockMollieClient;
+use Mollie\Api\Fake\MockResponse;
+use Mollie\Api\Http\PendingRequest;
+use Mollie\Api\Http\Requests\GetPaymentRequest;
+use Mollie\Api\Http\Requests\UpdatePaymentRequest;
 use Mollie\Api\MollieApiClient;
+use Mollie\Api\Resources\Payment;
+use Mollie\Api\Types\PaymentStatus;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -31,17 +38,10 @@ class MollieTest extends TestCase
     {
         parent::setUp();
 
-        if (! env('MOLLIE_KEY')) {
-            $this->markTestSkipped('Skipping without MOLLIE_KEY.');
-        }
-
         config()->set('statamic.cargo.payments.gateways', ['mollie' => [
-            'api_key' => env('MOLLIE_KEY'),
+            'api_key' => env('MOLLIE_KEY', 'test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'),
             'profile_id' => env('MOLLIE_PROFILE_ID'),
         ]]);
-
-        $this->mollie = new MollieApiClient;
-        $this->mollie->setApiKey(env('MOLLIE_KEY'));
     }
 
     protected function tearDown(): void
@@ -57,6 +57,8 @@ class MollieTest extends TestCase
     #[Test]
     public function it_can_setup_a_payment()
     {
+        $this->useMollieApi();
+
         $cart = $this->makeCartWithGuestCustomer();
 
         $setup = (new Mollie)->setup($cart);
@@ -89,6 +91,8 @@ class MollieTest extends TestCase
     #[Test]
     public function it_can_setup_a_payment_when_prices_exclude_tax()
     {
+        $this->useMollieApi();
+
         config()->set('statamic.cargo.taxes.price_includes_tax', false);
 
         $cart = $this->makeCartWithGuestCustomer()
@@ -127,6 +131,8 @@ class MollieTest extends TestCase
     #[Test]
     public function it_can_setup_a_payment_with_discounted_line()
     {
+        $this->useMollieApi();
+
         $cart = $this->makeCartWithGuestCustomer()
             ->grandTotal(900)
             ->lineItems([
@@ -165,6 +171,8 @@ class MollieTest extends TestCase
     #[Test]
     public function selected_shipping_option_is_added_as_a_payment_line()
     {
+        $this->useMollieApi();
+
         $cart = $this->makeCartWithGuestCustomer();
         $cart->merge(['shipping_method' => 'free_shipping', 'shipping_option' => 'free_shipping'])->save();
 
@@ -186,6 +194,8 @@ class MollieTest extends TestCase
     #[Test]
     public function addresses_are_added_to_payments()
     {
+        $this->useMollieApi();
+
         $cart = $this->makeCartWithGuestCustomer();
 
         $cart->data([
@@ -227,6 +237,8 @@ class MollieTest extends TestCase
     #[Test]
     public function it_can_setup_a_payment_for_a_new_customer()
     {
+        $this->useMollieApi();
+
         [$cart, $user] = $this->makeCartAndUser();
 
         (new Mollie)->setup($cart);
@@ -243,6 +255,8 @@ class MollieTest extends TestCase
     #[Test]
     public function it_can_setup_a_payment_for_an_existing_customer()
     {
+        $this->useMollieApi();
+
         $mollieCustomer = $this->mollie->customers->create([
             'name' => 'David Hasselhoff',
             'email' => 'david@hasselhoff.com',
@@ -260,6 +274,8 @@ class MollieTest extends TestCase
     #[Test]
     public function setup_returns_existing_payment_if_one_exists()
     {
+        $this->useMollieApi();
+
         $molliePayment = $this->mollie->payments->create([
             'description' => 'Test payment',
             'amount' => ['currency' => 'GBP', 'value' => '10.00'],
@@ -282,6 +298,8 @@ class MollieTest extends TestCase
     #[Test]
     public function setup_returns_new_payment_when_cart_fingerprint_has_changed()
     {
+        $this->useMollieApi();
+
         $originalPayment = $this->mollie->payments->create([
             'description' => 'Test payment',
             'amount' => ['currency' => 'GBP', 'value' => '10.00'],
@@ -306,6 +324,8 @@ class MollieTest extends TestCase
     #[Test]
     public function create_payment_payload_can_be_modified_by_a_hook()
     {
+        $this->useMollieApi();
+
         [$cart] = $this->makeCartAndUser();
 
         Mollie::hook('creating-payment', function ($payload, $next) use (&$hookedCart) {
@@ -331,49 +351,86 @@ class MollieTest extends TestCase
     }
 
     #[Test]
-    public function it_can_process_a_payment()
+    #[DataProvider('completedPaymentStatusProvider')]
+    public function it_can_process_a_payment(string $status)
     {
-        $molliePayment = $this->mollie->payments->create([
-            'description' => 'Test payment',
-            'amount' => ['currency' => 'GBP', 'value' => '10.00'],
-            'redirectUrl' => 'https://example.com/redirect',
-            'metadata' => ['cart_id' => 'foo', 'cart_fingerprint' => 'original'],
+        $mollie = $this->fakeMollieApi([
+            GetPaymentRequest::class => $this->paymentResponse(['status' => $status]),
+            UpdatePaymentRequest::class => $this->paymentResponse(['status' => $status]),
         ]);
 
         $order = $this->makeOrder();
 
         $order
             ->orderNumber(1234)
-            ->set('mollie_payment_id', $molliePayment->id)
+            ->set('mollie_payment_id', 'tr_12345')
             ->save();
 
         (new Mollie)->process($order);
 
-        $order->fresh();
+        $mollie->assertSent(function (PendingRequest $request) use ($order) {
+            return $request->getRequest() instanceof UpdatePaymentRequest
+                && $request->payload()->get('description') === 'Order #1234'
+                && $request->payload()->get('metadata') === [
+                    'cart_id' => 'foo',
+                    'cart_fingerprint' => 'original',
+                    'order_id' => $order->id(),
+                    'order_number' => 1234,
+                ];
+        });
+    }
 
-        $molliePayment = $this->mollie->payments->get($order->get('mollie_payment_id'));
-        $this->assertEquals('Order #1234', $molliePayment->description);
-        $this->assertEquals([
-            'cart_id' => 'foo',
-            'cart_fingerprint' => 'original',
-            'order_id' => $order->id(),
-            'order_number' => $order->orderNumber(),
-        ], (array) $molliePayment->metadata);
+    public static function completedPaymentStatusProvider(): array
+    {
+        return [
+            'paid' => [PaymentStatus::PAID],
+            'authorized' => [PaymentStatus::AUTHORIZED],
+            'pending' => [PaymentStatus::PENDING],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('incompletePaymentStatusProvider')]
+    public function it_cant_process_a_payment_when_the_payment_is_incomplete(string $status, string $message)
+    {
+        $mollie = $this->fakeMollieApi([
+            GetPaymentRequest::class => $this->paymentResponse(['status' => $status]),
+        ]);
+
+        $order = $this->makeOrder();
+        $order->set('mollie_payment_id', 'tr_12345')->save();
+
+        try {
+            (new Mollie)->process($order);
+
+            $this->fail('Expected a PreventCheckout exception.');
+        } catch (PreventCheckout $e) {
+            $this->assertEquals($message, $e->getMessage());
+        }
+
+        $mollie->assertSentCount(1);
+    }
+
+    public static function incompletePaymentStatusProvider(): array
+    {
+        return [
+            'open' => [PaymentStatus::OPEN, 'Payment has not been completed.'],
+            'canceled' => [PaymentStatus::CANCELED, 'Payment was cancelled.'],
+            'failed' => [PaymentStatus::FAILED, 'Payment was unsuccessful.'],
+            'expired' => [PaymentStatus::EXPIRED, 'Payment was unsuccessful.'],
+        ];
     }
 
     #[Test]
     #[DataProvider('mismatchedPaymentAmountProvider')]
     public function it_cant_process_a_payment_when_the_payment_amount_does_not_match_the_order(array $amount)
     {
-        $molliePayment = $this->mollie->payments->create([
-            'description' => 'Test payment',
-            'amount' => $amount,
-            'redirectUrl' => 'https://example.com/redirect',
-            'metadata' => ['cart_id' => 'foo', 'cart_fingerprint' => 'original'],
+        $mollie = $this->fakeMollieApi([
+            GetPaymentRequest::class => $this->paymentResponse(['amount' => $amount]),
         ]);
 
         $order = $this->makeOrder();
-        $order->set('mollie_payment_id', $molliePayment->id)->save();
+        $order->set('mollie_payment_id', 'tr_12345')->save();
 
         try {
             (new Mollie)->process($order);
@@ -383,8 +440,7 @@ class MollieTest extends TestCase
             $this->assertEquals('The amount paid does not match the order total.', $e->getMessage());
         }
 
-        $molliePayment = $this->mollie->payments->get($molliePayment->id);
-        $this->assertEquals('Test payment', $molliePayment->description);
+        $mollie->assertSentCount(1);
     }
 
     public static function mismatchedPaymentAmountProvider(): array
@@ -409,6 +465,8 @@ class MollieTest extends TestCase
     #[Test]
     public function it_can_cancel_a_payment()
     {
+        $this->useMollieApi();
+
         // TODO: Figure out how to create a "paid" payment in Mollie in order to test this.
         $this->markTestIncomplete();
     }
@@ -416,6 +474,8 @@ class MollieTest extends TestCase
     #[Test]
     public function it_receives_a_webhook_with_cancelled_payment()
     {
+        $this->useMollieApi();
+
         // TODO: Figure out how to create a "cancelled" payment in Mollie in order to test this.
         $this->markTestIncomplete();
 
@@ -439,6 +499,8 @@ class MollieTest extends TestCase
     #[Test]
     public function it_receives_a_webhook_with_paid_payment()
     {
+        $this->useMollieApi();
+
         // TODO: Figure out how to create a "paid" payment in Mollie in order to test this.
         $this->markTestIncomplete();
 
@@ -462,6 +524,8 @@ class MollieTest extends TestCase
     #[Test]
     public function it_receives_a_webhook_with_refunded_payment()
     {
+        $this->useMollieApi();
+
         // TODO: Figure out how to create a "refunded" payment in Mollie in order to test this.
         $this->markTestIncomplete();
 
@@ -485,6 +549,8 @@ class MollieTest extends TestCase
     #[Test]
     public function it_handles_webhook_for_payment_that_doesnt_exist()
     {
+        $this->useMollieApi();
+
         $this
             ->post('/!/cargo/payments/mollie/webhook', ['id' => 'tr_doesnotexist123'])
             ->assertOk();
@@ -493,8 +559,42 @@ class MollieTest extends TestCase
     #[Test]
     public function it_refunds_a_payment()
     {
+        $this->useMollieApi();
+
         // TODO: Figure out how to create a "paid" payment in Mollie in order to test this.
         $this->markTestIncomplete();
+    }
+
+    private function useMollieApi(): void
+    {
+        if (! env('MOLLIE_KEY')) {
+            $this->markTestSkipped('Skipping without MOLLIE_KEY.');
+        }
+
+        $this->mollie = new MollieApiClient;
+        $this->mollie->setApiKey(env('MOLLIE_KEY'));
+    }
+
+    private function fakeMollieApi(array $responses): MockMollieClient
+    {
+        $mollie = MollieApiClient::fake($responses);
+
+        $this->app->instance(MollieApiClient::class, $mollie);
+
+        return $mollie;
+    }
+
+    private function paymentResponse(array $payment = []): MockResponse
+    {
+        return MockResponse::resource(Payment::class)->with([
+            'resource' => 'payment',
+            'id' => 'tr_12345',
+            'mode' => 'test',
+            'status' => PaymentStatus::PAID,
+            'amount' => ['currency' => 'GBP', 'value' => '10.00'],
+            'metadata' => ['cart_id' => 'foo', 'cart_fingerprint' => 'original'],
+            ...$payment,
+        ])->create();
     }
 
     private function makeCartWithGuestCustomer()

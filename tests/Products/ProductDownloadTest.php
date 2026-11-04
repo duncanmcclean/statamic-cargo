@@ -4,10 +4,12 @@ namespace Tests\Products;
 
 use DuncanMcClean\Cargo\Events\ProductDownloaded;
 use DuncanMcClean\Cargo\Facades\Order;
+use DuncanMcClean\Cargo\Orders\OrderStatus;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Asset;
 use Statamic\Facades\AssetContainer;
@@ -186,9 +188,39 @@ class ProductDownloadTest extends TestCase
     }
 
     #[Test]
+    #[DataProvider('unpaidOrderStatusProvider')]
+    public function cant_download_when_order_has_not_been_paid(OrderStatus $status)
+    {
+        Event::fake(ProductDownloaded::class);
+
+        File::put(Storage::path('one.png'), '');
+        Asset::make()->container('assets')->path('one.png')->save();
+
+        $product = $this->makeProductWithDownloads(['one.png']);
+        $order = $this->makeOrderWithLineItem($product, status: $status);
+
+        $this
+            ->get($this->generateDownloadUrl('order-id', 'line-item-id'))
+            ->assertForbidden();
+
+        $this->assertEquals(0, $order->fresh()->lineItems()->first()->download_count);
+
+        Event::assertNotDispatched(ProductDownloaded::class);
+    }
+
+    public static function unpaidOrderStatusProvider(): array
+    {
+        return [
+            'payment pending' => [OrderStatus::PaymentPending],
+            'cancelled' => [OrderStatus::Cancelled],
+            'returned' => [OrderStatus::Returned],
+        ];
+    }
+
+    #[Test]
     public function throws_404_when_line_item_cant_be_found()
     {
-        Order::make()->id('order-id')->save();
+        Order::make()->id('order-id')->status(OrderStatus::PaymentReceived)->save();
 
         $this
             ->get($this->generateDownloadUrl('order-id', 'unknown-line-item-id'))
@@ -270,10 +302,11 @@ class ProductDownloadTest extends TestCase
         return $product;
     }
 
-    private function makeOrderWithLineItem($product, array $lineItem = [])
+    private function makeOrderWithLineItem($product, array $lineItem = [], OrderStatus $status = OrderStatus::PaymentReceived)
     {
         $order = Order::make()
             ->id('order-id')
+            ->status($status)
             ->lineItems([
                 ['id' => 'line-item-id', 'product' => $product->id(), 'download_count' => 0, ...$lineItem],
             ]);
