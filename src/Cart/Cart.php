@@ -299,7 +299,9 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
     public function updatableFields(): array
     {
         return $this->blueprint()->fields()->all()->map->handle()->except([
-            'id', 'line_items', 'discount_total', 'grand_total', 'shipping_total', 'sub_total', 'tax_total',
+            'id', 'status', 'order_number', 'date', 'line_items', 'receipt', 'timeline',
+            'shipping_details', 'payment_details', 'payment_gateway', 'tracking_number', 'cancellation_reason',
+            'discount_total', 'grand_total', 'shipping_total', 'shipping_tax_total', 'sub_total', 'tax_total',
         ])->all();
     }
 

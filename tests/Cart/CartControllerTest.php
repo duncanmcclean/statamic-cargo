@@ -7,8 +7,10 @@ use DuncanMcClean\Cargo\Facades\Cart;
 use DuncanMcClean\Cargo\Facades\Discount;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Event;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Events\UserBlueprintFound;
+use Statamic\Facades\Blueprint;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
 use Statamic\Facades\User;
@@ -113,6 +115,52 @@ class CartControllerTest extends TestCase
 
         // Ensure that the grand total passed in the request didn't update the cart.
         $this->assertEquals(900, $cart->grandTotal());
+    }
+
+    #[Test]
+    #[DataProvider('fieldsCustomersCantUpdateProvider')]
+    public function it_ignores_fields_customers_cant_update(string $field, string $value)
+    {
+        $cart = $this->makeCart();
+
+        $this
+            ->from('/cart')
+            ->patch('/!/cargo/cart', [$field => $value])
+            ->assertRedirect('/cart')
+            ->assertSessionHasNoErrors();
+
+        $this->assertNull($cart->fresh()->get($field));
+    }
+
+    public static function fieldsCustomersCantUpdateProvider(): array
+    {
+        return [
+            'status' => ['status', 'payment_received'],
+            'order_number' => ['order_number', '1'],
+            'date' => ['date', '2025-01-01 10:00'],
+            'payment_gateway' => ['payment_gateway', 'dummy'],
+            'tracking_number' => ['tracking_number', '<img src=x onerror=alert(document.cookie)>'],
+            'cancellation_reason' => ['cancellation_reason', 'Changed my mind'],
+        ];
+    }
+
+    #[Test]
+    public function it_updates_custom_blueprint_fields()
+    {
+        $cart = $this->makeCart();
+
+        $customBlueprint = Blueprint::make('order')->setNamespace('cargo')->setContents(['tabs' => [
+            'details' => ['sections' => [['fields' => [['handle' => 'gift_message', 'field' => ['type' => 'textarea']]]]]],
+        ]]);
+
+        Blueprint::partialMock()->shouldReceive('find')->with('cargo::order')->andReturn($customBlueprint);
+
+        $this
+            ->from('/cart')
+            ->patch('/!/cargo/cart', ['gift_message' => 'Happy Birthday!'])
+            ->assertRedirect('/cart');
+
+        $this->assertEquals('Happy Birthday!', $cart->fresh()->get('gift_message'));
     }
 
     #[Test]
