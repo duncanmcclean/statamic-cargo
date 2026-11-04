@@ -25,7 +25,7 @@ abstract class ShippingMethod
     {
         return array_filter([
             __('Amount') => Money::format($order->shippingTotal(), $order->site()),
-            __('Tracking Number') => $order->get('tracking_number'),
+            __('Tracking Number') => e($order->get('tracking_number')),
         ]);
     }
 

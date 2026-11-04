@@ -50,12 +50,9 @@ public function fieldtypeDetails(Order $order): array
 {  
 	return [
 		__('Delivery Due') => 'Tomorrow',
-		__('Tracking Number') => Html::link("https://example.com/track/{$order->get('tracking_number')}", $order->get('tracking_number')),
 	];
 }
 ```
-
-Details are escaped before they're displayed. To render HTML, like a link, return an `HtmlString` (eg. using `Html::link()`).
 
 Cargo will automatically register any shipping methods in the `app/ShippingMethods` directory. 
 

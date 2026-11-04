@@ -32,7 +32,7 @@ class PaymentDetails extends Fieldtype
             'title' => $order->paymentGateway()->title(),
             'handle' => $order->paymentGateway()->handle(),
             'logo' => $order->paymentGateway()->logo(),
-            'details' => collect($order->paymentGateway()->fieldtypeDetails($order))->map(fn ($detail) => e($detail))->all(),
+            'details' => $order->paymentGateway()->fieldtypeDetails($order),
         ];
     }
 

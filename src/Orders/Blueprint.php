@@ -10,39 +10,7 @@ class Blueprint
 {
     public function __invoke(): StatamicBlueprint
     {
-        $contents = $this->defaultContents();
-        $customBlueprint = BlueprintFacade::find('cargo::order');
-
-        foreach (Arr::get($customBlueprint->contents(), 'tabs') as $tabHandle => $customTab) {
-            if (! isset($contents['tabs'][$tabHandle])) {
-                $contents['tabs'][$tabHandle] = $customTab;
-
-                continue;
-            }
-
-            $contents['tabs'][$tabHandle]['sections'] = $this->mergeSections(
-                $contents['tabs'][$tabHandle]['sections'],
-                $customTab['sections']
-            );
-        }
-
-        return BlueprintFacade::make()
-            ->setHandle('orders')
-            ->setContents($contents);
-    }
-
-    public function defaultFieldHandles(): array
-    {
-        return collect(Arr::get($this->defaultContents(), 'tabs'))
-            ->flatMap(fn (array $tab) => $tab['sections'])
-            ->flatMap(fn (array $section) => $section['fields'])
-            ->pluck('handle')
-            ->all();
-    }
-
-    private function defaultContents(): array
-    {
-        return [
+        $contents = [
             'tabs' => [
                 'details' => [
                     'display' => __('Details'),
@@ -191,6 +159,25 @@ class Blueprint
                 ],
             ],
         ];
+
+        $customBlueprint = BlueprintFacade::find('cargo::order');
+
+        foreach (Arr::get($customBlueprint->contents(), 'tabs') as $tabHandle => $customTab) {
+            if (! isset($contents['tabs'][$tabHandle])) {
+                $contents['tabs'][$tabHandle] = $customTab;
+
+                continue;
+            }
+
+            $contents['tabs'][$tabHandle]['sections'] = $this->mergeSections(
+                $contents['tabs'][$tabHandle]['sections'],
+                $customTab['sections']
+            );
+        }
+
+        return BlueprintFacade::make()
+            ->setHandle('orders')
+            ->setContents($contents);
     }
 
     private function mergeSections(array $sections, array $customSections): array
