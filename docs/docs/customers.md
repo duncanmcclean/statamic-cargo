@@ -22,7 +22,9 @@ Whereas, when a **logged in** customer checks out, Cargo will associate the orde
 To force customers to be *real* Statamic users, you should ensure they're already logged in before hitting the checkout page. 
 
 ## Updating customer details
-Customer details can be updated from the frontend using the [cart update tag](/frontend/tags/cart#updating-the-cart), the [add to cart tag](/frontend/tags/cart#adding-to-the-cart) or the [JSON API](/frontend/json-api/endpoints#update-the-cart). Only fields defined in your [user blueprint](https://statamic.dev/users#user-fields) are accepted, and when a logged-in user changes their email address, it must not already belong to another user.
+Customer details can be updated from the frontend using the [cart update tag](/frontend/tags/cart#updating-the-cart), the [add to cart tag](/frontend/tags/cart#adding-to-the-cart) or the [JSON API](/frontend/json-api/endpoints#update-the-cart).
+
+Only fields defined in your [user blueprint](https://statamic.dev/users#user-fields) are accepted, and when a logged-in user changes their email address, it must not already belong to another user.
 
 ## Merging carts upon login
 By default, when a customer logs in, their current cart will be merged with any carts started on other devices.
