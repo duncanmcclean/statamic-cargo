@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Statamic\Contracts\Auth\User;
-use Statamic\Support\Html;
 use Stripe\Charge;
 use Stripe\Customer;
 use Stripe\Event;
@@ -275,11 +274,7 @@ class Stripe extends PaymentGateway
     public function fieldtypeDetails(Order $order): array
     {
         return [
-            __('Payment ID') => Html::link(
-                "https://dashboard.stripe.com/payments/{$order->get('stripe_payment_intent')}",
-                $order->get('stripe_payment_intent'),
-                ['target' => '_blank']
-            ),
+            __('Payment ID') => "<a href='https://dashboard.stripe.com/payments/{$order->get('stripe_payment_intent')}' target='_blank'>{$order->get('stripe_payment_intent')}</a>",
             __('Amount') => Money::format($order->grandTotal(), $order->site()),
         ];
     }
