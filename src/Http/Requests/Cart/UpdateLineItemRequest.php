@@ -12,23 +12,17 @@ class UpdateLineItemRequest extends CustomizableFormRequest
 {
     use Localizable;
 
+    protected string $form = 'cart:update_line_item';
+
     public function authorize(): bool
     {
         throw_if(! Cart::hasCurrentCart(), NotFoundHttpException::class);
 
-        if ($this->hasCustomFormRequest()) {
-            return $this->resolveCustomFormRequest()->authorize();
-        }
-
-        return true;
+        return parent::authorize();
     }
 
     public function rules(): array
     {
-        if ($this->hasCustomFormRequest()) {
-            return $this->resolveCustomFormRequest()->rules();
-        }
-
         return [
             'variant' => ['nullable'],
             'quantity' => ['nullable', 'integer', 'gt:0'],

@@ -173,7 +173,7 @@ This tag supports the following parameters:
 	:parameters="[
 		['key' => 'redirect', 'type' => 'string', 'description' => 'The URL the user will be taken to after submitting the form. If left blank, the user will stay on the same page.'],
 		['key' => 'error_redirect', 'type' => 'string', 'description' => 'The URL the user will be taken to after a failed form submission. If left blank, the user will stay on the same page.'],
-		['key' => 'request', 'type' => 'string', 'description' => 'The name or fully qualified classname of the [form request](https://laravel.com/docs/master/validation#creating-form-requests) that should be used to validate the form submission. For example: `AddToCartRequest` will map to `App\Http\Requests\AddToCartRequest`.'],
+		['key' => 'request', 'type' => 'string', 'description' => 'The name or fully qualified classname of a [form request](https://laravel.com/docs/master/validation#creating-form-requests) whose rules should be applied in addition to Cargo\'s own validation. For example: `AddToCartRequest` will map to `App\Http\Requests\AddToCartRequest`.'],
 	]"
 />
 @endblade
@@ -238,7 +238,7 @@ This tag supports the following parameters:
 		['key' => 'line_item', 'type' => 'string', 'required' => true, 'description' => 'The ID of the line item you wish to update. Required when `product` isn\'t present.'],
 		['key' => 'redirect', 'type' => 'string', 'description' => 'The URL the user will be taken to after submitting the form. If left blank, the user will stay on the same page.'],
 		['key' => 'error_redirect', 'type' => 'string', 'description' => 'The URL the user will be taken to after a failed form submission. If left blank, the user will stay on the same page.'],
-		['key' => 'request', 'type' => 'string', 'description' => 'The name or fully qualified classname of the [form request](https://laravel.com/docs/master/validation#creating-form-requests) that should be used to validate the form submission. For example: `AddToCartRequest` will map to `App\Http\Requests\AddToCartRequest`.'],
+		['key' => 'request', 'type' => 'string', 'description' => 'The name or fully qualified classname of a [form request](https://laravel.com/docs/master/validation#creating-form-requests) whose rules should be applied in addition to Cargo\'s own validation. For example: `AddToCartRequest` will map to `App\Http\Requests\AddToCartRequest`.'],
 	]"
 />
 @endblade
@@ -338,7 +338,7 @@ This tag supports the following parameters:
 	:parameters="[
 		['key' => 'redirect', 'type' => 'string', 'description' => 'The URL the user will be taken to after submitting the form. If left blank, the user will stay on the same page.'],
 		['key' => 'error_redirect', 'type' => 'string', 'description' => 'The URL the user will be taken to after a failed form submission. If left blank, the user will stay on the same page.'],
-		['key' => 'request', 'type' => 'string', 'description' => 'The name or fully qualified classname of the [form request](https://laravel.com/docs/master/validation#creating-form-requests) that should be used to validate the form submission. For example: `AddToCartRequest` will map to `App\Http\Requests\AddToCartRequest`.'],
+		['key' => 'request', 'type' => 'string', 'description' => 'The name or fully qualified classname of a [form request](https://laravel.com/docs/master/validation#creating-form-requests) whose rules should be applied in addition to Cargo\'s own validation. For example: `AddToCartRequest` will map to `App\Http\Requests\AddToCartRequest`.'],
 	]"
 />
 @endblade

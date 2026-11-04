@@ -13,12 +13,10 @@ class AddLineItemRequest extends CustomizableFormRequest
 {
     use Localizable;
 
+    protected string $form = 'cart:add';
+
     public function rules(): array
     {
-        if ($this->hasCustomFormRequest()) {
-            return $this->resolveCustomFormRequest()->rules();
-        }
-
         return [
             'product' => [
                 'required',

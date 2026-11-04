@@ -91,7 +91,7 @@ class Cart extends Tags
             $this->content .= '<input type="hidden" name="product" value="'.$this->context->get('id').'">';
         }
 
-        return $this->createForm(route('statamic.cargo.cart.line-items.store'), knownParams: ['product']);
+        return $this->createForm('cart:add', route('statamic.cargo.cart.line-items.store'), knownParams: ['product']);
     }
 
     public function updateLineItem()
@@ -113,6 +113,7 @@ class Cart extends Tags
             ->first();
 
         return $this->createForm(
+            form: 'cart:update_line_item',
             action: route('statamic.cargo.cart.line-items.update', $lineItem->id()),
             data: $lineItem->toAugmentedArray(),
             method: 'PATCH'
@@ -138,6 +139,7 @@ class Cart extends Tags
             ->first();
 
         return $this->createForm(
+            form: 'cart:remove',
             action: route('statamic.cargo.cart.line-items.destroy', $lineItem->id()),
             data: $lineItem->toAugmentedArray(),
             method: 'DELETE'
@@ -149,6 +151,7 @@ class Cart extends Tags
         $cart = CartFacade::current();
 
         return $this->createForm(
+            form: 'cart:update',
             action: route('statamic.cargo.cart.update'),
             data: $cart->toAugmentedArray(),
             method: 'PATCH',
@@ -158,6 +161,7 @@ class Cart extends Tags
     public function delete()
     {
         return $this->createForm(
+            form: 'cart:delete',
             action: route('statamic.cargo.cart.destroy'),
             method: 'DELETE'
         );

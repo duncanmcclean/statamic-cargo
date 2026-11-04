@@ -3,6 +3,8 @@
 namespace Tests\Tags;
 
 use DuncanMcClean\Cargo\Facades\Cart;
+use Illuminate\Foundation\Http\FormRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Entry;
@@ -161,6 +163,35 @@ class CartTagTest extends TestCase
         $this->assertStringContainsString('<button>Delete the cart!</button>', $output);
     }
 
+    #[Test]
+    #[DataProvider('formRequestProvider')]
+    public function it_outputs_custom_form_request_bound_to_the_form($template, $form)
+    {
+        $this->makeCartWithLineItems('123');
+
+        if (! class_exists('App\\Http\\Requests\\CustomCartRequest')) {
+            class_alias(CartTagFormRequest::class, 'App\\Http\\Requests\\CustomCartRequest');
+        }
+
+        $output = $this->tag($template, ['id' => '123']);
+
+        preg_match('/<input type="hidden" name="_request" value="([^"]+)" \/>/', $output, $matches);
+
+        $this->assertEquals([
+            'class' => 'App\\Http\\Requests\\CustomCartRequest',
+            'form' => $form,
+        ], decrypt($matches[1]));
+    }
+
+    public static function formRequestProvider(): array
+    {
+        return [
+            'add' => ['{{ cart:add request="CustomCartRequest" }}{{ /cart:add }}', 'cart:add'],
+            'update line item' => ['{{ cart:update_line_item product="123" request="CustomCartRequest" }}{{ /cart:update_line_item }}', 'cart:update_line_item'],
+            'update' => ['{{ cart:update request="CustomCartRequest" }}{{ /cart:update }}', 'cart:update'],
+        ];
+    }
+
     private function tag($tag, $variables = [])
     {
         return (string) Parse::template($tag, $variables, [], true);
@@ -213,5 +244,13 @@ class CartTagTest extends TestCase
         $product->save();
 
         return $product;
+    }
+}
+
+class CartTagFormRequest extends FormRequest
+{
+    public function rules(): array
+    {
+        return [];
     }
 }

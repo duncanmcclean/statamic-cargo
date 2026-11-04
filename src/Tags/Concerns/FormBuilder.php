@@ -10,6 +10,7 @@ trait FormBuilder
     use GetsFormRequests, GetsRedirects, RendersForms;
 
     protected function createForm(
+        string $form,
         string $action,
         array $data = [],
         string $method = 'POST',
@@ -35,7 +36,7 @@ trait FormBuilder
         }
 
         if ($formRequest = $this->getFormRequest()) {
-            $params['request'] = $this->parseFormRequest($formRequest);
+            $params['request'] = $this->parseFormRequest($formRequest, $form);
         }
 
         if (! $this->canParseContents()) {
