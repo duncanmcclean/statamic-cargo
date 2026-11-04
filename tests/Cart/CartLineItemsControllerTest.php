@@ -210,47 +210,36 @@ class CartLineItemsControllerTest extends TestCase
     }
 
     #[Test]
-    public function it_doesnt_add_a_product_to_the_cart_when_custom_form_request_was_generated_for_another_form()
+    #[DataProvider('ignoredFormRequestProvider')]
+    public function it_adds_a_product_to_the_cart_and_ignores_custom_form_request_it_cant_use($request)
     {
         $cart = $this->makeCart();
         $product = $this->makeProduct();
 
         $this
             ->post('/!/cargo/cart/line-items', [
-                '_request' => encrypt(['class' => CartLineItemsFormRequest::class, 'form' => 'cart:update']),
+                '_request' => $request(),
                 'product' => $product->id(),
-                'quantity' => 1,
-                'gift_note' => 'Happy Birthday!',
+                'quantity' => -5,
             ])
-            ->assertSessionHasErrors(['_request' => 'The form request was not generated for the cart:add form.']);
-
-        $cart = $cart->fresh();
-
-        $this->assertCount(0, $cart->lineItems());
-    }
-
-    #[Test]
-    #[DataProvider('invalidFormRequestProvider')]
-    public function it_doesnt_add_a_product_to_the_cart_when_custom_form_request_is_invalid($request)
-    {
-        $cart = $this->makeCart();
-        $product = $this->makeProduct();
+            ->assertSessionHasErrors('quantity')
+            ->assertSessionDoesntHaveErrors(['_request', 'gift_note']);
 
         $this
-            ->postJson('/!/cargo/cart/line-items', [
+            ->post('/!/cargo/cart/line-items', [
                 '_request' => $request(),
                 'product' => $product->id(),
                 'quantity' => 1,
             ])
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['_request' => 'The form request is invalid.']);
+            ->assertRedirect()
+            ->assertSessionHasNoErrors();
 
         $cart = $cart->fresh();
 
-        $this->assertCount(0, $cart->lineItems());
+        $this->assertCount(1, $cart->lineItems());
     }
 
-    public static function invalidFormRequestProvider(): array
+    public static function ignoredFormRequestProvider(): array
     {
         return [
             'not encrypted' => [fn () => 'not-encrypted'],
@@ -258,6 +247,7 @@ class CartLineItemsControllerTest extends TestCase
             'legacy token' => [fn () => encrypt(CartLineItemsFormRequest::class)],
             'class does not exist' => [fn () => encrypt(['class' => 'App\\Http\\Requests\\DoesNotExist', 'form' => 'cart:add'])],
             'class is not a form request' => [fn () => encrypt(['class' => \stdClass::class, 'form' => 'cart:add'])],
+            'generated for another form' => [fn () => encrypt(['class' => CartLineItemsFormRequest::class, 'form' => 'cart:update'])],
         ];
     }
 
@@ -751,7 +741,7 @@ class CartLineItemsControllerTest extends TestCase
     }
 
     #[Test]
-    public function it_doesnt_update_a_line_item_when_custom_form_request_was_generated_for_another_form()
+    public function it_updates_a_line_item_and_ignores_custom_form_request_generated_for_another_form()
     {
         $cart = $this->makeCartWithLineItems();
 
@@ -759,13 +749,13 @@ class CartLineItemsControllerTest extends TestCase
             ->patch('/!/cargo/cart/line-items/line-item-1', [
                 '_request' => encrypt(['class' => CartLineItemsFormRequest::class, 'form' => 'cart:add']),
                 'quantity' => 3,
-                'gift_note' => 'Happy Birthday!',
             ])
-            ->assertSessionHasErrors(['_request' => 'The form request was not generated for the cart:update_line_item form.']);
+            ->assertRedirect()
+            ->assertSessionHasNoErrors();
 
         $cart = $cart->fresh();
 
-        $this->assertEquals(1, $cart->lineItems()->first()->quantity());
+        $this->assertEquals(3, $cart->lineItems()->first()->quantity());
     }
 
     #[Test]

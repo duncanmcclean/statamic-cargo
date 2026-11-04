@@ -13,7 +13,7 @@ abstract class CustomizableFormRequest extends FormRequest
 
     private ?FormRequest $customFormRequest = null;
 
-    private ?string $customFormRequestError = null;
+    private bool $resolvedCustomFormRequest = false;
 
     public function authorize(): bool
     {
@@ -61,10 +61,6 @@ abstract class CustomizableFormRequest extends FormRequest
 
     public function withValidator(Validator $validator): void
     {
-        if ($this->customFormRequestError) {
-            $validator->after(fn (Validator $validator) => $validator->errors()->add('_request', $this->customFormRequestError));
-        }
-
         $customFormRequest = $this->customFormRequest();
 
         if ($customFormRequest && method_exists($customFormRequest, 'withValidator')) {
@@ -83,22 +79,16 @@ abstract class CustomizableFormRequest extends FormRequest
 
     private function customFormRequest(): ?FormRequest
     {
-        if ($this->customFormRequest || $this->customFormRequestError || ! $this->has('_request')) {
+        if ($this->resolvedCustomFormRequest) {
             return $this->customFormRequest;
         }
+
+        $this->resolvedCustomFormRequest = true;
 
         $token = $this->decodeFormRequestToken();
         $class = Arr::get($token, 'class');
 
-        if (! is_string($class) || ! is_subclass_of($class, FormRequest::class)) {
-            $this->customFormRequestError = __('cargo::validation.form_request_invalid');
-
-            return null;
-        }
-
-        if (Arr::get($token, 'form') !== $this->form) {
-            $this->customFormRequestError = __('cargo::validation.form_request_mismatch', ['form' => $this->form]);
-
+        if (! is_string($class) || ! is_subclass_of($class, FormRequest::class) || Arr::get($token, 'form') !== $this->form) {
             return null;
         }
 

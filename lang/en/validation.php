@@ -1,8 +1,6 @@
 <?php
 
 return [
-    'form_request_invalid' => 'The form request is invalid.',
-    'form_request_mismatch' => 'The form request was not generated for the :form form.',
     'invalid_discount_code' => 'Invalid discount code.',
     'no_physical_products' => 'This cart does not contain any physical products.',
     'prerequisite_product' => 'Before purchasing this product, you must purchase :product first.',

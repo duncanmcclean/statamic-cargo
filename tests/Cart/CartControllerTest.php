@@ -185,7 +185,7 @@ class CartControllerTest extends TestCase
     }
 
     #[Test]
-    public function it_doesnt_update_the_cart_when_custom_form_request_was_generated_for_another_form()
+    public function it_updates_the_cart_and_ignores_custom_form_request_generated_for_another_form()
     {
         $cart = $this->makeCart();
 
@@ -194,11 +194,11 @@ class CartControllerTest extends TestCase
             ->patch('/!/cargo/cart', [
                 '_request' => encrypt(['class' => CartFormRequest::class, 'form' => 'cart:add']),
                 'customer' => ['name' => 'Jane Doe'],
-                'baz' => 'qux',
             ])
-            ->assertSessionHasErrors(['_request' => 'The form request was not generated for the cart:update form.']);
+            ->assertRedirect('/cart')
+            ->assertSessionHasNoErrors();
 
-        $this->assertEquals('John Doe', $cart->fresh()->customer()->name());
+        $this->assertEquals('Jane Doe', $cart->fresh()->customer()->name());
     }
 
     #[Test]
