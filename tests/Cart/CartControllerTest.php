@@ -184,6 +184,48 @@ class CartControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_rate_limits_cart_updates()
+    {
+        $this->makeCart();
+
+        foreach (range(1, 60) as $attempt) {
+            $this->patchJson('/!/cargo/cart', ['customer' => ['name' => 'Jane Doe']])->assertOk();
+        }
+
+        $this
+            ->patchJson('/!/cargo/cart', ['customer' => ['name' => 'Jane Doe']])
+            ->assertStatus(429);
+    }
+
+    #[Test]
+    public function it_rate_limits_discount_code_attempts()
+    {
+        $this->makeCart();
+
+        foreach (range(1, 10) as $attempt) {
+            $this->patchJson('/!/cargo/cart', ['discount_code' => 'FOOBARZ'])->assertUnprocessable();
+        }
+
+        $this
+            ->patchJson('/!/cargo/cart', ['discount_code' => 'FOOBARZ'])
+            ->assertStatus(429);
+    }
+
+    #[Test]
+    public function it_doesnt_count_updates_without_a_discount_code_towards_the_discount_code_rate_limit()
+    {
+        $this->makeCart();
+
+        foreach (range(1, 10) as $attempt) {
+            $this->patchJson('/!/cargo/cart', ['customer' => ['name' => 'Jane Doe']])->assertOk();
+        }
+
+        $this
+            ->patchJson('/!/cargo/cart', ['discount_code' => 'FOOBARZ'])
+            ->assertUnprocessable();
+    }
+
+    #[Test]
     public function it_throws_validation_error_when_customer_email_is_invalid()
     {
         $cart = $this->makeCart();

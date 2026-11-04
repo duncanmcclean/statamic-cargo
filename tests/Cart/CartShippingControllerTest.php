@@ -50,6 +50,27 @@ class CartShippingControllerTest extends TestCase
     }
 
     #[Test]
+    public function it_rate_limits_shipping_option_requests()
+    {
+        FakeShippingMethod::register();
+
+        config()->set('statamic.cargo.shipping.methods', [
+            'fake_shipping_method' => [],
+        ]);
+
+        $cart = $this->makeCart();
+        $cart->merge(['shipping_address' => ['country' => 'US']])->save();
+
+        foreach (range(1, 30) as $attempt) {
+            $this->getJson('/!/cargo/cart/shipping')->assertOk();
+        }
+
+        $this
+            ->getJson('/!/cargo/cart/shipping')
+            ->assertStatus(429);
+    }
+
+    #[Test]
     public function it_returns_a_validation_error_when_the_cart_has_no_shipping_address()
     {
         $this->makeCart();
