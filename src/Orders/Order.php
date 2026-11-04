@@ -163,7 +163,7 @@ class Order implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableVal
             ->args(func_get_args());
     }
 
-    public function hasBeenPaid(): bool
+    public function isPaid(): bool
     {
         return in_array($this->status(), [
             OrderStatus::PaymentReceived,

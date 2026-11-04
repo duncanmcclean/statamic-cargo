@@ -60,7 +60,7 @@ class AugmentedOrder extends AugmentedCart
 
     public function downloads(): LineItems
     {
-        if (! $this->data->hasBeenPaid()) {
+        if (! $this->data->isPaid()) {
             return new LineItems;
         }
 

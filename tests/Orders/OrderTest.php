@@ -385,15 +385,15 @@ YAML, file_get_contents($order->path()));
     }
 
     #[Test]
-    #[DataProvider('hasBeenPaidProvider')]
-    public function can_check_if_order_has_been_paid(OrderStatus $status, bool $expected)
+    #[DataProvider('isPaidProvider')]
+    public function can_check_if_order_is_paid(OrderStatus $status, bool $expected)
     {
         $order = Order::make()->status($status);
 
-        $this->assertSame($expected, $order->hasBeenPaid());
+        $this->assertSame($expected, $order->isPaid());
     }
 
-    public static function hasBeenPaidProvider(): array
+    public static function isPaidProvider(): array
     {
         return [
             'payment pending' => [OrderStatus::PaymentPending, false],

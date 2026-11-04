@@ -18,7 +18,7 @@ class DownloadController
         }
 
         throw_unless($order = Order::find($orderId), NotFoundHttpException::class);
-        throw_unless($order->hasBeenPaid(), ForbiddenHttpException::class);
+        throw_unless($order->isPaid(), ForbiddenHttpException::class);
         throw_unless($lineItem = $order->lineItems()->find($lineItem), NotFoundHttpException::class);
 
         $product = $lineItem->variant
