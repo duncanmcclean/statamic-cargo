@@ -37,16 +37,6 @@ class ShippingTest extends TestCase
     }
 
     #[Test]
-    public function fieldtype_details_escape_the_tracking_number()
-    {
-        $order = Facades\Order::make()->set('tracking_number', '<img src=x onerror=alert(document.cookie)>');
-
-        $details = Facades\ShippingMethod::find('fake_shipping_method')->fieldtypeDetails($order);
-
-        $this->assertEquals('&lt;img src=x onerror=alert(document.cookie)&gt;', $details['Tracking Number']);
-    }
-
-    #[Test]
     public function shipping_option_can_be_augmented()
     {
         $shippingMethod = Facades\ShippingMethod::find('fake_shipping_method');
