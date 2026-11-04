@@ -50,9 +50,15 @@ public function fieldtypeDetails(Order $order): array
 {  
 	return [
 		__('Delivery Due') => 'Tomorrow',
+		__('Tracking Number') => [
+			'text' => $order->get('tracking_number'),
+			'url' => "https://example.com/track/{$order->get('tracking_number')}",
+		],
 	];
 }
 ```
+
+Each detail should be a plain string. To display a link, return an array with `text` and `url` keys instead. HTML isn't rendered.
 
 Cargo will automatically register any shipping methods in the `app/ShippingMethods` directory. 
 

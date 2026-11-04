@@ -273,7 +273,10 @@ class Stripe extends PaymentGateway
     public function fieldtypeDetails(Order $order): array
     {
         return [
-            __('Payment ID') => "<a href='https://dashboard.stripe.com/payments/{$order->get('stripe_payment_intent')}' target='_blank'>{$order->get('stripe_payment_intent')}</a>",
+            __('Payment ID') => [
+                'text' => $order->get('stripe_payment_intent'),
+                'url' => "https://dashboard.stripe.com/payments/{$order->get('stripe_payment_intent')}",
+            ],
             __('Amount') => Money::format($order->grandTotal(), $order->site()),
         ];
     }

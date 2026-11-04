@@ -101,8 +101,7 @@ class UpdateCartRequest extends CustomizableFormRequest
             return $this->cachedFields;
         }
 
-        $fields = Order::blueprint()->fields();
-        $fields->only(Cart::current()->updatableFields());
+        $fields = Order::blueprint()->fields()->only(Cart::current()->updatableFields());
 
         return $this->cachedFields = $fields->addValues($this->all());
     }

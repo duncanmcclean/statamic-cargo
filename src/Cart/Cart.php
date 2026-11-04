@@ -15,6 +15,7 @@ use DuncanMcClean\Cargo\Events\CartSaved;
 use DuncanMcClean\Cargo\Facades;
 use DuncanMcClean\Cargo\Facades\Cart as CartFacade;
 use DuncanMcClean\Cargo\Facades\Order;
+use DuncanMcClean\Cargo\Orders\Blueprint;
 use DuncanMcClean\Cargo\Orders\HasTotals;
 use DuncanMcClean\Cargo\Orders\LineItems;
 use DuncanMcClean\Cargo\Payments\Gateways\PaymentGateway;
@@ -298,9 +299,19 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
 
     public function updatableFields(): array
     {
-        return $this->blueprint()->fields()->all()->map->handle()->except([
-            'id', 'line_items', 'discount_total', 'grand_total', 'shipping_total', 'sub_total', 'tax_total',
-        ])->all();
+        $customFields = $this->blueprint()->fields()->all()->keys()
+            ->diff((new Blueprint)->defaultFieldHandles())
+            ->all();
+
+        return [
+            'customer',
+            'shipping_address',
+            'billing_address',
+            'discount_code',
+            'shipping_method',
+            'shipping_option',
+            ...$customFields,
+        ];
     }
 
     public function order(): ?OrderContract

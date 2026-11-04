@@ -34,9 +34,11 @@ const hasDetails = computed(() => Object.entries(props.value.details).length > 0
 
             <div v-if="hasDetails">
                 <ul class="list-none space-y-2">
-                    <li v-for="(value, label) in value.details" :key="label">
+                    <li v-for="(detail, label) in value.details" :key="label">
                         <Description>
-                            <strong>{{ label }}:</strong> <span v-html="value" />
+                            <strong>{{ label }}:</strong>
+                            <a v-if="detail.url" :href="detail.url" target="_blank">{{ detail.text }}</a>
+                            <span v-else>{{ detail }}</span>
                         </Description>
                     </li>
                 </ul>
