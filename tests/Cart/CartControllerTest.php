@@ -303,6 +303,7 @@ class CartControllerTest extends TestCase
     public function it_only_persists_updatable_fields_to_the_logged_in_user()
     {
         config()->set('statamic.cargo.carts.always_checkout_as_guest', false);
+
         Event::listen(UserBlueprintFound::class, function (UserBlueprintFound $event) {
             $event->blueprint->ensureField('company', ['type' => 'text']);
         });
@@ -348,6 +349,7 @@ class CartControllerTest extends TestCase
     public function it_only_persists_updatable_fields_to_a_guest_customer()
     {
         config()->set('statamic.cargo.carts.always_checkout_as_guest', true);
+
         Event::listen(UserBlueprintFound::class, function (UserBlueprintFound $event) {
             $event->blueprint->ensureField('company', ['type' => 'text']);
         });
