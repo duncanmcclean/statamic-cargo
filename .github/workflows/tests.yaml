@@ -43,18 +43,21 @@ jobs:
 
     strategy:
       matrix:
-        php: [8.3, 8.4, 8.5]
+        php: [8.3, 8.4, 8.5, 8.6]
         laravel: [12.*, 13.*]
         stability: [prefer-lowest, prefer-stable]
         os: [ubuntu-latest]
         shard: [1, 2, 3, 4]
         shards: [4] # single value, so it doesn't multiply the combinations
+        exclude:
+          - php: 8.6
+            laravel: 12.*
         # An include entry that overrides an existing matrix key (os) creates a standalone
         # combination rather than merging, so it wouldn't inherit the shard dimension.
         # Windows isn't sharded because its test step is already fast enough.
         include:
           - os: windows-latest
-            php: 8.5
+            php: 8.6
             laravel: 13.*
             stability: prefer-stable
             shard: 1
@@ -73,6 +76,11 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: fileinfo, exif, gd, pdo, sqlite, pdo_sqlite, intl, zip
+
+      - name: Require Laravel's PHP 8.6 branch
+        shell: bash
+        if: matrix.php == '8.6'
+        run: composer require "laravel/framework:dev-13/php86-experiment as 13.40.0" --no-interaction --no-update
 
       - name: Install dependencies
         # zizmor: ignore[template-injection] - matrix values are defined in this file, not attacker-controlled
