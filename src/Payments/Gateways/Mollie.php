@@ -214,7 +214,7 @@ class Mollie extends PaymentGateway
 
                 if ($cart) {
                     $order = $this->createOrderFromCart($cart);
-                } elseif ($this->isOutdatedPayment($payment) && ! $payment->hasRefunds()) {
+                } elseif ($this->isOldPayment($payment) && ! $payment->hasRefunds()) {
                     $this->mollie->payments->refund($payment, ['amount' => (array) $payment->amount]);
                 }
             }
@@ -253,7 +253,7 @@ class Mollie extends PaymentGateway
         static::$paymentDescriptionResolver = $callback;
     }
 
-    private function isOutdatedPayment(Payment $payment): bool
+    private function isOldPayment(Payment $payment): bool
     {
         return isset($payment->metadata->cart_id)
             && Facades\Cart::find($payment->metadata->cart_id) !== null;
