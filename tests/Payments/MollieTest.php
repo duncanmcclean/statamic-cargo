@@ -559,6 +559,29 @@ class MollieTest extends TestCase
     }
 
     #[Test]
+    public function it_doesnt_refund_a_paid_payment_that_belongs_to_an_order()
+    {
+        $cart = $this->makeCartWithGuestCustomer();
+
+        $order = $this->makeOrder();
+        $order->cart($cart->id())->set('mollie_payment_id', 'tr_12345')->save();
+
+        $mollie = $this->fakeMollieApi([
+            GetPaymentRequest::class => $this->paymentResponse([
+                'metadata' => ['cart_id' => $cart->id(), 'cart_fingerprint' => 'original'],
+            ]),
+        ]);
+
+        $this
+            ->post('/!/cargo/payments/mollie/webhook', ['id' => 'tr_12345'])
+            ->assertOk();
+
+        $mollie->assertSentCount(1);
+
+        $this->assertEquals(OrderStatus::PaymentReceived, $order->fresh()->status());
+    }
+
+    #[Test]
     public function it_refunds_a_paid_payment_that_was_replaced_by_a_newer_payment()
     {
         $cart = $this->makeCartWithGuestCustomer();
