@@ -590,6 +590,31 @@ class MollieTest extends TestCase
     }
 
     #[Test]
+    public function it_doesnt_refund_a_replaced_payment_that_has_already_been_refunded()
+    {
+        $cart = $this->makeCartWithGuestCustomer();
+        $cart->set('mollie_payment_id', 'tr_67890')->save();
+
+        $mollie = $this->fakeMollieApi([
+            GetPaymentRequest::class => $this->paymentResponse([
+                'metadata' => ['cart_id' => $cart->id(), 'cart_fingerprint' => 'original'],
+                '_links' => [
+                    'refunds' => [
+                        'href' => 'https://api.mollie.com/v2/payments/tr_12345/refunds',
+                        'type' => 'application/hal+json',
+                    ],
+                ],
+            ]),
+        ]);
+
+        $this
+            ->post('/!/cargo/payments/mollie/webhook', ['id' => 'tr_12345'])
+            ->assertOk();
+
+        $mollie->assertSentCount(1);
+    }
+
+    #[Test]
     public function it_doesnt_refund_a_paid_payment_when_its_cart_cant_be_found()
     {
         $mollie = $this->fakeMollieApi([
