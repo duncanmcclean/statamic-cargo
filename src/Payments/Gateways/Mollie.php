@@ -17,6 +17,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Mollie\Api\Exceptions\ApiException;
 use Mollie\Api\MollieApiClient;
+use Mollie\Api\Resources\Payment;
 use Mollie\Api\Types\PaymentStatus;
 use Statamic\Contracts\Auth\User;
 use Statamic\Sites\Site;
@@ -213,6 +214,8 @@ class Mollie extends PaymentGateway
 
                 if ($cart) {
                     $order = $this->createOrderFromCart($cart);
+                } elseif ($this->isOutdatedPayment($payment) && ! $payment->hasRefunds()) {
+                    $this->mollie->payments->refund($payment, ['amount' => (array) $payment->amount]);
                 }
             }
 
@@ -248,6 +251,12 @@ class Mollie extends PaymentGateway
     public static function paymentDescription(Closure $callback): void
     {
         static::$paymentDescriptionResolver = $callback;
+    }
+
+    private function isOutdatedPayment(Payment $payment): bool
+    {
+        return isset($payment->metadata->cart_id)
+            && Facades\Cart::find($payment->metadata->cart_id) !== null;
     }
 
     private function formatAmount(Site $site, int $amount): array
