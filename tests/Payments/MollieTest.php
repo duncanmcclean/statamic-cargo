@@ -13,10 +13,12 @@ use Mockery;
 use Mollie\Api\Fake\MockMollieClient;
 use Mollie\Api\Fake\MockResponse;
 use Mollie\Api\Http\PendingRequest;
+use Mollie\Api\Http\Requests\CreatePaymentRefundRequest;
 use Mollie\Api\Http\Requests\GetPaymentRequest;
 use Mollie\Api\Http\Requests\UpdatePaymentRequest;
 use Mollie\Api\MollieApiClient;
 use Mollie\Api\Resources\Payment;
+use Mollie\Api\Resources\Refund;
 use Mollie\Api\Types\PaymentStatus;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -557,12 +559,105 @@ class MollieTest extends TestCase
     }
 
     #[Test]
+    public function it_refunds_a_paid_payment_that_was_replaced_by_a_newer_payment()
+    {
+        $cart = $this->makeCartWithGuestCustomer();
+        $cart->set('mollie_payment_id', 'tr_67890')->save();
+
+        $mollie = $this->fakeMollieApi([
+            GetPaymentRequest::class => $this->paymentResponse([
+                'metadata' => ['cart_id' => $cart->id(), 'cart_fingerprint' => 'original'],
+            ]),
+            CreatePaymentRefundRequest::class => MockResponse::resource(Refund::class)->with([
+                'resource' => 'refund',
+                'id' => 're_12345',
+                'status' => 'pending',
+                'amount' => ['currency' => 'GBP', 'value' => '10.00'],
+            ])->create(),
+        ]);
+
+        $this
+            ->post('/!/cargo/payments/mollie/webhook', ['id' => 'tr_12345'])
+            ->assertOk();
+
+        $mollie->assertSent(function (PendingRequest $request) {
+            return $request->getRequest() instanceof CreatePaymentRefundRequest
+                && $request->payload()->get('amount') == ['currency' => 'GBP', 'value' => '10.00'];
+        });
+
+        $this->assertNull(Order::query()->where('cart', $cart->id())->first());
+        $this->assertEquals('tr_67890', $cart->fresh()->get('mollie_payment_id'));
+    }
+
+    #[Test]
+    public function it_doesnt_refund_a_replaced_payment_that_has_already_been_refunded()
+    {
+        $cart = $this->makeCartWithGuestCustomer();
+        $cart->set('mollie_payment_id', 'tr_67890')->save();
+
+        $mollie = $this->fakeMollieApi([
+            GetPaymentRequest::class => $this->paymentResponse([
+                'metadata' => ['cart_id' => $cart->id(), 'cart_fingerprint' => 'original'],
+                '_links' => [
+                    'refunds' => [
+                        'href' => 'https://api.mollie.com/v2/payments/tr_12345/refunds',
+                        'type' => 'application/hal+json',
+                    ],
+                ],
+            ]),
+        ]);
+
+        $this
+            ->post('/!/cargo/payments/mollie/webhook', ['id' => 'tr_12345'])
+            ->assertOk();
+
+        $mollie->assertSentCount(1);
+    }
+
+    #[Test]
+    public function it_doesnt_refund_a_paid_payment_when_its_cart_cant_be_found()
+    {
+        $mollie = $this->fakeMollieApi([
+            GetPaymentRequest::class => $this->paymentResponse(),
+        ]);
+
+        $this
+            ->post('/!/cargo/payments/mollie/webhook', ['id' => 'tr_12345'])
+            ->assertOk();
+
+        $mollie->assertSentCount(1);
+    }
+
+    #[Test]
     public function it_refunds_a_payment()
     {
         $this->useMollieApi();
 
         // TODO: Figure out how to create a "paid" payment in Mollie in order to test this.
         $this->markTestIncomplete();
+    }
+
+    #[Test]
+    public function it_doesnt_refund_a_paid_payment_that_belongs_to_an_order()
+    {
+        $cart = $this->makeCartWithGuestCustomer();
+
+        $order = $this->makeOrder();
+        $order->cart($cart->id())->set('mollie_payment_id', 'tr_12345')->save();
+
+        $mollie = $this->fakeMollieApi([
+            GetPaymentRequest::class => $this->paymentResponse([
+                'metadata' => ['cart_id' => $cart->id(), 'cart_fingerprint' => 'original'],
+            ]),
+        ]);
+
+        $this
+            ->post('/!/cargo/payments/mollie/webhook', ['id' => 'tr_12345'])
+            ->assertOk();
+
+        $mollie->assertSentCount(1);
+
+        $this->assertEquals(OrderStatus::PaymentReceived, $order->fresh()->status());
     }
 
     private function useMollieApi(): void
