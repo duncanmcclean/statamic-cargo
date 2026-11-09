@@ -28,7 +28,10 @@ class AddLineItemRequest extends CustomizableFormRequest
                         return $fail(__('cargo::validation.product_not_found'));
                     }
 
-                    if (! in_array($product->collectionHandle(), config('statamic.cargo.products.collections'))) {
+                    if (
+                        ! in_array($product->collectionHandle(), config('statamic.cargo.products.collections'))
+                        || $product->status() !== 'published'
+                    ) {
                         $fail(__('cargo::validation.product_not_found'));
                     }
                 },

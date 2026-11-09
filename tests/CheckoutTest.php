@@ -133,6 +133,22 @@ class CheckoutTest extends TestCase
         $this->assertNull(Facades\Order::query()->where('cart', $cart->id())->first());
     }
 
+    /**
+     * @see https://github.com/duncanmcclean/statamic-cargo/issues/357
+     */
+    #[Test]
+    public function cant_checkout_when_product_is_unpublished()
+    {
+        $cart = $this->makeCart();
+        $cart->lineItems()->first()->product()->published(false)->save();
+
+        $this
+            ->get('/!/cargo/payments/fake/checkout')
+            ->assertSessionHasErrors(['checkout' => 'One or more items in your cart are no longer available.']);
+
+        $this->assertNull(Facades\Order::query()->where('cart', $cart->id())->first());
+    }
+
     #[Test]
     public function cant_checkout_when_payment_gateway_prevents_checkout_during_processing()
     {

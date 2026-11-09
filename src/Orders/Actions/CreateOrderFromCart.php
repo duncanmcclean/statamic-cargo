@@ -69,6 +69,11 @@ class CreateOrderFromCart
     private function ensureProductsAreAvailable(Cart $cart): void
     {
         $cart->lineItems()->each(function (LineItem $lineItem) {
+            throw_if(
+                $lineItem->product()?->status() !== 'published',
+                new PreventCheckout(__('cargo::validation.products_no_longer_available'))
+            );
+
             try {
                 app(ValidateStock::class)->handle($lineItem);
             } catch (ValidationException) {

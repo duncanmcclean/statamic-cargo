@@ -353,6 +353,26 @@ class CartLineItemsControllerTest extends TestCase
         $this->assertCount(0, $cart->fresh()->lineItems());
     }
 
+    /**
+     * @see https://github.com/duncanmcclean/statamic-cargo/issues/357
+     */
+    #[Test]
+    public function a_validation_error_is_thrown_when_product_is_unpublished()
+    {
+        $cart = $this->makeCart();
+        $product = $this->makeProduct();
+        $product->published(false)->save();
+
+        $this
+            ->post('/!/cargo/cart/line-items', [
+                'product' => $product->id(),
+                'quantity' => 1,
+            ])
+            ->assertSessionHasErrors(['product' => 'The product is invalid.']);
+
+        $this->assertCount(0, $cart->fresh()->lineItems());
+    }
+
     #[Test]
     public function a_validation_error_is_thrown_when_variant_is_invalid()
     {
