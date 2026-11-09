@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.17.1 (2026-11-09)
+
+### What's fixed
+- Refund paid Mollie payments that were replaced by a newer payment [#356](https://github.com/duncanmcclean/statamic-cargo/pull/356) by @terminalstate
+- Prevent unpublished products from being purchased [#358](https://github.com/duncanmcclean/statamic-cargo/pull/358) by @duncanmcclean
+- Bump the github-actions group with 4 updates [#353](https://github.com/duncanmcclean/statamic-cargo/pull/353) by @dependabot
+
+
+
 ## v1.17.0 (2026-11-04)
 
 ### What's new
