@@ -198,6 +198,11 @@ class Mollie extends PaymentGateway
 
             throw $e;
         }
+
+        if ($cart = Facades\Cart::query()->where('mollie_payment_id', $payment->id)->first()) {
+            $this->waitIfCheckoutIsInProgress($cart);
+        }
+
         $order = Facades\Order::query()->where('mollie_payment_id', $payment->id)->first();
 
         if (in_array($payment->status, [PaymentStatus::CANCELED, PaymentStatus::FAILED, PaymentStatus::EXPIRED])) {

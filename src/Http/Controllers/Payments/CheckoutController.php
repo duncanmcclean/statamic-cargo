@@ -4,7 +4,6 @@ namespace DuncanMcClean\Cargo\Http\Controllers\Payments;
 
 use DuncanMcClean\Cargo\Exceptions\PreventCheckout;
 use DuncanMcClean\Cargo\Facades\Cart;
-use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Facades\PaymentGateway;
 use DuncanMcClean\Cargo\Orders\Actions\CreateOrderFromCart;
 use Illuminate\Http\Request;
@@ -28,12 +27,6 @@ class CheckoutController
         try {
             $order = app(CreateOrderFromCart::class)->handle($cart, $paymentGateway);
         } catch (PreventCheckout $e) {
-            $paymentGateway?->cancel($cart);
-
-            if ($order = Order::query()->where('cart', $cart->id())->first()) {
-                $order->delete();
-            }
-
             return redirect()
                 ->route($this->getCheckoutRoute($cart->site()))
                 ->withErrors($e->errors());
