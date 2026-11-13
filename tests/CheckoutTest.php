@@ -16,6 +16,7 @@ use DuncanMcClean\Cargo\Payments\Gateways\PaymentGateway;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Test;
@@ -162,7 +163,7 @@ class CheckoutTest extends TestCase
             ->assertSessionHasErrors(['checkout' => 'The amount paid does not match the order total.']);
 
         $this->assertNull(Facades\Order::query()->where('cart', $cart->id())->first());
-        $this->assertTrue(PreventingPaymentGateway::$cancelled);
+        $this->assertTrue(PreventingPaymentGateway::$cancelledDuringCheckout);
     }
 
     #[Test]
@@ -648,7 +649,7 @@ class PreventingPaymentGateway extends PaymentGateway
 {
     public static $handle = 'preventing';
 
-    public static bool $cancelled = false;
+    public static bool $cancelledDuringCheckout = false;
 
     public function setup(\DuncanMcClean\Cargo\Contracts\Cart\Cart $cart): array
     {
@@ -667,7 +668,7 @@ class PreventingPaymentGateway extends PaymentGateway
 
     public function cancel(\DuncanMcClean\Cargo\Contracts\Cart\Cart $cart): void
     {
-        static::$cancelled = true;
+        static::$cancelledDuringCheckout = ! Cache::lock("cart:{$cart->id()}:checkout")->get();
     }
 
     public function webhook(Request $request): Response

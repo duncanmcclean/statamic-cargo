@@ -207,6 +207,11 @@ class Stripe extends PaymentGateway
 
         if ($request->type === Event::PAYMENT_INTENT_AMOUNT_CAPTURABLE_UPDATED) {
             $paymentIntent = PaymentIntent::retrieve($request->data['object']['id']);
+
+            if ($cart = Facades\Cart::query()->where('stripe_payment_intent', $paymentIntent->id)->first()) {
+                $this->waitIfCheckoutIsInProgress($cart);
+            }
+
             $order = Facades\Order::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
 
             if (! $order) {
@@ -224,6 +229,11 @@ class Stripe extends PaymentGateway
 
         if ($request->type === Event::PAYMENT_INTENT_SUCCEEDED) {
             $paymentIntent = PaymentIntent::retrieve($request->data['object']['id']);
+
+            if ($cart = Facades\Cart::query()->where('stripe_payment_intent', $paymentIntent->id)->first()) {
+                $this->waitIfCheckoutIsInProgress($cart);
+            }
+
             $order = Facades\Order::query()->where('stripe_payment_intent', $paymentIntent->id)->first();
 
             if (! $order) {

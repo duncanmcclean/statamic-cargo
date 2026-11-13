@@ -593,4 +593,5 @@ public function boot(): void
 	* It takes the format of `/!/cargo/payments/gateway_handle/webhook`. 
 * Where possible, if your gateway supports it, we recommend separating the authorisation and capture steps of the payment.
 * The callback URL will usually handle order creation. However, for various reasons, this may not always happen (eg. customer closes the tab, or loses internet). You should call `$this->createOrderFromCart($cart)` in your `webhook` method if you can't find an order.
+* Webhooks may be received while the callback URL is still creating the order. You should call `$this->waitIfCheckoutIsInProgress($cart)` in your `webhook` method before looking up the order, to ensure the webhook doesn't update an order that ends up being cancelled.
 * If you're in need of inspiration, feel free to look at Cargo's [Stripe](https://github.com/duncanmcclean/cargo/blob/1.x/src/Payments/Gateways/Stripe.php) and [Mollie](https://github.com/duncanmcclean/cargo/blob/1.x/src/Payments/Gateways/Mollie.php) payment gateways.

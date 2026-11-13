@@ -31,39 +31,46 @@ class CreateOrderFromCart
                 return $order;
             }
 
-            $this->ensureProductsAreAvailable($cart);
+            try {
+                return $this->createOrder($cart, $paymentGateway);
+            } catch (PreventCheckout $e) {
+                Facades\Order::query()->where('cart', $cart->id())->first()?->delete();
 
-            throw_if(
-                ! $cart->taxableAddress(),
-                new PreventCheckout(__('Order cannot be created without an address.'))
-            );
+                $paymentGateway?->cancel($cart);
 
-            throw_if(
-                ! $cart->customer(),
-                new PreventCheckout(__('Order cannot be created without customer information.'))
-            );
-
-            $order = tap(Facades\Order::makeFromCart($cart))->save();
-
-            if ($order->isFree()) {
-                $order->status(OrderStatus::PaymentReceived)->save();
-            } else {
-                $order->set('payment_gateway', $paymentGateway::handle())->save();
-
-                try {
-                    $paymentGateway->process($order);
-                } catch (PreventCheckout $e) {
-                    $order->delete();
-
-                    throw $e;
-                }
+                throw $e;
             }
-
-            app(UpdateStock::class)->handle($order);
-            app(UpdateDiscounts::class)->handle($order);
-
-            return $order;
         });
+    }
+
+    private function createOrder(Cart $cart, ?PaymentGateway $paymentGateway): Order
+    {
+        $this->ensureProductsAreAvailable($cart);
+
+        throw_if(
+            ! $cart->taxableAddress(),
+            new PreventCheckout(__('Order cannot be created without an address.'))
+        );
+
+        throw_if(
+            ! $cart->customer(),
+            new PreventCheckout(__('Order cannot be created without customer information.'))
+        );
+
+        $order = tap(Facades\Order::makeFromCart($cart))->save();
+
+        if ($order->isFree()) {
+            $order->status(OrderStatus::PaymentReceived)->save();
+        } else {
+            $order->set('payment_gateway', $paymentGateway::handle())->save();
+
+            $paymentGateway->process($order);
+        }
+
+        app(UpdateStock::class)->handle($order);
+        app(UpdateDiscounts::class)->handle($order);
+
+        return $order;
     }
 
     private function ensureProductsAreAvailable(Cart $cart): void

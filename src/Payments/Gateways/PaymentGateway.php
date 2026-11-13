@@ -12,6 +12,7 @@ use DuncanMcClean\Cargo\Support\Money;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Statamic\Extend\HasHandle;
 use Statamic\Extend\HasTitle;
 use Statamic\Extend\RegistersItself;
@@ -71,19 +72,24 @@ abstract class PaymentGateway
 
     protected function createOrderFromCart(Cart $cart): Order
     {
+        $cartBeforeCancellation = clone $cart;
+
         try {
             return app(CreateOrderFromCart::class)->handle($cart, $this);
         } catch (PreventCheckout $e) {
-            $order = Facades\Order::makeFromCart($cart)
+            $order = Facades\Order::makeFromCart($cartBeforeCancellation)
                 ->status(OrderStatus::Cancelled)
                 ->set('payment_gateway', static::handle())
                 ->set('cancellation_reason', $e->getMessage());
 
             $order->save();
 
-            $this->cancel($cart);
-
             return $order;
         }
+    }
+
+    protected function waitIfCheckoutIsInProgress(Cart $cart): void
+    {
+        Cache::lock("cart:{$cart->id()}:checkout", 30)->block(15, fn () => null);
     }
 }

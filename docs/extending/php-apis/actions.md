@@ -102,6 +102,8 @@ The action will throw the `PreventCheckout` exception when:
 - The cart is missing a taxable address
 - The cart is missing customer information
 
+Before throwing the exception, the action cancels the payment and deletes the order, if one was created.
+
 ## UpdateStock
 
 Typically run during the Checkout process, the `UpdateStock` action is responsible for updating the [stock counters](/docs/products#inventory--stock-tracking) on products and variants. It also dispatches various [stock-related events](/extending/events/list#productnostockremaining).
