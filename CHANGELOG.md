@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.17.2 (2026-11-13)
+
+### What's fixed
+- Prevent payment webhooks from updating orders during checkout [#361](https://github.com/duncanmcclean/statamic-cargo/pull/361) by @duncanmcclean
+
+
+
 ## v1.17.1 (2026-11-09)
 
 ### What's fixed
