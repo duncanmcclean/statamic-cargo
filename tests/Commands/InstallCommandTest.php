@@ -4,6 +4,7 @@ namespace Tests\Commands;
 
 use DuncanMcClean\Cargo\Facades\TaxClass;
 use DuncanMcClean\Cargo\Support\CodeInjection;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -319,6 +320,77 @@ PHP);
         $this->runInstallCommand();
 
         $this->assertEquals(1, substr_count(File::get(config_path('statamic/cp.php')), "'type' => 'total_sales'"));
+    }
+
+    #[Test]
+    public function it_can_be_installed_non_interactively()
+    {
+        $this->setSites([
+            'english' => ['name' => 'English', 'url' => '/', 'locale' => 'en_GB', 'attributes' => ['currency' => 'GBP']],
+            'french' => ['name' => 'French', 'url' => '/fr', 'locale' => 'fr_FR'],
+        ]);
+
+        $this->assertEquals(0, $this->runInstallCommandNonInteractively());
+
+        $this->assertEquals('GBP', Site::get('english')->attribute('currency'));
+        $this->assertEquals('USD', Site::get('french')->attribute('currency'));
+        $this->assertEquals('Products', Collection::find('products')->title());
+        $this->assertEquals(['products'], $this->publishedConfig()['products']['collections']);
+        $this->assertFileExists(config('statamic.cargo.carts.directory').'/.gitignore');
+        $this->assertFileDoesNotExist(config('statamic.cargo.orders.directory').'/.gitignore');
+        $this->assertFileExists(resource_path('views/checkout/index.antlers.html'));
+    }
+
+    #[Test]
+    public function it_uses_the_existing_products_collection_when_installed_non_interactively()
+    {
+        Collection::make('products')->title('Shop')->save();
+
+        $this->assertEquals(0, $this->runInstallCommandNonInteractively());
+
+        $this->assertEquals('Shop', Collection::find('products')->title());
+        $this->assertEquals(['products'], $this->publishedConfig()['products']['collections']);
+    }
+
+    #[Test]
+    public function it_can_be_installed_with_options()
+    {
+        $this->setSites([
+            'english' => ['name' => 'English', 'url' => '/', 'locale' => 'en_GB'],
+            'french' => ['name' => 'French', 'url' => '/fr', 'locale' => 'fr_FR'],
+        ]);
+
+        Collection::make('merchandise')->title('Merchandise')->save();
+
+        $this->assertEquals(0, $this->runInstallCommandNonInteractively(['--currency' => 'eur', '--collection' => 'merchandise']));
+
+        $this->assertEquals('EUR', Site::get('english')->attribute('currency'));
+        $this->assertEquals('EUR', Site::get('french')->attribute('currency'));
+        $this->assertEquals(['merchandise'], $this->publishedConfig()['products']['collections']);
+        $this->assertNull(Collection::find('products'));
+    }
+
+    #[Test]
+    #[DataProvider('invalidOptionsProvider')]
+    public function it_fails_when_given_invalid_options(array $options, string $error)
+    {
+        $this->assertEquals(1, $this->runInstallCommandNonInteractively($options));
+        $this->assertStringContainsString($error, Artisan::output());
+    }
+
+    public static function invalidOptionsProvider(): array
+    {
+        return [
+            'unsupported currency' => [['--currency' => 'ABC'], 'Currency [ABC] is not supported.'],
+            'missing collection' => [['--collection' => 'merchandise'], "Collection [merchandise] doesn't exist."],
+        ];
+    }
+
+    private function runInstallCommandNonInteractively(array $options = []): int
+    {
+        return $this
+            ->withoutMockingConsoleOutput()
+            ->artisan('statamic:cargo:install', [...$options, '--no-interaction' => true]);
     }
 
     private function runInstallCommand(
