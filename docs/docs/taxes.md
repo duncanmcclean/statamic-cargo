@@ -197,6 +197,8 @@ Before calculating taxes, Cargo provides your driver with context about what's b
 
 Then, in the `getBreakdown` method you can do your calculations, and return a collection of `TaxCalculation` objects.
 
+Cargo only recalculates taxes when something it knows about changes, like the line items or the taxable address. If your driver relies on anything else, you should [add it to the cart's fingerprint](/extending/php-apis/carts#fingerprint).
+
 You can then bind the tax driver in your `AppServiceProvider`:
 
 ```php

@@ -78,6 +78,28 @@ $cart->save();
 Cargo will automatically recalculate the cart's totals when you `->save()`. If you wish to save the cart *without* recalculating, you should call `->saveWithoutRecalculating()` instead.
 :::
 
+### Fingerprint
+To avoid recalculating totals unnecessarily, Cargo only recalculates a cart when its "fingerprint" changes. The fingerprint is made up of the things that affect totals, like line items, the discount code, shipping method and taxable address.
+
+If your totals depend on anything else, like a VAT number used by a [custom tax driver](/docs/taxes#custom-tax-driver), you can add it to the fingerprint using a hook:
+
+```php
+// app/Providers/AppServiceProvider.php
+
+use DuncanMcClean\Cargo\Facades\Cart;
+
+public function boot(): void
+{
+    Cart::hook('fingerprint', function ($payload, $next) {
+        $fingerprint = $payload->fingerprint;
+        $fingerprint['vat_number'] = $payload->cart->get('vat_number');
+        $payload->fingerprint = $fingerprint;
+
+        return $next($payload);
+    });
+}
+```
+
 ### Methods
 There's a bunch of handy methods on the `Cart` object. For completeness, here's a big old table:
 

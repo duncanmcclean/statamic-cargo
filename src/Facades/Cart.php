@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \DuncanMcClean\Cargo\Contracts\Cart\Cart make()
  * @method static void save(\DuncanMcClean\Cargo\Contracts\Cart\Cart $cart)
  * @method static void delete(\DuncanMcClean\Cargo\Contracts\Cart\Cart $cart)
+ * @method static string fingerprint(\DuncanMcClean\Cargo\Contracts\Cart\Cart $cart)
  *
  * @see \DuncanMcClean\Cargo\Contracts\Cart\CartRepository
  */
