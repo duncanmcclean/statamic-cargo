@@ -79,7 +79,7 @@ Cargo will automatically recalculate the cart's totals when you `->save()`. If y
 :::
 
 ### Fingerprint
-To avoid recalculating totals unnecessarily, Cargo only recalculates a cart when its "fingerprint" changes. The fingerprint is made up of the customer, line items, discount code, shipping method & option, the country, state and postcode of the taxable address, and your tax config.
+To avoid recalculating totals unnecessarily, Cargo only recalculates a cart when its "fingerprint" changes. The fingerprint is made up of the things that affect totals, like line items, the discount code, shipping method and taxable address.
 
 If your totals depend on anything else, like a VAT number used by a [custom tax driver](/docs/taxes#custom-tax-driver), you can add it to the fingerprint using a hook:
 
