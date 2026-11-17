@@ -79,7 +79,9 @@ class InstallCommand extends Command
     {
         $sites = Site::all()->map(function ($site) {
             return array_merge($site->rawConfig(), [
-                'attributes' => array_merge($site->attributes(), ['currency' => $this->currencyFor($site)]),
+                'attributes' => array_merge($site->attributes(), [
+                    'currency' => $this->currencyForSite($site),
+                ]),
             ]);
         });
 
@@ -88,7 +90,7 @@ class InstallCommand extends Command
         return $this;
     }
 
-    private function currencyFor(SiteInstance $site): string
+    private function currencyForSite(SiteInstance $site): string
     {
         if ($currency = $this->option('currency')) {
             $currency = Str::upper($currency);
