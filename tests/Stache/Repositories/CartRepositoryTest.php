@@ -168,4 +168,21 @@ class CartRepositoryTest extends TestCase
 
         $this->assertFileDoesNotExist($cart->path());
     }
+
+    #[Test]
+    public function fingerprint_can_be_extended_with_a_hook()
+    {
+        $cart = Cart::make()->set('vat_number', 'GB123456789');
+        $fingerprint = $cart->fingerprint();
+
+        Cart::hook('fingerprint', function ($payload, $next) {
+            $fingerprint = $payload->fingerprint;
+            $fingerprint['vat_number'] = $payload->cart->get('vat_number');
+            $payload->fingerprint = $fingerprint;
+
+            return $next($payload);
+        });
+
+        $this->assertNotEquals($fingerprint, $cart->fingerprint());
+    }
 }
