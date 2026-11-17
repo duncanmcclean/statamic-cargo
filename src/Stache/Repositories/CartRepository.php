@@ -10,9 +10,12 @@ use Illuminate\Support\Facades\Cookie;
 use Statamic\Facades\Blink;
 use Statamic\Facades\Site;
 use Statamic\Stache\Stache;
+use Statamic\Support\Traits\Hookable;
 
 class CartRepository implements RepositoryContract
 {
+    use Hookable;
+
     protected $stache;
     protected $store;
     protected static $current;
@@ -113,6 +116,28 @@ class CartRepository implements RepositoryContract
     public function delete(Cart $cart): void
     {
         $this->store->delete($cart);
+    }
+
+    public function fingerprint(Cart $cart): string
+    {
+        $fingerprint = [
+            'customer' => $cart->customer(),
+            'discount_code' => $cart->get('discount_code'),
+            'line_items' => $cart->lineItems()->map->toArray()->all(),
+            'shipping_method' => $cart->get('shipping_method'),
+            'shipping_option' => $cart->get('shipping_option'),
+            'taxable_state' => $cart->taxableAddress()?->state,
+            'taxable_country' => $cart->taxableAddress()?->country,
+            'taxable_postcode' => $cart->taxableAddress()?->postcode,
+            'tax_config' => config('statamic.cargo.taxes'),
+        ];
+
+        $fingerprint = $this->runHooksWith('fingerprint', [
+            'cart' => $cart,
+            'fingerprint' => $fingerprint,
+        ])->fingerprint;
+
+        return sha1(json_encode($fingerprint));
     }
 
     public static function bindings(): array

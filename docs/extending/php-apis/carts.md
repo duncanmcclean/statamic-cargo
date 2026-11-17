@@ -86,7 +86,7 @@ If your totals depend on anything else, like a VAT number used by a [custom tax 
 ```php
 // app/Providers/AppServiceProvider.php
 
-use DuncanMcClean\Cargo\Cart\Cart;
+use DuncanMcClean\Cargo\Facades\Cart;
 
 public function boot(): void
 {
@@ -99,8 +99,6 @@ public function boot(): void
     });
 }
 ```
-
-When you're storing carts in the database, you should hook into `DuncanMcClean\Cargo\Cart\Eloquent\Cart` instead.
 
 ### Methods
 There's a bunch of handy methods on the `Cart` object. For completeness, here's a big old table:

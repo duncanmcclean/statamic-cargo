@@ -24,5 +24,7 @@ interface CartRepository
 
     public function delete(Cart $cart): void;
 
+    public function fingerprint(Cart $cart): string;
+
     public static function bindings(): array;
 }

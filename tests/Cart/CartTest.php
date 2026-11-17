@@ -80,7 +80,7 @@ class CartTest extends TestCase
         Collection::make('products')->save();
         Entry::make()->id('product-id')->collection('products')->data(['price' => 500])->save();
 
-        \DuncanMcClean\Cargo\Cart\Cart::hook('fingerprint', function ($payload, $next) {
+        Cart::hook('fingerprint', function ($payload, $next) {
             $fingerprint = $payload->fingerprint;
             $fingerprint['vat_number'] = $payload->cart->get('vat_number');
             $payload->fingerprint = $fingerprint;

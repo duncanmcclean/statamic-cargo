@@ -39,11 +39,10 @@ use Statamic\Fields\Blueprint as StatamicBlueprint;
 use Statamic\Support\Arr;
 use Statamic\Support\Str;
 use Statamic\Support\Traits\FluentlyGetsAndSets;
-use Statamic\Support\Traits\Hookable;
 
 class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValues, Contract
 {
-    use ContainsData, ExistsAsFile, FluentlyGetsAndSets, HasAddresses, HasAugmentedInstance, HasDirtyState, HasTotals, Hookable, TracksQueriedColumns, TracksQueriedRelations;
+    use ContainsData, ExistsAsFile, FluentlyGetsAndSets, HasAddresses, HasAugmentedInstance, HasDirtyState, HasTotals, TracksQueriedColumns, TracksQueriedRelations;
 
     protected $id;
     protected $customer;
@@ -322,24 +321,7 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
 
     public function fingerprint(): string
     {
-        $payload = [
-            'customer' => $this->customer(),
-            'discount_code' => $this->get('discount_code'),
-            'line_items' => $this->lineItems()->map->toArray()->all(),
-            'shipping_method' => $this->get('shipping_method'),
-            'shipping_option' => $this->get('shipping_option'),
-            'taxable_state' => $this->taxableAddress()?->state,
-            'taxable_country' => $this->taxableAddress()?->country,
-            'taxable_postcode' => $this->taxableAddress()?->postcode,
-            'tax_config' => config('statamic.cargo.taxes'),
-        ];
-
-        $payload = $this->runHooksWith('fingerprint', [
-            'cart' => $this,
-            'fingerprint' => $payload,
-        ])->fingerprint;
-
-        return sha1(json_encode($payload));
+        return CartFacade::fingerprint($this);
     }
 
     public function defaultAugmentedArrayKeys()
