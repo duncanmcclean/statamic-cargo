@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Contracts\Taxes;
 
+use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Purchasable;
 use DuncanMcClean\Cargo\Data\Address;
 use DuncanMcClean\Cargo\Orders\LineItem;
@@ -9,6 +10,8 @@ use Illuminate\Support\Collection;
 
 interface Driver
 {
+    public function setCart(Cart $cart): self;
+
     public function setAddress(Address $address): self;
 
     public function setPurchasable(Purchasable $purchasable): self;

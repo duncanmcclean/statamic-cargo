@@ -21,7 +21,7 @@ class CalculateTaxes
 
         $taxBreakdowns = collect();
 
-        $cart->lineItems()->each(function (LineItem $lineItem) use ($taxableAddress, &$taxBreakdowns) {
+        $cart->lineItems()->each(function (LineItem $lineItem) use ($cart, $taxableAddress, &$taxBreakdowns) {
             $lineItemTotal = $lineItem->total();
 
             if ($lineItem->discountTotal()) {
@@ -29,6 +29,7 @@ class CalculateTaxes
             }
 
             $taxBreakdown = app(TaxDriver::class)
+                ->setCart($cart)
                 ->setAddress($taxableAddress)
                 ->setPurchasable($lineItem->variant() ?? $lineItem->product())
                 ->setLineItem($lineItem)
@@ -56,6 +57,7 @@ class CalculateTaxes
             $shippingTotal = $cart->shippingTotal();
 
             $shippingTaxBreakdown = app(TaxDriver::class)
+                ->setCart($cart)
                 ->setAddress($taxableAddress)
                 ->setPurchasable($shippingOption)
                 ->getBreakdown($shippingTotal);

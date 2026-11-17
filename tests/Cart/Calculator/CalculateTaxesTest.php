@@ -848,27 +848,8 @@ class CalculateTaxesTest extends TestCase
     #[Test]
     public function uses_custom_tax_driver()
     {
-        $taxDriver = new class implements \DuncanMcClean\Cargo\Contracts\Taxes\Driver
+        $taxDriver = new class extends \DuncanMcClean\Cargo\Taxes\TaxDriver
         {
-            public $lineItem;
-
-            public function setAddress($address): self
-            {
-                return $this;
-            }
-
-            public function setPurchasable($purchasable): self
-            {
-                return $this;
-            }
-
-            public function setLineItem($lineItem): self
-            {
-                $this->lineItem = $lineItem;
-
-                return $this;
-            }
-
             public function getBreakdown(int $total): \Illuminate\Support\Collection
             {
                 if ($this->lineItem) {
@@ -926,5 +907,48 @@ class CalculateTaxesTest extends TestCase
         $this->assertEquals(750, $cart->shippingTotal());
 
         $this->assertEquals(1250, $cart->taxTotal());
+    }
+
+    #[Test]
+    public function passes_the_cart_to_the_tax_driver()
+    {
+        $taxDriver = new class extends \DuncanMcClean\Cargo\Taxes\TaxDriver
+        {
+            public $carts = [];
+
+            public function setCart(CartContract $cart): self
+            {
+                $this->carts[] = $cart;
+
+                return parent::setCart($cart);
+            }
+
+            public function getBreakdown(int $total): \Illuminate\Support\Collection
+            {
+                return collect();
+            }
+        };
+
+        app()->instance(\DuncanMcClean\Cargo\Contracts\Taxes\Driver::class, $taxDriver);
+
+        $product = Entry::make()->collection('products')->data(['price' => 10000]);
+        $product->save();
+
+        $cart = Cart::make()
+            ->shippingTotal(500)
+            ->lineItems([
+                ['id' => 'one', 'product' => $product->id(), 'quantity' => 1, 'total' => 10000],
+            ])
+            ->data([
+                'shipping_address' => ['country' => 'GBR'],
+                'shipping_method' => 'paid_shipping',
+                'shipping_option' => 'the_only_option',
+            ]);
+
+        app(CalculateTaxes::class)->handle($cart, fn ($cart) => $cart);
+
+        $this->assertCount(2, $taxDriver->carts);
+        $this->assertSame($cart, $taxDriver->carts[0]);
+        $this->assertSame($cart, $taxDriver->carts[1]);
     }
 }

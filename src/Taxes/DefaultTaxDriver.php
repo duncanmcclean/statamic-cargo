@@ -2,40 +2,11 @@
 
 namespace DuncanMcClean\Cargo\Taxes;
 
-use DuncanMcClean\Cargo\Contracts\Purchasable;
-use DuncanMcClean\Cargo\Contracts\Taxes\Driver as DriverContract;
-use DuncanMcClean\Cargo\Data\Address;
 use DuncanMcClean\Cargo\Facades\TaxZone as TaxZoneFacade;
-use DuncanMcClean\Cargo\Orders\LineItem;
 use Illuminate\Support\Collection;
 
-class DefaultTaxDriver implements DriverContract
+class DefaultTaxDriver extends TaxDriver
 {
-    public $address;
-    public $purchasable;
-    public $lineItem;
-
-    public function setAddress(Address $address): self
-    {
-        $this->address = $address;
-
-        return $this;
-    }
-
-    public function setPurchasable(Purchasable $purchasable): self
-    {
-        $this->purchasable = $purchasable;
-
-        return $this;
-    }
-
-    public function setLineItem(LineItem $lineItem): self
-    {
-        $this->lineItem = $lineItem;
-
-        return $this;
-    }
-
     public function getBreakdown(int $total): Collection
     {
         if (! $this->purchasable->purchasableTaxClass()) {
