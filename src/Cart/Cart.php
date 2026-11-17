@@ -39,10 +39,11 @@ use Statamic\Fields\Blueprint as StatamicBlueprint;
 use Statamic\Support\Arr;
 use Statamic\Support\Str;
 use Statamic\Support\Traits\FluentlyGetsAndSets;
+use Statamic\Support\Traits\Hookable;
 
 class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValues, Contract
 {
-    use ContainsData, ExistsAsFile, FluentlyGetsAndSets, HasAddresses, HasAugmentedInstance, HasDirtyState, HasTotals, TracksQueriedColumns, TracksQueriedRelations;
+    use ContainsData, ExistsAsFile, FluentlyGetsAndSets, HasAddresses, HasAugmentedInstance, HasDirtyState, HasTotals, Hookable, TracksQueriedColumns, TracksQueriedRelations;
 
     protected $id;
     protected $customer;
@@ -332,6 +333,11 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
             'taxable_postcode' => $this->taxableAddress()?->postcode,
             'tax_config' => config('statamic.cargo.taxes'),
         ];
+
+        $payload = $this->runHooksWith('fingerprint', [
+            'cart' => $this,
+            'fingerprint' => $payload,
+        ])->fingerprint;
 
         return sha1(json_encode($payload));
     }
