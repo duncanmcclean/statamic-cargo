@@ -2,10 +2,8 @@
 
 namespace Tests\Taxes;
 
-use DuncanMcClean\Cargo\Contracts\Purchasable;
 use DuncanMcClean\Cargo\Contracts\Taxes\Driver;
-use DuncanMcClean\Cargo\Data\Address;
-use DuncanMcClean\Cargo\Orders\LineItem;
+use DuncanMcClean\Cargo\Taxes\TaxDriver;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\Test;
@@ -23,23 +21,8 @@ class CustomTaxDriverTest extends TestCase
     {
         parent::getEnvironmentSetUp($app);
 
-        $app->bind(Driver::class, fn () => new class implements Driver
+        $app->bind(Driver::class, fn () => new class extends TaxDriver
         {
-            public function setAddress(Address $address): self
-            {
-                return $this;
-            }
-
-            public function setPurchasable(Purchasable $purchasable): self
-            {
-                return $this;
-            }
-
-            public function setLineItem(LineItem $lineItem): self
-            {
-                return $this;
-            }
-
             public function getBreakdown(int $total): SupportCollection
             {
                 return collect();

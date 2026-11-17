@@ -157,79 +157,45 @@ If you need to integrate with a third-party taxation system, or just prefer to h
 In its simplest form, a tax driver looks like this:
 
 ```php
-<?php  
-  
-namespace App\Cargo;  
-  
-use DuncanMcClean\Cargo\Contracts\Purchasable;  
-use DuncanMcClean\Cargo\Contracts\Taxes\Driver as DriverContract;  
-use DuncanMcClean\Cargo\Data\Address;  
-use DuncanMcClean\Cargo\Facades\TaxZone as TaxZoneFacade;  
-use DuncanMcClean\Cargo\Orders\LineItem;  
-use Illuminate\Support\Collection;  
-  
-class CustomTaxDriver implements DriverContract  
-{  
-    public $address;  
-    public $purchasable;  
-    public $lineItem;  
-  
-    public function setAddress(Address $address): self  
-    {  
-        $this->address = $address;  
-  
-        return $this;  
-    }  
-  
-    public function setPurchasable(Purchasable $purchasable): self  
-    {  
-        $this->purchasable = $purchasable;  
-  
-        return $this;  
-    }  
-  
-    public function setLineItem(LineItem $lineItem): self  
-    {  
-        $this->lineItem = $lineItem;  
-  
-        return $this;  
-    }  
-  
-    public function getBreakdown(int $total): Collection  
-    {  
-        $breakdown = collect();  
+<?php
 
-		// Calculate the taxes
+namespace App\Cargo;
 
-		// Add each "tax" to the tax breakdown collection
-		$breakdown->push(TaxCalculation::make(  
-            rate: 20,  
-            description: 'UK VAT',  
-            zone: 'United Kingdom',  
-            amount: 100  
-        )); 
+use DuncanMcClean\Cargo\Taxes\TaxCalculation;
+use DuncanMcClean\Cargo\Taxes\TaxDriver;
+use Illuminate\Support\Collection;
 
-		return $breakdown;
+class CustomTaxDriver extends TaxDriver
+{
+    public function getBreakdown(int $total): Collection
+    {
+        $breakdown = collect();
+
+        // Calculate the taxes
+
+        // Add each "tax" to the tax breakdown collection
+        $breakdown->push(TaxCalculation::make(
+            rate: 20,
+            description: 'UK VAT',
+            zone: 'United Kingdom',
+            amount: 100
+        ));
+
+        return $breakdown;
     }
 }
 ```
 
-The `set` method are used by the calculator to provide context about the line item and billing address being calculated.
+Before calculating taxes, Cargo provides your driver with context about what's being calculated, which you can access in the `getBreakdown` method:
+
+| Property | Description |
+|---|---|
+| `$this->cart` | The cart being calculated. |
+| `$this->address` | The address taxes are being calculated for, as an `Address` object. |
+| `$this->purchasable` | The product, variant or shipping option being taxed. |
+| `$this->lineItem` | The line item being taxed. Not set when taxing shipping. |
 
 Then, in the `getBreakdown` method you can do your calculations, and return a collection of `TaxCalculation` objects.
-
-If your driver needs the cart itself (for example, to read the customer's VAT number), you can add a `setCart` method. Cargo will call it before calculating taxes:
-
-```php
-use DuncanMcClean\Cargo\Contracts\Cart\Cart;
-
-public function setCart(Cart $cart): self
-{
-    $this->cart = $cart;
-
-    return $this;
-}
-```
 
 You can then bind the tax driver in your `AppServiceProvider`:
 

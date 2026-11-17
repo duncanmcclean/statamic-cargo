@@ -28,7 +28,8 @@ class CalculateTaxes
                 $lineItemTotal -= $lineItem->discountTotal();
             }
 
-            $taxBreakdown = $this->taxDriver($cart)
+            $taxBreakdown = app(TaxDriver::class)
+                ->setCart($cart)
                 ->setAddress($taxableAddress)
                 ->setPurchasable($lineItem->variant() ?? $lineItem->product())
                 ->setLineItem($lineItem)
@@ -55,7 +56,8 @@ class CalculateTaxes
         if ($shippingOption) {
             $shippingTotal = $cart->shippingTotal();
 
-            $shippingTaxBreakdown = $this->taxDriver($cart)
+            $shippingTaxBreakdown = app(TaxDriver::class)
+                ->setCart($cart)
                 ->setAddress($taxableAddress)
                 ->setPurchasable($shippingOption)
                 ->getBreakdown($shippingTotal);
@@ -92,16 +94,5 @@ class CalculateTaxes
         }
 
         return Address::make($address);
-    }
-
-    private function taxDriver(Cart $cart): TaxDriver
-    {
-        $taxDriver = app(TaxDriver::class);
-
-        if (method_exists($taxDriver, 'setCart')) {
-            $taxDriver->setCart($cart);
-        }
-
-        return $taxDriver;
     }
 }

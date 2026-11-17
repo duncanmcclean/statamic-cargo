@@ -848,27 +848,8 @@ class CalculateTaxesTest extends TestCase
     #[Test]
     public function uses_custom_tax_driver()
     {
-        $taxDriver = new class implements \DuncanMcClean\Cargo\Contracts\Taxes\Driver
+        $taxDriver = new class extends \DuncanMcClean\Cargo\Taxes\TaxDriver
         {
-            public $lineItem;
-
-            public function setAddress($address): self
-            {
-                return $this;
-            }
-
-            public function setPurchasable($purchasable): self
-            {
-                return $this;
-            }
-
-            public function setLineItem($lineItem): self
-            {
-                $this->lineItem = $lineItem;
-
-                return $this;
-            }
-
             public function getBreakdown(int $total): \Illuminate\Support\Collection
             {
                 if ($this->lineItem) {
@@ -929,32 +910,17 @@ class CalculateTaxesTest extends TestCase
     }
 
     #[Test]
-    public function passes_the_cart_to_tax_drivers_that_accept_it()
+    public function passes_the_cart_to_the_tax_driver()
     {
-        $taxDriver = new class implements \DuncanMcClean\Cargo\Contracts\Taxes\Driver
+        $taxDriver = new class extends \DuncanMcClean\Cargo\Taxes\TaxDriver
         {
             public $carts = [];
 
-            public function setCart($cart): self
+            public function setCart(CartContract $cart): self
             {
                 $this->carts[] = $cart;
 
-                return $this;
-            }
-
-            public function setAddress($address): self
-            {
-                return $this;
-            }
-
-            public function setPurchasable($purchasable): self
-            {
-                return $this;
-            }
-
-            public function setLineItem($lineItem): self
-            {
-                return $this;
+                return parent::setCart($cart);
             }
 
             public function getBreakdown(int $total): \Illuminate\Support\Collection
