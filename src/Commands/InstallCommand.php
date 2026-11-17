@@ -11,6 +11,7 @@ use Statamic\Console\RunsInPlease;
 use Statamic\Facades\Collection;
 use Statamic\Facades\Preference;
 use Statamic\Facades\Site;
+use Statamic\Sites\Site as SiteInstance;
 use Statamic\Support\Str;
 use Stillat\Proteus\Support\Facades\ConfigWriter;
 
@@ -23,7 +24,9 @@ class InstallCommand extends Command
 {
     use RunsInPlease;
 
-    protected $signature = 'statamic:cargo:install';
+    protected $signature = 'statamic:cargo:install
+        { --currency= : The currency to use for all sites }
+        { --collection= : The handle of the collection containing your products }';
 
     protected $description = 'Installs Cargo.';
 
@@ -40,12 +43,6 @@ class InstallCommand extends Command
                               |  $$$$$$/          
                                \______/           
                 </>'.PHP_EOL);
-
-        if (! $this->input->isInteractive()) {
-            $this->components->warn('Please run this command interactively.');
-
-            return;
-        }
 
         $this
             ->publishConfig()
@@ -81,20 +78,8 @@ class InstallCommand extends Command
     private function configureSiteCurrencies(): self
     {
         $sites = Site::all()->map(function ($site) {
-            $label = Site::hasMultiple()
-                ? "Which currency do you want to use for [{$site->name()}]?"
-                : 'Which currency do you want to use?';
-
-            $currency = search(
-                label: $label,
-                options: fn (string $value) => Currencies::mapWithKeys(fn ($currency) => [$currency['code'] => "{$currency['name']} ({$currency['code']})"])
-                    ->when(strlen($value) > 0, fn ($currencies) => $currencies->filter(fn ($name) => Str::contains($name, $value, ignoreCase: true)))
-                    ->when(strlen($value) === 0 && $site->attribute('currency'), fn ($currencies) => $currencies->sortBy(fn ($name, $code) => $code === $site->attribute('currency') ? 0 : 1))
-                    ->all(),
-            );
-
             return array_merge($site->rawConfig(), [
-                'attributes' => array_merge($site->attributes(), ['currency' => $currency]),
+                'attributes' => array_merge($site->attributes(), ['currency' => $this->currencyFor($site)]),
             ]);
         });
 
@@ -103,16 +88,50 @@ class InstallCommand extends Command
         return $this;
     }
 
+    private function currencyFor(SiteInstance $site): string
+    {
+        if ($currency = $this->option('currency')) {
+            $currency = Str::upper($currency);
+
+            if (! Currencies::firstWhere('code', $currency)) {
+                $this->fail("Currency [{$currency}] is not supported.");
+            }
+
+            return $currency;
+        }
+
+        if (! $this->input->isInteractive()) {
+            return $site->attribute('currency') ?? 'USD';
+        }
+
+        $label = Site::hasMultiple()
+            ? "Which currency do you want to use for [{$site->name()}]?"
+            : 'Which currency do you want to use?';
+
+        return search(
+            label: $label,
+            options: fn (string $value) => Currencies::mapWithKeys(fn ($currency) => [$currency['code'] => "{$currency['name']} ({$currency['code']})"])
+                ->when(strlen($value) > 0, fn ($currencies) => $currencies->filter(fn ($name) => Str::contains($name, $value, ignoreCase: true)))
+                ->when(strlen($value) === 0 && $site->attribute('currency'), fn ($currencies) => $currencies->sortBy(fn ($name, $code) => $code === $site->attribute('currency') ? 0 : 1))
+                ->all(),
+        );
+    }
+
     private function configureProductsCollection(): self
     {
-        $collection = select(
+        $collection = $this->option('collection') ?? select(
             label: 'Which collection contains your products?',
             options: Collection::all()
                 ->mapWithKeys(fn ($collection) => [$collection->handle() => $collection->title()])
                 ->merge(['new' => 'Create a "Products" collection'])
                 ->all(),
+            default: Collection::handleExists('products') ? 'products' : 'new',
             hint: 'If you need to, you can always add additional collections later.'
         );
+
+        if ($this->option('collection') && ! Collection::handleExists($collection)) {
+            $this->fail("Collection [{$collection}] doesn't exist.");
+        }
 
         if ($collection === 'new') {
             $name = text('What should the collection be called?', default: 'Products');
