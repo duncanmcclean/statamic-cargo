@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.18.0 (2026-11-17)
+
+### What's new
+- Allow install command to run non-interactively [#363](https://github.com/duncanmcclean/statamic-cargo/pull/363) by @duncanmcclean
+- Add a base tax driver class, and pass the cart to tax drivers [#364](https://github.com/duncanmcclean/statamic-cargo/pull/364) by @duncanmcclean
+- Allow extending the cart fingerprint [#365](https://github.com/duncanmcclean/statamic-cargo/pull/365) by @duncanmcclean
+
+
+
 ## v1.17.2 (2026-11-13)
 
 ### What's fixed
