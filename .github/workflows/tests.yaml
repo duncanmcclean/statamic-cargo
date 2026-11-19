@@ -77,11 +77,6 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: fileinfo, exif, gd, pdo, sqlite, pdo_sqlite, intl, zip
 
-      - name: Require Laravel's PHP 8.6 branch
-        shell: bash
-        if: matrix.php == '8.6'
-        run: composer require "laravel/framework:dev-13/php86-experiment as 13.40.0" --no-interaction --no-update
-
       - name: Install dependencies
         # zizmor: ignore[template-injection] - matrix values are defined in this file, not attacker-controlled
         run: |
