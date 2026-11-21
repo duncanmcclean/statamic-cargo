@@ -20,7 +20,7 @@ class CalculateTaxes
             return $next($cart);
         }
 
-        $taxBreakdowns = app(TaxDriver::class)::calculate($cart, $taxableAddress);
+        $taxBreakdowns = app(TaxDriver::class)->calculate($cart, $taxableAddress);
 
         $cart->lineItems()->each(function (LineItem $lineItem) use ($taxBreakdowns) {
             $this->applyToLineItem($lineItem, $taxBreakdowns->get($lineItem->id(), collect()));

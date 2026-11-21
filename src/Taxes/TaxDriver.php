@@ -46,7 +46,7 @@ abstract class TaxDriver implements DriverContract
 
     abstract public function getBreakdown(int $total): Collection;
 
-    public static function calculate(Cart $cart, Address $address): Collection
+    public function calculate(Cart $cart, Address $address): Collection
     {
         $taxBreakdowns = collect($cart->lineItems()->all())->mapWithKeys(fn (LineItem $lineItem) => [
             $lineItem->id() => app(DriverContract::class)

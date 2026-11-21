@@ -218,12 +218,12 @@ Tax Zones are only available when using Cargo's default tax driver. Tax Classes 
 :::
 
 ### Calculating the whole cart
-If your tax driver needs to calculate the whole cart once (for example, to split shipping between goods taxed at different rates), your driver can override the static `calculate` method.
+If your tax driver needs to calculate the whole cart once (for example, to split shipping between goods taxed at different rates), your driver can override the `calculate` method.
 
 By default, it calls `getBreakdown` for each line item and shipping. It should return a `Collection` of `TaxCalculation` collections, keyed by line item ID, plus `shipping`:
 
 ```php
-public static function calculate(Cart $cart, Address $address): Collection
+public function calculate(Cart $cart, Address $address): Collection
 {
     return collect([
         'line-item-id' => collect([TaxCalculation::make(...)]),
