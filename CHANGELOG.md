@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.18.1 (2026-11-21)
+
+### What's fixed
+- Avoid matching orders when cart has no ID [#368](https://github.com/duncanmcclean/statamic-cargo/pull/368) by @duncanmcclean
+
+
+
 ## v1.18.0 (2026-11-17)
 
 ### What's new
