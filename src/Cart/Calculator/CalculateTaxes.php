@@ -8,6 +8,7 @@ use DuncanMcClean\Cargo\Contracts\Taxes\Driver as TaxDriver;
 use DuncanMcClean\Cargo\Data\Address;
 use DuncanMcClean\Cargo\Orders\LineItem;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class CalculateTaxes
 {
@@ -19,64 +20,51 @@ class CalculateTaxes
             return $next($cart);
         }
 
-        $taxBreakdowns = collect();
+        $taxBreakdowns = app(TaxDriver::class)::getCartBreakdown($cart, $taxableAddress);
 
-        $cart->lineItems()->each(function (LineItem $lineItem) use ($cart, $taxableAddress, &$taxBreakdowns) {
-            $lineItemTotal = $lineItem->total();
-
-            if ($lineItem->discountTotal()) {
-                $lineItemTotal -= $lineItem->discountTotal();
-            }
-
-            $taxBreakdown = app(TaxDriver::class)
-                ->setCart($cart)
-                ->setAddress($taxableAddress)
-                ->setPurchasable($lineItem->variant() ?? $lineItem->product())
-                ->setLineItem($lineItem)
-                ->getBreakdown($lineItemTotal);
-
-            $taxBreakdowns = $taxBreakdowns->merge($taxBreakdown);
-
-            if ($taxBreakdown->isEmpty()) {
-                return;
-            }
-
-            $lineItem->set('tax_breakdown', $taxBreakdown->toArray());
-            $lineItem->taxTotal((int) $taxBreakdown->sum('amount'));
-
-            if (config('statamic.cargo.taxes.price_includes_tax')) {
-                $lineItem->total($lineItemTotal);
-            } else {
-                $lineItem->total($lineItemTotal + $lineItem->taxTotal());
-            }
+        $cart->lineItems()->each(function (LineItem $lineItem) use ($taxBreakdowns) {
+            $this->applyToLineItem($lineItem, $taxBreakdowns->get($lineItem->id(), collect()));
         });
 
-        $shippingOption = $cart->shippingOption();
-
-        if ($shippingOption) {
-            $shippingTotal = $cart->shippingTotal();
-
-            $shippingTaxBreakdown = app(TaxDriver::class)
-                ->setCart($cart)
-                ->setAddress($taxableAddress)
-                ->setPurchasable($shippingOption)
-                ->getBreakdown($shippingTotal);
-
-            $taxBreakdowns = $taxBreakdowns->merge($shippingTaxBreakdown);
-
-            $cart->set('shipping_tax_breakdown', $shippingTaxBreakdown->toArray());
-            $cart->set('shipping_tax_total', $shippingTaxTotal = (int) $shippingTaxBreakdown->sum('amount'));
-
-            if (config('statamic.cargo.taxes.price_includes_tax')) {
-                $cart->shippingTotal($shippingTotal);
-            } else {
-                $cart->shippingTotal($shippingTotal + $shippingTaxTotal);
-            }
+        if ($cart->shippingOption()) {
+            $this->applyToShipping($cart, $taxBreakdowns->get('shipping', collect()));
         }
 
-        $cart->taxTotal($taxBreakdowns->sum('amount'));
+        $cart->taxTotal($taxBreakdowns->sum(fn (Collection $taxBreakdown) => $taxBreakdown->sum('amount')));
 
         return $next($cart);
+    }
+
+    private function applyToLineItem(LineItem $lineItem, Collection $taxBreakdown): void
+    {
+        if ($taxBreakdown->isEmpty()) {
+            return;
+        }
+
+        $lineItemTotal = $lineItem->total() - $lineItem->discountTotal();
+
+        $lineItem->set('tax_breakdown', $taxBreakdown->toArray());
+        $lineItem->taxTotal((int) $taxBreakdown->sum('amount'));
+
+        if (config('statamic.cargo.taxes.price_includes_tax')) {
+            $lineItem->total($lineItemTotal);
+        } else {
+            $lineItem->total($lineItemTotal + $lineItem->taxTotal());
+        }
+    }
+
+    private function applyToShipping(Cart $cart, Collection $taxBreakdown): void
+    {
+        $shippingTotal = $cart->shippingTotal();
+
+        $cart->set('shipping_tax_breakdown', $taxBreakdown->toArray());
+        $cart->set('shipping_tax_total', $shippingTaxTotal = (int) $taxBreakdown->sum('amount'));
+
+        if (config('statamic.cargo.taxes.price_includes_tax')) {
+            $cart->shippingTotal($shippingTotal);
+        } else {
+            $cart->shippingTotal($shippingTotal + $shippingTaxTotal);
+        }
     }
 
     private function defaultAddress(Cart $cart): ?Address

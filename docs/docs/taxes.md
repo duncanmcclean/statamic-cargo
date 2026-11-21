@@ -216,3 +216,18 @@ public function boot(): void
 :::tip note
 Tax Zones are only available when using Cargo's default tax driver. Tax Classes are always available, so your driver can use the product's tax class to decide how it should be taxed (for example, mapping it to a third-party service's product tax codes).
 :::
+
+### Calculating the whole cart
+If your tax driver needs to calculate the whole cart once (for example, to split shipping between goods taxed at different rates), your driver can override the static `getCartBreakdown` method.
+
+By default, it calls `getBreakdown` for each line item and shipping. It should return a `Collection` of `TaxCalculation` collections, keyed by line item ID, plus `shipping`:
+
+```php
+public static function getCartBreakdown(Cart $cart, Address $address): Collection
+{
+    return collect([
+        'line-item-id' => collect([TaxCalculation::make(...)]),
+        'shipping' => collect([TaxCalculation::make(...)]),
+    ]);
+}
+```
