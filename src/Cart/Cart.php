@@ -307,6 +307,10 @@ class Cart implements Arrayable, ArrayAccess, Augmentable, ContainsQueryableValu
 
     public function order(): ?OrderContract
     {
+        if (! $this->id) {
+            return null;
+        }
+
         return Order::query()->where('cart', $this->id)->first();
     }
 

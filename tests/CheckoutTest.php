@@ -81,6 +81,31 @@ class CheckoutTest extends TestCase
     }
 
     #[Test]
+    public function cant_checkout_without_a_cart()
+    {
+        $order = tap(Facades\Order::make()->orderNumber(1000))->save();
+
+        $this
+            ->get('/!/cargo/payments/fake/checkout')
+            ->assertSessionHasErrors('checkout');
+
+        $this->assertNotNull(Facades\Order::find($order->id()));
+    }
+
+    #[Test]
+    public function cant_checkout_when_the_current_cart_no_longer_exists()
+    {
+        $order = tap(Facades\Order::make()->orderNumber(1000))->save();
+
+        $this
+            ->withCookie('cargo-cart', 'non-existent-cart')
+            ->get('/!/cargo/payments/fake/checkout')
+            ->assertSessionHasErrors('checkout');
+
+        $this->assertNotNull(Facades\Order::find($order->id()));
+    }
+
+    #[Test]
     public function cant_checkout_with_unavailable_payment_gateway()
     {
         UnavailablePaymentGateway::register();
