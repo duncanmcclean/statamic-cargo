@@ -199,13 +199,11 @@ Then, in the `getBreakdown` method you can do your calculations, and return a co
 
 Cargo only recalculates taxes when something it knows about changes, like the line items or the taxable address. If your driver relies on anything else, you should [add it to the cart's fingerprint](/extending/php-apis/carts#fingerprint).
 
-If your tax provider needs to see the whole cart at once (for example, to split shipping between goods taxed at different rates), you can add a `getCartBreakdown` method to your driver. Cargo will then call it once per cart, instead of calling `getBreakdown` for each line item and shipping. It should return a collection of `TaxCalculation` collections, keyed by line item ID, plus `shipping`:
+If your tax provider needs to see the whole cart at once (for example, to split shipping between goods taxed at different rates), you can override the static `getCartBreakdown` method instead. By default, it calls `getBreakdown` for each line item and shipping. It should return a collection of `TaxCalculation` collections, keyed by line item ID, plus `shipping`:
 
 ```php
-public function getCartBreakdown(): Collection
+public static function getCartBreakdown(Cart $cart, Address $address): Collection
 {
-    // $this->cart and $this->address are available here.
-
     return collect([
         'line-item-id' => collect([TaxCalculation::make(...)]),
         'shipping' => collect([TaxCalculation::make(...)]),

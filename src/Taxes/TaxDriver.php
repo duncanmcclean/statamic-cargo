@@ -45,4 +45,26 @@ abstract class TaxDriver implements DriverContract
     }
 
     abstract public function getBreakdown(int $total): Collection;
+
+    public static function getCartBreakdown(Cart $cart, Address $address): Collection
+    {
+        $taxBreakdowns = collect($cart->lineItems()->all())->mapWithKeys(fn (LineItem $lineItem) => [
+            $lineItem->id() => app(DriverContract::class)
+                ->setCart($cart)
+                ->setAddress($address)
+                ->setPurchasable($lineItem->variant() ?? $lineItem->product())
+                ->setLineItem($lineItem)
+                ->getBreakdown($lineItem->total() - $lineItem->discountTotal()),
+        ]);
+
+        if ($shippingOption = $cart->shippingOption()) {
+            $taxBreakdowns->put('shipping', app(DriverContract::class)
+                ->setCart($cart)
+                ->setAddress($address)
+                ->setPurchasable($shippingOption)
+                ->getBreakdown($cart->shippingTotal()));
+        }
+
+        return $taxBreakdowns;
+    }
 }

@@ -19,4 +19,6 @@ interface Driver
     public function setLineItem(LineItem $lineItem): self;
 
     public function getBreakdown(int $total): Collection;
+
+    public static function getCartBreakdown(Cart $cart, Address $address): Collection;
 }

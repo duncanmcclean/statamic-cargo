@@ -914,7 +914,7 @@ class CalculateTaxesTest extends TestCase
     {
         $taxDriver = new class extends \DuncanMcClean\Cargo\Taxes\TaxDriver
         {
-            public function getCartBreakdown(): \Illuminate\Support\Collection
+            public static function getCartBreakdown(CartContract $cart, \DuncanMcClean\Cargo\Data\Address $address): \Illuminate\Support\Collection
             {
                 return collect([
                     'one' => collect([TaxCalculation::make(rate: 19, description: 'Electronics', zone: 'Germany', amount: 1900)]),
