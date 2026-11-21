@@ -4,12 +4,12 @@ namespace DuncanMcClean\Cargo\Taxes;
 
 use DuncanMcClean\Cargo\Contracts\Cart\Cart;
 use DuncanMcClean\Cargo\Contracts\Purchasable;
-use DuncanMcClean\Cargo\Contracts\Taxes\Driver as DriverContract;
+use DuncanMcClean\Cargo\Contracts\Taxes\Driver as TaxDriverContract;
 use DuncanMcClean\Cargo\Data\Address;
 use DuncanMcClean\Cargo\Orders\LineItem;
 use Illuminate\Support\Collection;
 
-abstract class TaxDriver implements DriverContract
+abstract class TaxDriver implements TaxDriverContract
 {
     public $cart;
     public $address;
@@ -49,7 +49,7 @@ abstract class TaxDriver implements DriverContract
     public function calculate(Cart $cart, Address $address): Collection
     {
         $taxBreakdowns = collect($cart->lineItems()->all())->mapWithKeys(fn (LineItem $lineItem) => [
-            $lineItem->id() => app(DriverContract::class)
+            $lineItem->id() => app(TaxDriverContract::class)
                 ->setCart($cart)
                 ->setAddress($address)
                 ->setPurchasable($lineItem->variant() ?? $lineItem->product())
@@ -58,7 +58,7 @@ abstract class TaxDriver implements DriverContract
         ]);
 
         if ($shippingOption = $cart->shippingOption()) {
-            $taxBreakdowns->put('shipping', app(DriverContract::class)
+            $taxBreakdowns->put('shipping', app(TaxDriverContract::class)
                 ->setCart($cart)
                 ->setAddress($address)
                 ->setPurchasable($shippingOption)
