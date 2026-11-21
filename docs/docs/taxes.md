@@ -199,18 +199,6 @@ Then, in the `getBreakdown` method you can do your calculations, and return a co
 
 Cargo only recalculates taxes when something it knows about changes, like the line items or the taxable address. If your driver relies on anything else, you should [add it to the cart's fingerprint](/extending/php-apis/carts#fingerprint).
 
-If your tax provider needs to see the whole cart at once (for example, to split shipping between goods taxed at different rates), you can override the static `getCartBreakdown` method instead. By default, it calls `getBreakdown` for each line item and shipping. It should return a collection of `TaxCalculation` collections, keyed by line item ID, plus `shipping`:
-
-```php
-public static function getCartBreakdown(Cart $cart, Address $address): Collection
-{
-    return collect([
-        'line-item-id' => collect([TaxCalculation::make(...)]),
-        'shipping' => collect([TaxCalculation::make(...)]),
-    ]);
-}
-```
-
 You can then bind the tax driver in your `AppServiceProvider`:
 
 ```php
@@ -228,3 +216,16 @@ public function boot(): void
 :::tip note
 Tax Zones are only available when using Cargo's default tax driver. Tax Classes are always available, so your driver can use the product's tax class to decide how it should be taxed (for example, mapping it to a third-party service's product tax codes).
 :::
+
+### Calculating the whole cart
+If your tax provider needs to see the whole cart at once (for example, to split shipping between goods taxed at different rates), your driver can override the static `getCartBreakdown` method. By default, it calls `getBreakdown` for each line item and shipping. It should return a collection of `TaxCalculation` collections, keyed by line item ID, plus `shipping`:
+
+```php
+public static function getCartBreakdown(Cart $cart, Address $address): Collection
+{
+    return collect([
+        'line-item-id' => collect([TaxCalculation::make(...)]),
+        'shipping' => collect([TaxCalculation::make(...)]),
+    ]);
+}
+```
