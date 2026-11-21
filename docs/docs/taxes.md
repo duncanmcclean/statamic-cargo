@@ -199,34 +199,17 @@ Then, in the `getBreakdown` method you can do your calculations, and return a co
 
 Cargo only recalculates taxes when something it knows about changes, like the line items or the taxable address. If your driver relies on anything else, you should [add it to the cart's fingerprint](/extending/php-apis/carts#fingerprint).
 
-If your tax provider needs to see the whole cart at once (for example, to split shipping between goods taxed at different rates), your driver can implement the `CalculatesWholeCart` interface. Cargo will then call `getCartBreakdown` once per cart, instead of calling `getBreakdown` for each line item and shipping:
+If your tax provider needs to see the whole cart at once (for example, to split shipping between goods taxed at different rates), you can add a `getCartBreakdown` method to your driver. Cargo will then call it once per cart, instead of calling `getBreakdown` for each line item and shipping. It should return a collection of `TaxCalculation` collections, keyed by line item ID, plus `shipping`:
 
 ```php
-use DuncanMcClean\Cargo\Contracts\Taxes\CalculatesWholeCart;
-use DuncanMcClean\Cargo\Orders\LineItem;
-
-class CustomTaxDriver extends TaxDriver implements CalculatesWholeCart
+public function getCartBreakdown(): Collection
 {
-    public function getCartBreakdown(): Collection
-    {
-        $lineItems = $this->cart->lineItems()->map(fn (LineItem $lineItem) => [
-            'id' => $lineItem->id(),
-            'amount' => $lineItem->total() - $lineItem->discountTotal(),
-        ]);
+    // $this->cart and $this->address are available here.
 
-        $shipping = $this->cart->shippingTotal();
-
-        // Return a collection of TaxCalculation objects for each line item, keyed by its ID, plus one for shipping:
-        return collect([
-            'line-item-id' => collect([TaxCalculation::make(...)]),
-            'shipping' => collect([TaxCalculation::make(...)]),
-        ]);
-    }
-
-    public function getBreakdown(int $total): Collection
-    {
-        return collect();
-    }
+    return collect([
+        'line-item-id' => collect([TaxCalculation::make(...)]),
+        'shipping' => collect([TaxCalculation::make(...)]),
+    ]);
 }
 ```
 

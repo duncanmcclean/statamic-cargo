@@ -912,7 +912,7 @@ class CalculateTaxesTest extends TestCase
     #[Test]
     public function uses_custom_tax_driver_that_calculates_the_whole_cart()
     {
-        $taxDriver = new class extends \DuncanMcClean\Cargo\Taxes\TaxDriver implements \DuncanMcClean\Cargo\Contracts\Taxes\CalculatesWholeCart
+        $taxDriver = new class extends \DuncanMcClean\Cargo\Taxes\TaxDriver
         {
             public function getCartBreakdown(): \Illuminate\Support\Collection
             {

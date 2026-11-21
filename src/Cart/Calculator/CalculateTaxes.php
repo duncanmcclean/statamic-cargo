@@ -4,12 +4,10 @@ namespace DuncanMcClean\Cargo\Cart\Calculator;
 
 use Closure;
 use DuncanMcClean\Cargo\Cart\Cart;
-use DuncanMcClean\Cargo\Contracts\Taxes\CalculatesWholeCart;
 use DuncanMcClean\Cargo\Contracts\Taxes\Driver as TaxDriver;
 use DuncanMcClean\Cargo\Data\Address;
 use DuncanMcClean\Cargo\Orders\LineItem;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 
 class CalculateTaxes
 {
@@ -21,77 +19,70 @@ class CalculateTaxes
             return $next($cart);
         }
 
+        $taxBreakdowns = collect();
+
         $taxDriver = app(TaxDriver::class);
 
-        $taxBreakdowns = $taxDriver instanceof CalculatesWholeCart
+        $cartTaxBreakdown = method_exists($taxDriver, 'getCartBreakdown')
             ? $taxDriver->setCart($cart)->setAddress($taxableAddress)->getCartBreakdown()
-            : $this->breakdownsPerLine($cart, $taxableAddress);
+            : null;
 
-        $cart->lineItems()->each(function (LineItem $lineItem) use ($taxBreakdowns) {
-            $this->applyToLineItem($lineItem, $taxBreakdowns->get($lineItem->id(), collect()));
-        });
+        $cart->lineItems()->each(function (LineItem $lineItem) use ($cart, $taxableAddress, $cartTaxBreakdown, &$taxBreakdowns) {
+            $lineItemTotal = $lineItem->total();
 
-        if ($cart->shippingOption()) {
-            $this->applyToShipping($cart, $taxBreakdowns->get('shipping', collect()));
-        }
+            if ($lineItem->discountTotal()) {
+                $lineItemTotal -= $lineItem->discountTotal();
+            }
 
-        $cart->taxTotal($taxBreakdowns->sum(fn (Collection $taxBreakdown) => $taxBreakdown->sum('amount')));
-
-        return $next($cart);
-    }
-
-    private function breakdownsPerLine(Cart $cart, Address $taxableAddress): Collection
-    {
-        $taxBreakdowns = collect($cart->lineItems()->all())->mapWithKeys(fn (LineItem $lineItem) => [
-            $lineItem->id() => app(TaxDriver::class)
+            $taxBreakdown = $cartTaxBreakdown?->get($lineItem->id(), collect()) ?? app(TaxDriver::class)
                 ->setCart($cart)
                 ->setAddress($taxableAddress)
                 ->setPurchasable($lineItem->variant() ?? $lineItem->product())
                 ->setLineItem($lineItem)
-                ->getBreakdown($lineItem->total() - $lineItem->discountTotal()),
-        ]);
+                ->getBreakdown($lineItemTotal);
 
-        if ($shippingOption = $cart->shippingOption()) {
-            $taxBreakdowns->put('shipping', app(TaxDriver::class)
+            $taxBreakdowns = $taxBreakdowns->merge($taxBreakdown);
+
+            if ($taxBreakdown->isEmpty()) {
+                return;
+            }
+
+            $lineItem->set('tax_breakdown', $taxBreakdown->toArray());
+            $lineItem->taxTotal((int) $taxBreakdown->sum('amount'));
+
+            if (config('statamic.cargo.taxes.price_includes_tax')) {
+                $lineItem->total($lineItemTotal);
+            } else {
+                $lineItem->total($lineItemTotal + $lineItem->taxTotal());
+            }
+        });
+
+        $shippingOption = $cart->shippingOption();
+
+        if ($shippingOption) {
+            $shippingTotal = $cart->shippingTotal();
+
+            $shippingTaxBreakdown = $cartTaxBreakdown?->get('shipping', collect()) ?? app(TaxDriver::class)
                 ->setCart($cart)
                 ->setAddress($taxableAddress)
                 ->setPurchasable($shippingOption)
-                ->getBreakdown($cart->shippingTotal()));
+                ->getBreakdown($shippingTotal);
+
+            $taxBreakdowns = $taxBreakdowns->merge($shippingTaxBreakdown);
+
+            $cart->set('shipping_tax_breakdown', $shippingTaxBreakdown->toArray());
+            $cart->set('shipping_tax_total', $shippingTaxTotal = (int) $shippingTaxBreakdown->sum('amount'));
+
+            if (config('statamic.cargo.taxes.price_includes_tax')) {
+                $cart->shippingTotal($shippingTotal);
+            } else {
+                $cart->shippingTotal($shippingTotal + $shippingTaxTotal);
+            }
         }
 
-        return $taxBreakdowns;
-    }
+        $cart->taxTotal($taxBreakdowns->sum('amount'));
 
-    private function applyToLineItem(LineItem $lineItem, Collection $taxBreakdown): void
-    {
-        if ($taxBreakdown->isEmpty()) {
-            return;
-        }
-
-        $lineItemTotal = $lineItem->total() - $lineItem->discountTotal();
-
-        $lineItem->set('tax_breakdown', $taxBreakdown->toArray());
-        $lineItem->taxTotal((int) $taxBreakdown->sum('amount'));
-
-        if (config('statamic.cargo.taxes.price_includes_tax')) {
-            $lineItem->total($lineItemTotal);
-        } else {
-            $lineItem->total($lineItemTotal + $lineItem->taxTotal());
-        }
-    }
-
-    private function applyToShipping(Cart $cart, Collection $taxBreakdown): void
-    {
-        $shippingTotal = $cart->shippingTotal();
-
-        $cart->set('shipping_tax_breakdown', $taxBreakdown->toArray());
-        $cart->set('shipping_tax_total', $shippingTaxTotal = (int) $taxBreakdown->sum('amount'));
-
-        if (config('statamic.cargo.taxes.price_includes_tax')) {
-            $cart->shippingTotal($shippingTotal);
-        } else {
-            $cart->shippingTotal($shippingTotal + $shippingTaxTotal);
-        }
+        return $next($cart);
     }
 
     private function defaultAddress(Cart $cart): ?Address
