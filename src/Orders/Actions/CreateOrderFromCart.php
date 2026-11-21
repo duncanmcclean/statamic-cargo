@@ -25,7 +25,7 @@ class CreateOrderFromCart
         }
 
         return Cache::lock("cart:{$cart->id()}:checkout", 30)->block(15, function () use ($cart, $paymentGateway) {
-            $order = Facades\Order::query()->where('cart', $cart->id())->first();
+            $order = $cart->order();
 
             if ($order) {
                 return $order;
@@ -34,7 +34,7 @@ class CreateOrderFromCart
             try {
                 return $this->createOrder($cart, $paymentGateway);
             } catch (PreventCheckout $e) {
-                Facades\Order::query()->where('cart', $cart->id())->first()?->delete();
+                $cart->order()?->delete();
 
                 $paymentGateway?->cancel($cart);
 
