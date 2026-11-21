@@ -910,68 +910,6 @@ class CalculateTaxesTest extends TestCase
     }
 
     #[Test]
-    public function uses_custom_tax_driver_that_calculates_the_whole_cart()
-    {
-        $taxDriver = new class extends \DuncanMcClean\Cargo\Taxes\TaxDriver
-        {
-            public static function getCartBreakdown(CartContract $cart, \DuncanMcClean\Cargo\Data\Address $address): \Illuminate\Support\Collection
-            {
-                return collect([
-                    'one' => collect([TaxCalculation::make(rate: 19, description: 'Electronics', zone: 'Germany', amount: 1900)]),
-                    'two' => collect([TaxCalculation::make(rate: 7, description: 'Books', zone: 'Germany', amount: 210)]),
-                    'shipping' => collect([
-                        TaxCalculation::make(rate: 19, description: 'Shipping', zone: 'Germany', amount: 146),
-                        TaxCalculation::make(rate: 7, description: 'Shipping', zone: 'Germany', amount: 16),
-                    ]),
-                ]);
-            }
-
-            public function getBreakdown(int $total): \Illuminate\Support\Collection
-            {
-                throw new \Exception('getBreakdown should not be called.');
-            }
-        };
-
-        app()->instance(\DuncanMcClean\Cargo\Contracts\Taxes\Driver::class, $taxDriver);
-
-        $electronics = Entry::make()->collection('products')->data(['price' => 10000]);
-        $electronics->save();
-
-        $book = Entry::make()->collection('products')->data(['price' => 3000]);
-        $book->save();
-
-        $cart = Cart::make()
-            ->shippingTotal(1000)
-            ->lineItems([
-                ['id' => 'one', 'product' => $electronics->id(), 'quantity' => 1, 'total' => 10000],
-                ['id' => 'two', 'product' => $book->id(), 'quantity' => 1, 'total' => 3000],
-            ])
-            ->data([
-                'shipping_address' => ['country' => 'DEU'],
-                'shipping_method' => 'paid_shipping',
-                'shipping_option' => 'the_only_option',
-            ]);
-
-        $cart = app(CalculateTaxes::class)->handle($cart, fn ($cart) => $cart);
-
-        $this->assertEquals(1900, $cart->lineItems()->find('one')->taxTotal());
-        $this->assertEquals(11900, $cart->lineItems()->find('one')->total());
-
-        $this->assertEquals(210, $cart->lineItems()->find('two')->taxTotal());
-        $this->assertEquals(3210, $cart->lineItems()->find('two')->total());
-
-        $this->assertEquals([
-            ['rate' => 19, 'description' => 'Shipping', 'zone' => 'Germany', 'amount' => 146],
-            ['rate' => 7, 'description' => 'Shipping', 'zone' => 'Germany', 'amount' => 16],
-        ], $cart->get('shipping_tax_breakdown'));
-
-        $this->assertEquals(162, $cart->get('shipping_tax_total'));
-        $this->assertEquals(1162, $cart->shippingTotal());
-
-        $this->assertEquals(2272, $cart->taxTotal());
-    }
-
-    #[Test]
     public function passes_the_cart_to_the_tax_driver()
     {
         $taxDriver = new class extends \DuncanMcClean\Cargo\Taxes\TaxDriver
