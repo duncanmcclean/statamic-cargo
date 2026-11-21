@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.19.0 (2026-11-21)
+
+### What's new
+- Refactor tax calculation to allow whole cart calculations [#370](https://github.com/duncanmcclean/statamic-cargo/pull/370) by @duncanmcclean
+
+
+
 ## v1.18.1 (2026-11-21)
 
 ### What's fixed
