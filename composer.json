@@ -34,7 +34,7 @@
         "ext-intl": "*",
         "laravel/framework": "^12.0 || ^13.0",
         "mollie/mollie-api-php": "^3.0",
-        "moneyphp/money": "^4.5",
+        "moneyphp/money": "^4.10",
         "statamic/cms": "^6.35.1",
         "stillat/proteus": "^4.2.1",
         "stripe/stripe-php": "^16.4",
@@ -43,8 +43,8 @@
     "require-dev": {
         "laravel/pint": "1.22.1",
         "orchestra/testbench": "^10.0 || ^11.0",
-        "pestphp/pest": "^4.7",
-        "phpunit/phpunit": "^11.0 || ^12.0",
+        "pestphp/pest": "^4.7 || ^5.3",
+        "phpunit/phpunit": "^11.0 || ^12.0 || ^13.4.5",
         "spatie/ray": "^1.41.2"
     },
     "config": {
@@ -54,7 +54,5 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
