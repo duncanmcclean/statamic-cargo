@@ -238,6 +238,8 @@ class TimelineEventsTest extends TestCase
                 'Amount' => 1500,
             ]],
         ], $order->timelineEvents()->toArray());
+
+        $this->assertEquals('Order was refunded for £15.00', $order->timelineEvents()->last()->message());
     }
 
     private function makeOrder(): OrderContract

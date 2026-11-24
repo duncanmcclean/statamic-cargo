@@ -2,6 +2,7 @@
 
 namespace DuncanMcClean\Cargo\Orders;
 
+use DuncanMcClean\Cargo\Contracts\Orders\Order;
 use DuncanMcClean\Cargo\Exceptions\TimelineEventTypeNotFound;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Carbon;
@@ -14,17 +15,24 @@ class TimelineEvent implements Arrayable
         protected string $datetime,
         protected string $type,
         protected $user,
-        protected array $metadata = []
+        protected array $metadata = [],
+        protected ?Order $order = null
     ) {}
 
-    public static function make(array $data): self
+    public static function make(array $data, ?Order $order = null): self
     {
         return new static(
             datetime: $data['datetime'],
             type: $data['type'],
             user: $data['user'] ?? null,
-            metadata: $data['metadata'] ?? []
+            metadata: $data['metadata'] ?? [],
+            order: $order
         );
+    }
+
+    public function order(): ?Order
+    {
+        return $this->order;
     }
 
     public function datetime(): Carbon
