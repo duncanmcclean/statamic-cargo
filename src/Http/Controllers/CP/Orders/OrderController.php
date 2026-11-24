@@ -120,7 +120,8 @@ class OrderController extends CpController
 
         $shouldRefund = $request->boolean('refund')
             && $request->status === OrderStatus::Cancelled->value
-            && $order->status() !== OrderStatus::Cancelled;
+            && $order->status() !== OrderStatus::Cancelled
+            && $order->paymentGateway();
 
         $blueprint = Order::blueprint();
 
@@ -152,7 +153,7 @@ class OrderController extends CpController
 
         $amountRemaining = $order->grandTotal() - $order->get('amount_refunded', 0);
 
-        if ($shouldRefund && $order->paymentGateway() && $amountRemaining > 0) {
+        if ($shouldRefund && $amountRemaining > 0) {
             $this->authorize('refund', $order);
 
             $order->paymentGateway()->refund($order, $amountRemaining);
