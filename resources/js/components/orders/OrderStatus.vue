@@ -1,9 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { Button, Field, Select, Input, Description, Textarea } from '@statamic/cms/ui';
+import { Button, Field, Select, Input, Description, Textarea, Checkbox } from '@statamic/cms/ui';
 import OrderStatusBadge from "./OrderStatusBadge.vue";
 
-const emit = defineEmits(['update:modelValue', 'update:trackingNumber', 'update:cancellationReason']);
+const emit = defineEmits(['update:modelValue', 'update:trackingNumber', 'update:cancellationReason', 'update:refund']);
 
 const props = defineProps({
     orderId: String,
@@ -12,11 +12,13 @@ const props = defineProps({
     modelValue: String,
     trackingNumber: { type: String, required: false },
     cancellationReason: { type: String, required: false },
+    canRefund: Boolean,
 });
 
 const status = ref(props.modelValue);
 const trackingNumber = ref(props.trackingNumber);
 const cancellationReason = ref(props.cancellationReason);
+const refund = ref(false);
 const updating = ref(false);
 
 const hasShipped = (status) => status === 'shipped' || status === 'delivered';
@@ -25,6 +27,7 @@ function update() {
     emit('update:modelValue', status.value);
     emit('update:trackingNumber', trackingNumber.value);
     emit('update:cancellationReason', cancellationReason.value);
+    emit('update:refund', status.value === 'cancelled' && refund.value);
     updating.value = false;
 }
 
@@ -63,7 +66,14 @@ onMounted(() => {
             <Textarea v-model:modelValue="cancellationReason" />
         </Field>
 
-        <div v-if="status === 'returned' || status === 'cancelled'">
+        <Checkbox
+            v-if="status === 'cancelled' && canRefund"
+            v-model="refund"
+            :label="__('Refund payment')"
+            :description="__('The full remaining amount will be refunded to the customer.')"
+        />
+
+        <div v-else-if="status === 'returned' || status === 'cancelled'">
             <Description :text="__('Any payment will need to be refunded manually.')" />
         </div>
 

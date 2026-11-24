@@ -3,10 +3,12 @@
 namespace DuncanMcClean\Cargo\Http\Controllers\CP\Orders;
 
 use DuncanMcClean\Cargo\Contracts\Orders\Order as OrderContract;
+use DuncanMcClean\Cargo\Events\OrderRefunded;
 use DuncanMcClean\Cargo\Facades\Order;
 use DuncanMcClean\Cargo\Http\Resources\CP\Orders\Order as OrderResource;
 use DuncanMcClean\Cargo\Http\Resources\CP\Orders\Orders;
 use DuncanMcClean\Cargo\Orders\CsvExporter;
+use DuncanMcClean\Cargo\Orders\OrderStatus;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Statamic\Facades\Action;
@@ -116,11 +118,15 @@ class OrderController extends CpController
     {
         $this->authorize('update', $order);
 
+        $shouldRefund = $request->boolean('refund')
+            && $request->status === OrderStatus::Cancelled->value
+            && $order->status() !== OrderStatus::Cancelled;
+
         $blueprint = Order::blueprint();
 
         $data = collect($request->all())->except($except = [
             'id', 'customer', 'date', 'status', 'discount_total', 'grand_total', 'line_items', 'order_number',
-            'payment_details', 'receipt', 'shipping_total', 'sub_total', 'tax_total', 'shipping_method',
+            'payment_details', 'receipt', 'shipping_total', 'sub_total', 'tax_total', 'shipping_method', 'refund',
         ])->all();
 
         $fields = $blueprint
@@ -143,6 +149,16 @@ class OrderController extends CpController
         $order->merge($values->all());
 
         $saved = $order->save();
+
+        $amountRemaining = $order->grandTotal() - $order->get('amount_refunded', 0);
+
+        if ($shouldRefund && $order->paymentGateway() && $amountRemaining > 0) {
+            $this->authorize('refund', $order);
+
+            $order->paymentGateway()->refund($order, $amountRemaining);
+
+            OrderRefunded::dispatch($order->fresh(), $amountRemaining);
+        }
 
         [$values, $meta, $extraValues] = $this->extractFromFields($order, $blueprint);
 

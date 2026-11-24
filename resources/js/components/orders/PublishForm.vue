@@ -59,6 +59,7 @@ function save() {
 
 const isDirty = computed(() => Statamic.$dirty.has('order'));
 const hasItemActions = computed(() => props.itemActions.length > 0);
+const canRefund = computed(() => props.itemActions.some((action) => action.handle === 'refund'));
 
 function actionStarted() {
     saving.value = true;
@@ -151,9 +152,11 @@ function actionCompleted(successful = null, response) {
                             :model-value="values.status"
                             :tracking-number="values.tracking_number"
                             :cancellation-reason="values.cancellation_reason"
+                            :can-refund
                             @update:modelValue="values.status = $event"
                             @update:trackingNumber="values.tracking_number = $event"
                             @update:cancellationReason="values.cancellation_reason = $event"
+                            @update:refund="values.refund = $event"
                         />
                     </Card>
                 </Panel>
