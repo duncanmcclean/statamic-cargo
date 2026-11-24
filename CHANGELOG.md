@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.20.0 (2026-11-24)
+
+### What's new
+- PHP 8.6 Compatibility [#354](https://github.com/duncanmcclean/statamic-cargo/pull/354) by @duncanmcclean
+- Refund payment when cancelling an order [#374](https://github.com/duncanmcclean/statamic-cargo/pull/374) by @duncanmcclean
+
+### What's fixed
+- Format refund amounts in order timeline [#373](https://github.com/duncanmcclean/statamic-cargo/pull/373) by @duncanmcclean
+
+
+
 ## v1.19.0 (2026-11-21)
 
 ### What's new
